@@ -7,14 +7,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 // use Laravel\Passport\HasApiTokens;
-// use Spatie\Permission\Traits\HasRoles;
-// use Spatie\Permission\Models\Role;
-// use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Auth;
 
 class User extends Authenticatable {
 	use Notifiable, SoftDeletes;
-	// use HasRoles;
+	use HasRoles;
 	public $with = ['roles'];
 	protected $guard_name = 'web';
 	/**
@@ -23,7 +23,7 @@ class User extends Authenticatable {
 	 * @var array
 	 */
 	protected $fillable = [
-		'name', 'email', 'password', 'verifyToken', 'status', 'company',
+		'name', 'email', 'password', 'verifyToken', 'status',
 	];
 
 	/**
@@ -39,9 +39,9 @@ class User extends Authenticatable {
 	/**
 	 * The roles that belong to the user.
 	 */
-	public function roles() {
-		return $this->belongsToMany('App\Role');
-	}
+	// public function roles() {
+	// 	return $this->belongsToMany('App\Rolem');
+	// }
 	
 	public function branch() {
 		return $this->belongsTo('App\Branch');
@@ -72,33 +72,33 @@ class User extends Authenticatable {
      *
      * @return bool
      */
-    // public function getAllPermissionsAttribute()
-    // {
-    //     return $this->getAllPermissions();
-    // }
+    public function getAllPermissionsAttribute()
+    {
+        return $this->getAllPermissions();
+    }
     
      /**
      * Get all user permissions in a flat array.
      *
      * @return array
      */
-    // public function getCanAttribute()
-    // {
-    //     $permissions = [];
-    //     foreach (Permission::all() as $permission) {
-    //         if (Auth::user()->can($permission->name)) {
-    //             $permissions[$permission->name] = true;
-    //         } else {
-    //             $permissions[$permission->name] = false;
-    //         }
-    //     }
-    //     return $permissions;
-	// }
+    public function getCanAttribute()
+    {
+        $permissions = [];
+        foreach (Permission::all() as $permission) {
+            if (Auth::user()->can($permission->name)) {
+                $permissions[$permission->name] = true;
+            } else {
+                $permissions[$permission->name] = false;
+            }
+        }
+        return $permissions;
+	}
 	/**
 	* The accessors to append to the model's array form.
 	*
 	* @var array
 	*/
-	// protected $appends = ['all_permissions','can'];
+	protected $appends = ['all_permissions','can'];
 
 }

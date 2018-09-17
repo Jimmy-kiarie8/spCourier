@@ -22,6 +22,8 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
+        "@casl/ability": "^2.4.2",
+        "@casl/vue": "^0.4.3",
         "chart.js": "^2.7.2",
         "jspdf": "^1.4.1",
         "vue-barcode": "^1.1.0",

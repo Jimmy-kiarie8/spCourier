@@ -1,6 +1,6 @@
 <template>
 <v-layout row justify-center>
-    <v-dialog v-model="openAddRequest" persistent max-width="500px">
+    <v-dialog v-model="openAddRequest" persistent max-width="600px">
         <v-card>
             <v-card-title fixed>
                 <span class="headline">Add Role</span>
@@ -15,13 +15,12 @@
                                         <v-text-field v-model="form.name" :rules="rules.name" color="purple darken-2" label="Full name" required></v-text-field>
                                         <!-- <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small> -->
                                     </v-flex>
-                                    <v-flex xs12 sm12>
-                                        <v-textarea v-model="form.description" color="blue">
-                                            <div slot="label">
-                                                Description
-                                            </div>
-                                        </v-textarea>
-                                    </v-flex>
+                                    <v-layout wrap>
+                                        <div v-for="perm in permissions" :key="perm.id">
+                                        <v-flex xs6 sm6>
+                                            <v-checkbox v-model="selected" :label="perm.name" :value="perm.name"></v-checkbox>
+                                        </v-flex></div>
+                                    </v-layout>
                                 </v-layout>
                             </v-container>
                             <v-card-actions>
@@ -49,8 +48,10 @@ export default {
         })
         return {
             loading: false,
+            selected: [],
             defaultForm,
             loader: false,
+            permissions: [],
             form: Object.assign({}, defaultForm),
             rules: {
                 name: [val => (val || '').length > 0 || 'This field is required']
@@ -60,7 +61,10 @@ export default {
     methods: {
         save() {
             this.loading = true
-            axios.post('/roles', this.$data.form).
+            axios.post('/roles', {
+                form: this.$data.form,
+                selected: this.$data.selected
+            }).
             then((response) => {
                     this.loading = false
                     console.log(response);
@@ -91,7 +95,13 @@ export default {
         },
     },
     mounted() {
-
+        axios.get('getPermissions')
+            .then((response) => {
+                this.permissions = response.data
+            })
+            .catch((errors) => {
+                this.errors = error.response.data.errors
+            })
     }
 }
 </script>

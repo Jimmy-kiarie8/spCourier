@@ -54,11 +54,18 @@
                                         <option value="5">User</option>
                                     </select> -->
                                     <select class="custom-select custom-select-md col-md-3" v-model="form.role_id">
-                                        <option v-for="roles in AllRoles" :key="roles.id" :value="roles.id">{{ roles.name }}</option>
+                                        <option v-for="roles in AllRoles" :key="roles.id" :value="roles.name">{{ roles.name }}</option>
                                     </select>
                                     <select class="custom-select custom-select-md col-md-3" v-model="form.branch_id">
                                         <option v-for="branches in AllBranches" :key="branches.id" :value="branches.id">{{ branches.branch_name }}</option>
                                     </select>
+                                </v-layout>
+                                <v-layout wrap>
+                                    <div v-for="perm in permissions" :key="perm.id">
+                                        <v-flex xs6 sm6>
+                                            <v-checkbox v-model="selected" :label="perm.name" :value="perm.name"></v-checkbox>
+                                        </v-flex>
+                                    </div>
                                 </v-layout>
                             </v-container>
                             <v-card-actions>
@@ -97,6 +104,8 @@ export default {
         return {
             loading: false,
             errors: [],
+            selected: [],
+            permissions: [],
             defaultForm,
             loader: false,
             e1: true,
@@ -144,6 +153,15 @@ export default {
                 this.Allusers = response.data
             })
             .catch((error) => {
+                this.errors = error.response.data.errors
+            })
+
+        axios.get('getPermissions')
+            .then((response) => {
+                console.log(response.data)
+                this.permissions = response.data
+            })
+            .catch((errors) => {
                 this.errors = error.response.data.errors
             })
     },

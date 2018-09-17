@@ -140,9 +140,9 @@ class BranchController extends Controller {
 						return Shipment::whereNotNull('branch_id')->take(500)->where('status', $request->selectStatus['state'])->latest()->get();	
 					}else{
 						if ($request->selectAss['Assigned'] == 'Assigned') {
-						return Shipment::whereNotNull('branch_id')->where('status', $request->selectStatus['state'])->take(500)->latest()->get();	
+							return Shipment::whereNotNull('branch_id')->where('status', $request->selectStatus['state'])->take(500)->latest()->get();	
 						} else {
-						return Shipment::whereNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->take(500)->where('status', $request->selectStatus['state'])->latest()->get();	
+							return Shipment::whereNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->take(500)->where('status', $request->selectStatus['state'])->latest()->get();	
 						}
 					}
 				}
@@ -164,9 +164,9 @@ class BranchController extends Controller {
 						return Shipment::whereNotNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->take(500)->where('status', $request->selectStatus['state'])->where('branch_id', $request->select['id'])->latest()->get();	
 					}else{
 						if ($request->selectAss['Assigned'] == 'Assigned') {
-						return Shipment::whereNotNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('status', $request->selectStatus['state'])->take(500)->where('branch_id', $request->select['id'])->latest()->get();	
+							return Shipment::whereNotNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('status', $request->selectStatus['state'])->take(500)->where('branch_id', $request->select['id'])->latest()->get();	
 						} else {
-						return Shipment::whereNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->take(500)->where('status', $request->selectStatus['state'])->where('branch_id', $request->select['id'])->latest()->get();	
+							return Shipment::whereNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->take(500)->where('status', $request->selectStatus['state'])->where('branch_id', $request->select['id'])->latest()->get();	
 						}
 					}
 				}

@@ -21,13 +21,15 @@ import VueCharts from 'vue-chartjs'
 import { Bar, Line } from 'vue-chartjs'
 import JsonExcel from 'vue-json-excel'
 import * as VueGoogleMaps from 'vue2-google-maps'
+import { abilitiesPlugin } from '@casl/vue'
 
 import jsPDF from 'jsPDF'
 // vue.use(Vuetify, {
 //     iconfont: 'mdi'
 // })
-Vue.use(VueChartkick, {adapter: Chart})
- 
+Vue.use(VueChartkick, {adapter: Chart}) 
+Vue.use(abilitiesPlugin)
+
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyBNzKeF6ZwxlAOUCyeH8UxvvYRHP_w_Guk',

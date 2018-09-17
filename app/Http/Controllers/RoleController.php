@@ -5,7 +5,7 @@ use Illuminate\Support\Carbon;
 use App\Notifications\scheduleNotification;
 
 use App\Role_user;
-use App\Role;
+use App\Rolem;
 use App\User;
 use App\Shipment;
 use Illuminate\Http\Request;
@@ -15,6 +15,9 @@ use PdfReport;
 use ExcelReport;
 use App\Mail\ReportMail;
 use Auth;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 class RoleController extends Controller {
 	
 	public function getUsersRole() {
@@ -23,12 +26,25 @@ class RoleController extends Controller {
 
 	}
 
+	public function getPermissions()
+	{
+		return Permission::all();
+	}
+
 	public function store(Request $request)
 	{
-		$role = new Role;
-		$role->name = $request->name;
-		$role->description = $request->description;
-		$role->save();
+		// $role = new Role;
+		// $role->name = $request->name;
+		// $role->description = $request->description;
+		// $role->save();
+		// return $request->all();
+		
+        $role = Role::create(['name' => $request->form['name']]);
+        $role->givePermissionTo($request->selected);
+
+        // $role = Role::create(['name' => 'super-admin']);
+		// $role->givePermissionTo(Permission::all());
+		
 		return $role;
 	}
 
@@ -36,7 +52,7 @@ class RoleController extends Controller {
 	 * Update the specified resource in storage.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \App\Role  $role
+	 * @param  \App\Rolem  $role
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, Role_user $role_user, $id) {
@@ -47,7 +63,7 @@ class RoleController extends Controller {
 		return $role;
 	}
 
-	public function destroy(Role $role) {
+	public function destroy(Rolem $role) {
 		// return $role->id;
 		Role::find($role->id)->delete();
 	}
@@ -59,8 +75,9 @@ class RoleController extends Controller {
 
 	public function carbon(Request $request)
 	{
-		$user = Auth::user();
-		return	$user->givePermissionTo('Edit Users');
+		$user = User::find(6);
+		return $user->assignRole('Admin');
+		return	$user->givePermissionTo('add user');
 		$all_shipment = Shipment::setEagerLoads([])->get();
 		$today = Carbon::now();
 		 $user = User::find(1);

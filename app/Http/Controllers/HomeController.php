@@ -19,12 +19,22 @@ class HomeController extends Controller
         $companies = Company::where('id', Auth::user()->company_id)->get();
 	    foreach ($companies as $company) {
 	        $company_logo = $company->logo;
-	    }
+        }
+        $auth_user = Auth::user()->toArray();
+        $user = Auth::user()->permissions;
+        $can = [];
+        foreach ($user as $perm) {
+            $can[] = ['name' => $perm->name];
+        }
+        // dd($can);
+        $user_perm = array_prepend($auth_user, $can, 'has');
+        // dd($user_perm);
+
 		$newrole = Auth::user()->roles;
 		foreach ($newrole as $name) {
 			$rolename = $name->name;
 		}
-		return view('welcome', compact('rolename', 'company_logo'));
+		return view('welcome', compact('rolename', 'company_logo', 'user_perm'));
     }
     public function courierHome()
     {

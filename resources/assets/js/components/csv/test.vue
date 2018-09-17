@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card card-body">
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <v-layout row>
                         <v-flex xs12 sm5 offset-sm1>
                             <v-text-field v-model="form.start_date" :type="'date'" color="blue darken-2" label="Start Date" required></v-text-field>
@@ -12,7 +12,7 @@
                             <v-text-field v-model="form.end_date" :type="'date'" color="blue darken-2" label="End Date" required></v-text-field>
                         </v-flex>
                     </v-layout>
-                </div>
+                </div> -->
                 <v-btn raised color="primary" @click="getScheduled" :disabled="loading" :loading="loading">Download PDF</v-btn>
             </div>
         </div>
@@ -41,15 +41,15 @@ export default {
     methods: {
         getScheduled() {
             this.loading = true
-            axios.post('getScheduled', this.$data.form)
+            axios.post('carbon')
                 .then((response) => {
                     this.loading = false
-                    this.Scheduled = response.data
-                    this.download()
+                    // this.Scheduled = response.data
+                    // this.download()
                 })
                 .catch((error) => {
                     this.loading = false
-                    this.errors = error.response.data.errors
+                    // this.errors = error.response.data.errors
                 })
         },
         download() {

@@ -268,15 +268,15 @@ export default {
                 this.loading = true
                 axios.delete(`/users/${item.id}`)
                     .then((response) => {
-                        this.Allusers.splice(index, 1)
                         this.loading = false
                         this.message = 'deleted successifully'
                         this.color = 'red'
                         this.snackbar = true
+                        this.Allusers.splice(index, 1)
                     })
                     .catch((error) => {
-                        this.errors = error.response.data.errors
                         this.loading = false
+                        this.errors = error.response.data.errors
                         this.message = 'something went wrong'
                         this.color = 'red'
                         this.snackbar = true
@@ -321,15 +321,15 @@ export default {
                 this.errors = error.response.data.errors
             })
     },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            if (vm.role === 'Admin') {
-                next();
-            } else {
-                next('/');
-            }
-        })
-    }
+    // beforeRouteEnter(to, from, next) {
+    //     next(vm => {
+    //         if (vm.role === 'Admin') {
+    //             next();
+    //         } else {
+    //             next('/');
+    //         }
+    //     })
+    // }
 }
 </script>
 

@@ -32,19 +32,19 @@
                                     <!-- <v-flex xs12 sm6>
                                         <v-text-field v-model="form.zipcode" :rules="rules.name" color="blue darken-2" label="Zip Code" required></v-text-field>
                                     </v-flex> -->
-
-                                    <!-- <select class="custom-select custom-select-md col-md-3" v-model="form.role_id">
-                      <option value="1">Admin</option>
-                      <option value="2">Company Admin</option>
-                      <option value="3">Customer</option>
-                      <option value="4">Driver</option>
-                    </select> -->
-                    <select class="custom-select custom-select-md col-md-3" v-model="form.role_id">
-                                        <option v-for="roles in AllRoles" :key="roles.id" :value="roles.id">{{ roles.name }}</option>
+                                    <select class="custom-select custom-select-md col-md-3" v-model="form.role_id">
+                                        <option v-for="roles in AllRoles" :key="roles.id" :value="roles.name">{{ roles.name }}</option>
                                     </select>
                                     <select class="custom-select custom-select-md col-md-3" v-model="form.branch_id">
-                      <option v-for="branches in AllBranches" :key="branches.id" :value="branches.id">{{ branches.branch_name }}</option>
-                    </select>
+                                        <option v-for="branches in AllBranches" :key="branches.id" :value="branches.id">{{ branches.branch_name }}</option>
+                                    </select>
+                                <v-layout wrap>
+                                    <div v-for="perm in permissions" :key="perm.id">
+                                        <v-flex xs6 sm6>
+                                            <v-checkbox v-model="selected" :label="perm.name" :value="perm.name"></v-checkbox>
+                                        </v-flex>
+                                    </div>
+                                </v-layout>
                                 </v-layout>
                             </v-container>
                             <v-card-actions>
@@ -74,6 +74,8 @@ export default {
             loader: false,
             loading: false,
             list: {},
+            selected: [],
+            permissions: [],
             emailRules: [
                 v => {
                     return !!v || 'E-mail is required'
@@ -88,7 +90,10 @@ export default {
     methods: {
         update() {
             this.loading = true
-            axios.patch(`/users/${this.form.id}`, this.form).
+            axios.patch(`/users/${this.form.id}`, {
+                form: this.form,
+                selected: this.selected    
+            }).
             then((response) => {
                     // console.log(response);
                     this.loading = false
@@ -128,6 +133,14 @@ export default {
     },
     mounted() {
 
+        axios.get('getPermissions')
+            .then((response) => {
+                this.permissions = response.data
+            })
+            .catch((errors) => {
+                this.errors = error.response.data.errors
+            })
     }
 }
 </script>
+ 

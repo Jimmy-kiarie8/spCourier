@@ -311,9 +311,9 @@ class ShipmentController extends Controller {
 
 	public function getAdmin()
 	{
-		$usersRole = User::with('roles')->get();
+		$usersRolem = User::with('roles')->get();
 		$userArr = [];
-		foreach ($usersRole as $user) {
+		foreach ($usersRolem as $user) {
 				// var_dump($user->roles); die;
 			foreach ($user->roles as $role) {
 				if ($role->name == 'Admin') {

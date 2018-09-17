@@ -46,7 +46,7 @@
                                     </div>
                             </div>
                         </router-link> -->
-                        <router-link to="/users" class="v-list__tile v-list__tile--link" v-if="role === 'Admin'">
+                        <router-link to="/users" class="v-list__tile v-list__tile--link" v-if="user.can['create users']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">account_circle</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">

@@ -30,27 +30,30 @@ class UserController extends Controller {
 		$password_hash = Hash::make($request->password);
 		$user->name = $request->name;
 		$user->password = $password_hash;
-		$user->email = $request->email;
-		$user->phone = $request->phone;
-		// $user->zipcode = $request->zipcode;
-		$user->branch_id = $request->branch_id;
-		$user->address = $request->address;
-		$user->city = $request->city;
-		$user->country = $request->country;
+		$user->name = $request->form['name'];
+		$user->email = $request->form['email'];
+		$user->phone = $request->form['phone'];
+		$user->branch_id = $request->form['branch_id'];
+		$user->address = $request->form['address'];
+		$user->city = $request->form['city'];
+		$user->country = $request->form['country'];
 		$user->activation_token = str_random(60);
-		// return $password;
+		$user->save();
+		$user->assignRole($request->role_id);
+		$user->givePermissionTo($request->selected);
+		// $user->syncRoles($request->form['role_id']);
+		
+		// if ($user->save()) {
+		// 	$user_role = new Role_user;
+		// 	$user_role->user_id = $user->id;
+		// 	$user_role->role_id = $request->role_id;
+		// 	$user_role->save();
 
-		if ($user->save()) {
-			$user_role = new Role_user;
-			$user_role->user_id = $user->id;
-			$user_role->role_id = $request->role_id;
-			$user_role->save();
-
-			// $user_branch = new Branch_user;
-			// $user_branch->user_id = $user->id;
-			// $user_branch->branch_id = $request->branch_id;
-			// $user_branch->save();
-		}
+		// 	// $user_branch = new Branch_user;
+		// 	// $user_branch->user_id = $user->id;
+		// 	// $user_branch->branch_id = $request->branch_id;
+		// 	// $user_branch->save();
+		// }
         $user->notify(new SignupActivate($user, $password));
 		return $user;
 	}
@@ -64,39 +67,33 @@ class UserController extends Controller {
 	 */
 	public function update(Request $request, User $user) {
 		// return $request->all();
-		$user = User::find($request->id);
-		$user->name = $request->name;
-		$user->email = $request->email;
-		$user->phone = $request->phone;
-		// $user->zipcode = $request->zipcode;
-		$user->branch_id = $request->branch_id;
-		$user->address = $request->address;
-		$user->city = $request->city;
-		$user->country = $request->country;
-		if ($user->save()) {
-			if (!$request->role_id) {
-				return $user;
-			}else{
-				$user_role = Role_user::where('user_id', $request->id)->get();
-				$user_id = $user->id;
-				$role_id = $request->role_id;
-				$user_role = Role_user::updateOrCreate(
-					['user_id' => $user_id],
-					['user_id' => $user_id, 'role_id' => $role_id]
-				);
-			}
-			// $user_role->save();
-
-			// $user_branch = Branch_user::where('user_id', $request->id)->get();
-			// $user_id = $user->id;
-			// $branch_id = $request->branch_id;
-			// $user_branch = Branch_user::updateOrCreate(
-			// 	['user_id' => $user_id],
-			// 	['user_id' => $user_id, 'branch_id' => $branch_id]
-			// );
-		}
+		$user = User::find($request->form['id']);
+		$user->name = $request->form['name'];
+		$user->email = $request->form['email'];
+		$user->phone = $request->form['phone'];
+		$user->branch_id = $request->form['branch_id'];
+		$user->address = $request->form['address'];
+		$user->city = $request->form['city'];
+		$user->country = $request->form['country'];
+		$user->save();
+		$user->givePermissionTo($request->selected);
+		$user->syncRoles($request->form['role_id']);
+		// $user->assignRole($request->role_id);
+		// if ($user->save()) {
+		// 	if (!$request->role_id) {
+		// 		return $user;
+		// 	}else{
+		// 		$user_role = Role_user::where('user_id', $request->id)->get();
+		// 		$user_id = $user->id;
+		// 		$role_id = $request->role_id;
+		// 		$user_role = Role_user::updateOrCreate(
+		// 			['user_id' => $user_id],
+		// 			['user_id' => $user_id, 'role_id' => $role_id]
+		// 		);
+		// 	}
+		// }
 		// $user->save();
-		// return $user;
+		return $user;
 	}
 
 	/**
