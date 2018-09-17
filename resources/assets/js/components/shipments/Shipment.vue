@@ -38,6 +38,9 @@
                             <v-flex xs4 sm1>
                                 <v-btn raised color="info" @click="sort">Filter</v-btn>
                             </v-flex>
+                            <v-flex xs4 sm1>
+                                <v-btn raised color="info" @click="filReset">Reset</v-btn>
+                            </v-flex>
                         </v-layout>
                     </v-card>
                     <v-card-title>
@@ -661,6 +664,16 @@ export default {
             this.dialog1 = this.dialog = this.pdialog2 = this.updateModal = this.showdialog1 =
                 this.UpdateShipmentModel = this.AssignDriverModel = this.AssignBranchModel = this.trackModel = this.csvModel = this.chargeModal = this.RowModal = this.printModal = false;
         },
+        filReset() {
+            this.selectAss = {
+                Assigned: 'All',
+            }
+            this.selectItem = {
+                state: 'All',
+            }
+            this.form.start_date = this.form.end_date = ''
+            this.getShipments()
+        }
     },
     mounted() {
         this.loader = true;

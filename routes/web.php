@@ -97,8 +97,9 @@ Route::group(['middleware' => ['auth']], function () {
 
 	Route::get('getUsersRole', 'RoleController@getUsersRole')->name('getUsersRole');
 	Route::get('getRoles', 'RoleController@getRoles')->name('getRoles');
-
+	
 	Route::get('getBranch', 'BranchController@getBranch')->name('getBranch');
+	Route::post('getShipBranch', 'BranchController@getShipBranch')->name('getShipBranch');
 	Route::post('getBranchShip/{id}', 'BranchController@getBranchShip')->name('getBranchShip');
 
 	Route::post('getCompanies', 'CompanyController@getCompanies')->name('getCompanies');

@@ -443,13 +443,13 @@ class ShipmentController extends Controller {
 
 	public function scheduled() {
 		// return Shipment::where('status', 'Scheduled')->get();
-		$all_shipment = Shipment::get();
+		$all_shipment = Shipment::latest()->take(300)->get();
 		foreach ($all_shipment as $shipment) {
 			$derivery_date = new Carbon($shipment->derivery_date);
 			$date1 = Carbon::today();
 			$date2 = new Carbon('tomorrow');
         	$date2->diffInDays($date1);
-        	$shipment = Shipment::whereBetween('created_at', [$date1, $date2])->where('status', 'Scheduled')->get();
+        	$shipment = Shipment::whereBetween('created_at', [$date1, $date2])->where('status', 'Scheduled')->latest()->take(300)->get();
 		}
 		return $shipment;
 	}
@@ -503,11 +503,18 @@ class ShipmentController extends Controller {
 				return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->where('status', $request->selectStatus['state'])->get();
 				}
 			}else{
+				if ($request->selectStatus['state'] == 'All') {
+				// return 'st1';
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->where('status', $request->selectStatus['state'])->latest()->take(500)->get();
+				}else{
+				// return 'st2';
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->latest()->take(500)->where('status', $request->selectStatus['state'])->get();
+				}
 				// return 'st3';
-				return Shipment::where('branch_id', $request->select['id'])
-								// ->where('status', $request->selectStatus['state'])
-								->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])
-								->latest()->take(500)->get();
+				// return Shipment::where('branch_id', $request->select['id'])
+				// 				// ->where('status', $request->selectStatus['state'])
+				// 				->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])
+				// 				->latest()->take(500)->get();
 			}
 		}
 

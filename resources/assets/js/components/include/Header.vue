@@ -78,14 +78,6 @@
                                 </div>
                             </div>
                         </router-link>
-                        <router-link to="/branches" class="v-list__tile v-list__tile--link" v-if="role === 'Admin'">
-                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">home</i></div>
-                            <div class="v-list__tile__content">
-                                <div class="v-list__tile__title">
-                                    Manage Branches
-                                </div>
-                            </div>
-                        </router-link>
                         <router-link to="/reports" class="v-list__tile v-list__tile--link">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
                             <div class="v-list__tile__content">
@@ -111,6 +103,30 @@
                                         <div class="v-list__tile__content">
                                             <div class="v-list__tile__title">
                                                 Receipt
+                                            </div>
+                                        </div>
+                                    </router-link>
+                                </v-card>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+
+                        <v-expansion-panel popout>
+                            <v-expansion-panel-content>
+                                <div slot="header">Manage Branches</div>
+                                <v-card>
+                                    <router-link to="/branches" class="v-list__tile v-list__tile--link" v-if="role === 'Admin'">
+                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">home</i></div>
+                                        <div class="v-list__tile__content">
+                                            <div class="v-list__tile__title">
+                                                Branches 
+                                            </div>
+                                        </div>
+                                    </router-link>
+                                    <router-link to="/status" class="v-list__tile v-list__tile--link">
+                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
+                                        <div class="v-list__tile__content">
+                                            <div class="v-list__tile__title">
+                                                Shipment Status
                                             </div>
                                         </div>
                                     </router-link>
@@ -153,12 +169,12 @@
                 SpeedBall Courier
                 <img src="storage/logo1.jpg" alt="" style="width: 60px; height: 60px; border-radius: 25%;">
             </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-icon @click.stop="right = !right" style="cursor: pointer">apps</v-icon>
-            <form action="/logout" method="post">
-                <v-btn flat color="white" type="submit">Logout</v-btn>
-            </form>
-            <!-- <v-toolbar-side-icon></v-toolbar-side-icon> -->
+                <v-spacer></v-spacer>
+                <v-icon @click.stop="right = !right" style="cursor: pointer">apps</v-icon>
+                <form action="/logout" method="post">
+                    <v-btn flat color="white" type="submit">Logout</v-btn>
+                </form>
+                <!-- <v-toolbar-side-icon></v-toolbar-side-icon> -->
         </v-toolbar>
     </v-app>
 </div>

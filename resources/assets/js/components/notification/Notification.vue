@@ -21,7 +21,7 @@
 
                     <v-list-tile-content>
                         <v-list-tile-title>{{ user.name }}</v-list-tile-title>
-                        <v-list-tile-sub-title>Founder of Vuetify.js</v-list-tile-sub-title>
+                        <!-- <v-list-tile-sub-title>Founder of Vuetify.js</v-list-tile-sub-title> -->
                     </v-list-tile-content>
 
                     <v-list-tile-action v-if="notifications.length > 0">

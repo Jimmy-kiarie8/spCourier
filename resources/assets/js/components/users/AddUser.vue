@@ -13,38 +13,38 @@
                                 <v-layout wrap>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.name" :rules="rules.name" color="purple darken-2" label="Full name" required></v-text-field>
-                                        <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small>
+                                        <!-- <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small> -->
                                     </v-flex>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.email" :rules="emailRules" color="blue darken-2" label="Email" required></v-text-field>
-                                        <small class="has-text-danger" v-if="errors.email">{{ errors.email[0] }}</small>
+                                        <!-- <small class="has-text-danger" v-if="errors.email">{{ errors.email[0] }}</small> -->
                                     </v-flex>
                                     <v-flex xs12 sm6>
                                         <v-text-field :append-icon="e1 ? 'visibility_off' : 'visibility'" :type="e1 ? 'password' : 'text'" v-model="form.password" name="input-10-2" label="Enter your password" hint="At least 6 characters" min="8" value="" class="input-group--focused"></v-text-field>
-                                        <small class="has-text-danger" v-if="errors.password">{{ errors.password[0] }}</small>
+                                        <!-- <small class="has-text-danger" v-if="errors.password">{{ errors.password[0] }}</small> -->
                                     </v-flex>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.address" :rules="rules.name" color="blue darken-2" label="Address" required></v-text-field>
-                                        <small class="has-text-danger" v-if="errors.address">{{ errors.address[0] }}</small>
+                                        <!-- <small class="has-text-danger" v-if="errors.address">{{ errors.address[0] }}</small> -->
                                     </v-flex>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.city" :rules="rules.name" color="blue darken-2" label="City" required></v-text-field>
-                                        <small class="has-text-danger" v-if="errors.city">{{ errors.city[0] }}</small>
+                                        <!-- <small class="has-text-danger" v-if="errors.city">{{ errors.city[0] }}</small> -->
                                     </v-flex>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.country" :rules="rules.name" color="blue darken-2" label="Country" required></v-text-field>
-                                        <small class="has-text-danger" v-if="errors.country">{{ errors.country[0] }}</small>
+                                        <!-- <small class="has-text-danger" v-if="errors.country">{{ errors.country[0] }}</small> -->
                                     </v-flex>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.phone" :rules="rules.name" color="blue darken-2" label="Phone" required></v-text-field>
-                                        <small class="has-text-danger" v-if="errors.phone">{{ errors.phone[0] }}</small>
+                                        <!-- <small class="has-text-danger" v-if="errors.phone">{{ errors.phone[0] }}</small> -->
                                     </v-flex>
                                     <!-- <v-flex xs12 sm6>
                                         <v-text-field v-model="form.zipcode" :rules="rules.name" color="blue darken-2" label="Zip Code" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.zipcode">{{ errors.zipcode[0] }}</small>
                                     </v-flex> -->
 
-                                    <small class="has-text-danger" v-if="errors.branch">{{ errors.branch[0] }}</small>
+                                    <!-- <small class="has-text-danger" v-if="errors.branch">{{ errors.branch[0] }}</small> -->
                                     <!-- </v-flex> -->
                                     <!-- <select class="custom-select custom-select-md col-md-3" v-model="form.role_id">
                                         <option value="1">Admin</option>
@@ -120,8 +120,8 @@ export default {
                     this.loading = false
                     console.log(response);
                     this.$parent.Allusers.push(response.data)
-                    // this.close;
-                    // this.resetForm();
+                    this.close;
+                    this.resetForm();
                     this.$emit('alertRequest');
 
                 })
