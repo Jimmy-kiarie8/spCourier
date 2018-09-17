@@ -22,7 +22,7 @@
                                 </div>
                             </div>
                         </router-link>
-                        <router-link to="/Shipments" class="v-list__tile v-list__tile--link">
+                        <router-link to="/Shipments" class="v-list__tile v-list__tile--link" v-if="user.can['create shipments', 'delete shipments', 'view shipments']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">local_shipping</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
@@ -30,7 +30,7 @@
                                 </div>
                             </div>
                         </router-link>
-                        <router-link to="/charges" class="v-list__tile v-list__tile--link">
+                        <router-link to="/charges" class="v-list__tile v-list__tile--link" v-if="user.can['create charges', 'delete charges', 'view charges']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">attach_money</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
@@ -46,7 +46,7 @@
                                     </div>
                             </div>
                         </router-link> -->
-                        <router-link to="/users" class="v-list__tile v-list__tile--link" v-if="user.can['create users']">
+                        <router-link to="/users" class="v-list__tile v-list__tile--link" v-if="user.can['create users', 'delete users', 'view users']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">account_circle</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
@@ -54,7 +54,7 @@
                                 </div>
                             </div>
                         </router-link>
-                        <router-link to="/subscribers" class="v-list__tile v-list__tile--link" v-if="role === 'Admin'">
+                        <router-link to="/subscribers" class="v-list__tile v-list__tile--link" v-if="user.can['create subscribers', 'delete subscribers', 'view subscribers']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">email</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
@@ -114,7 +114,7 @@
                             <v-expansion-panel-content>
                                 <div slot="header">Manage Branches</div>
                                 <v-card>
-                                    <router-link to="/branches" class="v-list__tile v-list__tile--link" v-if="role === 'Admin'">
+                                    <router-link to="/branches" class="v-list__tile v-list__tile--link" v-if="user.can['create branches', 'delete branches', 'view branches']">
                                         <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">home</i></div>
                                         <div class="v-list__tile__content">
                                             <div class="v-list__tile__title">
@@ -143,7 +143,7 @@
                             </div>
                         </router-link>
 
-                        <!-- <router-link to="/companies" class="v-list__tile v-list__tile--link" v-if="role === 'Admin'">
+                        <!-- <router-link to="/companies" class="v-list__tile v-list__tile--link" v-if="user.can['create users', 'delete users', 'view users']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">home</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
