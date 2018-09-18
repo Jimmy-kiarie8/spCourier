@@ -22,7 +22,7 @@
                                 </div>
                             </div>
                         </router-link>
-                        <router-link to="/Shipments" class="v-list__tile v-list__tile--link" v-if="user.can['create shipments', 'delete shipments', 'view shipments']">
+                        <router-link to="/Shipments" class="v-list__tile v-list__tile--link" v-if="user.can['create shipments', 'delete shipments', 'view shipments', 'edit shipments']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">local_shipping</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
@@ -46,7 +46,7 @@
                                     </div>
                             </div>
                         </router-link> -->
-                        <router-link to="/users" class="v-list__tile v-list__tile--link" v-if="user.can['create users', 'delete users', 'view users']">
+                        <router-link to="/users" class="v-list__tile v-list__tile--link" v-if="user.can['create users', 'delete users', 'view users', 'edit users']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">account_circle</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
@@ -54,7 +54,7 @@
                                 </div>
                             </div>
                         </router-link>
-                        <router-link to="/subscribers" class="v-list__tile v-list__tile--link" v-if="user.can['create subscribers', 'delete subscribers', 'view subscribers']">
+                        <router-link to="/subscribers" class="v-list__tile v-list__tile--link" v-if="user.can['create subscribers', 'delete subscribers', 'view subscribers', 'edit subscribers']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">email</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
@@ -70,7 +70,7 @@
                                     </div>
                             </div>
                         </router-link> -->
-                        <router-link to="/scanner" class="v-list__tile v-list__tile--link">
+                        <router-link to="/scanner" class="v-list__tile v-list__tile--link" v-if="user.can['outscan', 'inscan']">
                             <div class="v-list__tile__action"><i class="fa fa-barcode nav_icon"></i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
