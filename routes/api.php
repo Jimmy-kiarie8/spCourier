@@ -168,4 +168,8 @@ Route::group([
 	Route::get('/getInvoice', 'InvoiceController@getInvoice')->name('getInvoice');
 	Route::post('/getInvoiceSort', 'InvoiceController@getInvoiceSort')->name('getInvoiceSort');
 	Route::post('/sendMail', 'InvoiceController@sendMail')->name('sendMail');
+
+	// M-pesa
+	Route::get('mpesa', 'MpesaController@mpesa')->name('mpesa');
+
 });

@@ -226,10 +226,9 @@ Route::group(['middleware' => ['auth']], function () {
 	});
 
 	// M-pesa
-	Route::get('mpesa', 'MpesaController@mpesa')->name('mpesa');
 	
 });
 
-// Route::get('scheduler', function (){
-// 	\Illuminate\Support\Facades\Artisan::call('schedule:run');
-//  });
+Route::get('scheduler', function (){
+	\Illuminate\Support\Facades\Artisan::call('schedule:run');
+ });
