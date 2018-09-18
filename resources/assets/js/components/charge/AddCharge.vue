@@ -16,7 +16,7 @@
                                     </v-flex>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.charges" color="blue darken-2" label="Charges" required></v-text-field>
-                                        <!-- <small class="has-text-danger" v-if="errors.charges">{{ errors.charges[0] }}</small> -->
+                                        <small class="has-text-danger" v-if="errors.charges">{{ errors.charges[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="getVat" :disabled="disabled" color="blue darken-2" label="VAT" required></v-text-field>

@@ -16,6 +16,9 @@ class TownController extends Controller
      */
     public function store(Request $request)
     {
+		$this->Validate($request, [
+			'town_name' => 'required',
+		]);
         // return $request->all();
         $town = new Town;
         $town->town_name = $request->town_name;

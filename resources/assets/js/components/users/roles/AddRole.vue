@@ -12,8 +12,8 @@
                             <v-container grid-list-xl fluid>
                                 <v-layout wrap>
                                     <v-flex xs12 sm12>
-                                        <v-text-field v-model="form.name" :rules="rules.name" color="purple darken-2" label="Full name" required></v-text-field>
-                                        <!-- <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small> -->
+                                        <v-text-field v-model="form.name" :rules="rules.name" color="purple darken-2" label="Role Name" required></v-text-field>
+                                        <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small>
                                     </v-flex>
                                     <v-layout wrap>
                                         <div v-for="perm in permissions" :key="perm.id">
@@ -47,6 +47,7 @@ export default {
             description: '',
         })
         return {
+            errors: [],
             loading: false,
             selected: [],
             defaultForm,

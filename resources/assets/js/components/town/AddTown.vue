@@ -14,7 +14,7 @@
                                     <v-flex xs12 sm12>
                                         <v-text-field v-model="form.town_name" :rules="rules.name" color="blue darken-2" label="Town name" required>
                                         </v-text-field>
-                                        <!-- <small class="has-text-danger" v-if="errors.town_name">{{ errors.town_name[0] }}</small> -->
+                                        <small class="has-text-danger" v-if="errors.town_name">{{ errors.town_name[0] }}</small>
                                     </v-flex>
                                 </v-layout>
                             </v-container>

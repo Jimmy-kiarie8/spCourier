@@ -17,6 +17,12 @@ class BranchController extends Controller {
 	 */
 	public function store(Request $request) {
 		// return $request->all();
+		$this->Validate($request, [
+			'email' => 'required|email',
+			'phone' => 'required|numeric',
+			'address' => 'required',
+			'branch_name' => 'required',
+		]);
 		$branch = new Branch;
 		$branch->branch_name = $request->branch_name;
 		$branch->phone = $request->phone;

@@ -56,7 +56,7 @@
     </v-content>
     <AddRole @closeRequest="close" :openAddRequest="dispAdd" @alertRequest="showAlert"></AddRole>
     <!--  <ShowRole @closeRequest="close" :openShowRequest="dispShow"></ShowRole> -->
-    <EditRole @closeRequest="close" :openEditRequest="dispEdit" @alertRequest="showAlert" :form="editedItem"></EditRole>
+    <EditRole @closeRequest="close" :openEditRequest="dispEdit" @alertRequest="showAlert" :form="editedItem" :userPerm="userPerm"></EditRole>
 </div>
 </template>
 
@@ -118,6 +118,7 @@ export default {
             color: 'black',
             message: 'Success',
             AllRoles: [],
+            userPerm: [],
             temp: '',
             editedItem: {},
         }
@@ -136,6 +137,13 @@ export default {
             this.editedItem = Object.assign({}, item)
             // this.$children[4].list = this.company[key]
             // this.$children[3].form = this.AllRoles[key]
+            axios.post('getPerms')
+            .then((response) => {
+                thie.userPerm = response.data
+            })
+            .catch((error) => {
+                this.errors = error.response.data.errors
+            })
             this.dispEdit = true
         },
         showAlert() {

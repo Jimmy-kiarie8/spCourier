@@ -224,6 +224,10 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('test', function () {
 		return Shipment::take(4)->get();
 	});
+
+	// M-pesa
+	Route::get('mpesa', 'MpesaController@mpesa')->name('mpesa');
+	
 });
 
 // Route::get('scheduler', function (){

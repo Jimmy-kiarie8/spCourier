@@ -12,16 +12,16 @@
                             <v-container grid-list-xl fluid>
                                 <v-layout wrap>
                                     <v-flex xs12 sm12>
-                                        <v-text-field v-model="form.name" :rules="rules.name" color="purple darken-2" label="Full name" required></v-text-field>
+                                        <v-text-field v-model="form.name" :rules="rules.name" color="blue darken-2" label="Full name" required></v-text-field>
                                         <!-- <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small> -->
                                     </v-flex>
-                                    <v-flex xs12 sm12>
-                                        <v-textarea v-model="form.description" color="blue">
-                                            <div slot="label">
-                                                Description
-                                            </div>
-                                        </v-textarea>
+                                </v-layout>
+                                <v-layout wrap>
+                                    <!-- <div> -->
+                                    <v-flex v-for="perm in permissions" :key="perm.id" xs6 sm6>
+                                        <v-checkbox v-model="selected" :label="perm.name" :value="perm.name"></v-checkbox>
                                     </v-flex>
+                                    <!-- </div> -->
                                 </v-layout>
                             </v-container>
                             <v-card-actions>
@@ -41,11 +41,13 @@
 
 <script>
 export default {
-    props: ['openEditRequest', 'form'],
+    props: ['openEditRequest', 'form', 'userPerm'],
     data() {
         return {
             loading: false,
             loader: false,
+            selected: [],
+            permissions: [],
             rules: {
                 name: [val => (val || '').length > 0 || 'This field is required']
             },
@@ -76,5 +78,15 @@ export default {
             this.$emit('closeRequest')
         },
     },
+    mounted() {
+
+        axios.get('getPermissions')
+            .then((response) => {
+                this.permissions = response.data
+            })
+            .catch((errors) => {
+                this.errors = error.response.data.errors
+            })
+    }
 }
 </script>

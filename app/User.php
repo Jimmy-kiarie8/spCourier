@@ -99,6 +99,6 @@ class User extends Authenticatable {
 	*
 	* @var array
 	*/
-	protected $appends = ['all_permissions','can'];
+	protected $appends = ['can'];
 
 }
