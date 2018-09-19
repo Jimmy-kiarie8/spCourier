@@ -93,11 +93,13 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('profile/{id}', 'UserController@profile')->name('profile');
 	Route::post('getSorted', 'UserController@getSorted')->name('getSorted');
 	Route::post('getUserPro/{id}', 'UserController@getUserPro')->name('getUserPro');
-
+	Route::post('getUserPerm/{id}', 'UserController@getUserPerm')->name('getUserPerm');
+	
 
 	Route::get('getUsersRole', 'RoleController@getUsersRole')->name('getUsersRole');
 	Route::get('getRoles', 'RoleController@getRoles')->name('getRoles');
 	Route::get('getPermissions', 'RoleController@getPermissions')->name('getPermissions');
+	Route::post('getRolesPerm/{id}', 'RoleController@getRolesPerm')->name('getRolesPerm');
 	
 	
 	Route::get('getBranch', 'BranchController@getBranch')->name('getBranch');

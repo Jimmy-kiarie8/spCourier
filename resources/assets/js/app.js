@@ -23,6 +23,8 @@ import JsonExcel from 'vue-json-excel'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import { abilitiesPlugin } from '@casl/vue'
 
+window.eventBus = new Vue()
+
 import jsPDF from 'jsPDF'
 // vue.use(Vuetify, {
 //     iconfont: 'mdi'

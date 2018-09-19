@@ -7,7 +7,7 @@
                     <v-card style="background: rgba(5, 117, 230, 0.16);">
                         <v-layout wrap>
                             <v-flex xs4 sm3 offset-sm4>
-                                <v-select :items="items" v-model="select" :hint="`${select.state}, ${select.abbr}`" label="Select" single-line item-text="state" item-value="abbr" return-object persistent-hint></v-select>
+                                <v-select :items="AllRoles" v-model="select" label="Select Role" single-line item-text="name" item-value="name" return-object persistent-hint></v-select>
                             </v-flex>
                             <!-- <v-spacer></v-spacer> -->
                             <v-flex xs4 sm3>
@@ -227,9 +227,14 @@ export default {
         },
         openEdit(item) {
             this.editedIndex = this.Allusers.indexOf(item)
-            this.editedItem = Object.assign({}, item)
-            // this.$children[4].list = this.company[key]
-            // this.$children[3].form = this.Allusers[key]
+            this.editedItem = Object.assign({}, item)            
+            axios.post(`getUserPerm/${item.id}`)
+            .then((response) => {
+                eventBus.$emit('permEvent', response.data);
+            })
+            .catch((error) => {
+                this.errors = error.response.data.errors
+            })
             this.dispEdit = true
         },
         openShow(item) {
@@ -321,15 +326,15 @@ export default {
                 this.errors = error.response.data.errors
             })
     },
-    // beforeRouteEnter(to, from, next) {
-    //     next(vm => {
-    //         if (vm.role === 'Admin') {
-    //             next();
-    //         } else {
-    //             next('/');
-    //         }
-    //     })
-    // }
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            if (vm.user.can['create users']) {
+                next();
+            } else {
+                next('/');
+            }
+        })
+    }
 }
 </script>
 

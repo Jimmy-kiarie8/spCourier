@@ -10,11 +10,11 @@ use App\Shipment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller {
 	public function getUsers() {
 		return User::with(['roles'])->get();
-		// return User::with(['roles'])->where('branch_id', Auth::user()->branch_id)->get();
 	}
 	/**
 	 * Store a newly created resource in storage.
@@ -24,7 +24,6 @@ class UserController extends Controller {
 	 */
 	public function store(UsersRequest $request) {
 		// return $request->all();
-		// var_dump($request->form); die;
 		$user = new User;
 		$password = $request->password;
 		$password_hash = Hash::make($request->password);
@@ -41,19 +40,6 @@ class UserController extends Controller {
 		$user->save();
 		$user->assignRole($request->role_id);
 		$user->givePermissionTo($request->selected);
-		// $user->syncRoles($request->form['role_id']);
-		
-		// if ($user->save()) {
-		// 	$user_role = new Role_user;
-		// 	$user_role->user_id = $user->id;
-		// 	$user_role->role_id = $request->role_id;
-		// 	$user_role->save();
-
-		// 	// $user_branch = new Branch_user;
-		// 	// $user_branch->user_id = $user->id;
-		// 	// $user_branch->branch_id = $request->branch_id;
-		// 	// $user_branch->save();
-		// }
         $user->notify(new SignupActivate($user, $password));
 		return $user;
 	}
@@ -76,23 +62,8 @@ class UserController extends Controller {
 		$user->city = $request->form['city'];
 		$user->country = $request->form['country'];
 		$user->save();
-		$user->givePermissionTo($request->selected);
+		// $user->givePermissionTo($request->selected);
 		$user->syncRoles($request->form['role_id']);
-		// $user->assignRole($request->role_id);
-		// if ($user->save()) {
-		// 	if (!$request->role_id) {
-		// 		return $user;
-		// 	}else{
-		// 		$user_role = Role_user::where('user_id', $request->id)->get();
-		// 		$user_id = $user->id;
-		// 		$role_id = $request->role_id;
-		// 		$user_role = Role_user::updateOrCreate(
-		// 			['user_id' => $user_id],
-		// 			['user_id' => $user_id, 'role_id' => $role_id]
-		// 		);
-		// 	}
-		// }
-		// $user->save();
 		return $user;
 	}
 
@@ -125,33 +96,26 @@ class UserController extends Controller {
 
 	public function getDrivers()
 	{
-		$users = User::with('roles')->get();
+		$users = User::all();
 		$userArr = [];
 		foreach ($users as $user) {
-				// var_dump($user->roles); die;
-			foreach ($user->roles as $role) {
-				if ($role->name == 'Driver') {
-					$userArr[] = $role->pivot->user_id;		
-				}
+			if ($user->hasRole('Rider')) {
+				$userArr[] = $user;
 			}
 		}
-		$drivers = User::whereIn('id', $userArr)->get();
-		return $drivers;
+		return $userArr;
 	}
 
 	public function getCustomer()
 	{
-		$users = User::with('roles')->get();
+		$users = User::all();
 		$userArr = [];
 		foreach ($users as $user) {
-			foreach ($user->roles as $role) {
-				if ($role->name == 'Customer') {
-					$userArr[] = $role->pivot->user_id;		
-				}
+			if ($user->hasRole('Client')) {
+				$userArr[] = $user;
 			}
 		}
-		$customers = User::whereIn('id', $userArr)->get();
-		return json_decode(json_encode($customers));
+		return $userArr;
 	}
 
 	public function getSorted(Request $request)
@@ -159,24 +123,29 @@ class UserController extends Controller {
 		// return $request->all();
 		$roles = User::all();
 		$users_id = [];
-		if ($request->abbr == 'all') {
-			return $roles;
-		}else{
-			foreach ($roles as $role) {
-				foreach ($role->roles as $user_role) {
-					if ($user_role->pivot->role_id == $request->abbr) {
-						$users_id[] = $user_role->pivot->user_id;
-					}
+			$users = User::all();
+			$userArr = [];
+			foreach ($users as $user) {
+				if ($user->hasRole($request->name)) {
+					$userArr[] = $user;
 				}
 			}
-		}
-		return User::whereIn('id', $users_id)->get();
-		// return $users_id;
-		// return User::where()->get();
+			return $userArr;
 	}
 
 	public function getUserPro(Request $request, $id)
 	{
 		return Shipment::where('client_id', $id)->get();
+	}
+
+	public function getUserPerm(Request $request, $id)
+	{
+		$user = User::find($id);
+		$permissions = $user->getAllPermissions();
+        $can = [];
+        foreach ($permissions as $perm) {
+            $can[] = $perm->name;
+        }
+        return $can;
 	}
 }

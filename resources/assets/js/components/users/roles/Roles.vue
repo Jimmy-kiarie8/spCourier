@@ -133,13 +133,21 @@ export default {
             this.dispAdd = true
         },
         openEdit(item) {
+            // console.log(item)
             this.editedIndex = this.AllRoles.indexOf(item)
             this.editedItem = Object.assign({}, item)
             // this.$children[4].list = this.company[key]
             // this.$children[3].form = this.AllRoles[key]
             axios.post('getPerms')
             .then((response) => {
-                thie.userPerm = response.data
+                this.userPerm = response.data
+            })
+            .catch((error) => {
+                this.errors = error.response.data.errors
+            })
+            axios.post(`getRolesPerm/${item.id}`)
+            .then((response) => {
+                eventBus.$emit('RolepermEvent', response.data);
             })
             .catch((error) => {
                 this.errors = error.response.data.errors

@@ -56,7 +56,10 @@ export default {
     methods: {
         save() {
             this.loading = true
-            axios.patch(`/roles/${this.form.id}`, this.form).
+            axios.patch(`/roles/${this.form.id}`, {
+                form: this.form,
+                selected: this.selected
+                }).
             then((response) => {
                     this.loading = false
                     console.log(response);
@@ -77,6 +80,11 @@ export default {
         close() {
             this.$emit('closeRequest')
         },
+    },
+    created() {
+        eventBus.$on('RolepermEvent', data => {
+            this.selected = data;
+        });
     },
     mounted() {
 

@@ -58,11 +58,12 @@ class RoleController extends Controller {
 	 * @param  \App\Rolem  $role
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, Role_user $role_user, $id) {
+	public function update(Request $request, $id) {
+		// return $request->all();
 		$role = Role::find($id);
-		$role->name = $request->name;
-		$role->description = $request->description;
+		$role->name = $request->form['name'];
 		$role->save();
+		$role->syncPermissions($request->selected);
 		return $role;
 	}
 
@@ -73,7 +74,12 @@ class RoleController extends Controller {
 	
 	public function getRoles()
 	{
-		return	Role::all();
+		return Role::all();
+	}
+	
+	public function getRolesPerm(Request $request)
+	{
+		return Role::findByName('Admin')->permissions->pluck('name');
 	}
 
 	public function carbon(Request $request)

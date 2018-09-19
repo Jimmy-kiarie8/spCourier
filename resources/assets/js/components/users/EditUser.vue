@@ -38,13 +38,25 @@
                                     <select class="custom-select custom-select-md col-md-3" v-model="form.branch_id">
                                         <option v-for="branches in AllBranches" :key="branches.id" :value="branches.id">{{ branches.branch_name }}</option>
                                     </select>
-                                <v-layout wrap>
-                                    <div v-for="perm in permissions" :key="perm.id">
-                                        <v-flex xs6 sm6>
-                                            <v-checkbox v-model="selected" :label="perm.name" :value="perm.name"></v-checkbox>
-                                        </v-flex>
-                                    </div>
-                                </v-layout>
+                                    <v-flex xs12>
+                                        <v-expansion-panel inset>
+                                            <v-expansion-panel-content>
+                                                <div slot="header">Permissions</div>
+                                                <v-card>
+                                                    <v-card-text>
+                                                        <v-layout wrap>
+                                                            <div v-for="perm in permissions" :key="perm.id">
+                                                                <v-flex xs12 sm12>
+                                                                    <v-checkbox v-model="selected" :label="perm.name" :value="perm.name"></v-checkbox>
+                                                                </v-flex>
+                                                            </div>
+                                                        </v-layout>
+                                                    </v-card-text>
+                                                </v-card>
+                                            </v-expansion-panel-content>
+                                        </v-expansion-panel>
+                                    </v-flex>
+
                                 </v-layout>
                             </v-container>
                             <v-card-actions>
@@ -92,7 +104,7 @@ export default {
             this.loading = true
             axios.patch(`/users/${this.form.id}`, {
                 form: this.form,
-                selected: this.selected    
+                selected: this.selected
             }).
             then((response) => {
                     // console.log(response);
@@ -116,6 +128,11 @@ export default {
             this.$emit('closeRequest')
         },
     },
+    created() {
+        eventBus.$on('permEvent', data => {
+            this.selected = data;
+        });
+    },
     computed: {
         formIsValid() {
             return (
@@ -123,7 +140,6 @@ export default {
                 this.form.email &&
                 this.form.phone &&
                 this.form.password &&
-                // this.form.zipcode &&
                 this.form.branch &&
                 this.form.address &&
                 this.form.city &&
@@ -143,4 +159,3 @@ export default {
     }
 }
 </script>
- 

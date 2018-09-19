@@ -22,7 +22,7 @@
                                 </div>
                             </div>
                         </router-link>
-                        <router-link to="/Shipments" class="v-list__tile v-list__tile--link" v-if="user.can['create shipments', 'delete shipments', 'view shipments', 'edit shipments']">
+                        <router-link to="/Shipments" class="v-list__tile v-list__tile--link" v-if="user.can['view shipments']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">local_shipping</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
@@ -30,7 +30,7 @@
                                 </div>
                             </div>
                         </router-link>
-                        <router-link to="/charges" class="v-list__tile v-list__tile--link" v-if="user.can['create charges', 'delete charges', 'view charges']">
+                        <router-link to="/charges" class="v-list__tile v-list__tile--link" v-if="user.can['view charges']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">attach_money</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
@@ -46,15 +46,39 @@
                                     </div>
                             </div>
                         </router-link> -->
-                        <router-link to="/users" class="v-list__tile v-list__tile--link" v-if="user.can['create users', 'delete users', 'view users', 'edit users']">
-                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">account_circle</i></div>
-                            <div class="v-list__tile__content">
-                                <div class="v-list__tile__title">
-                                    Manage Users
-                                </div>
-                            </div>
-                        </router-link>
-                        <router-link to="/subscribers" class="v-list__tile v-list__tile--link" v-if="user.can['create subscribers', 'delete subscribers', 'view subscribers', 'edit subscribers']">
+                        <!-- <v-expansion-panel v-model="panel" expand>
+                            <v-expansion-panel-content>
+                                <template slot="header">Regular</template>
+                                <v-card>
+                                    <v-card-text>Some content</v-card-text>
+                                </v-card>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel> -->
+
+                        <v-expansion-panel popout>
+                            <v-expansion-panel-content>
+                                <div slot="header">Manage User</div>
+                                <v-card>
+                                    <router-link to="/users" class="v-list__tile v-list__tile--link" v-if="user.can['view users']">
+                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">account_circle</i></div>
+                                        <div class="v-list__tile__content">
+                                            <div class="v-list__tile__title">
+                                                Manage Users
+                                            </div>
+                                        </div>
+                                    </router-link>
+                                    <router-link to="/roles" class="v-list__tile v-list__tile--link" v-if="user.can[ 'view roles']">
+                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
+                                        <div class="v-list__tile__content">
+                                            <div class="v-list__tile__title">
+                                                Manage Roles
+                                            </div>
+                                        </div>
+                                    </router-link>
+                                </v-card>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+                        <router-link to="/subscribers" class="v-list__tile v-list__tile--link" v-if="user.can['view subscribers']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">email</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
@@ -62,14 +86,7 @@
                                 </div>
                             </div>
                         </router-link>
-                        <!-- <router-link to="/customers" class="v-list__tile v-list__tile--link">
-                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">account_circle</i></div>
-                            <div class="v-list__tile__content">
-                                    <div class="v-list__tile__title">
-                                        Manage Customers
-                                    </div>
-                            </div>
-                        </router-link> -->
+
                         <router-link to="/scanner" class="v-list__tile v-list__tile--link" v-if="user.can['outscan', 'inscan']">
                             <div class="v-list__tile__action"><i class="fa fa-barcode nav_icon"></i></div>
                             <div class="v-list__tile__content">
@@ -114,11 +131,11 @@
                             <v-expansion-panel-content>
                                 <div slot="header">Manage Branches</div>
                                 <v-card>
-                                    <router-link to="/branches" class="v-list__tile v-list__tile--link" v-if="user.can['create branches', 'delete branches', 'view branches']">
+                                    <router-link to="/branches" class="v-list__tile v-list__tile--link" v-if="user.can['view branches']">
                                         <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">home</i></div>
                                         <div class="v-list__tile__content">
                                             <div class="v-list__tile__title">
-                                                Branches 
+                                                Branches
                                             </div>
                                         </div>
                                     </router-link>
@@ -187,6 +204,7 @@ export default {
         return {
             sheet: false,
             color: 'indigo',
+            panel: false,
             dialog: false,
             changeColor: 'item.color',
             drawer: true,
@@ -208,3 +226,13 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+.v-expansion-panel__container:hover{
+    border-radius: 10px !important;
+    width: 90% !important;
+    margin-left: 15px !important;
+    background: #e3edfe !important;
+    color: #1a73e8 !important;
+}
+</style>
