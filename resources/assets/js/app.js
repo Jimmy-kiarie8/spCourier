@@ -27,8 +27,8 @@ window.eventBus = new Vue()
 
 import jsPDF from 'jsPDF'
 // vue.use(Vuetify, {
-//     iconfont: 'mdi'
-// })
+//     iconfont: 'mdi' 
+// }) 
 Vue.use(VueChartkick, {adapter: Chart}) 
 Vue.use(abilitiesPlugin)
 

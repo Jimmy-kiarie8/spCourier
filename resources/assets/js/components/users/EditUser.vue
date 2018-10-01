@@ -29,15 +29,19 @@
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.phone" :rules="rules.name" color="blue darken-2" label="Phone" required></v-text-field>
                                     </v-flex>
-                                    <!-- <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.zipcode" :rules="rules.name" color="blue darken-2" label="Zip Code" required></v-text-field>
-                                    </v-flex> -->
-                                    <select class="custom-select custom-select-md col-md-3" v-model="form.role_id">
-                                        <option v-for="roles in AllRoles" :key="roles.id" :value="roles.name">{{ roles.name }}</option>
+
+                                    <div class="form-group col-md-6">
+                                        <label class="col-md-6 col-form-label text-md-right" for="">Role</label>
+                                        <select class="custom-select custom-select-md col-md-12" v-model="form.role_id">
+                                            <option v-for="roles in AllRoles" :key="roles.id" :value="roles.name">{{ roles.name }}</option>
                                     </select>
-                                    <select class="custom-select custom-select-md col-md-3" v-model="form.branch_id">
-                                        <option v-for="branches in AllBranches" :key="branches.id" :value="branches.id">{{ branches.branch_name }}</option>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="col-md-6 col-form-label text-md-right" for="">Brach</label>
+                                        <select class="custom-select custom-select-md col-md-12" v-model="form.branch_id">
+                                            <option v-for="branches in AllBranches" :key="branches.id" :value="branches.id">{{ branches.branch_name }}</option>
                                     </select>
+                                    </div>
                                     <v-flex xs12>
                                         <v-expansion-panel inset>
                                             <v-expansion-panel-content>

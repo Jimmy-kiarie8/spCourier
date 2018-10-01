@@ -39,20 +39,20 @@
                                         <v-text-field v-model="form.phone" :rules="rules.name" color="blue darken-2" label="Phone" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.phone">{{ errors.phone[0] }}</small>
                                     </v-flex>
-                                    <!-- <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.zipcode" :rules="rules.name" color="blue darken-2" label="Zip Code" required></v-text-field>
-                                        <small class="has-text-danger" v-if="errors.zipcode">{{ errors.zipcode[0] }}</small> 
-                                    </v-flex> -->
-
-                                    <!-- </v-flex> -->
-                                    <select class="custom-select custom-select-md col-md-3" v-model="form.role_id">
+                                    <div class="form-group col-md-6">
+                                        <label class="col-md-6 col-form-label text-md-right" for="">Role</label>
+                                        <select class="custom-select custom-select-md col-md-12" v-model="form.role_id">
                                         <option v-for="roles in AllRoles" :key="roles.id" :value="roles.name">{{ roles.name }}</option>
                                     </select>
-                                    <small class="has-text-danger" v-if="errors.role_id">{{ errors.role_id[0] }}</small>
-                                    <select class="custom-select custom-select-md col-md-3" v-model="form.branch_id">
+                                        <small class="has-text-danger" v-if="errors.role_id">{{ errors.role_id[0] }}</small>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="col-md-6 col-form-label text-md-right" for="">Brach</label>
+                                        <select class="custom-select custom-select-md col-md-12" v-model="form.branch_id">
                                         <option v-for="branches in AllBranches" :key="branches.id" :value="branches.id">{{ branches.branch_name }}</option>
                                     </select>
-                                    <small class="has-text-danger" v-if="errors.branch_id">{{ errors.branch_id[0] }}</small>
+                                        <small class="has-text-danger" v-if="errors.branch_id">{{ errors.branch_id[0] }}</small>
+                                    </div>
                                 </v-layout>
                                 <v-layout wrap>
                                     <!-- <div> -->

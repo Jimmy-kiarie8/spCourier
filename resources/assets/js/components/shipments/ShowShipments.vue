@@ -303,4 +303,3 @@ export default {
     margin-left: 40% !important;
 }
 </style>
-

@@ -7,12 +7,16 @@
         <!-- temporary -->
         <v-navigation-drawer fixed :color="color" :clipped="$vuetify.breakpoint.lgAndUp" app v-model="drawer">
             <v-list dense>
+                <v-img :aspect-ratio="16/9" src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
+                    <v-layout pa-2 column fill-height class="lightbox white--text">
+                        <v-spacer></v-spacer>
+                        <v-flex shrink>
+                            <div class="subheading">{{ user.name }}</div>
+                            <div class="body-1">{{ user.email }}</div>
+                        </v-flex>
+                    </v-layout>
+                </v-img>
                 <template>
-                    <v-list-group append-icon="" style="background:#f0f0f0">
-                        <v-list-tile slot="activator" style="background:#f5f5f5; padding: 0 0 40px 0; margin-top: 10px; padding: 30px 0 0 0;">
-                        </v-list-tile>
-                    </v-list-group>
-                    <v-divider></v-divider>
                     <v-card>
                         <router-link to="/" class="v-list__tile v-list__tile--link">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">home</i></div>
@@ -55,29 +59,6 @@
                             </v-expansion-panel-content>
                         </v-expansion-panel> -->
 
-                        <v-expansion-panel popout>
-                            <v-expansion-panel-content>
-                                <div slot="header">Manage User</div>
-                                <v-card>
-                                    <router-link to="/users" class="v-list__tile v-list__tile--link" v-if="user.can['view users']">
-                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">account_circle</i></div>
-                                        <div class="v-list__tile__content">
-                                            <div class="v-list__tile__title">
-                                                Manage Users
-                                            </div>
-                                        </div>
-                                    </router-link>
-                                    <router-link to="/roles" class="v-list__tile v-list__tile--link" v-if="user.can[ 'view roles']">
-                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
-                                        <div class="v-list__tile__content">
-                                            <div class="v-list__tile__title">
-                                                Manage Roles
-                                            </div>
-                                        </div>
-                                    </router-link>
-                                </v-card>
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
                         <router-link to="/subscribers" class="v-list__tile v-list__tile--link" v-if="user.can['view subscribers']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">email</i></div>
                             <div class="v-list__tile__content">
@@ -103,54 +84,6 @@
                                 </div>
                             </div>
                         </router-link>
-                        <v-expansion-panel popout>
-                            <v-expansion-panel-content>
-                                <div slot="header">Account Setting</div>
-                                <v-card>
-                                    <router-link to="/invoices" class="v-list__tile v-list__tile--link">
-                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
-                                        <div class="v-list__tile__content">
-                                            <div class="v-list__tile__title">
-                                                Invoices
-                                            </div>
-                                        </div>
-                                    </router-link>
-                                    <router-link to="/receipts" class="v-list__tile v-list__tile--link">
-                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
-                                        <div class="v-list__tile__content">
-                                            <div class="v-list__tile__title">
-                                                Receipt
-                                            </div>
-                                        </div>
-                                    </router-link>
-                                </v-card>
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
-
-                        <v-expansion-panel popout>
-                            <v-expansion-panel-content>
-                                <div slot="header">Manage Branches</div>
-                                <v-card>
-                                    <router-link to="/branches" class="v-list__tile v-list__tile--link" v-if="user.can['view branches']">
-                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">home</i></div>
-                                        <div class="v-list__tile__content">
-                                            <div class="v-list__tile__title">
-                                                Branches
-                                            </div>
-                                        </div>
-                                    </router-link>
-                                    <router-link to="/status" class="v-list__tile v-list__tile--link">
-                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
-                                        <div class="v-list__tile__content">
-                                            <div class="v-list__tile__title">
-                                                Shipment Status
-                                            </div>
-                                        </div>
-                                    </router-link>
-                                </v-card>
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
-
                         <router-link to="/profile" class="v-list__tile v-list__tile--link">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">account_circle</i></div>
                             <div class="v-list__tile__content">
@@ -176,6 +109,84 @@
                                 </div>
                             </div>
                         </router-link>
+                        <router-link to="/customers" class="v-list__tile v-list__tile--link" v-for="role in user.roles" :key="role.id" v-if="role.name === 'Client'">
+                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">print</i></div>
+                            <div class="v-list__tile__content">
+                                <div class="v-list__tile__title">
+                                    My Shipments
+                                </div>
+                            </div>
+                        </router-link>
+                        <v-expansion-panel popout v-if="user.can['view users']">
+                            <v-expansion-panel-content>
+                                <div slot="header">User&Roles</div>
+                                <v-card>
+                                    <router-link to="/users" class="v-list__tile v-list__tile--link" v-if="user.can['view users']">
+                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">account_circle</i></div>
+                                        <div class="v-list__tile__content">
+                                            <div class="v-list__tile__title">
+                                                Manage Users
+                                            </div>
+                                        </div>
+                                    </router-link>
+                                    <router-link to="/roles" class="v-list__tile v-list__tile--link" v-if="user.can[ 'view roles']">
+                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
+                                        <div class="v-list__tile__content">
+                                            <div class="v-list__tile__title">
+                                                Manage Roles
+                                            </div>
+                                        </div>
+                                    </router-link>
+                                </v-card>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+                        <v-expansion-panel popout v-if="user.can['view branches']">
+                            <v-expansion-panel-content>
+                                <div slot="header">Manage Branches</div>
+                                <v-card>
+                                    <router-link to="/branches" class="v-list__tile v-list__tile--link" v-if="user.can['view branches']">
+                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">home</i></div>
+                                        <div class="v-list__tile__content">
+                                            <div class="v-list__tile__title">
+                                                Branches
+                                            </div>
+                                        </div>
+                                    </router-link>
+                                    <router-link to="/status" class="v-list__tile v-list__tile--link">
+                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
+                                        <div class="v-list__tile__content">
+                                            <div class="v-list__tile__title">
+                                                Shipment Status
+                                            </div>
+                                        </div>
+                                    </router-link>
+                                </v-card>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+
+                        <v-expansion-panel popout v-if="user.can['view accounts']">
+                            <v-expansion-panel-content>
+                                <div slot="header">Account Setting</div>
+                                <v-card>
+                                    <router-link to="/invoices" class="v-list__tile v-list__tile--link">
+                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
+                                        <div class="v-list__tile__content">
+                                            <div class="v-list__tile__title">
+                                                Invoices
+                                            </div>
+                                        </div>
+                                    </router-link>
+                                    <router-link to="/receipts" class="v-list__tile v-list__tile--link">
+                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
+                                        <div class="v-list__tile__content">
+                                            <div class="v-list__tile__title">
+                                                Receipt
+                                            </div>
+                                        </div>
+                                    </router-link>
+                                </v-card>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
                     </v-card>
                 </template>
             </v-list>
@@ -228,7 +239,7 @@ export default {
 </script>
 
 <style scoped>
-.v-expansion-panel__container:hover{
+.v-expansion-panel__container:hover {
     border-radius: 10px !important;
     width: 90% !important;
     margin-left: 15px !important;

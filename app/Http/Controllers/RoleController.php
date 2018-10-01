@@ -33,9 +33,9 @@ class RoleController extends Controller {
 
 	public function store(Request $request)
 	{
-		$this->Validate($request, [
-			'name' => 'required',
-		]);
+		// $this->Validate($request, [
+		// 	'form.name' => 'required',
+		// ]);
 		// $role = new Role;
 		// $role->name = $request->name;
 		// $role->description = $request->description;
@@ -79,7 +79,8 @@ class RoleController extends Controller {
 	
 	public function getRolesPerm(Request $request)
 	{
-		return Role::findByName('Admin')->permissions->pluck('name');
+		// return $request->all();
+		return Role::findByName($request->name)->permissions->pluck('name');
 	}
 
 	public function carbon(Request $request)

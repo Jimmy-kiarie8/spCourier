@@ -10,16 +10,26 @@
                     <v-flex xs12 sm4>
                         <v-card>
                             <img :src="avatar" style="width: 100px; height: 100px; border-radius: 50%; text-align:center; margin-top 70px;margin-left-100px">
-                            <!-- <v-icon class="text-center" color="indigo" style="font-size:100px; text-align:center;">account_circle</v-icon> -->
                             <v-divider></v-divider>
-                            <h6 class="text-center" color="green">Admin</h6>
+                            <h6 class="text-center" color="green">{{ user.name }}</h6>
                             <v-btn color="red" darken-1 raised @click="onPickFile" style="color: #fff;">Upload</v-btn>
-                            <!-- <input type="file" @change="Getimage" accept="image/*"> -->
                             <input type="file" @change="Getimage" accept="image/*" style="display: none" ref="fileInput">
-                            <!-- <img v-show="imagePlaced" :src="avatar" style="width: 300px; height: 240px;"> -->
                             <img v-show="imagePlaced" :src="avatar" style="width: 200px; height: 200px;">
                             <v-btn @click="upload" flat v-show="imagePlaced" :loading="loading" :disabled="loading">Upload</v-btn>
                             <v-btn @click="cancle" flat v-show="imagePlaced">Cancle</v-btn>
+                        </v-card>
+                        <v-card-text>
+                            <v-form ref="form" @submit.prevent>
+                                <v-flex xs12 sm12>
+                                    <v-text-field :append-icon="e1 ? 'visibility_off' : 'visibility'" :type="e1 ? 'password' : 'text'" v-model="form.password" name="input-10-2" label="Enter your password" hint="At least 6 characters" min="8" value="" class="input-group--focused"></v-text-field>
+                                    <small class="has-text-danger" v-if="errors.password">{{ errors.password[0] }}</small>
+                                </v-flex>
+                            </v-form>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-btn :disabled="ploading" :loading="ploading" flat color="primary" @click="passwordChange">Change Password</v-btn>
+                        </v-card-actions>
+                        <v-card>
                         </v-card>
                     </v-flex>
 
@@ -51,10 +61,6 @@
                                         <v-flex xs12 sm6>
                                             <v-text-field v-model="LogedUser.phone" :rules="rules.name" color="blue darken-2" label="Phone" required></v-text-field>
                                         </v-flex>
-                                        <v-flex xs12 sm6>
-                                            <v-text-field v-model="LogedUser.zipcode" :rules="rules.name" color="blue darken-2" label="Zip Code" required></v-text-field>
-                                        </v-flex>
-
                                         <!-- <v-flex xs12 sm6>
                                             <v-text-field v-model="LogedUser.branch" :rules="rules.name" color="blue darken-2" label="Branch" required></v-text-field>
                                         </v-flex> -->
@@ -69,7 +75,6 @@
                         </v-card>
                     </v-flex>
                     <!-- User Form -->
-
                 </v-layout>
             </v-layout>
         </v-container>
@@ -84,9 +89,7 @@ export default {
         const defaultForm = Object.freeze({
             name: '',
             password: '',
-            email: '',
             phone: null,
-            zipcode: null,
             branch: '',
             address: '',
             city: '',
@@ -96,8 +99,10 @@ export default {
             imagePlaced: false,
             defaultForm,
             loading: false,
+            errors: [],
             avatar: '',
             LogedUser: {},
+            ploading: false,
             e1: true,
             snackbar: false,
             loader: false,
@@ -164,6 +169,21 @@ export default {
                     this.errors = error.response.data.errors
                 })
         },
+        passwordChange() {
+            this.ploading = true
+            axios.post('/password', this.form)
+                .then((response) => {
+                    this.ploading = false
+                    this.color = 'black';
+                    this.text = 'Password updated';
+                    this.snackbar = true;
+                    // this.close()
+                })
+                .catch((error) => {
+                    this.ploading = false
+                    this.errors = error.response.data.errors
+                })
+        },
         cancle() {
             this.avatar = this.LogedUser.profile;
             this.imagePlaced = false;
@@ -208,8 +228,6 @@ export default {
                 this.LogedUser.name &&
                 this.LogedUser.email &&
                 this.LogedUser.phone &&
-                this.LogedUser.password &&
-                this.LogedUser.zipcode &&
                 this.LogedUser.branch &&
                 this.LogedUser.address &&
                 this.LogedUser.city &&

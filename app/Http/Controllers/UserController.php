@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Http\Requests\UsersRequest;
 use App\Notifications\SignupActivate;
 use App\Role_user;
@@ -147,5 +146,17 @@ class UserController extends Controller {
             $can[] = $perm->name;
         }
         return $can;
+	}
+
+	public function password(Request $request)
+	{
+		$this->Validate($request, [
+			'password' => 'required|string|min:6',
+			// 'password' => 'required|string|min:6|confirmed',
+		]);
+		$user = User::find(Auth::id());
+		$user->password =  Hash::make($request->password);
+		$user->save();
+		return $user;
 	}
 }

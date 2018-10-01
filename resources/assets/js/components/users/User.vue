@@ -326,15 +326,15 @@ export default {
                 this.errors = error.response.data.errors
             })
     },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            if (vm.user.can['create users']) {
-                next();
-            } else {
-                next('/');
-            }
-        })
-    }
+    // beforeRouteEnter(to, from, next) {
+    //     next(vm => {
+    //         if (vm.user.can['create users']) {
+    //             next();
+    //         } else {
+    //             next('/');
+    //         }
+    //     })
+    // }
 }
 </script>
 

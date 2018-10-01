@@ -81,7 +81,6 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('conupdateStatus/{id}', 'ContainerController@conupdateStatus')->name('conupdateStatus');
 	Route::post('getShipmentArray/{id}', 'ContainerController@getShipmentArray')->name('getShipmentArray');
 	Route::post('assigndialog/{id}', 'ContainerController@assigndialog')->name('assigndialog');
-	Route::post('getContainers', 'ContainerController@getContainers')->name('getContainers');
 
 	Route::post('productAdd/{id}', 'ProductController@productAdd')->name('productAdd');
 	Route::post('getProducts', 'ProductController@getProducts')->name('getProducts');
@@ -94,6 +93,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('getSorted', 'UserController@getSorted')->name('getSorted');
 	Route::post('getUserPro/{id}', 'UserController@getUserPro')->name('getUserPro');
 	Route::post('getUserPerm/{id}', 'UserController@getUserPerm')->name('getUserPerm');
+	Route::post('password', 'UserController@password')->name('password');
 	
 
 	Route::get('getUsersRole', 'RoleController@getUsersRole')->name('getUsersRole');
@@ -135,10 +135,13 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('pod/{id}', 'ReportController@pod')->name('pod');
 	
 	// Dashboard
-	Route::get('delayedShipment', 'ShipmentController@delayedShipment')->name('delayedShipment');
-	Route::get('approvedShipment', 'ShipmentController@approvedShipment')->name('approvedShipment');
-	Route::get('waitingShipment', 'ShipmentController@waitingShipment')->name('waitingShipment');
-	Route::get('deriveredShipment', 'ShipmentController@deriveredShipment')->name('deriveredShipment');
+	Route::get('delayedShipmentCount', 'PermissionController@delayedShipmentCount')->name('delayedShipmentCount');
+	Route::get('scheduledShipmentCount', 'PermissionController@scheduledShipmentCount')->name('scheduledShipmentCount');
+	Route::get('getShipmentsCount', 'PermissionController@getShipmentsCount')->name('getShipmentsCount');
+	Route::get('dispatchedShipmentCount', 'PermissionController@dispatchedShipmentCount')->name('dispatchedShipmentCount');
+	Route::get('getCanceledCount', 'PermissionController@getCanceledCount')->name('getCanceledCount');
+	Route::get('deriveredShipmentCount', 'PermissionController@deriveredShipmentCount')->name('deriveredShipmentCount');
+	Route::get('getUsersCount', 'PermissionController@getUsersCount')->name('getUsersCount');
 	Route::get('scheduled', 'ShipmentController@scheduled')->name('scheduled');
 	Route::post('getScheduled', 'ShipmentController@getScheduled')->name('getScheduled');
 
@@ -228,6 +231,12 @@ Route::group(['middleware' => ['auth']], function () {
 	});
 
 	// M-pesa
+	Route::any('confirmation', 'SafaricomController@confirmation')->name('confirmation');
+	Route::any('register_url', 'SafaricomController@register_url')->name('register_url');
+
+	// Customers 
+	Route::get('customerShip', 'CustomerController@customerShip')->name('customerShip');
+	Route::post('getsearchRe', 'CustomerController@getsearchRe')->name('getsearchRe');
 	
 });
 

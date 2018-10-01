@@ -13,12 +13,12 @@
                             <v-card-actions>
                                 <v-layout row wrap>
                                     <v-flex sm4>
-                                        <i class="pull-left fa fa-globe icon-rounded" style="font-size: 70px; color: #9358ac"></i>
+                                        <i class="pull-left fa fa-car" style="font-size: 70px; color: #9358ac"></i>
                                     </v-flex>
                                     <v-flex sm7 offset-sm1>
-                                        <strong>10</strong>
+                                        <strong>{{ Allshipments }}</strong>
                                         <v-divider></v-divider>
-                                        <h6 style="color: white;">Total Bookings</h6>
+                                        <h6 style="color: #000;">Total Shipments</h6>
                                     </v-flex>
                                 </v-layout>
                             </v-card-actions>
@@ -29,12 +29,12 @@
                             <v-card-actions>
                                 <v-layout row wrap>
                                     <v-flex sm4>
-                                        <i class="pull-left fa fa-exchange" style="font-size: 70px; color: white"></i>
+                                        <i class="pull-left fa fa-calendar" style="font-size: 70px; color: #3f51b5"></i>
                                     </v-flex>
                                     <v-flex sm7 offset-sm1>
-                                        <strong>12</strong>
+                                        <strong>{{ AllScheduled }}</strong>
                                         <v-divider></v-divider>
-                                        <h6 style="color: '#000';">Total Freight</h6>
+                                        <h6 style="color: '#000';">Total Scheduled</h6>
                                     </v-flex>
                                 </v-layout>
                             </v-card-actions>
@@ -48,7 +48,7 @@
                                         <i class="pull-left fa fa-check-circle" style="font-size: 70px; color: #ef553a"></i>
                                     </v-flex>
                                     <v-flex sm7 offset-sm1>
-                                        <strong>4</strong>
+                                        <strong>{{ AllderiveredShipment }}</strong>
                                         <v-divider></v-divider>
                                         <h6 style="color: #3b5998;">Total Derivered</h6>
                                     </v-flex>
@@ -64,9 +64,9 @@
                                         <i class="pull-left fa fa-plane" style="font-size: 70px; color: #99a2b3"></i>
                                     </v-flex>
                                     <v-flex sm7 offset-sm1>
-                                        <strong>2</strong>
+                                        <strong>{{ AllCanceled }}</strong>
                                         <v-divider></v-divider>
-                                        <h6 style="color: white;">Total Freight</h6>
+                                        <h6 style="color: white;">Total Canceled</h6>
                                     </v-flex>
                                 </v-layout>
                             </v-card-actions>
@@ -79,7 +79,7 @@
                     </v-flex>
                     <v-flex xs4>
                         <v-card>
-                            <v-toolbar color="white" dark>
+                            <v-toolbar color="#fff">
                                 <v-toolbar-title>Business Stats</v-toolbar-title>
                             </v-toolbar>
                             <v-list two-line>
@@ -88,37 +88,37 @@
                                         <v-list-tile-content>
                                             <v-list-tile-sub-title> Waiting Approval</v-list-tile-sub-title>
                                         </v-list-tile-content>
-                                        <v-list style="color: green"> {{ AllwaitingShipment.length }}</v-list>
+                                        <v-list style="color: green"> {{ AllCanceled }}</v-list>
                                     </v-list-tile>
                                     <v-list-tile avatar>
                                         <v-list-tile-content>
                                             <v-list-tile-sub-title> Derivery Orders</v-list-tile-sub-title>
                                         </v-list-tile-content>
-                                        <v-list style="color: green"> {{ AllderiveredShipment.length }}</v-list>
+                                        <v-list style="color: green"> {{ AllderiveredShipment }}</v-list>
                                     </v-list-tile>
                                     <v-list-tile avatar>
                                         <v-list-tile-content>
                                             <v-list-tile-sub-title> Total Packages</v-list-tile-sub-title>
                                         </v-list-tile-content>
-                                        <v-list style="color: green"> {{ Allshipments.length }}</v-list>
+                                        <v-list style="color: green"> {{ Allshipments }}</v-list>
                                     </v-list-tile>
                                     <v-list-tile avatar>
                                         <v-list-tile-content>
                                             <v-list-tile-sub-title> Delayed Orders</v-list-tile-sub-title>
                                         </v-list-tile-content>
-                                        <v-list style="color: red"> {{ AlldelayedShipment.length }}</v-list>
+                                        <v-list style="color: red"> {{ AlldelayedShipment }}</v-list>
                                     </v-list-tile>
                                     <v-list-tile avatar>
                                         <v-list-tile-content>
                                             <v-list-tile-sub-title> Orders Not Completed</v-list-tile-sub-title>
                                         </v-list-tile-content>
-                                        <v-list style="color: red"> {{ notCompleted.length }}</v-list>
+                                        <v-list style="color: red">10</v-list>
                                     </v-list-tile>
                                     <v-list-tile avatar>
                                         <v-list-tile-content>
                                             <v-list-tile-sub-title> Total Derivery</v-list-tile-sub-title>
                                         </v-list-tile-content>
-                                        <v-list style="color: orange"> {{ AllderiveredShipment.length }}</v-list>
+                                        <v-list style="color: orange"> {{ AllderiveredShipment }}</v-list>
                                     </v-list-tile>
                                 </template>
                             </v-list>
@@ -132,7 +132,7 @@
                         <v-layout row wrap>
                             <v-flex xs4>
                                 <v-card>
-                                    <v-toolbar color="white" dark>
+                                    <v-toolbar color="#fff">
                                         <v-toolbar-title>vehicles</v-toolbar-title>
                                     </v-toolbar>
                                     <v-list two-line>
@@ -155,7 +155,7 @@
                             </v-flex>
                             <v-flex xs4>
                                 <v-card>
-                                    <v-toolbar color="white" dark>
+                                    <v-toolbar color="#fff">
                                         <v-toolbar-title>Derivery Boys</v-toolbar-title>
                                     </v-toolbar>
                                     <v-list two-line>
@@ -178,9 +178,9 @@
                             </v-flex>
                         </v-layout>
                     </v-flex>
+                    <v-divider></v-divider>
+                    <v-divider></v-divider>
                 </v-layout>
-                <v-divider></v-divider>
-                <v-divider></v-divider>
 
                 <v-layout wrap>
                     <v-flex xs3 sm2>
@@ -270,10 +270,10 @@ export default {
             Allusers: {},
             loader: false,
             Allshipments: {},
-            AllContainers: {},
+            AllScheduled: {},
             AlldelayedShipment: {},
             notCompleted: {},
-            AllwaitingShipment: {},
+            AllCanceled: {},
             AllderiveredShipment: {},
             AllapprovedShipment: {},
             chart: [],
@@ -284,7 +284,7 @@ export default {
     },
     mounted() {
         this.loader = true
-        axios.get('getUsers')
+        axios.get('getUsersCount')
             .then((response) => {
                 this.Allusers = response.data
             })
@@ -292,7 +292,7 @@ export default {
                 this.errors = error.response.data.errors
             })
 
-        axios.get('getShipments')
+        axios.get('getShipmentsCount')
             .then((response) => {
                 this.Allshipments = response.data
             })
@@ -300,16 +300,16 @@ export default {
                 this.errors = error.response.data.errors
             })
 
-        axios.get('getContainers')
+        axios.get('scheduledShipmentCount')
             .then((response) => {
-                this.AllContainers = response.data
+                this.AllScheduled = response.data
             })
             .catch((error) => {
                 this.errors = error.response.data.errors
             })
 
         // Dashboard
-        axios.get('delayedShipment')
+        axios.get('delayedShipmentCount')
             .then((response) => {
                 this.AlldelayedShipment = response.data
             })
@@ -317,15 +317,15 @@ export default {
                 this.errors = error.response.data.errors
             })
 
-        axios.get('waitingShipment')
+        axios.get('getCanceledCount')
             .then((response) => {
-                this.AllwaitingShipment = response.data
+                this.AllCanceled = response.data
             })
             .catch((error) => {
                 this.errors = error.response.data.errors
             })
 
-        axios.get('deriveredShipment')
+        axios.get('deriveredShipmentCount')
             .then((response) => {
                 this.AllderiveredShipment = response.data
             })
@@ -333,11 +333,13 @@ export default {
                 this.errors = error.response.data.errors
             })
 
-        axios.get('deriveredShipment')
+        axios.get('deriveredShipmentCount')
             .then((response) => {
+                this.loader = false
                 this.AllderiveredShipment = response.data
             })
             .catch((error) => {
+                this.loader = false
                 this.errors = error.response.data.errors
             })
 
@@ -350,15 +352,6 @@ export default {
                 this.errors = error.response.data.errors
             })
 
-        axios.get('approvedShipment')
-            .then((response) => {
-                this.loader = false
-                this.AllapprovedShipment = response.data
-            })
-            .catch((error) => {
-                this.loader = false
-                this.errors = error.response.data.errors
-            })
     }
 }
 </script>

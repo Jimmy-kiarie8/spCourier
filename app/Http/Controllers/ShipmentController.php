@@ -19,43 +19,11 @@ use Notification;
 
 class ShipmentController extends Controller {
 	public function getShipments() {
-		// $roles = Auth::user()->roles;
-		// $user = User::find(1);
-		// $roles = $user->hasrolesTo('Edit Users');
-		// // var_dump($roles);die;
-		// if ($roles) {
-		// 	return 'wpooo';
-		// 	foreach ($roles as $role) {
-		// 		$role_name = $role->name;
-		// 	}
-		// // return $role_name;
-		// if ($role_name == 'Admin') {
-		// 	return Shipment::orderby('id', 'asc')->get();
-		// }
-		// $results = Shipment::orderby('id', 'asc')->get();
-		// // $results = Shipment::where('branch_id', Auth::user()->branch_id)->get();
-		// return json_decode(json_encode($results), true);
-		// }else{
-		// 	return 'qqqsss';
-		// }
-		// $shipment = [];
-		// $res = Shipment::chunk(100, function($shipments) use (&$shipment) {
-		// 	foreach ($shipments as $val) {
-		// 		 $shipment[] = $val;
-		// 	}
-		// });
-			// return Shipment::latest()->limit(500)->get();
-		return Shipment::latest()->take(500)->get();
-
-			// return $shipment;
-		// return $shipment;
-		// $results = [];
-		// $req = Shipment::chunk(20, function ($shipment) {
-		// 	foreach ($shipment as $flight) {
-		// 		$results[] = $flight;
-		// 	}
-		// });
-		// return $results;
+		if (Auth::user()->hasRole('Client')) {
+			return Shipment::latest()->where('client_id', Auth::id())->take(500)->get();
+		}else{
+			return Shipment::latest()->take(500)->get();
+		}
 	}
 
 	public function csv() {

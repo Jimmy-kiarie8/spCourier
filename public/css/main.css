@@ -44,7 +44,6 @@
     padding: 40px;
 }
 #user hr{
-    /*border-width: 3px;*/
     border-color: #f00 !important;
     height: 1px;
     max-width: 200px;
@@ -56,7 +55,6 @@
 }
 
 .snack__content {
-    /*background-color: #000 !important;*/
     color: #fff !important;
 }
 #post #img img{
@@ -108,7 +106,6 @@
 
 .btn-outline{
     color: #000 !important;
-    /*background-color: red;*/
 }
 
 
@@ -137,7 +134,6 @@ div.dataTables_wrapper div.dataTables_filter input {
     box-shadow: none;
     box-sizing: content-box;
     transition: all 0.3s;
-    /*color: rgba(255, 255, 255, 0.7);*/
 }
 
 .fade-enter-active{
@@ -203,7 +199,7 @@ div.dataTables_wrapper div.dataTables_filter input {
 }
 
 .v-content__wrap{
-    margin-top: -90px;
+    margin-top: -60px;
 }
 
 .v-list__tile--link{
