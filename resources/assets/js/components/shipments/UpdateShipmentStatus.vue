@@ -97,7 +97,11 @@ export default {
                 .then(response => {
                     this.loading = false
                     this.$emit("alertRequest");
-                      this.close();
+                    this.close();
+                    this.form.scheduled_date = ''
+                    this.form.derivery_time = ''
+                    this.form.location = ''
+                    this.form.remark = ''
                 })
                 .catch(error => {
                     this.loading = false;

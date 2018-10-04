@@ -117,6 +117,7 @@ class ShipmentController extends Controller {
 							'sender_address' => $user->address,
 							'sender_city' => $user->city,
 							'client_id' => $request->client,
+							'country' => $request->country,
 						];
 					}
 				}
@@ -500,13 +501,57 @@ class ShipmentController extends Controller {
 		foreach ($print_shipment as $selectedItems ) {
 			$id[] = $selectedItems['id'];
 		}
-		// return $id;
 		$status = $request->form['status'];
 		$derivery_time = $request->form['derivery_time'];
 		$remark = $request->form['remark'];
-		// $location = $request->form['location'];
 		$derivery_date = $request->form['scheduled_date'];
 		$shipment = Shipment::whereIn('id', $id)->update(['printed' => 1]);
 		return $print_shipment;
+	}
+
+	public function getDeriveredS(Request $request)
+	{
+		if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
+			if ($request->select['id'] == 'all') {
+				if ($request->selectStatus['state'] == 'All') {
+				// return 'st6';
+				return Shipment::where('status', 'Delivered')->latest()->take(500)->get();	
+				}else{
+				// return 'st5';
+				return Shipment::where('status', 'Delivered')->latest()->take(500)->get();
+				}
+				
+			}else{
+				// return 'st4';
+				return Shipment::where('status', 'Delivered')->where('branch_id', $request->select['id'])->latest()->take(500)->get();
+			}
+		}else{
+			if ($request->select['id'] == 'all') {
+				if ($request->selectStatus['state'] == 'All') {
+				// return 'st1';
+				return Shipment::where('status', 'Delivered')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->get();
+				}else{
+				// return 'st2';
+				return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->where('status', 'Delivered')->get();
+				}
+			}else{
+				if ($request->selectStatus['state'] == 'All') {
+				// return 'st1';
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->where('status', 'Delivered')->latest()->take(500)->get();
+				}else{
+				// return 'st2';
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->latest()->take(500)->where('status', 'Delivered')->get();
+				}
+				// return 'st3';
+				// return Shipment::where('branch_id', $request->select['id'])
+				// 				// ->where('status', 'Delivered')
+				// 				->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])
+				// 				->latest()->take(500)->get();
+			}
+		}
+	} 
+	public function getDeriveredA()
+	{
+		return Shipment::where('status', 'Delivered')->latest()->take(500)->get();	
 	}
 }

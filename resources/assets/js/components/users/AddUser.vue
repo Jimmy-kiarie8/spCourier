@@ -125,7 +125,6 @@ export default {
                     this.close;
                     this.resetForm();
                     this.$emit('alertRequest');
-
                 })
                 .catch((error) => {
                     this.loading = false

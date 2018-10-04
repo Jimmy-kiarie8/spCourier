@@ -22,7 +22,7 @@
                         <v-divider vertical></v-divider>
                         <v-divider vertical></v-divider>
                         <v-tooltip bottom>
-                            <v-btn slot="activator" color="green darken-2" class="mx-0">{{ AllShipments.length }}
+                            <v-btn slot="activator" color="green darken-2" class="mx-0">{{ AllDel.length }}
                                 <v-icon color="white darken-2" small>check_circle</v-icon>
                             </v-btn>
                             <span>Delivered</span>
@@ -31,7 +31,7 @@
                         <v-divider vertical></v-divider>
                         <v-divider vertical></v-divider>
                         <v-tooltip bottom>
-                            <v-btn slot="activator" color="brown darken-2" class="mx-0">{{ AllShipments.length }}
+                            <v-btn slot="activator" color="brown darken-2" class="mx-0">{{ AllShipments.length - AllDel.length }}
                                 <v-icon color="white darken-2" small>block</v-icon>
                             </v-btn>
                             <span>Pending</span>
@@ -225,6 +225,7 @@ export default {
             coordinatesArr: [],
             showItem: {},
             editedItem: {},
+            AllDel: [],
             between: {
                 start: 1,
                 end: 500,
@@ -325,6 +326,7 @@ export default {
                 .then((response) => {
                     this.loading = false
                     this.AllShipments = response.data
+                    this.getDeriveredS()
                 })
                 .catch((error) => {
                     this.loading = false
@@ -362,6 +364,22 @@ export default {
                     this.errors = error.response.data.errors;
                 });
         },
+        getDeriveredS() {
+            axios
+                .post("/getDeriveredS", {
+                    select: this.select,
+                    selectStatus: this.selectItem,
+                    form: this.form,
+                    selectAss: this.selectAss
+                })
+                .then(response => {
+                    this.AllDel = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.errors = error.response.data.errors;
+                });
+        },
         close() {
             this.dialog1 = false;
         },
@@ -381,7 +399,15 @@ export default {
     },
     mounted() {
         this.loader = true;
-
+        axios
+            .get("/getDeriveredA")
+            .then(response => {
+                this.AllDel = response.data;
+            })
+            .catch(error => {
+                console.log(error);
+                this.errors = error.response.data.errors;
+            });
         this.getShipBranch()
         axios
             .get("/getBranch")
@@ -394,6 +420,7 @@ export default {
                 console.log(error);
                 this.errors = error.response.data.errors;
             });
+
     }
 }
 </script>

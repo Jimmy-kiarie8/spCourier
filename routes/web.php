@@ -94,6 +94,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('getUserPro/{id}', 'UserController@getUserPro')->name('getUserPro');
 	Route::post('getUserPerm/{id}', 'UserController@getUserPerm')->name('getUserPerm');
 	Route::post('password', 'UserController@password')->name('password');
+	Route::patch('AuthUserUp/{id}', 'UserController@AuthUserUp')->name('AuthUserUp');
 	
 
 	Route::get('getUsersRole', 'RoleController@getUsersRole')->name('getUsersRole');
@@ -145,6 +146,10 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('scheduled', 'ShipmentController@scheduled')->name('scheduled');
 	Route::post('getScheduled', 'ShipmentController@getScheduled')->name('getScheduled');
 
+	Route::post('getDeriveredS', 'ShipmentController@getDeriveredS')->name('getDeriveredS');
+	Route::get('getDeriveredA', 'ShipmentController@getDeriveredA')->name('getDeriveredA');
+
+	
 	// Chart
 	Route::post('getChartData', 'ShipmentController@getChartData')->name('getChartData');
 

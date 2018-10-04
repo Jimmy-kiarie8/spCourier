@@ -69,7 +69,7 @@ export default {
                 doc.text(0, 30, 'SpeedBall Courier Services.');
                 doc.text(0, 40, 'Location: ' + element['sender_city']);
                 doc.text(0, 50, 'Phone: ' + element['sender_phone']);
-                doc.text(0, 60, 'Email: ' + element['sender_email']);
+                doc.text(0, 60, 'Email: info@speedballcourier.com');
 
                 // doc.text(105, 80, 'This is centred text.', null, null, 'center');
                 doc.text(200, 30, 'Booking Date: ' + element['booking_date'], null, null, 'right');
@@ -80,7 +80,7 @@ export default {
                 doc.text(0, 80, 'Sender Details :');
                 doc.text(0, 90, 'Name: ' + element['sender_name']);
                 doc.text(0, 100, 'Phone: ' + element['sender_phone']);
-                doc.text(0, 110, 'Email: ' + element['sender_email']);
+                doc.text(0, 110, 'Email: info@speedballcourier.com');
 
                 doc.text(105, 80, 'Client Details :', null, null, 'center');
                 doc.text(105, 90, 'Name: ' + element['client_name'], null, null, 'center');

@@ -15,6 +15,15 @@
                                 <option v-for="client in Allcustomers" :key="client.id" :value="client.id">{{ client.name }}</option>
                             </select>
                         </div> 
+                        <div class="form-group row">
+                            <label for="password" class="col-md-4 col-form-label text-md-right">Client</label>
+                            <select class="custom-select custom-select-md col-md-8" name="country">
+                                <!-- <option v-for="client in Allcustomers" :key="client.id" :value="client.id">{{ client.name }}</option> -->
+                                <option value="Kenya">Kenya</option>
+                                <option value="Tanzania">Tanzania</option>
+                                <option value="Uganda">Uganda</option>
+                            </select>
+                        </div> 
 
                         <v-btn color="red" darken-1 raised @click="onPickFile" style="color: #fff;">Upload</v-btn>
                         <input type="file" name="shipment" id="csv" ref="fileInput" style="display: none">

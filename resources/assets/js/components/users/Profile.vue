@@ -194,7 +194,7 @@ export default {
         },
         update() {
             this.loading = true
-            axios.patch(`/users/${this.LogedUser.id}`, this.$data.LogedUser).
+            axios.patch(`/AuthUserUp/${this.LogedUser.id}`, this.$data.LogedUser).
             then((response) => {
                     // console.log(response);
                     this.loading = false

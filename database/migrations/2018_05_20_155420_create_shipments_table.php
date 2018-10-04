@@ -63,6 +63,7 @@ class CreateShipmentsTable extends Migration {
 			$table->string('lng_to')->nullable();
 			$table->integer('printed')->nullable();
 			$table->text('description')->nullable();
+			$table->text('country')->nullable();
 			$table->softDeletes();
 			$table->timestamps();
 		});

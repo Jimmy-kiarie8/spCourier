@@ -79,6 +79,19 @@ class UserController extends Controller {
 		return $user;
 	}
 
+	public function AuthUserUp(Request $request)
+	{
+		$user = User::find(Auth::id());
+		$user->name = $request->name;
+		$user->email = $request->email;
+		$user->phone = $request->phone;
+		$user->branch_id = $request->branch_id;
+		$user->address = $request->address;
+		$user->city = $request->city;
+		$user->country = $request->country;
+		$user->save();
+	}
+
 	/**
 	 * Remove the specified resource from storage.
 	 *
