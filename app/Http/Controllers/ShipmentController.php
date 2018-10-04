@@ -495,6 +495,17 @@ class ShipmentController extends Controller {
 	public function getScheduled(Request $request)
 	{
 		// return $request->all();
-		return Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->get();
+		$print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->get();
+		$id = [];
+		foreach ($print_shipment as $selectedItems ) {
+			$id[] = $selectedItems['id'];
+		}
+		// return $id;
+		$status = $request->form['status'];
+		$derivery_time = $request->form['derivery_time'];
+		$remark = $request->form['remark'];
+		$derivery_date = $request->form['scheduled_date'];
+		$shipment = Shipment::whereIn('id', $id)->update(['printed' => 1]);
+		return $print_shipment;
 	}
 }

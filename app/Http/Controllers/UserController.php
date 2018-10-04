@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Str;
 
 class UserController extends Controller {
 	public function getUsers() {
@@ -21,12 +22,24 @@ class UserController extends Controller {
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(UsersRequest $request) {
+	public function store(Request $request) {
+		$this->Validate($request, [
+			'form.name' => 'required',
+            'form.password' => 'required|min:6',
+            'form.email' => 'required|email',
+            'form.phone' => 'required|numeric',
+            'form.branch_id' => 'required',
+            'form.address' => 'required',
+            'form.city' => 'required',
+            'form.country' => 'required',
+            'form.role_id' => 'required'
+		]);
 		// return $request->all();
 		$user = new User;
-		$password = $request->password;
-		$password_hash = Hash::make($request->password);
-		$user->name = $request->name;
+		$password = Str::random(10);
+		// return $request->form['name'];
+		$password_hash = Hash::make($password);
+		// $user->name = $request->name;
 		$user->password = $password_hash;
 		$user->name = $request->form['name'];
 		$user->email = $request->form['email'];

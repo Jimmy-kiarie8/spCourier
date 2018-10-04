@@ -24,16 +24,15 @@ class UsersRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'password' => 'required|min:6',
-            'email' => 'required|email',
-            'phone' => 'required|numeric',
-            // 'zipcode' => 'required',
-            'branch_id' => 'required',
-            'address' => 'required',
-            'city' => 'required',
-            'country' => 'required',
-            'role_id' => 'required'
+            'form.name' => 'required',
+            'form.password' => 'required|min:6',
+            'form.email' => 'required|email',
+            'form.phone' => 'required|numeric',
+            'form.branch_id' => 'required',
+            'form.address' => 'required',
+            'form.city' => 'required',
+            'form.country' => 'required',
+            'form.role_id' => 'required'
         ];
     }
 }

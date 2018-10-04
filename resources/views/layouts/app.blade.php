@@ -9,6 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="user" content="Auth::user()">
     <title>{{ config('app.name', 'Laravel') }}</title>
+    <link rel="icon" href="https://speedball-215310.appspot.com/storage/logo1.jpg">
 
     <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
     <script>

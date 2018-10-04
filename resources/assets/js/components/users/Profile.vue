@@ -16,7 +16,7 @@
                             <input type="file" @change="Getimage" accept="image/*" style="display: none" ref="fileInput">
                             <img v-show="imagePlaced" :src="avatar" style="width: 200px; height: 200px;">
                             <v-btn @click="upload" flat v-show="imagePlaced" :loading="loading" :disabled="loading">Upload</v-btn>
-                            <v-btn @click="cancle" flat v-show="imagePlaced">Cancle</v-btn>
+                            <v-btn @click="cancle" flat v-show="imagePlaced">Cancel</v-btn>
                         </v-card>
                         <v-card-text>
                             <v-form ref="form" @submit.prevent>

@@ -117,7 +117,7 @@ export default {
     methods: {
         save() {
             this.loading = true
-            axios.post('/users', this.$data.form).
+            axios.post('/users', {form: this.$data.form}).
             then((response) => {
                     this.loading = false
                     console.log(response);

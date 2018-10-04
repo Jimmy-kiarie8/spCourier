@@ -8,9 +8,38 @@
                     <v-progress-circular :width="3" indeterminate color="red" style="margin: 1rem"></v-progress-circular>
                 </div>
                 <div v-show="!loader">
+                    <v-toolbar dark color="primary">
+                        <!-- <v-toolbar-side-icon></v-toolbar-side-icon> -->
+                        <v-toolbar-title class="white--text">Orders</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-tooltip bottom>
+                            <v-btn slot="activator" color="info darken-2" class="mx-0">{{ AllShipments.length }}
+                                <v-icon color="white darken-2" small>check_circle</v-icon>
+                            </v-btn>
+                            <span>Orders</span>
+                        </v-tooltip>
+                        <v-divider vertical></v-divider>
+                        <v-divider vertical></v-divider>
+                        <v-divider vertical></v-divider>
+                        <v-tooltip bottom>
+                            <v-btn slot="activator" color="green darken-2" class="mx-0">{{ AllShipments.length }}
+                                <v-icon color="white darken-2" small>check_circle</v-icon>
+                            </v-btn>
+                            <span>Delivered</span>
+                        </v-tooltip>
+                        <v-divider vertical></v-divider>
+                        <v-divider vertical></v-divider>
+                        <v-divider vertical></v-divider>
+                        <v-tooltip bottom>
+                            <v-btn slot="activator" color="brown darken-2" class="mx-0">{{ AllShipments.length }}
+                                <v-icon color="white darken-2" small>block</v-icon>
+                            </v-btn>
+                            <span>Pending</span>
+                        </v-tooltip>
+                    </v-toolbar>
                     <!-- <v-btn color="primary" flat @click="openRow">Filter Rows</v-btn> -->
-                    <v-spacer></v-spacer>
-                    <v-flex sm6>
+                    <!-- <v-spacer></v-spacer> -->
+                    <!-- <v-flex sm6>
                         <v-tooltip bottom>
                             <v-btn icon class="mx-0" @click="next" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
                                 <v-icon color="blue darken-2">chevron_right</v-icon>
@@ -18,7 +47,7 @@
                             <span>Next results</span>
                         </v-tooltip>
                         From {{ between.start }} to {{ between.end }}
-                    </v-flex>
+                    </v-flex> -->
                     <v-card style="background: rgba(5, 117, 230, 0.16);">
                         <v-layout wrap>
                             <v-flex xs4 sm2>
@@ -41,7 +70,7 @@
                             <v-flex xs4 sm1>
                                 <v-btn raised color="info" @click="sort">Filter</v-btn>
                             </v-flex>
-                            
+
                             <v-flex xs4 sm1>
                                 <v-btn raised color="info" @click="filReset">Reset</v-btn>
                             </v-flex>
@@ -320,7 +349,7 @@ export default {
             this.loading = true
             this.between.start = 1;
             this.between.end = 500;
-            
+
             axios
                 .get("/getShipments")
                 .then(response => {
