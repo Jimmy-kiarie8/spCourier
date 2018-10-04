@@ -504,6 +504,7 @@ class ShipmentController extends Controller {
 		$status = $request->form['status'];
 		$derivery_time = $request->form['derivery_time'];
 		$remark = $request->form['remark'];
+		// $location = $request->form['location'];
 		$derivery_date = $request->form['scheduled_date'];
 		$shipment = Shipment::whereIn('id', $id)->update(['printed' => 1]);
 		return $print_shipment;
