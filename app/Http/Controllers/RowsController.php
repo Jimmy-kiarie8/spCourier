@@ -63,21 +63,14 @@ class RowsController extends Controller
 	public function notprinted(Request $request, $id)
 	{
 		$shipment = Shipment::find($id);
-		$shipment->printed = 0;
+		$shipment->printReceipt = 0;
 		$shipment->save();
 		return $shipment;
 	}
 	public function printed(Request $request, $id)
 	{
 		$shipment = Shipment::find($id);
-		$shipment->printed = 1;
-		$shipment->save();
-		return $shipment;
-	}
-	public function pending(Request $request, $id)
-	{
-		$shipment = Shipment::find($id);
-		$shipment->printed = 2;
+		$shipment->printReceipt = 1;
 		$shipment->save();
 		return $shipment;
 	}

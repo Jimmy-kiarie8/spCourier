@@ -102,6 +102,7 @@ export default {
                     this.form.derivery_time = ''
                     this.form.location = ''
                     this.form.remark = ''
+                    eventBus.$emit('selectClear');
                 })
                 .catch(error => {
                     this.loading = false;

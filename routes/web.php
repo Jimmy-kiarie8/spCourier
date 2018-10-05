@@ -106,6 +106,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('getBranch', 'BranchController@getBranch')->name('getBranch');
 	Route::post('getShipBranch', 'BranchController@getShipBranch')->name('getShipBranch');
 	Route::post('getBranchShip/{id}', 'BranchController@getBranchShip')->name('getBranchShip');
+	Route::get('getBranchEger', 'BranchController@getBranchEger')->name('getBranchEger');
 
 	Route::post('getCompanies', 'CompanyController@getCompanies')->name('getCompanies');
 	Route::post('getCompanyAdmin', 'CompanyController@getCompanyAdmin')->name('getCompanyAdmin');
@@ -219,7 +220,6 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('rows', 'RowsController@rows')->name('rows');
 	Route::get('getRows', 'RowsController@getRows')->name('getRows');
 	Route::post('notprinted/{id}', 'RowsController@notprinted')->name('notprinted');
-	Route::post('pending/{id}', 'RowsController@pending')->name('pending');
 	Route::post('printed/{id}', 'RowsController@printed')->name('printed');
 
 	Route::post('locationUpdate/{id}', 'LocationController@locationUpdate')->name('locationUpdate');
@@ -248,3 +248,5 @@ Route::group(['middleware' => ['auth']], function () {
 Route::get('scheduler', function (){
 	\Illuminate\Support\Facades\Artisan::call('schedule:run');
  });
+
+//  ALTER TABLE `shipments` ADD `printReceipt` BOOLEAN NOT NULL DEFAULT FALSE AFTER `country`;

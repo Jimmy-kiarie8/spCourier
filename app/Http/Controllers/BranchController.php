@@ -79,6 +79,11 @@ class BranchController extends Controller {
 		return Branch::where('id', $id)->get();
 	}
 
+	public function getBranchEger()
+	{
+		return Branch::setEagerLoads([])->get();
+	}
+
 	public function getShipBranch(Request $request)
 	{
 		// return $request->all();
@@ -179,4 +184,5 @@ class BranchController extends Controller {
 			}
 		}
 	}
+	
 }

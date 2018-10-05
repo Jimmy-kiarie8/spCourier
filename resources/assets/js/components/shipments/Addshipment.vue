@@ -158,7 +158,7 @@
                                                         <tr v-for="product, key in form.products">
                                                             <th scope="row">{{ key+1 }}</th>
                                                             <td><input type="text" class="form-control" placeholder="Product Description" v-model="product.product_name"></td>
-                                                            <!-- <td><input type="text" class="form-control" placeholder="COD Amount" v-model="product.cod_amount"></td> -->
+                                                                <!-- <td><input type="text" class="form-control" placeholder="COD Amount" v-model="product.cod_amount"></td> -->
                                                             <td><input type="text" class="form-control" placeholder="Price" v-model="product.price"></td>
                                                             <td><input type="text" class="form-control" placeholder="Quantity" v-model="product.quantity"></td>
                                                             <td><input type="text" class="form-control" placeholder="Total Weight" v-model="product.weight"></td>
@@ -315,7 +315,7 @@
 <script>
 import VueBarcode from "vue-barcode";
 export default {
-    props: ["addShipment", "user", 'role'],
+    props: ["addShipment", "user", 'role', 'Allcustomer', 'AllDrivers', 'AllBranches'],
     components: {
         barcode: VueBarcode
     },
@@ -345,9 +345,9 @@ export default {
         });
         return {
             selectCl: [],
-            AllDrivers: [],
-            Allcustomer: [],
-            AllBranches: [],
+            // AllDrivers: [],
+            // Allcustomer: [],
+            // AllBranches: [],
             customerArr: [],
             loading: false,
             selectD: {
@@ -453,14 +453,14 @@ export default {
             this.isLoading = true
 
             // Lazily load input customerArr
-            axios.get('getCustomer')
-                .then(res => {
-                    this.customerArr = res.data
-                    this.isLoading = false
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+            // axios.get('getCustomer')
+            //     .then(res => {
+            this.customerArr = Allcustomer
+            this.isLoading = false
+            // })
+            // .catch(err => {
+            //     console.log(err)
+            // })
             //   .finally(() => (this.isLoading = false))
         }
     },
@@ -494,37 +494,6 @@ export default {
                 this.form.derivery_date
             );
         }
-    },
-    mounted() {
-        axios
-            .get("/getDrivers")
-            .then(response => {
-                this.AllDrivers = response.data;
-                this.loader = false;
-            })
-            .catch(error => {
-                console.log(error);
-                this.errors = error.response.data.errors;
-            });
-        axios
-            .get("/getCustomer")
-            .then(response => {
-                this.Allcustomer = response.data;
-                this.loader = false;
-            })
-            .catch(error => {
-                console.log(error);
-                this.errors = error.response.data.errors;
-            });
-        axios
-            .get("/getBranch")
-            .then(response => {
-                this.AllBranches = response.data;
-            })
-            .catch(error => {
-                console.log(error);
-                this.errors = error.response.data.errors;
-            });
     },
 };
 </script>

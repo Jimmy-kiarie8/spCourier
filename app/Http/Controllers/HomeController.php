@@ -68,8 +68,9 @@ class HomeController extends Controller
     {	
     	$props = Props::get();
         // return redirect('/login');
-
-    	return view('home', ['props' => $props]);
+        if (Auth::check()) {
+    	    return redirect('/courier');
+        }
     }
 
     /**

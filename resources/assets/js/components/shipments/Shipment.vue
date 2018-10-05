@@ -89,20 +89,24 @@
                             <td class="text-xs-right">{{ props.item.charges }}</td>
                             <td class="text-xs-right">{{ props.item.created_at }}</td>
                             <td class="text-xs-right" v-if="props.item.printed === 1" style="background: Green;">
-                                <v-btn color="white" flat @click="printed(props.item)" :loading="ploading" :disabled="ploading">Printed</v-btn>
+                                Printed
+                            </td>
+                            <td class="text-xs-right" v-else>
+                                Not Printed
+                            </td>
+                            <td class="text-xs-right" v-if="props.item.printed === 1" style="background: Green;">
+                                <v-btn color="white" flat @click="printed(props.item)" :loading="ploading" :disabled="ploading"><p style="color: #fff;">Printed</p> </v-btn>
                                 <v-btn color="white" flat @click="notPrinted(props.item)" :loading="nloading" :disabled="nloading">Not Printed</v-btn>
-                                <!-- <v-btn color="white" flat @click="pending(props.item)" :loading="mloading" :disabled="mloading">Pending</v-btn> -->
                             </td>
                             <!-- <td class="text-xs-right" v-if="props.item.printed === 0" style="background: red;">
                                 <v-btn color="white" flat @click="printed(props.item)" :loading="ploading" :disabled="ploading">Printed</v-btn>
                                 <v-btn color="white" flat @click="notPrinted(props.item)" :loading="nloading" :disabled="nloading">Not Printed</v-btn>
                                 <v-btn color="white" flat @click="pending(props.item)" :loading="mloading" :disabled="mloading">Pending</v-btn>
                             </td> -->
-                            <td class="text-xs-right" v-if="props.item.printed === 0">
+                            <!-- <td class="text-xs-right" v-if="props.item.printed === 0">
                                 <v-btn color="primary" flat @click="printed(props.item)" :loading="ploading" :disabled="ploading">Printed</v-btn>
                                 <v-btn color="pink darken-2" flat @click="notPrinted(props.item)" :loading="nloading" :disabled="nloading">Not Printed</v-btn>
-                                <!-- <v-btn color="white" flat @click="pending(props.item)" :loading="mloading" :disabled="mloading">Pending</v-btn> -->
-                            </td>
+                            </td> -->
                             <td class="justify-center layout px-0">
                                 <v-tooltip bottom>
                                     <v-btn icon class="mx-0" @click="editItem(props.item)" slot="activator">
@@ -158,7 +162,7 @@
             <!-- Data table -->
         </v-container>
     </v-content>
-    <AddShipment :addShipment="dialog" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role"></AddShipment>
+    <AddShipment :addShipment="dialog" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers"></AddShipment>
     <EditShipment :EditShipment="dialog1" @closeRequest="close" :customers="Allcustomers" :form="editedItem" @alertRequest="showalert" :role="role"></EditShipment>
     <ShowShipment :ShowShipment="showdialog1" @closeRequest="close" :customers="Allcustomers" :showItems="showItem"></ShowShipment>
     <UpdateShipment :UpdateShipment="updateModal" @closeRequest="close" :markers="markers" :updateitedItem="updateitedItem" @alertRequest="showalert"></UpdateShipment>
@@ -220,7 +224,7 @@ export default {
             nloading: false,
             mloading: false,
             AllBranches: [],
-            AllDrivers: {},
+            AllDrivers: [],
             select: {
                 branch_name: 'All',
                 id: 'all'
@@ -404,7 +408,7 @@ export default {
             AllRows: [],
             selectStatus: [],
             direction: "left",
-            Allcustomers: {},
+            Allcustomers: [],
             shipment: {},
             markers: [],
         };
@@ -432,6 +436,9 @@ export default {
         },
         openShipment() {
             this.dialog = true;
+            this.getBranch()
+            this.getCustomer()
+            this.getDrivers()
         },
         addProduct() {
             // alert(this.updateitedItem.id);
@@ -454,9 +461,6 @@ export default {
         },
         openProduct(updateitedItem) {
             this.pdialog2 = true;
-        },
-        initialize() {
-            this.AllShipments;
         },
         UpdateItems(item) {
             axios
@@ -499,6 +503,7 @@ export default {
         },
         ShipmentCsv() {
             this.csvModel = true
+            this.getCustomer()
         },
         deleteItem(item) {
             const index = this.AllShipments.indexOf(item);
@@ -580,6 +585,7 @@ export default {
                 this.snackbar = true
             } else {
                 this.AssignDriverModel = true
+                this.getDrivers()
             }
         },
         assignBranch() {
@@ -589,6 +595,7 @@ export default {
                 this.snackbar = true
             } else {
                 this.AssignBranchModel = true
+                this.getBranch()
             }
         },
         assignPrint() {
@@ -643,23 +650,6 @@ export default {
                     this.errors = error.response.data.errors
                 })
         },
-        getShipments() {
-            this.loading = true
-            this.between.start = 1;
-            this.between.end = 500;
-            axios
-                .get("/getShipments")
-                .then(response => {
-                    this.loading = false
-                    this.AllShipments = response.data;
-                    this.loader = false;
-                })
-                .catch(error => {
-                    this.loading = false
-                    this.errors = error.response.data.errors;
-                    this.loader = false;
-                });
-        },
         close() {
             this.dialog1 = this.dialog = this.pdialog2 = this.updateModal = this.showdialog1 =
                 this.UpdateShipmentModel = this.AssignDriverModel = this.AssignBranchModel = this.trackModel = this.csvModel = this.chargeModal = this.RowModal = this.printModal = false;
@@ -673,34 +663,10 @@ export default {
             }
             this.form.start_date = this.form.end_date = ''
             this.getShipments()
-        }
-    },
-    mounted() {
-        this.loader = true;
-
-        axios
-            .get("/getRows")
-            .then(response => {
-                this.AllRows = response.data;
-                this.loader = false;
-            })
-            .catch(error => {
-                console.log(error);
-                this.errors = error.response.data.errors;
-                this.loader = false;
-            });
-        // axios
-        //     .get("/getShipments")
-        //     .then(response => {
-        //         this.AllShipments = response.data;
-        //         this.loader = false;
-        //     })
-        //     .catch(error => {
-        //         this.errors = error.response.data.errors;
-        //         this.loader = false;
-        //     });
-        this.getShipments()
-        axios
+        },
+        
+        getCustomer() {
+            axios
             .get("getCustomer")
             .then(response => {
                 this.Allcustomers = response.data;
@@ -708,16 +674,9 @@ export default {
             .catch(error => {
                 this.errors = error.response.data.errors;
             });
-        axios
-            .get("/getBranch")
-            .then(response => {
-                this.AllBranches = response.data;
-            })
-            .catch(error => {
-                console.log(error);
-                this.errors = error.response.data.errors;
-            });
-        axios
+        },
+        getDrivers() {
+            axios
             .get("/getDrivers")
             .then(response => {
                 this.AllDrivers = response.data;
@@ -726,53 +685,58 @@ export default {
                 console.log(error);
                 this.errors = error.response.data.errors;
             });
-    },
-    computed: {
-        activeFab() {
-            switch (this.tabs) {
-                case "one":
-                    return {
-                        class: "purple",
-                        icon: "account_circle"
-                    };
-                case "two":
-                    return {
-                        class: "red",
-                        icon: "edit"
-                    };
-                case "three":
-                    return {
-                        class: "green",
-                        icon: "keyboard_arrow_up"
-                    };
-                default:
-                    return {};
-            }
         },
-        formTitle() {
-            return this.editedIndex === -1 ? "New Item" : "Edit Item";
-        }
+        getBranch() {
+            axios
+            .get("/getBranchEger")
+            .then(response => {
+                this.AllBranches = response.data;
+            })
+            .catch(error => {
+                console.log(error);
+                this.errors = error.response.data.errors;
+            });
+        },
+        getShipments() {
+            this.loading = true
+            this.between.start = 1;
+            this.between.end = 500;
+            axios
+                .get("/getShipments")
+                .then(response => {
+                    this.loading = false
+                    this.loader = false;
+                    this.AllShipments = response.data;
+                })
+                .catch(error => {
+                    this.loading = false
+                    this.loader = false;
+                    this.errors = error.response.data.errors;
+                });
+        },
     },
+    
     created() {
-        this.initialize();
+        eventBus.$on('selectClear', data => {
+            this.selected = [];
+        });
     },
-    watch: {
-        dialog(val) {
-            val || this.close();
-        },
-        top(val) {
-            this.bottom = !val;
-        },
-        right(val) {
-            this.left = !val;
-        },
-        bottom(val) {
-            this.top = !val;
-        },
-        left(val) {
-            this.right = !val;
-        }
-    }
+    mounted() {
+        this.loader = true;
+
+        // axios
+        //     .get("/getRows")
+        //     .then(response => {
+        //         this.AllRows = response.data;
+        //         this.loader = false;
+        //     })
+        //     .catch(error => {
+        //         console.log(error);
+        //         this.errors = error.response.data.errors;
+        //         this.loader = false;
+        //     });
+        this.getShipments()
+    },
 };
 </script>
 
