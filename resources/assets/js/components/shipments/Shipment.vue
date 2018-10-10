@@ -89,24 +89,17 @@
                             <td class="text-xs-right">{{ props.item.charges }}</td>
                             <td class="text-xs-right">{{ props.item.created_at }}</td>
                             <td class="text-xs-right" v-if="props.item.printed === 1" style="background: Green;">
-                                Printed
+                                <p style="color: #fff;">Printed</p> 
                             </td>
                             <td class="text-xs-right" v-else>
-                                Not Printed
+                                <p style="color: #000;">Not Printed</p> 
                             </td>
-                            <td class="text-xs-right" v-if="props.item.printed === 1" style="background: Green;">
-                                <v-btn color="white" flat @click="printed(props.item)" :loading="ploading" :disabled="ploading"><p style="color: #fff;">Printed</p> </v-btn>
-                                <v-btn color="white" flat @click="notPrinted(props.item)" :loading="nloading" :disabled="nloading">Not Printed</v-btn>
+                            <td class="text-xs-right" v-if="props.item.printReceipt === 1" style="background: green;">
+                                <v-btn color="white" flat @click="notPrinted(props.item)" :loading="nloading" :disabled="nloading">Mark Not Printed</v-btn>
                             </td>
-                            <!-- <td class="text-xs-right" v-if="props.item.printed === 0" style="background: red;">
-                                <v-btn color="white" flat @click="printed(props.item)" :loading="ploading" :disabled="ploading">Printed</v-btn>
-                                <v-btn color="white" flat @click="notPrinted(props.item)" :loading="nloading" :disabled="nloading">Not Printed</v-btn>
-                                <v-btn color="white" flat @click="pending(props.item)" :loading="mloading" :disabled="mloading">Pending</v-btn>
-                            </td> -->
-                            <!-- <td class="text-xs-right" v-if="props.item.printed === 0">
-                                <v-btn color="primary" flat @click="printed(props.item)" :loading="ploading" :disabled="ploading">Printed</v-btn>
-                                <v-btn color="pink darken-2" flat @click="notPrinted(props.item)" :loading="nloading" :disabled="nloading">Not Printed</v-btn>
-                            </td> -->
+                            <td class="text-xs-right" v-else>
+                                <v-btn color="info" flat @click="printed(props.item)" :loading="ploading" :disabled="ploading">Mark Printed </v-btn>
+                            </td>
                             <td class="justify-center layout px-0">
                                 <v-tooltip bottom>
                                     <v-btn icon class="mx-0" @click="editItem(props.item)" slot="activator">
@@ -394,8 +387,13 @@ export default {
                     text: "Created",
                     value: "created_at"
                 },
+                
                 {
-                    text: 'Printed Status',
+                    text: "Waybill Printed",
+                    value: "created_at"
+                },
+                {
+                    text: 'Receipt Printed',
                     value: 'name',
                 },
                 {
@@ -405,7 +403,7 @@ export default {
                 }
             ],
             selected: [],
-            AllRows: [],
+            AllRows: [],    
             selectStatus: [],
             direction: "left",
             Allcustomers: [],
@@ -524,15 +522,16 @@ export default {
             
             this.editedItem = Object.assign({}, item);
             this.editedIndex = this.AllShipments.indexOf(item);
-            this.nloading = true,
+            this.loading = true,
                 axios.post(`/notprinted/${item.id}`)
                 .then(response => {
                     // this.printColor = 'red'
-                    this.nloading = false,
+                    // this.loading = false,
+                    this.getShipments()
                     this.message = "Not Printed";
                     this.color = "black";
                     this.snackbar = true;
-                    Object.assign(this.AllShipments[this.editedIndex], this.editedItem)
+                    // Object.assign(this.AllShipments[this.editedIndex], this.editedItem)
                     // console.log(response);
                 })
                 .catch(error => (this.errors = error.response.data.errors));
@@ -540,15 +539,16 @@ export default {
         printed(item) {
             this.editedItem = Object.assign({}, item);
             this.editedIndex = this.AllShipments.indexOf(item);
-            this.ploading = true,
+            this.loading = true,
                 axios.post(`/printed/${item.id}`)
                 .then(response => {
                     // this.printColor = 'green'
-                    this.ploading = false,
-                        this.message = "Printed";
+                    this.getShipments()
+                    // this.loading = false,
+                    this.message = "Printed";
                     this.color = "black";
                     this.snackbar = true;
-                    Object.assign(this.AllShipments[this.editedIndex], this.editedItem)
+                    // Object.assign(this.AllShipments[this.editedIndex], this.editedItem)
                     // console.log(response);
                 })
                 .catch(error => (this.errors = error.response.data.errors));

@@ -93,21 +93,21 @@ class Kernel extends ConsoleKernel
         //             ->monthly();
         // }
         $schedule->command('notifications:ScheduledCommand')
-                 ->hourly();
-        $schedule->command('Mailreports:ReportMail')
-                ->hourly();
+                 ->everyTenMinutes();
+        // $schedule->command('Mailreports:ReportMail')
+                // ->hourly();
         // $schedule->command('Mailreports:ReportMail')
         //         ->twiceDaily(13, 15);
-        $schedule->command(ParseReportsCommand::class)->daily();
+        // $schedule->command(ParseReportsCommand::class)->daily();
 
     }
 
-    public function S_everyMinute()
-    {
-        // $schedule_t = Task::first();
-        // return $schedule_time = $schedule_t->schedule;
-        return;
-    }
+    // public function S_everyMinute()
+    // {
+    //     $schedule_t = Task::first();
+    //     return $schedule_time = $schedule_t->schedule;
+    //     return;
+    // }
     
 
     /**

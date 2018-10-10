@@ -45,17 +45,12 @@ class ScheduledCommand extends Command
      */
     public function handle()
     {
-        $all_shipment = Shipment::setEagerLoads([])->get();
-		// return Carbon::today();
-		 $user = User::find(1);
-		$email = $user->email;
-		foreach ($all_shipment as $shipment) {
-			$derivery_date = new Carbon($shipment->derivery_date);
-			$date1 = Carbon::today();
-			$date2 = new Carbon('tomorrow');
-        	$date2->diffInDays($date1);
-        	$shipment = Shipment::whereBetween('derivery_date', [$date1, $date2])->setEagerLoads([])->get();
-		}
-		Mail::send(new scheduleMail($user, $shipment, $email));
+        $date1 = Carbon::today();
+        $date2 = new Carbon('tomorrow');
+        $shipment = Shipment::setEagerLoads([])->where('status', 'Scheduled')->whereBetween('derivery_date', [$date1, $date2])->get();
+        // dd($all_shipment);
+        $user = User::first();
+        // dd($user);
+		Mail::send(new scheduleMail($user, $shipment));
     }
 }

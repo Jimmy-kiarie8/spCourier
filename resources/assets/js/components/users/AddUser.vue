@@ -120,9 +120,9 @@ export default {
             axios.post('/users', {form: this.$data.form}).
             then((response) => {
                     this.loading = false
-                    console.log(response);
+                    // console.log(response);
                     this.$parent.Allusers.push(response.data)
-                    this.close;
+                    this.close();
                     this.resetForm();
                     this.$emit('alertRequest');
                 })

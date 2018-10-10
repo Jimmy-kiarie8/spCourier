@@ -65,11 +65,6 @@ class ShipmentController extends Controller {
 	public function import(Request $request) {
 		// var_dump($request->all());die;
 		$user = User::find($request->client);
-		// return $user->city;
-		// $message = 'New shipments have been added';
-		// Notification::send(Auth::user(), new NotyExcel($message));
-		// return redirect('courier#/Shipments');
-		// var_dump($request->client);die;
 		if ($request->file('shipment')) {
 			$path = $request->file('shipment')->getRealPath();
 			$data = Excel::load($path, function ($reader) {
@@ -88,28 +83,18 @@ class ShipmentController extends Controller {
 							'client_address' => $row['address'],
 							'client_city' => $row['city'],
 							'amount_ordered' => $row['quantity'],
-							// 'client_postal_code' => $row['postal_code'],
 							'cod_amount' => $row['cod_amount'],
 							'client_region' => $row['region'],
-							// 'booking_date' => $row['order_date']->formatDates(true),
-							// 'product_no' => $row['How_many_pieces_of_the_product_are_contained_in_the_order'],
 							'airway_bill_no' => $row['order_id'],
 							'bar_code' => $row['order_id'],
-							// 'derivery_date' => $row['derivery_date'],
-							// 'order_date' => $row['order_date'],
 							'user_id' => Auth::id(),
 							'status' => 'Warehouse',
 							'created_at' => new DateTime(),
 							'booking_date' => new DateTime(),
 							'updated_at' => new DateTime(),
 							'shipment_id' => random_int(1000000, 9999999),
-							// 'sender_name' => Auth::user()->name,
-							// 'sender_email' => Auth::user()->email,
-							// 'sender_phone' => Auth::user()->phone,
-							// 'sender_address' => Auth::user()->address,
-							// 'sender_city' => Auth::user()->city,
-							// 'user_id' => Auth::id(),
 							'paid' => 0,
+							// 'printReceipt' => 0,
 							'printed' => 0,
 							'sender_name' => $user->name,
 							'sender_email' => $user->email,
@@ -154,29 +139,17 @@ class ShipmentController extends Controller {
 	 */
 	public function store(Request $request) {
 		// return $request->all();
-		$this->Validate($request, [
-			// 'form.client_name' =>'required',
-			// 'form.client_phone' =>'required|numeric',
-			// 'form.client_email' =>'required|email',
-			// 'form.client_address' =>'required',
-			// 'form.client_city' =>'required',
-			// 'form.assign_staff' =>'required',
-			// 'form.shipment_type' =>'required',
-			'form.payment' =>'required',
-			'form.insuarance_status' =>'required',
-			'form.booking_date' =>'required|date',
-			'form.derivery_date' =>'required|date',
-			'form.bar_code' =>'required',
-			'form.derivery_time' =>'required',
-			'form.from_city' =>'required',
-			'form.to_city' =>'required',
-			// 'form.sender_name' =>'required',
-			// 'form.sender_phone' =>'required',
-			// 'form.sender_address' =>'required',
-			// 'form.sender_city' =>'required',
-			// 'form.airway_bill_no' =>'required',
-			// 'form.total_freight' =>'required|numeric',
-		]);
+		// $this->Validate($request, [
+		// 	'form.payment' =>'required',
+		// 	'form.insuarance_status' =>'required',
+		// 	'form.booking_date' =>'required|date',
+		// 	'form.derivery_date' =>'required|date',
+		// 	'form.bar_code' =>'required',
+		// 	'form.derivery_time' =>'required',
+		// 	'form.from_city' =>'required',
+		// 	'form.to_city' =>'required',
+		// ]);
+		
 		
 
 		$products = collect($request->form['products'])->transform(function ($product) {
@@ -193,6 +166,29 @@ class ShipmentController extends Controller {
 			], 422);
 		}
 		$shipment = new Shipment;
+		if ($request->selectCl == []) {
+			$shipment->client_id = null;
+			// dd('nn');
+		} else {
+			$shipment->client_id = $request->selectCl['id'];
+			// dd( $request->selectCl['id']);
+		}
+		if ($request->selectD == []) {
+			$shipment->driver = '';
+			// dd('renn');
+		} else {
+			$shipment->driver = $request->selectD['id'];
+			// dd( $request->selectD['id']);
+		}
+
+		if ($request->selectB == []) {
+			$shipment->branch_id = Auth::user()->branch_id;
+			// dd(Auth::user()->branch_id);
+		} else {
+			$shipment->branch_id = $request->selectB['id'];
+			// dd( $request->selectB['id']);
+		}
+		
 		$shipment->sub_total = $products->sum('total');
 		$shipment->client_name = $request->form['client_name'];
 		$shipment->client_phone = $request->form['client_phone'];
@@ -215,19 +211,28 @@ class ShipmentController extends Controller {
 		$shipment->cod_amount = $request->form['cod_amount'];
 		// $shipment->receiver_name = $request->form['receiver_name'];
 		$shipment->from_city = $request->form['from_city'];
-		$shipment->branch_id = $request->selectB['id'];
-		// $shipment->driver = $request->selectD['id'];
-		$shipment->client_id = $request->model;
-		$sender = User::find($request->model);
+		
+		if ($request->model) {
+			$shipment->client_id = $request->model;
+			$sender = User::find($request->model);
+			$shipment->sender_name = $sender->name;
+			$shipment->sender_email = 'info@speedballcourier.com';
+			$shipment->sender_phone = '+254728492446';
+			$shipment->sender_address = '17254 00100';
+			$shipment->sender_city = $sender->city;
+		} else {
+			$shipment->sender_name = 'Speedball Courier';
+			$shipment->sender_email = 'info@speedballcourier.com';
+			$shipment->sender_phone = '+254728492446';
+			$shipment->sender_address = '17254 00100';
+			$shipment->sender_city = 'Nairobi';
+		}
+		
 		// return $request->form['customer_id'];
-		$shipment->sender_name = $sender->name;
-		$shipment->sender_email = $sender->email;
-		$shipment->sender_phone = $sender->phone;
-		$shipment->sender_address = $sender->address;
-		$shipment->sender_city = $sender->city;
 		$shipment->user_id = Auth::id();
 		$shipment->shipment_id = random_int(1000000, 9999999);
 		// $shipment->branch_id = Auth::user()->branch_id;
+		
 		$users = $this->getAdmin();
 		if ($shipment->save()) {
 			$shipment->products()->saveMany($products);
@@ -411,15 +416,9 @@ class ShipmentController extends Controller {
 	}
 
 	public function scheduled() {
-		// return Shipment::where('status', 'Scheduled')->get();
-		$all_shipment = Shipment::latest()->take(300)->get();
-		foreach ($all_shipment as $shipment) {
-			$derivery_date = new Carbon($shipment->derivery_date);
 			$date1 = Carbon::today();
 			$date2 = new Carbon('tomorrow');
-        	$date2->diffInDays($date1);
-        	$shipment = Shipment::whereBetween('created_at', [$date1, $date2])->where('status', 'Scheduled')->latest()->take(300)->get();
-		}
+        $shipment = Shipment::setEagerLoads([])->where('status', 'Scheduled')->whereBetween('derivery_date', [$date1, $date2])->take(300)->get();
 		return $shipment;
 	}
 

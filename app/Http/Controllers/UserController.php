@@ -36,7 +36,8 @@ class UserController extends Controller {
 		]);
 		// return $request->all();
 		$user = new User;
-		$password = Str::random(10);
+		$password = $request->form['password'];
+		// $password = Str::random(10);
 		// return $request->form['name'];
 		$password_hash = Hash::make($password);
 		// $user->name = $request->name;
@@ -50,7 +51,7 @@ class UserController extends Controller {
 		$user->country = $request->form['country'];
 		$user->activation_token = str_random(60);
 		$user->save();
-		$user->assignRole($request->role_id);
+		$user->assignRole($request->form['role_id']);
 		$user->givePermissionTo($request->selected);
         $user->notify(new SignupActivate($user, $password));
 		return $user;

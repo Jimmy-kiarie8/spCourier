@@ -13,18 +13,18 @@ class scheduleMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $shipment, $user, $email;
+    public $shipment, $user;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user, $shipment, $email)
+    public function __construct(User $user, $shipment)
     {
         $this->user = $user;
         $this->shipment = $shipment;
-        $this->email = $email;
+        // $this->email = $email;
     }
 
 
@@ -40,9 +40,9 @@ class scheduleMail extends Mailable
         // ->subject('Scheduled Shipment')
         // ->markdown('mail.scheduleMail', ['url' => $url]);
         // return $this->markdown('emails/InvoiceMail');
-        $mail = $this->email;
+        // $mail = $this->email;
 
-        return $this->from('courier@courier.com')
+        return $this->from('jimlaravel@gmail.com')
                     // ->view('emails.InvoiceMail')
                     ->markdown('mail/scheduleNotification')
                     ->to('jimlaravel@gmail.com')

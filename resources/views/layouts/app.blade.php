@@ -11,8 +11,8 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="icon" href="https://speedball-215310.appspot.com/storage/logo1.jpg">
 
-    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
-    <script>
+    {{-- <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script> --}}
+    {{-- <script>
       // Initialize Firebase
       var config = {
         apiKey: "AIzaSyD6ZwYtv9R4LJusjTLCVBtdbZn9nxj4xe0",
@@ -23,7 +23,7 @@
         messagingSenderId: "380640669657"
       };
       firebase.initializeApp(config);
-    </script>
+    </script> --}}
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     {{-- <script src="{{ asset('js/jquery.js') }}"></script> --}}
@@ -31,9 +31,9 @@
     <!-- Fonts -->
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> --}}
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    {{--<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
+    {{-- {{--<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css"> --}}
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
-     <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet"> --}}
+     <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     {{-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNzKeF6ZwxlAOUCyeH8UxvvYRHP_w_Guk&libraries=places"></script> --}}
  {{--     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>

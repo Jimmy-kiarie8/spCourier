@@ -1,4 +1,4 @@
 cron:
-- description: "daily summary job"
-  url: scheduler
+- description: "Scheduled shipments"
+  url: /scheduler
   schedule: every 1 mins

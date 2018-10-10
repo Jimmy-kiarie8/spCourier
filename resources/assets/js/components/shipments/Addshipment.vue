@@ -75,10 +75,30 @@
                                                 </template>
                                             </v-autocomplete>
                                             <v-divider></v-divider>
+
+                                            <div v-if="!model">
+                                                <v-layout wrap row>
+                                                    <v-flex xs6 sm6>
+                                                        <v-text-field v-model="form.sender_name" :rules="rules.name" color="blue darken-2" label="Sender Name" required></v-text-field>
+                                                    </v-flex>
+                                                    <v-flex xs6 sm6>
+                                                        <v-text-field v-model="form.sender_email" :rules="emailRules" color="blue darken-2" label="Sender Email" required></v-text-field>
+                                                    </v-flex>
+                                                    <v-flex xs6 sm6>
+                                                        <v-text-field v-model="form.sender_address" :rules="rules.name" color="blue darken-2" label="Sender Address" required></v-text-field>
+                                                    </v-flex>
+                                                    <v-flex xs6 sm6>
+                                                        <v-text-field v-model="form.sender_city" :rules="rules.name" color="blue darken-2" label="Sender City" required></v-text-field>
+                                                    </v-flex>
+                                                    <v-flex xs6 sm6>
+                                                        <v-text-field v-model="form.sender_phone" color="blue darken-2" label="Sender Phone" required></v-text-field>
+                                                    </v-flex>
+                                                </v-layout>
+                                            </div>
                                             <!-- <v-flex xs6 sm6 v-if="cust.id === model">
                                                     <v-select :items="Allcustomer" v-model="selectCl" label="Select Sender" single-line item-text="name" item-value="id" return-object persistent-hint></v-select>
                                                 </v-flex> -->
-                                            <div v-for="cust in Allcustomer" :key="cust.id">
+                                            <div v-if="model" v-for="cust in Allcustomer" :key="cust.id">
                                                 <v-layout wrap row>
                                                     <v-flex xs6 sm6 v-if="cust.id === model">
                                                         <v-text-field v-model="cust.name" :rules="rules.name" color="blue darken-2" label="Sender Name" required></v-text-field>
@@ -98,12 +118,6 @@
 
                                                     <v-flex xs6 sm6 v-if="cust.id === model">
                                                         <v-text-field v-model="cust.country" :rules="rules.name" color="blue darken-2" label="Country" required></v-text-field>
-                                                    </v-flex>
-                                                    <v-flex xs6 sm6>
-                                                        <v-text-field v-model="form.from_city" :rules="rules.name" color="blue darken-2" label="From" required></v-text-field>
-                                                    </v-flex>
-                                                    <v-flex xs6 sm6>
-                                                        <v-text-field v-model="form.cod_amount" :rules="rules.name" color="blue darken-2" label="COD Amount" required></v-text-field>
                                                     </v-flex>
                                                 </v-layout>
                                             </div>
@@ -130,6 +144,12 @@
                                                 <v-text-field v-model="form.client_phone" color="blue darken-2" label="Client Phone" required></v-text-field>
                                             </v-flex>
 
+                                            <v-flex xs6 sm6>
+                                                <v-text-field v-model="form.from_city" :rules="rules.name" color="blue darken-2" label="From" required></v-text-field>
+                                            </v-flex>
+                                            <v-flex xs6 sm6>
+                                                <v-text-field v-model="form.cod_amount" :rules="rules.name" color="blue darken-2" label="COD Amount" required></v-text-field>
+                                            </v-flex>
                                             <v-flex xs6 sm6>
                                                 <v-text-field v-model="form.to_city" :rules="rules.name" color="blue darken-2" label="To" required></v-text-field>
                                             </v-flex>
@@ -194,7 +214,7 @@
                                                         <option value="OVS">OVS</option>
                                                         <option value="Same day">Same day</option>
                                                     </select>
-                                                    <div class="form-group col-md-6">
+                                                    <!-- <div class="form-group col-md-6">
                                                         <label for="insurance" class="col-md-4 col-form-label text-md-right">Status</label>
                                                         <select class="custom-select custom-select-md col-md-12" v-model="form.status">
                                                             <option value="Awaiting Approval">Awaiting Approval</option>
@@ -216,7 +236,7 @@
                                                             <option value="Transit">Transit</option>
                                                             <option value="Waiting for Scan">Waiting for scan</option>
                                                         </select>
-                                                    </div>
+                                                    </div> -->
 
                                                     <div class="form-group col-md-6">
                                                         <label for="insurance" class="col-md-4 col-form-label text-md-right">Insuarance</label>
@@ -236,12 +256,33 @@
                                                 </v-layout>
                                             </v-flex>
                                             <v-flex sm4>
-                                                <h3><b>Package Type</b></h3>
+                                                <h3><b>Status</b></h3>
                                                 <v-divider></v-divider>
                                                 <v-layout wrap>
-                                                    <select class="custom-select custom-select-md col-md-12" v-model="form.package_type">
-                                                        <option value="yes">Type A</option>
-                                                        <option value="no">Type B</option>
+                                                    <select class="custom-select custom-select-md col-md-12" v-model="form.status">
+                                                       <option value="Awaiting Approval">Awaiting Approval</option>
+                                                        <option value="Approved">Approved</option>
+                                                        <option value="Arrived">Arrived</option>
+                                                        <option value="Awaiting Confirmation">Awaiting Confirmation</option>
+                                                        <option value="Cancelled ">Call Back</option>
+                                                        <option value="Cancelled">Cancelled</option>
+                                                        <option value="Cleared">Cleared</option>
+                                                        <option value="Delivered">Delivered</option>
+                                                        <option value="Dispatched">Dispatched</option>
+                                                        <!-- <option value="Cancled">Cancled</option> -->
+                                                        <option value="Hold">Hold</option>
+                                                        <option value="Not Available">Not Available</option>
+                                                        <option value="Not Picking">Not Picking</option>
+                                                        <option value="Out For Destination">Out For Destination</option>
+                                                        <option value="Offline">Offline</option>
+                                                        <option value="Out For Delivery">Out For Delivery</option>
+                                                        <option value="Returned">Returned</option>
+                                                        <option value="Ready For Depart">Ready For Depart</option>
+                                                        <option value="Scheduled">Scheduled</option>
+                                                        <option value="Shipment Collected">Shipment Collected</option>
+                                                        <option value="Transit">Transit</option>
+                                                        <option value="Waiting for Scan">Waiting for scan</option>
+                                                        <option value="Wrong Number">Wrong Number</option>
                                                     </select>
                                                 </v-layout>
                                             </v-flex>
@@ -336,29 +377,37 @@ export default {
             derivery_time: null,
             bar_code: "",
             getTotal: '',
+            status: 'warehouse',
+            cod_amount: '',
+            from_city: '',
+            to_city: '',
             products: [{
                 product_name: '',
                 weight: null,
                 quantity: 1,
                 price: 0,
             }],
+            sender_name: '',
+            sender_email: '',
+            sender_phone: '',
+            sender_address: '',
+            sender_city: '',
         });
         return {
             selectCl: [],
-            // AllDrivers: [],
-            // Allcustomer: [],
-            // AllBranches: [],
+            cust: {
+                name: "",
+                phone: "",
+                email: "",
+                address: "",
+                city: "",
+                country: "",
+            },
             customerArr: [],
             loading: false,
-            selectD: {
-                name: 'Select Driver'
-            },
-            selectC: {
-                name: 'Select Client'
-            },
-            selectB: {
-                branch_name: 'Select Name'
-            },
+            selectD: [],
+            selectC: [],
+            selectB: [],
             select: [],
             loader: false,
             isLoading: false,
@@ -398,7 +447,7 @@ export default {
                     model: this.$data.model,
                     selectB: this.$data.selectB,
                     user: this.user,
-                    selectCl: this.$data.selectCl
+                    selectCl: this.$data.selectC
                 })
                 .then(response => {
                     this.loading = false;
@@ -455,7 +504,7 @@ export default {
             // Lazily load input customerArr
             // axios.get('getCustomer')
             //     .then(res => {
-            this.customerArr = Allcustomer
+            this.customerArr = this.Allcustomer
             this.isLoading = false
             // })
             // .catch(err => {

@@ -11,6 +11,10 @@ use App\Shipment;
 | contains the "web" middleware group. Now create something great!
 |
  */
+
+Route::get('scheduler', function (){
+	\Illuminate\Support\Facades\Artisan::call('schedule:run');
+ });
 	// Socialite
 	Route::get('login/{service}', 'Auth\LoginController@redirectToProvider');
 	Route::get('login/{service}/callback', 'Auth\LoginController@handleProviderCallback');
@@ -245,8 +249,5 @@ Route::group(['middleware' => ['auth']], function () {
 	
 });
 
-Route::get('scheduler', function (){
-	\Illuminate\Support\Facades\Artisan::call('schedule:run');
- });
 
 //  ALTER TABLE `shipments` ADD `printReceipt` BOOLEAN NOT NULL DEFAULT FALSE AFTER `country`;
