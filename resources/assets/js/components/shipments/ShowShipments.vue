@@ -38,7 +38,7 @@
                                                 Phone:
                                             </v-list-tile-action>
                                             <v-list-tile-content>
-                                                <v-list-tile-title>{{ showItems.sender_phone }}</v-list-tile-title>
+                                                <v-list-tile-title>+254728492446</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
                                         <v-list-tile>
@@ -47,7 +47,7 @@
                                                 Email:
                                             </v-list-tile-action>
                                             <v-list-tile-content>
-                                                <v-list-tile-title>{{ showItems.sender_email }}</v-list-tile-title>
+                                                <v-list-tile-title>info@speedballcourier.com</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
                                     </v-list>
@@ -126,7 +126,7 @@
                                                 <b>Phone</b>
                                             </v-list-tile-action>
                                             <v-list-tile-content>
-                                                <v-list-tile-title>{{ showItems.sender_phone }}</v-list-tile-title>
+                                                <v-list-tile-title>+254728492446</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
                                         <v-list-tile>
@@ -135,7 +135,7 @@
                                                 <b>Email:</b>
                                             </v-list-tile-action>
                                             <v-list-tile-content>
-                                                <v-list-tile-title>{{ showItems.sender_email }}</v-list-tile-title>
+                                                <v-list-tile-title>info@speedballcourier.com</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
                                     </v-list>
@@ -298,8 +298,11 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .vue-barcode-element {
     margin-left: 40% !important;
+}
+.v-card{
+    border: 1px solid #000 !important;
 }
 </style>

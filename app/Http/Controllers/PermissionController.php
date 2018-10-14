@@ -24,7 +24,7 @@ class PermissionController extends Controller
     }
     
     public function getCanceledCount() {
-        return Shipment::where('status', 'Canceled')->count();
+        return Shipment::where('status', 'Cancelled')->count();
     }
     
 // Dashboard
@@ -44,4 +44,4 @@ class PermissionController extends Controller
     public function dispatchedShipmentCount() {
         return Shipment::where('status', 'Dispatched')->count();
     }
-}
+} 

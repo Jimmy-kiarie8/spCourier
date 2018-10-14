@@ -302,16 +302,6 @@ class ShipmentController extends Controller {
 	public function updateStatus(Request $request, Shipment $shipment, $id) {
 		// return $request->all();
 		$shipment = Shipment::find($request->id);
-		// if ($request->address) {
-		// 	$coordinates = serialize($request->address);
-		// 	$latitude = $request->address['latitude'];
-		// 	$longitude = $request->address['longitude'];
-		// 	$coords = array('lat' => $latitude, 'lng' => $longitude);
-		// 	$shipment->coordinates = $coordinates;
-		// 	$shipment->longitude = $longitude;
-		// 	$shipment->latitude = $latitude;
-		// }
-		// $shipment->location = $request->formobg['location'];
 		$shipment->status = $request->formobg['status'];
 		// var_dump($request->formobg['status']); die;
 		$shipment->derivery_date = $request->formobg['derivery_date'];
@@ -397,7 +387,6 @@ class ShipmentController extends Controller {
 		
 	}
 
-
 	// Dashboard
 	public function delayedShipment() {
 		return Shipment::where('status', 'delayed')->where('branch_id', Auth::user()->branch_id)->get();
@@ -412,7 +401,7 @@ class ShipmentController extends Controller {
 	}
 
 	public function deriveredShipment() {
-		return Shipment::where('status', 'derivered')->where('branch_id', Auth::user()->branch_id)->get();
+		return Shipment::where('status', 'Delivered')->where('branch_id', Auth::user()->branch_id)->get();
 	}
 
 	public function scheduled() {
@@ -421,29 +410,6 @@ class ShipmentController extends Controller {
         $shipment = Shipment::setEagerLoads([])->where('status', 'Scheduled')->whereBetween('derivery_date', [$date1, $date2])->take(300)->get();
 		return $shipment;
 	}
-
-	// Chart
-	public function getChartData() {
-		$shipments = DB::table('products')
-			->select(DB::raw('count(id) as count, date_format(created_at, "%M %d") as date'))
-			->orderBy('created_at', 'desc')
-			->groupBy('date')
-			->where('branch_id', Auth::user()->branch_id)
-			->get();
-
-		$lables = [];
-		$rows = [];
-		foreach ($shipments as $shipment) {
-			$lables[] = $shipment->date;
-			$rows[] = $shipment->count;
-		}
-		$data = [
-			'lables' => $lables,
-			'rows' => $rows,
-		];
-		return $data;
-	}
-
 	public function filterShipment(Request $request)
 	{
 		// return $request->all();

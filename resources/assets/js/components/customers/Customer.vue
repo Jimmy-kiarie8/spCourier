@@ -171,7 +171,7 @@ export default {
     methods: {
         next(page) {
             this.nextPage = true
-            axios.get(`http://couriers.dev/customerShip?page=` + this.AllShip.current_page)
+            axios.get(`/customerShip?page=` + this.AllShip.current_page)
                 .then((response) => {
                     this.nextPage = false
                     this.AllShip = response.data

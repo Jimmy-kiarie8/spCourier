@@ -67,12 +67,7 @@ class BranchController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function getBranch() {
-		return Branch::with([
-			'shipments' => function ($query)
-			{
-				Shipment::take(200)->latest();
-			}
-		])->get();
+		return Branch::all();
 	}
 
 	public function getBranchShip(Request $request, $id) {
@@ -82,6 +77,11 @@ class BranchController extends Controller {
 	public function getBranchEger()
 	{
 		return Branch::setEagerLoads([])->get();
+	}
+
+	public function getBranchC()
+	{
+		return Branch::count();
 	}
 
 	public function getShipBranch(Request $request)

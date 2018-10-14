@@ -111,7 +111,8 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('getShipBranch', 'BranchController@getShipBranch')->name('getShipBranch');
 	Route::post('getBranchShip/{id}', 'BranchController@getBranchShip')->name('getBranchShip');
 	Route::get('getBranchEger', 'BranchController@getBranchEger')->name('getBranchEger');
-
+	Route::get('getBranchC', 'BranchController@getBranchC')->name('getBranchC');
+	
 	Route::post('getCompanies', 'CompanyController@getCompanies')->name('getCompanies');
 	Route::post('getCompanyAdmin', 'CompanyController@getCompanyAdmin')->name('getCompanyAdmin');
 	Route::post('companupdate/{id}', 'CompanyController@companupdate')->name('companupdate');
@@ -156,7 +157,6 @@ Route::group(['middleware' => ['auth']], function () {
 
 	
 	// Chart
-	Route::post('getChartData', 'ShipmentController@getChartData')->name('getChartData');
 
 
 	// E-MAILS
@@ -246,6 +246,19 @@ Route::group(['middleware' => ['auth']], function () {
 	// Customers 
 	Route::get('customerShip', 'CustomerController@customerShip')->name('customerShip');
 	Route::post('getsearchRe', 'CustomerController@getsearchRe')->name('getsearchRe');
+	
+	Route::get('getBranchShipments', 'DashboardController@getBranchShipments')->name('getBranchShipments'); 
+
+
+	Route::get('getChartScheduled', 'DashboardController@getChartScheduled')->name('getChartScheduled');
+	Route::get('getChartDelivered', 'DashboardController@getChartDelivered')->name('getChartDelivered');
+	Route::get('getChartData', 'DashboardController@getChartData')->name('getChartData');
+	Route::get('getChartCancled', 'DashboardController@getChartCancled')->name('getChartCancled');
+	Route::get('getChartBranch', 'DashboardController@getChartBranch')->name('getChartBranch');
+
+	Route::get('getCountCount', 'DashboardController@getCountCount')->name('getCountCount');
+	Route::get('getBranchCount', 'DashboardController@getBranchCount')->name('getBranchCount');
+	Route::get('getChartCount', 'DashboardController@getChartCount')->name('getChartCount');
 	
 });
 

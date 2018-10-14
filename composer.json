@@ -18,6 +18,7 @@
         "maatwebsite/excel": "~2.1.0",
         "milon/barcode": "^5.3",
         "smodav/mpesa": "^4.0",
+        "snowfire/beautymail": "dev-master",
         "spatie/laravel-permission": "^2.19"
     },
     "require-dev": {

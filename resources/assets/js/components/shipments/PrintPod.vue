@@ -16,7 +16,7 @@
                     <v-layout row wrap>
                         <!-- COURIER SCRIPTS PVT LTD. -->
                         <v-flex xs5 sm5>
-                            <v-card>
+                            <v-card style="border: 1px solid #000;">
                                 <img src="storage/logo-white.png" alt="SpeedBall" sizes="100">
                                 <v-card-title primary-title>
                                     <h3 class="headline mb-0">SpeedBall Courier Services.</h3>
@@ -38,7 +38,7 @@
                                                 Phone:
                                             </v-list-tile-action>
                                             <v-list-tile-content>
-                                                <v-list-tile-title>{{ showItems.sender_phone }}</v-list-tile-title>
+                                                <v-list-tile-title>+254728492446</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
                                         <v-list-tile>
@@ -47,7 +47,7 @@
                                                 Email:
                                             </v-list-tile-action>
                                             <v-list-tile-content>
-                                                <v-list-tile-title>{{ showItems.sender_email }}</v-list-tile-title>
+                                                <v-list-tile-title>info@speedballcourier.com</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
                                     </v-list>
@@ -58,7 +58,7 @@
                         <v-spacer></v-spacer>
                         <!-- TRACKING NO -->
                         <v-flex xs7 sm7>
-                            <v-card>
+                            <v-card style="border: 1px solid #000;">
                                 <v-card-title primary-title style="width: 100%">
                                     <v-list-tile>
                                         <v-list-tile-content>
@@ -76,7 +76,7 @@
                                                 {{ showItems.bar_code }}
                                             </v-list-tile-title>
                                         </v-list-tile-content>
-                                    </v-list-tile> -->
+                                    </v-list-tile> --> 
                                 </v-card-title>
                                 <v-card-actions>
                                     <v-list-tile>
@@ -105,7 +105,7 @@
                     <v-layout row wrap>
                         <!-- sender details -->
                         <v-flex xs4 sm4>
-                            <v-card>
+                            <v-card style="border: 1px solid #000;">
                                 <v-card-title primary-title>
                                     <h3 class="headline mb-0">Sender Details :</h3>
                                 </v-card-title>
@@ -117,7 +117,7 @@
                                                 <b>Name</b>
                                             </v-list-tile-action>
                                             <v-list-tile-content>
-                                                <v-list-tile-title>{{ showItems.sender_name }}</v-list-tile-title>
+                                                <v-list-tile-title>SpeedBall</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
                                         <v-list-tile>
@@ -126,7 +126,7 @@
                                                 <b>Phone</b>
                                             </v-list-tile-action>
                                             <v-list-tile-content>
-                                                <v-list-tile-title>{{ showItems.sender_phone }}</v-list-tile-title>
+                                                <v-list-tile-title>+254728492446</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
                                         <v-list-tile>
@@ -145,7 +145,7 @@
                         <!-- sender details -->
                         <!-- Receiver details -->
                         <v-flex xs4 sm4>
-                            <v-card>
+                            <v-card style="border: 1px solid #000;">
                                 <v-card-title primary-title>
                                     <h3 class="headline mb-0">Client Details :</h3>
                                 </v-card-title>
@@ -185,7 +185,7 @@
                         <!-- Receiver details -->
                         <!-- Shipment details -->
                         <v-flex xs4 sm4>
-                            <v-card>
+                            <v-card style="border: 1px solid #000;">
                                 <v-card-title primary-title>
                                     <h3 class="headline mb-0">Shipment Details :</h3>
                                 </v-card-title>
@@ -301,6 +301,9 @@ export default {
 <style>
 .vue-barcode-element {
     margin-left: 40% !important;
+}
+.v-card{
+    border: 1px solid #000 !important;
 }
 </style>
 

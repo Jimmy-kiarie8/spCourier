@@ -164,6 +164,8 @@ return [
         // Jimmyjs\ReportGenerator\ServiceProvider::class,
         // Maatwebsite\Excel\ExcelServiceProvider::class,
         // niklasravnsborg\LaravelPdf\PdfServiceProvider::class
+        Snowfire\Beautymail\BeautymailServiceProvider::class,
+
 
 
 

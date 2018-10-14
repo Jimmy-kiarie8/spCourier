@@ -1,25 +1,20 @@
-@component('mail::message')
-# Introduction
+@extends('beautymail::templates.widgets')
 
-The body of your message.
+@section('content')
 
-@component('mail::panel')
-The following shipments are schedueled today and tomorrow
-@endcomponent
+	@include('beautymail::templates.widgets.articleStart')
 
-@component('mail::button', ['url' => url('/courier#/scheduled')])
-See Shipments
-@endcomponent
+		<h4 class="secondary"><strong>Hello World</strong></h4>
+		<p>This is a test</p>
 
-@component('mail::table')
-| Client Name        | Phone         | Email  | delivery Date 	 |
-| ------------------ |:-------------:| ---------:|:---------:|
-@foreach  ($shipment as $value)
-| {{ $value->client_name }}   | {{ $value->client_phone }} | {{ $value->client_email }} | {{ $value->derivery_date }} |
-@endforeach
-@endcomponent
+	@include('beautymail::templates.widgets.articleEnd')
 
 
-Thanks,<br>
-{{ config('app.name') }}
-@endcomponent
+	@include('beautymail::templates.widgets.newfeatureStart')
+
+		<h4 class="secondary"><strong>Hello World again</strong></h4>
+		<p>This is another test</p>
+
+	@include('beautymail::templates.widgets.newfeatureEnd')
+
+@stop

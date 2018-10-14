@@ -214,3 +214,11 @@ div.dataTables_wrapper div.dataTables_filter input {
     background: #e3edfe;
     color: #1a73e8 !important;
 }
+
+/* .SpeedBall{
+    background-image: url(http://courier.dev/storage/logo2.png) !important;
+    background: #000 !important;
+} */
+
+
+.panel-header{height:260px;padding-top:80px;padding-bottom:45px;background:#141e30;background:linear-gradient(90deg,#0c2646,#204065 60%,#2a5788);position:relative;overflow:hidden}.panel-header .header .title{color:#fff}.panel-header .header .category{max-width:600px;color:hsla(0,0%,100%,.5);margin:0 auto;font-size:13px}.panel-header .header .category a{color:#fff}.panel-header-sm{height:135px}.panel-header-lg{height:380px}.card{border:0;border-radius:.1875rem;display:inline-block;position:relative;width:100%;margin-bottom:20px;box-shadow:0 1px 15px 1px rgba(39,39,39,.1)}.card .card-body{padding:15px 15px 10px}

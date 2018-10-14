@@ -43,8 +43,10 @@
       {{-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNzKeF6ZwxlAOUCyeH8UxvvYRHP_w_Guk&callback=initMap"
   type="text/javascript"></script>--}}
     <!-- Styles -->
+
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/vueDash.css') }}" rel="stylesheet">
     {{-- <link href="{{ asset('css/font-awesome.css') }}" rel="stylesheet"> --}}
     {{-- <link href="{{ asset('vuetify/css/vuetify.min.css') }}" rel="stylesheet"> --}}
 </head>
@@ -58,6 +60,5 @@
     </div>
 
 <script src="{{ asset('vuetify/js/vuetify.js') }}"></script>
-
 </body>
 </html>

@@ -11,7 +11,13 @@
                     <!-- <v-btn color="primary" flat @click="openRow">Filter Rows</v-btn> -->
                     <v-spacer></v-spacer>
                     <v-flex sm6>
-                        <v-tooltip bottom>
+                        <v-tooltip bottom v-if="between.start >= 500">
+                            <v-btn icon class="mx-0" @click="previous" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
+                                <v-icon color="blue darken-2">chevron_left</v-icon>
+                            </v-btn>
+                            <span>Previous results</span>
+                        </v-tooltip>
+                        <v-tooltip bottom v-if="shipmentsCount > between.end">
                             <v-btn icon class="mx-0" @click="next" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
                                 <v-icon color="blue darken-2">chevron_right</v-icon>
                             </v-btn>
@@ -225,23 +231,39 @@ export default {
             selectItem: {
                 state: 'All',
             },
-            statuses: [{
+            statuses: [
+                {
+                    state: 'Awaiting Confirmation',
+                },
+                {
+                    state: 'Cancelled',
+                },
+                {
+                    state: 'Call Back',
+                },
+                {
                     state: 'Dispatched',
                 },
                 {
                     state: 'Delivered',
                 },
                 {
+                    state: 'Not Available',
+                },
+                {
                     state: 'Not Picking',
                 },
                 {
-                    state: 'Cancelled',
+                    state: 'Offline',
                 },
                 {
-                    state: 'Awaiting Confirmation',
+                    state: 'Returned',
                 },
                 {
                     state: 'Scheduled',
+                },
+                {
+                    state: 'Wrong Number',
                 },
             ],
             items: [{
@@ -409,6 +431,7 @@ export default {
             Allcustomers: [],
             shipment: {},
             markers: [],
+            shipmentsCount: null
         };
     },
     methods: {
@@ -650,6 +673,27 @@ export default {
                     this.errors = error.response.data.errors
                 })
         },
+        previous() {
+            this.loading = true
+            if (this.between.start >= 500) {
+                this.between.start = parseInt(this.between.start) - 500;
+                this.between.end = parseInt(this.between.end) - 500;
+                axios.post('betweenShipments', this.$data.between)
+                .then((response) => {
+                    this.loading = false
+                    this.AllShipments = response.data
+                })
+                .catch((error) => {
+                    this.loading = false
+                    this.errors = error.response.data.errors
+                })
+            } else {
+                return;
+                this.loading = false
+            }
+            
+        },
+        
         close() {
             this.dialog1 = this.dialog = this.pdialog2 = this.updateModal = this.showdialog1 =
                 this.UpdateShipmentModel = this.AssignDriverModel = this.AssignBranchModel = this.trackModel = this.csvModel = this.chargeModal = this.RowModal = this.printModal = false;
@@ -735,6 +779,15 @@ export default {
         //         this.errors = error.response.data.errors;
         //         this.loader = false;
         //     });
+        
+
+        axios.get('getShipmentsCount')
+            .then((response) => {
+                this.shipmentsCount = response.data
+            })
+            .catch((error) => {
+                this.errors = error.response.data.errors
+            })
         this.getShipments()
     },
 };
