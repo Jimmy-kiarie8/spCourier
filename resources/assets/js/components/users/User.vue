@@ -18,19 +18,19 @@
                     <!-- users display -->
                     <v-card-title>
                         Users
-                        <download-excel :data="Allusers" :fields = "json_fields">
+                        <download-excel :data="Allusers" :fields="json_fields">
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
-                        <v-btn slot="activator" color="primary" dark @click="openAdd">Add User</v-btn>
-                        <v-tooltip right>
-                            <v-btn icon slot="activator" class="mx-0" @click="getUsers">
-                                <v-icon color="blue darken-2" small>refresh</v-icon>
-                            </v-btn>
-                            <span>Refresh</span>
-                        </v-tooltip>
-                        <v-spacer></v-spacer>
-                        <v-text-field v-model="search" append-icon="search" label="Search" single-line></v-text-field>
+                            <v-btn slot="activator" color="primary" dark @click="openAdd">Add User</v-btn>
+                            <v-tooltip right>
+                                <v-btn icon slot="activator" class="mx-0" @click="getUsers">
+                                    <v-icon color="blue darken-2" small>refresh</v-icon>
+                                </v-btn>
+                                <span>Refresh</span>
+                            </v-tooltip>
+                            <v-spacer></v-spacer>
+                            <v-text-field v-model="search" append-icon="search" label="Search" single-line></v-text-field>
                     </v-card-title>
                     <v-data-table :headers="headers" :items="Allusers" class="elevation-1" :loading="loading" :search="search">
                         <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
@@ -153,12 +153,12 @@ export default {
                 }
             ],
             json_fields: {
-                 'Name': 'name',
-                 'Email': 'email',
-                 'Phone': 'phone',
-                 'City': 'city',
-                 'Address': 'address',
-                 'Country': 'country',
+                'Name': 'name',
+                'Email': 'email',
+                'Phone': 'phone',
+                'City': 'city',
+                'Address': 'address',
+                'Country': 'country',
             },
             AllBranches: {},
             search: '',
@@ -227,14 +227,14 @@ export default {
         },
         openEdit(item) {
             this.editedIndex = this.Allusers.indexOf(item)
-            this.editedItem = Object.assign({}, item)            
+            this.editedItem = Object.assign({}, item)
             axios.post(`getUserPerm/${item.id}`)
-            .then((response) => {
-                eventBus.$emit('permEvent', response.data);
-            })
-            .catch((error) => {
-                this.errors = error.response.data.errors
-            })
+                .then((response) => {
+                    eventBus.$emit('permEvent', response.data);
+                })
+                .catch((error) => {
+                    this.errors = error.response.data.errors
+                })
             this.dispEdit = true
         },
         openShow(item) {
@@ -317,8 +317,7 @@ export default {
                 this.errors = error.response.data.errors
             })
 
-            
-            axios.get('getRoles')
+        axios.get('getRoles')
             .then((response) => {
                 this.AllRoles = response.data
             })

@@ -136,7 +136,7 @@ class DashboardController extends Controller
 			->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
 			->orderBy('id', 'asc')
 			->groupBy('date')
-            ->where('branch_id', Auth::id())
+            // ->where('branch_id', Auth::id())
 			->get();
 
         $lables = [];
@@ -158,7 +158,7 @@ class DashboardController extends Controller
 			->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
 			->orderBy('id', 'asc')
 			->groupBy('date')
-            ->where('branch_id', Auth::id())
+            // ->where('branch_id', Auth::id())
 			->get();
 
         $lables = [];
@@ -196,20 +196,39 @@ class DashboardController extends Controller
 
     public function getCountryhipments()
     {
-        $branches = Country::all();
-        $A_country = [];
-        foreach ($branches as $branch) {
-            $shipmen_ts = DB::table('shipments')
-			->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date, country_id'))
+        $countries = Country::setEagerLoads([])->get();
+        $country_count = [];
+        foreach ($countries as $key => $country) {
+            // return $country->id;
+            // $country_count[] = Shipment::where('country_id', $country->id)->count();
+            $country_count[] = array(
+                'name' => $country->country_name,
+                'id' => $key,
+                'count' => Shipment::where('country_id', $country->id)->count(),
+            );
+        }
+        return $country_count;
+    }
+
+    public function getChartCountry() {
+		// return Shipment::take(100)->get();
+		 $shipments = DB::table('shipments')
+			->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
 			->orderBy('id', 'asc')
 			->groupBy('date')
-            ->where('country_id', $country->id)
-            ->get();
-            
-            // $shipments = Shipment::where('branch_id', $branch->id)->count();
-            // json_decode(json_encode($branch), true);
-            $A_country[] = array_prepend(json_decode(json_encode($shipmen_ts), true), $branch->branch_name, 'name');
+            // ->where('country_id', )
+			->get();
+
+        $lables = [];
+        $rows = [];
+		foreach ($shipments as $key => $shipment) {
+            $lables[] = $shipment->date;
+			$rows[] = $shipment->count;
         }
-        return $shipmen_ts;
+        $data = array(
+            'lables' => $lables, 
+            'rows' => $rows
+        );
+        return response()->json(['data' => $data]);
     }
 }

@@ -17,16 +17,19 @@ use App\Notifications\ShipmentNoty;
 use App\Notifications\NotyExcel;
 use Notification;
 
-class ShipmentController extends Controller {
-	public function getShipments() {
+class ShipmentController extends Controller
+{
+	public function getShipments()
+	{
 		if (Auth::user()->hasRole('Client')) {
-			return Shipment::latest()->where('client_id', Auth::id())->take(500)->get();
-		}else{
-			return Shipment::latest()->take(500)->get();
+			return Shipment::latest()->where('client_id', Auth::id())->take(500)->orderBy('id', 'DESC')->get();
+		} else {
+			return Shipment::latest()->take(500)->orderBy('id', 'DESC')->get();
 		}
 	}
 
-	public function csv() {
+	public function csv()
+	{
 		return view('csv.csv');
 	}
 
@@ -36,7 +39,8 @@ class ShipmentController extends Controller {
 	 * @param  Request $request
 	 * @return mixed
 	 */
-	public function search(Request $request) {
+	public function search(Request $request)
+	{
 		// First we define the error message we are going to show if no keywords
 		// existed or if no results found.
 		$error = ['error' => 'No results found, please try with different keywords.'];
@@ -62,8 +66,9 @@ class ShipmentController extends Controller {
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function import(Request $request) {
-		// var_dump($request->all());die;
+	public function import(Request $request)
+	{
+		// dd($request->all());
 		$user = User::find($request->client);
 		if ($request->file('shipment')) {
 			$path = $request->file('shipment')->getRealPath();
@@ -102,7 +107,8 @@ class ShipmentController extends Controller {
 							'sender_address' => $user->address,
 							'sender_city' => $user->city,
 							'client_id' => $request->client,
-							'country' => $request->country,
+							// 'country' => $request->country,
+							'country_id' => $request->country_id,
 						];
 					}
 				}
@@ -111,14 +117,15 @@ class ShipmentController extends Controller {
 				}
 				// Notification::send(Auth::user(), new ShipmentNoty($shipment));
 				return redirect('courier#/Shipments');
-				
+
 			}
-		}else{
+		} else {
 			var_dump('something went wrong');
 		}
 	}
 
-	public function export() {
+	public function export()
+	{
 		$model = Shipment::where('branch_id', Auth::user()->branch_id)->get();
 		$results = Excel::create('Shipment', function ($excel) {
 
@@ -137,7 +144,8 @@ class ShipmentController extends Controller {
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request) {
+	public function store(Request $request)
+	{
 		// return $request->all();
 		// $this->Validate($request, [
 		// 	'form.payment' =>'required',
@@ -149,8 +157,8 @@ class ShipmentController extends Controller {
 		// 	'form.from_city' =>'required',
 		// 	'form.to_city' =>'required',
 		// ]);
-		
-		
+
+
 
 		$products = collect($request->form['products'])->transform(function ($product) {
 			$product['total'] = $product['quantity'] * $product['price'];
@@ -188,7 +196,7 @@ class ShipmentController extends Controller {
 			$shipment->branch_id = $request->selectB['id'];
 			// dd( $request->selectB['id']);
 		}
-		
+
 		$shipment->sub_total = $products->sum('total');
 		$shipment->client_name = $request->form['client_name'];
 		$shipment->client_phone = $request->form['client_phone'];
@@ -211,7 +219,7 @@ class ShipmentController extends Controller {
 		$shipment->cod_amount = $request->form['cod_amount'];
 		// $shipment->receiver_name = $request->form['receiver_name'];
 		$shipment->from_city = $request->form['from_city'];
-		
+
 		if ($request->model) {
 			$shipment->client_id = $request->model;
 			$sender = User::find($request->model);
@@ -232,7 +240,7 @@ class ShipmentController extends Controller {
 		$shipment->user_id = Auth::id();
 		$shipment->shipment_id = random_int(1000000, 9999999);
 		// $shipment->branch_id = Auth::user()->branch_id;
-		
+
 		$users = $this->getAdmin();
 		if ($shipment->save()) {
 			$shipment->products()->saveMany($products);
@@ -249,7 +257,8 @@ class ShipmentController extends Controller {
 	 * @param  \App\Shipment  $shipment
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, Shipment $shipment) {
+	public function update(Request $request, Shipment $shipment)
+	{
 		// return $request->all();
 		$shipment = Shipment::find($request->id);
 		$shipment->client_name = $request->client_name;
@@ -262,7 +271,7 @@ class ShipmentController extends Controller {
 		$shipment->shipment_type = $request->shipment_type;
 		// $shipment->customer_id = $request->customer_id;
 		$shipment->payment = $request->payment;
-		
+
 		$shipment->total_freight = $request->total_freight;
 		$shipment->insuarance_status = $request->insuarance_status;
 		$shipment->booking_date = $request->booking_date;
@@ -278,7 +287,8 @@ class ShipmentController extends Controller {
 	 * @param  \App\Shipment  $shipment
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy(Shipment $shipment) {
+	public function destroy(Shipment $shipment)
+	{
 		Shipment::find($shipment->id)->delete();
 	}
 
@@ -291,15 +301,16 @@ class ShipmentController extends Controller {
 				// var_dump($user->roles); die;
 			foreach ($user->roles as $role) {
 				if ($role->name == 'Admin') {
-					$userArr[] = $role->pivot->user_id;		
+					$userArr[] = $role->pivot->user_id;
 				}
 			}
 		}
 		$users = $userArr;
 		return $admin = User::whereIn('id', $userArr)->get();
 	}
-	
-	public function updateStatus(Request $request, Shipment $shipment, $id) {
+
+	public function updateStatus(Request $request, Shipment $shipment, $id)
+	{
 		// return $request->all();
 		$shipment = Shipment::find($request->id);
 		$shipment->status = $request->formobg['status'];
@@ -329,7 +340,7 @@ class ShipmentController extends Controller {
 	{
 		// return $request->all();
 		$id = [];
-		foreach ($request->selected as $selectedItems ) {
+		foreach ($request->selected as $selectedItems) {
 			$id[] = $selectedItems['id'];
 		}
 		$status = $request->form['status'];
@@ -360,7 +371,7 @@ class ShipmentController extends Controller {
 	public function assignDriver(Request $request, Shipment $shipment)
 	{
 		$id = [];
-		foreach ($request->selected as $selectedItems ) {
+		foreach ($request->selected as $selectedItems) {
 			$id[] = $selectedItems['id'];
 		}
 		$driver = $request->form['driver'];
@@ -373,7 +384,7 @@ class ShipmentController extends Controller {
 	{
 		// return $request->all();
 		$id = [];
-		foreach ($request->selected as $selectedItems ) {
+		foreach ($request->selected as $selectedItems) {
 			$id[] = $selectedItems['id'];
 		}
 		// $status = $request->form['status'];
@@ -384,30 +395,35 @@ class ShipmentController extends Controller {
 		$remark = $request->form['remark'];
 		$shipment = Shipment::whereIn('id', $id)->update(['branch_id' => $branch, 'remark' => $remark]);
 		// return $shipStatus = Shipment::whereIn('id', $id)->get();
-		
+
 	}
 
 	// Dashboard
-	public function delayedShipment() {
+	public function delayedShipment()
+	{
 		return Shipment::where('status', 'delayed')->where('branch_id', Auth::user()->branch_id)->get();
 	}
 
-	public function approvedShipment() {
+	public function approvedShipment()
+	{
 		return Shipment::where('status', 'approved')->where('branch_id', Auth::user()->branch_id)->get();
 	}
 
-	public function waitingShipment() {
+	public function waitingShipment()
+	{
 		return Shipment::where('status', 'waiting approval')->where('branch_id', Auth::user()->branch_id)->get();
 	}
 
-	public function deriveredShipment() {
+	public function deriveredShipment()
+	{
 		return Shipment::where('status', 'Delivered')->where('branch_id', Auth::user()->branch_id)->get();
 	}
 
-	public function scheduled() {
-			$date1 = Carbon::today();
-			$date2 = new Carbon('tomorrow');
-        $shipment = Shipment::setEagerLoads([])->where('status', 'Scheduled')->whereBetween('derivery_date', [$date1, $date2])->take(300)->get();
+	public function scheduled()
+	{
+		$date1 = Carbon::today();
+		$date2 = new Carbon('tomorrow');
+		$shipment = Shipment::setEagerLoads([])->where('status', 'Scheduled')->whereBetween('derivery_date', [$date1, $date2])->take(300)->get();
 		return $shipment;
 	}
 	public function filterShipment(Request $request)
@@ -417,30 +433,30 @@ class ShipmentController extends Controller {
 			if ($request->select['id'] == 'all') {
 				if ($request->selectStatus['state'] == 'All') {
 				// return 'st6';
-				return Shipment::latest()->take(500)->get();	
-				}else{
+					return Shipment::latest()->take(500)->get();
+				} else {
 				// return 'st5';
-				return Shipment::where('status', $request->selectStatus['state'])->latest()->take(500)->get();
+					return Shipment::where('status', $request->selectStatus['state'])->latest()->take(500)->get();
 				}
-				
-			}else{
+
+			} else {
 				// return 'st4';
 				return Shipment::where('branch_id', $request->select['id'])->latest()->take(500)->get();
 			}
-		}else{
+		} else {
 			if ($request->select['id'] == 'all') {
 				if ($request->selectStatus['state'] == 'All') {
 				// return 'st1';
-				return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->get();
-				}else{
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->get();
+				} else {
 				// return 'st2';
-				return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->where('status', $request->selectStatus['state'])->get();
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->where('status', $request->selectStatus['state'])->get();
 				}
-			}else{
+			} else {
 				if ($request->selectStatus['state'] == 'All') {
 				// return 'st1';
 					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->where('status', $request->selectStatus['state'])->latest()->take(500)->get();
-				}else{
+				} else {
 				// return 'st2';
 					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->latest()->take(500)->where('status', $request->selectStatus['state'])->get();
 				}
@@ -463,7 +479,7 @@ class ShipmentController extends Controller {
 		// return $request->all();
 		$print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->get();
 		$id = [];
-		foreach ($print_shipment as $selectedItems ) {
+		foreach ($print_shipment as $selectedItems) {
 			$id[] = $selectedItems['id'];
 		}
 		$status = $request->form['status'];
@@ -480,30 +496,30 @@ class ShipmentController extends Controller {
 			if ($request->select['id'] == 'all') {
 				if ($request->selectStatus['state'] == 'All') {
 				// return 'st6';
-				return Shipment::where('status', 'Delivered')->latest()->take(500)->get();	
-				}else{
+					return Shipment::where('status', 'Delivered')->latest()->take(500)->get();
+				} else {
 				// return 'st5';
-				return Shipment::where('status', 'Delivered')->latest()->take(500)->get();
+					return Shipment::where('status', 'Delivered')->latest()->take(500)->get();
 				}
-				
-			}else{
+
+			} else {
 				// return 'st4';
 				return Shipment::where('status', 'Delivered')->where('branch_id', $request->select['id'])->latest()->take(500)->get();
 			}
-		}else{
+		} else {
 			if ($request->select['id'] == 'all') {
 				if ($request->selectStatus['state'] == 'All') {
 				// return 'st1';
-				return Shipment::where('status', 'Delivered')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->get();
-				}else{
+					return Shipment::where('status', 'Delivered')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->get();
+				} else {
 				// return 'st2';
-				return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->where('status', 'Delivered')->get();
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->where('status', 'Delivered')->get();
 				}
-			}else{
+			} else {
 				if ($request->selectStatus['state'] == 'All') {
 				// return 'st1';
 					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->where('status', 'Delivered')->latest()->take(500)->get();
-				}else{
+				} else {
 				// return 'st2';
 					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->latest()->take(500)->where('status', 'Delivered')->get();
 				}
@@ -514,9 +530,9 @@ class ShipmentController extends Controller {
 				// 				->latest()->take(500)->get();
 			}
 		}
-	} 
+	}
 	public function getDeriveredA()
 	{
-		return Shipment::where('status', 'Delivered')->latest()->take(500)->get();	
+		return Shipment::where('status', 'Delivered')->latest()->take(500)->get();
 	}
 }

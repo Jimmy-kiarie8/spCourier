@@ -263,7 +263,8 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('getBranchCount', 'DashboardController@getBranchCount')->name('getBranchCount');
 	Route::get('getChartCount', 'DashboardController@getChartCount')->name('getChartCount');
 	Route::get('getCountryhipments', 'DashboardController@getCountryhipments')->name('getCountryhipments');
-
+	Route::get('getChartCountry', 'DashboardController@getChartCountry')->name('getChartCountry');
+	
 });
 
 

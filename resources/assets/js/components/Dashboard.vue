@@ -105,7 +105,7 @@
                                 <div class="chart-area">
                                     <my-country :height="255"></my-country>
                                 </div>
-                                <div class="progress-Ship">
+                                <!-- <div class="progress-Ship">
                                     <img src="storage/country/ke.png" alt="">
                                     Kenya: {{ parseInt(countryC.Kenya/Allshipments*100) }} %
                                     <v-progress-linear color="secondary" height="2" :value="countryC.Kenya / Allshipments * 100"></v-progress-linear>
@@ -115,6 +115,12 @@
                                     <img src="storage/country/ug.png" alt="">
                                     Uganda: {{ parseInt(countryC.Uganda/Allshipments*100) }} %
                                     <v-progress-linear color="info" height="2" :value="countryC.Uganda / Allshipments * 100"></v-progress-linear>
+                                </div> -->
+                                <div class="progress-Ship">
+                                    <div v-for="country in countryC" :key="country.id">
+                                        {{ country.name }}: {{ parseInt(country.count / Allshipments * 100) }} %
+                                        <v-progress-linear color="red" height="2" :value="country.count / Allshipments * 100"></v-progress-linear>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -177,12 +183,13 @@ export default {
             notifications: [],
             countryC: [],
             branchC: [],
-            colorCache: {}
+            colorCache: {},
+            // AllCountry: [],
         }
     },
     methods: {
         getCountCount() {
-            axios.get('getCountCount')
+            axios.get('getCountryhipments')
                 .then((response) => {
                     this.countryC = response.data
                 })
@@ -275,6 +282,15 @@ export default {
                 this.loader = false
                 this.errors = error.response.data.errors
             })
+
+        // axios.get('getCountryhipments')
+        //     .then((response) => {
+        //         this.countryC = response.data
+        //     })
+        //     .catch((error) => {
+        //         this.errors = error.response.data.errors
+        //     })
+
 
     }
 }
