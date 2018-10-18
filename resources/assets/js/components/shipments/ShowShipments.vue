@@ -69,33 +69,29 @@
                                             </v-list-tile-title>
                                         </v-list-tile-content>
                                     </v-list-tile>
-                                    <!-- <v-list-tile>
-                                        <v-list-tile-content>
-                                            <v-list-tile-title style="text-align: center !important;">
-                                                TRACKING NO: <br>
-                                                {{ showItems.bar_code }}
-                                            </v-list-tile-title>
-                                        </v-list-tile-content>
-                                    </v-list-tile> -->
-                                </v-card-title>
-                                <v-card-actions>
                                     <v-list-tile>
                                         <v-list-tile-content>
-                                            <v-list-tile-title>Booking Date</v-list-tile-title>
-                                            <v-list-tile-sub-title>{{ showItems.booking_date}}</v-list-tile-sub-title>
-                                        </v-list-tile-content>
-                                        <!-- <v-divider vertical></v-divider> -->
-                                        <v-list-tile-content style="margin-left: 100px;">
-                                            <v-list-tile-title>From</v-list-tile-title>
-                                            <v-list-tile-sub-title>{{ showItems.sende_city }}</v-list-tile-sub-title>
-                                        </v-list-tile-content>
-                                        <!-- <v-divider vertical></v-divider> -->
-                                        <v-list-tile-content style="margin-left: 100px;">
-                                            <v-list-tile-title>To</v-list-tile-title>
-                                            <v-list-tile-sub-title>{{ showItems.client_address }}</v-list-tile-sub-title>
+                                            <v-list-tile-title>
+                                                Booking Date: {{ showItems.booking_date }}
+                                            </v-list-tile-title>
                                         </v-list-tile-content>
                                     </v-list-tile>
-                                </v-card-actions>
+                                    <v-list-tile>
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                From: {{ showItems.sender_address }}
+                                            </v-list-tile-title>
+                                        </v-list-tile-content>
+                                    </v-list-tile>
+                                    <v-list-tile>
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>
+                                                To: {{ showItems.client_address }}
+                                            </v-list-tile-title>
+                                        </v-list-tile-content>
+                                    </v-list-tile>
+                                </v-card-title>
+
                             </v-card>
                         </v-flex>
                         <!-- TRACKING NO -->
@@ -218,15 +214,7 @@
                                                 <v-list-tile-title>{{ showItems.insuarance_status }}</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
-                                        <v-list-tile>
-                                            <v-list-tile-action>
-                                                <!-- <v-icon color="indigo">Isured</v-icon> -->
-                                                <b>Special Instructions:</b>
-                                            </v-list-tile-action>
-                                            <v-list-tile-content>
-                                                <v-list-tile-title>{{ showItems.speciial_instruction }}</v-list-tile-title>
-                                            </v-list-tile-content>
-                                        </v-list-tile>
+
                                         <v-list-tile>
                                             <v-list-tile-action>
                                                 <!-- <v-icon color="indigo">Isured</v-icon> -->
@@ -247,28 +235,32 @@
                     <table class="table table-striped table-hover">
                         <thead>
                             <th>Product Description</th>
-                            <th>Weight </th>
                             <th>Price</th>
                             <th>Quantity</th>
-                            <th>Total</th>
                         </thead>
                         <tbody>
-                            <tr v-for="pros in showItems.products" :key="pros.id" v-if="pros.shipments_id === showItems.id">
-                                <td>{{ pros.product_name }}</td>
-                                <td>{{ pros.weight }}</td>
-                                <td>{{ pros.price }}</td>
-                                <td>{{ pros.quantity }}</td>
-                                <td>{{ pros.price * pros.quantity }}</td>
+                            <tr>
+                                <td>{{ showItems.bar_code }}</td>
+                                <td>{{ showItems.cod_amount }}</td>
+                                <td>{{ showItems.amount_ordered }}</td>
                             </tr>
                         </tbody>
-                        <tfoot>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>Sub Total</th>
-                            <th>{{ showItems.sub_total }}</th>
-                        </tfoot>
                     </table>
+                    <v-divider></v-divider>
+
+                    <v-list-tile>
+                        <v-list-tile-action>
+                            <!-- <v-icon color="indigo">Isured</v-icon> -->
+                            <b>Special Instructions:</b>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>{{ showItems.speciial_instruction }}</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <v-divider></v-divider>
+                    <h4 style="text-align: justify;">Clients are requested to pay through M-PESA TILL NUMBER - <b>877838</b>
+                        (If asked to pay cash please call <b> 0728 492 446 </b> or <b> 0799 869 844</b>) </h4>
+                   <br><br><br>
                     <b style="float: left;">Authorizer Signature____________________________</b>
                     <b style="float: right;">Customer Signature____________________________</b>
                 </v-container>
@@ -302,7 +294,8 @@ export default {
 .vue-barcode-element {
     margin-left: 40% !important;
 }
-.v-card{
+
+.v-card {
     border: 1px solid #000 !important;
 }
 </style>

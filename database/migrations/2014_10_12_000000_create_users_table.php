@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration {
 			$table->string('branch')->nullable();
 			$table->string('profile')->nullable();
 			$table->integer('branch_id')->nullable();
+			$table->integer('country_id')->nullable();
 			$table->boolean('status')->nullable();
 			$table->boolean('active')->nullable();
 			$table->string('verifyToken')->nullable();

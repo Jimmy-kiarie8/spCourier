@@ -11,7 +11,7 @@
       }
     },
     mounted () {
-      axios.get('getChartCount')
+      axios.get('getCountryhipments')
               .then((response) => {
                   console.log(response);
                   this.label = response.data.data.lables
@@ -29,7 +29,7 @@
         labels: this.label,
         datasets: [
           {
-            label: 'Branch Shipments',
+            label: 'Country Shipments',
             backgroundColor: '#566c86',
             data: this.rows
           }
@@ -37,7 +37,7 @@
       }, {responsive: true, maintainAspectRatio: false})
     },
       ref() {
-          axios.get('getChartCount')
+          axios.get('getCountryhipments')
               .then((response) => {
                   console.log(response);
                   this.label = response.data.lables

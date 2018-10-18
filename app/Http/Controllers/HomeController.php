@@ -11,30 +11,27 @@ use App\AttachmentCategory;
 use App\Attachment;
 use App\User;
 use App\Company;
+use Spatie\Permission\Models\Permission;
 
 class HomeController extends Controller
 {
     public function courier()
     {
         $companies = Company::where('id', Auth::user()->company_id)->get();
-	    foreach ($companies as $company) {
-	        $company_logo = $company->logo;
+        foreach ($companies as $company) {
+            $company_logo = $company->logo;
         }
-        $auth_user = Auth::user()->toArray();
-        $user = Auth::user()->permissions;
-        $can = [];
-        foreach ($user as $perm) {
-            $can[] = ['name' => $perm->name];
+        $permissions = [];
+        foreach (Permission::all() as $permission) {
+            if (Auth::user()->can($permission->name)) {
+                $permissions[$permission->name] = true;
+            } else {
+                $permissions[$permission->name] = false;
+            }
         }
-        // dd($can);
-        $user_perm = array_prepend($auth_user, $can, 'has');
-        // dd($user_perm);
-
-		$newrole = Auth::user()->roles;
-		foreach ($newrole as $name) {
-			$rolename = $name->name;
-		}
-		return view('welcome', compact('rolename', 'company_logo', 'user_perm'));
+        // dd(json_decode(json_encode((Auth::user()), false)));
+        $auth_user = array_prepend(Auth::user()->toArray(), $permissions, 'can');
+        return view('welcome', compact('rolename', 'company_logo', 'auth_user'));
     }
     public function courierHome()
     {
@@ -58,18 +55,18 @@ class HomeController extends Controller
         $this->attachmentRepo = $attachmentRepo;
     }
 
-	/**
-	 * Load homepage
-	 * 
-	 * @param  Request $request 
-	 * @return view           
-	 */
+    /**
+     * Load homepage
+     * 
+     * @param  Request $request 
+     * @return view           
+     */
     public function index(Request $request)
-    {	
-    	$props = Props::get();
+    {
+        $props = Props::get();
         // return redirect('/login');
         if (Auth::check()) {
-    	    return redirect('/courier');
+            return redirect('/courier');
         }
     }
 
@@ -101,7 +98,7 @@ class HomeController extends Controller
                 'errors' => []
             ), 200);
 
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
 
             return response()->json(array(
                 'success' => false,
@@ -119,7 +116,7 @@ class HomeController extends Controller
      * @return Response           
      */
     public function pullAttachments(Request $request)
-    {   
+    {
         try {
 
             if (!Auth::check()) {
@@ -128,7 +125,7 @@ class HomeController extends Controller
 
             $user_id = Auth::user()->id;
 
-            $attachments = $this->attachmentRepo->where('user_id' ,$user_id)->with('category')->orderBy('created_at', 'DESC')->all();
+            $attachments = $this->attachmentRepo->where('user_id', $user_id)->with('category')->orderBy('created_at', 'DESC')->all();
 
             return response()->json(array(
                 'success' => true,
@@ -136,7 +133,7 @@ class HomeController extends Controller
                 'errors' => []
             ), 200);
 
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
 
             return response()->json(array(
                 'success' => false,
@@ -155,27 +152,27 @@ class HomeController extends Controller
      */
     public function store(Request $request)
     {
-    	try {
+        try {
 
             $attachments = $this->processAttachments($request);
-            
+
             if (count($attachments) > 0) {
                 $this->attachmentRepo->saveInBulk($attachments);
             }
 
-    		return response()->json(array(
+            return response()->json(array(
                 'success' => true,
                 'data' => [],
                 'errors' => []
             ), 200);
 
-    	} catch(\Exception $e) {
-    		return response()->json(array(
+        } catch (\Exception $e) {
+            return response()->json(array(
                 'success' => false,
                 'data' => 'Server error happened',
                 'errors' => $e
             ), 200);
-    	}
+        }
     }
 
     /**
@@ -193,7 +190,7 @@ class HomeController extends Controller
 
         if (count($attachments_files)) {
             foreach ($attachments_files as $key => $value) {
-                $category_id = $attachments_input[$key][1] != 'undefined' ? $attachments_input[$key][1] : NULL;
+                $category_id = $attachments_input[$key][1] != 'undefined' ? $attachments_input[$key][1] : null;
                 $value[0]->category_id = $category_id;
                 array_push($attachments, $value[0]);
             }
@@ -209,7 +206,7 @@ class HomeController extends Controller
      * @return Response           
      */
     public function getCategories(Request $request)
-    {   
+    {
         try {
 
             if (!Auth::check()) {
@@ -226,7 +223,7 @@ class HomeController extends Controller
                 'errors' => []
             ), 200);
 
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
 
             return response()->json(array(
                 'success' => false,
@@ -266,10 +263,10 @@ class HomeController extends Controller
         // return AttachmentCategory::where('id', $attachmentCategory->id)->delete();
         // return Nse::where('id', $nse->id)->delete();
     }
-    
+
     public function upload(Request $request)
-    {	
-    	return Props::get();
+    {
+        return Props::get();
 
     }
 
@@ -286,16 +283,16 @@ class HomeController extends Controller
     public function getClientsDocs()
     {
         $users = User::with('roles')->get();
-		$userArr = [];
-		foreach ($users as $user) {
-			foreach ($user->roles as $role) {
-				if ($role->name == 'Customer') {
-					$userArr[] = $role->pivot->user_id;		
-				}
-			}
-		}
-		$customers = User::with('documents')->whereIn('id', $userArr)->get();
-		return $customers;
+        $userArr = [];
+        foreach ($users as $user) {
+            foreach ($user->roles as $role) {
+                if ($role->name == 'Customer') {
+                    $userArr[] = $role->pivot->user_id;
+                }
+            }
+        }
+        $customers = User::with('documents')->whereIn('id', $userArr)->get();
+        return $customers;
     }
 
     public function assign(Request $request, $id)
@@ -309,29 +306,27 @@ class HomeController extends Controller
 
     public function getDocsSort(Request $request)
     {
-        
-		if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
-			if ($request->select['id'] == 'all') {
-				return Attachment::all();	
-			}
-			else{
-				return Attachment::where('client_id', $request->select['id'])->get();
-			}
-		}else{
-			if ($request->select['id'] == 'all') {
-				if ($request->select['id'] == 'all') {
-					return Attachment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->get();
-				}else{
-					
-					return Attachment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->get();
-				}
-			}
-			else{
-					return Attachment::where('client_id', $request->select['id'])
-								->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])
-								->get();
-			}
-		}
-		return Attachment::whereBetween('created_at', [$request->start_date, $request->end_date])->get();
+
+        if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
+            if ($request->select['id'] == 'all') {
+                return Attachment::all();
+            } else {
+                return Attachment::where('client_id', $request->select['id'])->get();
+            }
+        } else {
+            if ($request->select['id'] == 'all') {
+                if ($request->select['id'] == 'all') {
+                    return Attachment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->get();
+                } else {
+
+                    return Attachment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->get();
+                }
+            } else {
+                return Attachment::where('client_id', $request->select['id'])
+                    ->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])
+                    ->get();
+            }
+        }
+        return Attachment::whereBetween('created_at', [$request->start_date, $request->end_date])->get();
     }
 }

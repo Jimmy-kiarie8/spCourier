@@ -203,12 +203,12 @@ export default {
                     this.snackbar = true
                 })
                 .catch((error) => {
-                    this.errors = error.response.data.errors
                     this.Editloader = false
                     this.close()
                     this.color = 'red'
                     this.message = 'Something went wrong'
                     this.snackbar = true
+                    this.errors = error.response.data.errors
                 })
         },
         openAdd() {

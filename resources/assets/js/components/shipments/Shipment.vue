@@ -95,10 +95,10 @@
                             <td class="text-xs-right">{{ props.item.charges }}</td>
                             <td class="text-xs-right">{{ props.item.created_at }}</td>
                             <td class="text-xs-right" v-if="props.item.printed === 1" style="background: Green;">
-                                <p style="color: #fff;">Printed</p> 
+                                <p style="color: #fff;">Printed</p>
                             </td>
                             <td class="text-xs-right" v-else>
-                                <p style="color: #000;">Not Printed</p> 
+                                <p style="color: #000;">Not Printed</p>
                             </td>
                             <td class="text-xs-right" v-if="props.item.printReceipt === 1" style="background: green;">
                                 <v-btn color="white" flat @click="notPrinted(props.item)" :loading="nloading" :disabled="nloading">Mark Not Printed</v-btn>
@@ -231,8 +231,7 @@ export default {
             selectItem: {
                 state: 'All',
             },
-            statuses: [
-                {
+            statuses: [{
                     state: 'Awaiting Confirmation',
                 },
                 {
@@ -409,7 +408,7 @@ export default {
                     text: "Created",
                     value: "created_at"
                 },
-                
+
                 {
                     text: "Waybill Printed",
                     value: "created_at"
@@ -425,7 +424,7 @@ export default {
                 }
             ],
             selected: [],
-            AllRows: [],    
+            AllRows: [],
             selectStatus: [],
             direction: "left",
             Allcustomers: [],
@@ -542,7 +541,7 @@ export default {
             }
         },
         notPrinted(item) {
-            
+
             this.editedItem = Object.assign({}, item);
             this.editedIndex = this.AllShipments.indexOf(item);
             this.loading = true,
@@ -679,21 +678,21 @@ export default {
                 this.between.start = parseInt(this.between.start) - 500;
                 this.between.end = parseInt(this.between.end) - 500;
                 axios.post('betweenShipments', this.$data.between)
-                .then((response) => {
-                    this.loading = false
-                    this.AllShipments = response.data
-                })
-                .catch((error) => {
-                    this.loading = false
-                    this.errors = error.response.data.errors
-                })
+                    .then((response) => {
+                        this.loading = false
+                        this.AllShipments = response.data
+                    })
+                    .catch((error) => {
+                        this.loading = false
+                        this.errors = error.response.data.errors
+                    })
             } else {
                 return;
                 this.loading = false
             }
-            
+
         },
-        
+
         close() {
             this.dialog1 = this.dialog = this.pdialog2 = this.updateModal = this.showdialog1 =
                 this.UpdateShipmentModel = this.AssignDriverModel = this.AssignBranchModel = this.trackModel = this.csvModel = this.chargeModal = this.RowModal = this.printModal = false;
@@ -708,38 +707,38 @@ export default {
             this.form.start_date = this.form.end_date = ''
             this.getShipments()
         },
-        
+
         getCustomer() {
             axios
-            .get("getCustomer")
-            .then(response => {
-                this.Allcustomers = response.data;
-            })
-            .catch(error => {
-                this.errors = error.response.data.errors;
-            });
+                .get("getCustomer")
+                .then(response => {
+                    this.Allcustomers = response.data;
+                })
+                .catch(error => {
+                    this.errors = error.response.data.errors;
+                });
         },
         getDrivers() {
             axios
-            .get("/getDrivers")
-            .then(response => {
-                this.AllDrivers = response.data;
-            })
-            .catch(error => {
-                console.log(error);
-                this.errors = error.response.data.errors;
-            });
+                .get("/getDrivers")
+                .then(response => {
+                    this.AllDrivers = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.errors = error.response.data.errors;
+                });
         },
         getBranch() {
             axios
-            .get("/getBranchEger")
-            .then(response => {
-                this.AllBranches = response.data;
-            })
-            .catch(error => {
-                console.log(error);
-                this.errors = error.response.data.errors;
-            });
+                .get("/getBranchEger")
+                .then(response => {
+                    this.AllBranches = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.errors = error.response.data.errors;
+                });
         },
         getShipments() {
             this.loading = true
@@ -759,7 +758,7 @@ export default {
                 });
         },
     },
-    
+
     created() {
         eventBus.$on('selectClear', data => {
             this.selected = [];
@@ -767,7 +766,7 @@ export default {
     },
     mounted() {
         this.loader = true;
-
+        this.getBranch()
         // axios
         //     .get("/getRows")
         //     .then(response => {
@@ -779,7 +778,6 @@ export default {
         //         this.errors = error.response.data.errors;
         //         this.loader = false;
         //     });
-        
 
         axios.get('getShipmentsCount')
             .then((response) => {

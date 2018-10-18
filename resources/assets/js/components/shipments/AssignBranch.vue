@@ -66,7 +66,8 @@ export default {
                 .then(response => {
                     this.loading = false
                     this.$emit("alertRequest");
-                    //   this.$emit("closeRequest");
+                    eventBus.$emit('selectClear');
+                      this.close();
                 })
                 .catch(error => {
                     this.loading = false;

@@ -12,12 +12,12 @@ use App\Shipment;
 |
  */
 
-Route::get('scheduler', function (){
+Route::get('scheduler', function () {
 	\Illuminate\Support\Facades\Artisan::call('schedule:run');
- });
+});
 	// Socialite
-	Route::get('login/{service}', 'Auth\LoginController@redirectToProvider');
-	Route::get('login/{service}/callback', 'Auth\LoginController@handleProviderCallback');
+Route::get('login/{service}', 'Auth\LoginController@redirectToProvider');
+Route::get('login/{service}/callback', 'Auth\LoginController@handleProviderCallback');
 Route::get('/search', 'ShipmentController@search')->name('search');
 // Route::get('/algoria', function () {
 // 	return view('search');
@@ -69,6 +69,7 @@ Route::group(['middleware' => ['auth']], function () {
 	// Route::resource('tasks', 'TaskController');
 	Route::resource('charges', 'ChargeController');
 	Route::resource('towns', 'TownController');
+	Route::resource('country', 'CountryController');
 
 	Route::post('updateStatus/{id}', 'ShipmentController@updateStatus')->name('updateStatus');
 	Route::get('csv', 'ShipmentController@csv')->name('csv');
@@ -80,7 +81,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('assignDriver', 'ShipmentController@assignDriver')->name('assignDriver');
 	Route::post('filterShipment', 'ShipmentController@filterShipment')->name('filterShipment');
 	Route::post('betweenShipments', 'ShipmentController@betweenShipments')->name('betweenShipments');
-	
+
 	Route::post('AddShipments/{id}', 'ContainerController@AddShipments')->name('AddShipments');
 	Route::post('conupdateStatus/{id}', 'ContainerController@conupdateStatus')->name('conupdateStatus');
 	Route::post('getShipmentArray/{id}', 'ContainerController@getShipmentArray')->name('getShipmentArray');
@@ -99,19 +100,21 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('getUserPerm/{id}', 'UserController@getUserPerm')->name('getUserPerm');
 	Route::post('password', 'UserController@password')->name('password');
 	Route::patch('AuthUserUp/{id}', 'UserController@AuthUserUp')->name('AuthUserUp');
-	
+
 
 	Route::get('getUsersRole', 'RoleController@getUsersRole')->name('getUsersRole');
 	Route::get('getRoles', 'RoleController@getRoles')->name('getRoles');
 	Route::get('getPermissions', 'RoleController@getPermissions')->name('getPermissions');
 	Route::post('getRolesPerm/{id}', 'RoleController@getRolesPerm')->name('getRolesPerm');
-	
-	
+
+
 	Route::get('getBranch', 'BranchController@getBranch')->name('getBranch');
 	Route::post('getShipBranch', 'BranchController@getShipBranch')->name('getShipBranch');
 	Route::post('getBranchShip/{id}', 'BranchController@getBranchShip')->name('getBranchShip');
 	Route::get('getBranchEger', 'BranchController@getBranchEger')->name('getBranchEger');
 	Route::get('getBranchC', 'BranchController@getBranchC')->name('getBranchC');
+
+	Route::get('getCountry', 'CountryController@getCountry')->name('getCountry');
 	
 	Route::post('getCompanies', 'CompanyController@getCompanies')->name('getCompanies');
 	Route::post('getCompanyAdmin', 'CompanyController@getCompanyAdmin')->name('getCompanyAdmin');
@@ -134,7 +137,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('dispatchedExpo', 'ReportController@dispatchedExpo')->name('dispatchedExpo');
 	Route::post('userDateExpo', 'ReportController@userDateExpo')->name('userDateExpo');
 	Route::post('DriverReport', 'ReportController@DriverReport')->name('DriverReport');
-	
+
 	Route::post('generate_pdf', 'ReportController@generate_pdf')->name('generate_pdf');
 
 
@@ -214,13 +217,13 @@ Route::group(['middleware' => ['auth']], function () {
 	// Charges
 	Route::get('/getCharges', 'ChargeController@getCharges')->name('getCharges');
 	Route::post('/shipCharge/{id}', 'ChargeController@shipCharge')->name('shipCharge');
-	
+
 	Route::post('barcodeUpdate/{bar_code}', 'ScanController@barcodeUpdate')->name('barcodeUpdate');
 	Route::post('barcodeIn/{bar_code}', 'ScanController@barcodeIn')->name('barcodeIn');
 	Route::post('statusUpdate', 'ScanController@statusUpdate')->name('statusUpdate');
 	Route::post('statusUpdateIn', 'ScanController@statusUpdateIn')->name('statusUpdateIn');
 	Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
-	
+
 	Route::post('rows', 'RowsController@rows')->name('rows');
 	Route::get('getRows', 'RowsController@getRows')->name('getRows');
 	Route::post('notprinted/{id}', 'RowsController@notprinted')->name('notprinted');
@@ -229,10 +232,10 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('locationUpdate/{id}', 'LocationController@locationUpdate')->name('locationUpdate');
 	Route::post('getcoordinatesArray/{id}', 'LocationController@getcoordinatesArray')->name('getcoordinatesArray');
 	Route::post('paid/{id}', 'LocationController@paid')->name('paid');
-	
+
 	Route::get('getTowns', 'TownController@getTowns')->name('getTowns');
 	Route::get('getTownCharge', 'TownController@getTownCharge')->name('getTownCharge');
-	
+
 
 
 	Route::get('test', function () {
@@ -246,8 +249,8 @@ Route::group(['middleware' => ['auth']], function () {
 	// Customers 
 	Route::get('customerShip', 'CustomerController@customerShip')->name('customerShip');
 	Route::post('getsearchRe', 'CustomerController@getsearchRe')->name('getsearchRe');
-	
-	Route::get('getBranchShipments', 'DashboardController@getBranchShipments')->name('getBranchShipments'); 
+
+	Route::get('getBranchShipments', 'DashboardController@getBranchShipments')->name('getBranchShipments');
 
 
 	Route::get('getChartScheduled', 'DashboardController@getChartScheduled')->name('getChartScheduled');
@@ -259,7 +262,8 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('getCountCount', 'DashboardController@getCountCount')->name('getCountCount');
 	Route::get('getBranchCount', 'DashboardController@getBranchCount')->name('getBranchCount');
 	Route::get('getChartCount', 'DashboardController@getChartCount')->name('getChartCount');
-	
+	Route::get('getCountryhipments', 'DashboardController@getCountryhipments')->name('getCountryhipments');
+
 });
 
 

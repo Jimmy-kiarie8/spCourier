@@ -62,6 +62,9 @@ export default {
                 .then(response => {
                     this.loading = false
                     this.$emit("alertRequest");
+                    this.$emit("alertRequest");
+                    eventBus.$emit('selectClear');
+                      this.close();
                     //   this.$emit("closeRequest");
                 })
                 .catch(error => {

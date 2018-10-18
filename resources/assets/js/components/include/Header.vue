@@ -19,7 +19,7 @@
                 <template>
                     <v-card>
                         <router-link to="/" class="v-list__tile v-list__tile--link">
-                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">home</i></div>
+                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">dashboard</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
                                     Dashboard
@@ -117,76 +117,44 @@
                                 </div>
                             </div>
                         </router-link>
-                        <v-expansion-panel popout v-if="user.can['view users']">
-                            <v-expansion-panel-content>
-                                <div slot="header">User&Roles</div>
-                                <v-card>
-                                    <router-link to="/users" class="v-list__tile v-list__tile--link" v-if="user.can['view users']">
-                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">account_circle</i></div>
-                                        <div class="v-list__tile__content">
-                                            <div class="v-list__tile__title">
-                                                Manage Users
-                                            </div>
-                                        </div>
-                                    </router-link>
-                                    <router-link to="/roles" class="v-list__tile v-list__tile--link" v-if="user.can[ 'view roles']">
-                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
-                                        <div class="v-list__tile__content">
-                                            <div class="v-list__tile__title">
-                                                Manage Roles
-                                            </div>
-                                        </div>
-                                    </router-link>
-                                </v-card>
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
-                        <v-expansion-panel popout v-if="user.can['view branches']">
-                            <v-expansion-panel-content>
-                                <div slot="header">Manage Branches</div>
-                                <v-card>
-                                    <router-link to="/branches" class="v-list__tile v-list__tile--link" v-if="user.can['view branches']">
-                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">home</i></div>
-                                        <div class="v-list__tile__content">
-                                            <div class="v-list__tile__title">
-                                                Branches
-                                            </div>
-                                        </div>
-                                    </router-link>
-                                    <router-link to="/status" class="v-list__tile v-list__tile--link">
-                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
-                                        <div class="v-list__tile__content">
-                                            <div class="v-list__tile__title">
-                                                Shipment Status
-                                            </div>
-                                        </div>
-                                    </router-link>
-                                </v-card>
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
+                        <v-list-group prepend-icon="account_circle" v-if="user.can['view users']">
+                            <v-list-tile slot="activator">
+                                <v-list-tile-title>User&Roles</v-list-tile-title>
+                            </v-list-tile>
 
-                        <v-expansion-panel popout v-if="user.can['view accounts']">
-                            <v-expansion-panel-content>
-                                <div slot="header">Account Setting</div>
-                                <v-card>
-                                    <router-link to="/invoices" class="v-list__tile v-list__tile--link">
-                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
-                                        <div class="v-list__tile__content">
-                                            <div class="v-list__tile__title">
-                                                Invoices
-                                            </div>
-                                        </div>
-                                    </router-link>
-                                    <router-link to="/receipts" class="v-list__tile v-list__tile--link">
-                                        <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
-                                        <div class="v-list__tile__content">
-                                            <div class="v-list__tile__title">
-                                                Receipt
-                                            </div>
-                                        </div>
-                                    </router-link>
-                                </v-card>
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
+                            <router-link to="/users" class="v-list__tile theme--light" style="text-decoration: none">
+                                    <v-list-tile-action>
+                                        <v-icon>people_outline</v-icon>
+                                    </v-list-tile-action>
+                                    <v-list-tile-title>Manage Users</v-list-tile-title>
+                            </router-link>
+                            <router-link to="/roles" class="v-list__tile theme--light" style="text-decoration: none">
+                                <v-list-tile-action>
+                                    <v-icon>gavel</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title> Manage Roles</v-list-tile-title>
+                            </router-link>
+                        </v-list-group>
+
+                        <v-list-group prepend-icon="insert_drive_file" v-if="user.can['view branches']">
+                            <v-list-tile slot="activator">
+                                <v-list-tile-title>Manage Branches</v-list-tile-title>
+                            </v-list-tile>
+
+                            <router-link to="/branches" class="v-list__tile theme--light" style="text-decoration: none">
+                                    <v-list-tile-action>
+                                        <v-icon>book</v-icon>
+                                    </v-list-tile-action>
+                                    <v-list-tile-title>Branches</v-list-tile-title>
+                            </router-link>
+                            <router-link to="/status" class="v-list__tile theme--light" style="text-decoration: none">
+                                <v-list-tile-action>
+                                    <v-icon>question_answer</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title> Shipment status</v-list-tile-title>
+                            </router-link>
+                        </v-list-group>
+
                     </v-card>
                 </template>
             </v-list>
@@ -224,6 +192,12 @@ export default {
             menu: false,
             mode: '',
             company: {},
+            cruds: [
+                ['Create', 'add'],
+                ['Read', 'insert_drive_file'],
+                ['Update', 'update'],
+                ['Delete', 'delete']
+            ]
         }
     },
     mounted() {

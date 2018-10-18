@@ -39,9 +39,9 @@ class User extends Authenticatable {
 	/**
 	 * The roles that belong to the user.
 	 */
-	// public function roles() {
-	// 	return $this->belongsToMany('App\Rolem');
-	// }
+	public function country() {
+		return $this->belongsToMany('App\Country');
+	}
 	
 	public function branch() {
 		return $this->belongsTo('App\Branch');
@@ -76,29 +76,4 @@ class User extends Authenticatable {
     {
         return $this->getAllPermissions();
     }
-    
-     /**
-     * Get all user permissions in a flat array.
-     *
-     * @return array
-     */
-    public function getCanAttribute()
-    {
-        $permissions = [];
-        foreach (Permission::all() as $permission) {
-            if (Auth::user()->can($permission->name)) {
-                $permissions[$permission->name] = true;
-            } else {
-                $permissions[$permission->name] = false;
-            }
-        }
-        return $permissions;
-	}
-	/**
-	* The accessors to append to the model's array form.
-	*
-	* @var array
-	*/
-	protected $appends = ['can'];
-
 }

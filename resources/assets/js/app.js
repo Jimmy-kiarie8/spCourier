@@ -85,6 +85,7 @@ let myCharges = require('./components/charge/Charge.vue');
 let myTown = require('./components/town/Town.vue');
 let myPrintPdf = require('./components/shipments/PrintPdf.vue');
 let myStatus = require('./components/shipments/status/Status.vue');
+let myCountry = require('./components/country/Country.vue');
 
 const routes = [
     {path: '/', component: dashboard },
@@ -113,6 +114,7 @@ const routes = [
     {path: '/print', component: myPrintPdf },
     {path: '/status', component: myStatus },
     {path: '/chart', component: myChart },
+    {path: '/country', component: myCountry },
 
 ]
 const router = new VueRouter({
@@ -127,7 +129,7 @@ const app = new Vue({
     	myHeader, myUser, myDrivers, myShipment, myScanner, myContainer, myMap,
         myBranch, myProfile, myCompany, myCustomer, mysubsicriber, myInvice, myReceipt,
         myReports, mybranchShip, myRoles, myscheduled, myTasks, myUploadFile, myCharges,
-        myTown, myPrintPdf, myStatus, myChart
+        myTown, myPrintPdf, myStatus, myChart, myCountry
     },
     data: {
     shipments: [],

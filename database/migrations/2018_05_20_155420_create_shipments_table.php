@@ -64,8 +64,8 @@ class CreateShipmentsTable extends Migration {
 			$table->integer('printed')->nullable();
 			$table->text('description')->nullable();
 			$table->text('country')->nullable();
+			$table->integer('country_id')->nullable();
 			$table->boolean('printReceipt')->nullable();
-			
 			$table->softDeletes();
 			$table->timestamps();
 		});

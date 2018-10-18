@@ -103,7 +103,7 @@
                         <div class="card card-chart">
                             <div class="card-body">
                                 <div class="chart-area">
-                                    <my-schedule :height="255"></my-schedule>
+                                    <my-country :height="255"></my-country>
                                 </div>
                                 <div class="progress-Ship">
                                     <img src="storage/country/ke.png" alt="">
@@ -149,6 +149,7 @@ import Shipment from './charts/Shipment'
 import Delivered from './charts/Delivered'
 import Cancled from './charts/Cancled'
 import Branch from './charts/Branch'
+import Country from './charts/Country'
 
 export default {
     name: 'VueChartJS',
@@ -158,6 +159,7 @@ export default {
         'my-delivered': Delivered,
         'my-branch': Branch,
         'my-cancled': Cancled,
+        'my-country': Country,
     },
     data() {
         return {

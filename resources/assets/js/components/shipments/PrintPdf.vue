@@ -143,7 +143,7 @@ export default {
 
                 doc.text(5, 160, 'NOTE: ');
                 doc.text(5, 170, 'Clients are requested to pay through M-PESA TILL NUMBER - 877838 ');
-                doc.text(5, 180, '(If asked to pay cash please cal 0728 492 446 or 0799 869 844) ');
+                doc.text(5, 180, '(If asked to pay cash please call 0728 492 446 or 0799 869 844) ');
 
                 doc.setFontSize(12)
                 doc.text(5, 200, 'Authorizer Signature____________________________');

@@ -73,8 +73,8 @@ class SafaricomController extends Controller
     
     public function base_64()
     {
-        $key = 'vc4SsAN8ko64jNTY71lOZWvGThoGXASL';
-        $secret = 'MVMcOQi4uAOQH73s';
+        $key = 'hzMJS6i9OCuAc6AlRyKz7JUuMIvYIQqV';
+        $secret = 'hgGlK8nSLa2DDAjA';
         
         $base64 = base64_encode($key.':'.$secret);
 
