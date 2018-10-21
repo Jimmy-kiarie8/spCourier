@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Requests\UsersRequest;
 use App\Notifications\SignupActivate;
 use App\Role_user;
@@ -12,8 +13,10 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Str;
 
-class UserController extends Controller {
-	public function getUsers() {
+class UserController extends Controller
+{
+	public function getUsers()
+	{
 		return User::with(['roles'])->get();
 	}
 	/**
@@ -22,17 +25,19 @@ class UserController extends Controller {
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request) {
+	public function store(Request $request)
+	{
+		// return $request->all();
 		$this->Validate($request, [
 			'form.name' => 'required',
-            'form.password' => 'required|min:6',
-            'form.email' => 'required|email',
-            'form.phone' => 'required|numeric',
-            'form.branch_id' => 'required',
-            'form.address' => 'required',
-            'form.city' => 'required',
-            'form.country' => 'required',
-            'form.role_id' => 'required'
+			'form.password' => 'required|min:6',
+			'form.email' => 'required|email',
+			'form.phone' => 'required|numeric',
+			'form.branch_id' => 'required',
+			'form.address' => 'required',
+			'form.city' => 'required',
+			'form.country' => 'required',
+			'form.role_id' => 'required'
 		]);
 		// return $request->all();
 		$user = new User;
@@ -49,11 +54,12 @@ class UserController extends Controller {
 		$user->address = $request->form['address'];
 		$user->city = $request->form['city'];
 		$user->country = $request->form['country'];
+		$user->country_id = $request->form['countryList'];
 		$user->activation_token = str_random(60);
 		$user->save();
 		$user->assignRole($request->form['role_id']);
 		$user->givePermissionTo($request->selected);
-        $user->notify(new SignupActivate($user, $password));
+		$user->notify(new SignupActivate($user, $password));
 		return $user;
 	}
 
@@ -64,7 +70,8 @@ class UserController extends Controller {
 	 * @param  \App\User  $user
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, User $user) {
+	public function update(Request $request, User $user)
+	{
 		// return $request->all();
 		$user = User::find($request->form['id']);
 		$user->name = $request->form['name'];
@@ -74,6 +81,7 @@ class UserController extends Controller {
 		$user->address = $request->form['address'];
 		$user->city = $request->form['city'];
 		$user->country = $request->form['country'];
+		$user->country_id = $request->form['countryList'];
 		$user->save();
 		// $user->givePermissionTo($request->selected);
 		$user->syncRoles($request->form['role_id']);
@@ -99,15 +107,18 @@ class UserController extends Controller {
 	 * @param  \App\User  $user 
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy(User $user) {
+	public function destroy(User $user)
+	{
 		User::find($user->id)->delete();
 	}
 
-	public function getLogedinUsers() {
+	public function getLogedinUsers()
+	{
 		return Auth::user();
 	}
 
-	public function profile(Request $request, User $user, $id) {
+	public function profile(Request $request, User $user, $id)
+	{
 		// return $request->all;
 		$upload = User::find($request->id);
 		if ($request->hasFile('image')) {
@@ -149,14 +160,14 @@ class UserController extends Controller {
 		// return $request->all();
 		$roles = User::all();
 		$users_id = [];
-			$users = User::all();
-			$userArr = [];
-			foreach ($users as $user) {
-				if ($user->hasRole($request->name)) {
-					$userArr[] = $user;
-				}
+		$users = User::all();
+		$userArr = [];
+		foreach ($users as $user) {
+			if ($user->hasRole($request->name)) {
+				$userArr[] = $user;
 			}
-			return $userArr;
+		}
+		return $userArr;
 	}
 
 	public function getUserPro(Request $request, $id)
@@ -168,11 +179,11 @@ class UserController extends Controller {
 	{
 		$user = User::find($id);
 		$permissions = $user->getAllPermissions();
-        $can = [];
-        foreach ($permissions as $perm) {
-            $can[] = $perm->name;
-        }
-        return $can;
+		$can = [];
+		foreach ($permissions as $perm) {
+			$can[] = $perm->name;
+		}
+		return $can;
 	}
 
 	public function password(Request $request)
@@ -182,7 +193,7 @@ class UserController extends Controller {
 			// 'password' => 'required|string|min:6|confirmed',
 		]);
 		$user = User::find(Auth::id());
-		$user->password =  Hash::make($request->password);
+		$user->password = Hash::make($request->password);
 		$user->save();
 		return $user;
 	}

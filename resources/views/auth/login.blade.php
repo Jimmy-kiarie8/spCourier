@@ -3,7 +3,8 @@
 @section('content')
 
 <template>
-<v-app id="inspire" class="SpeedBall">
+<v-app id="inspire">
+    <div id="login">
     <v-content>
         <v-container fluid fill-height>
             <v-layout align-center justify-center style="margin-top: 200px;">
@@ -81,6 +82,7 @@
             </v-layout>
         </v-container>
     </v-content>
+</div>
 </v-app>
 </template>
 

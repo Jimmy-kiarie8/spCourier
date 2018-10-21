@@ -1,4 +1,3 @@
-<!-- <p>qwer11222  qw@qw.zz</p> -->
 <template>
 <div>
     <v-content>
@@ -34,62 +33,66 @@
                             <!-- <div v-for="shipments in AllShip.data" :key="shipments.id"> -->
                             <v-flex xs12 sm6>
                                 <ul class="list-group">
-                                    <li class="list-group-item"><label for="">Waybill Number: </label>{{ shipments.airway_bill_no }}</li>
-                                    <li class="list-group-item"><label for="">From: </label>{{ shipments.sender_city }}</li>
-                                    <li class="list-group-item"><label for="">Parcels Sent: </label>{{ shipments.products.length }}</li>
-                                    <li class="list-group-item"><label for="">Status: </label>{{ shipments.status }}</li>
+                                    <li class="list-group-item"><label for=""><b>Waybill Number: </b></label>{{ shipments.airway_bill_no }}</li>
+                                    <li class="list-group-item"><label for=""><b>From: </b></label>{{ shipments.sender_city }}</li>
+                                    <li class="list-group-item"><label for=""><b>Status: </b></label>{{ shipments.status }}</li>
                                 </ul>
                             </v-flex>
 
                             <v-flex xs12 sm6>
                                 <ul class="list-group">
-                                    <li class="list-group-item"><label for="">Derivery Date: </label> {{ shipments.derivery_date }}</li>
-                                    <li class="list-group-item"><label for="">Derivery Time: </label> {{ shipments.derivery_time }}</li>
-                                    <li class="list-group-item"><label for="">To: </label> {{ shipments.client_city }}</li>
-                                    <li class="list-group-item"><label for="">Assigned Staff: </label> {{ shipments.assign_staff }}</li>
+                                    <li class="list-group-item"><label for=""><b>Derivery Date: </b></label> {{ shipments.derivery_date }}</li>
+                                    <li class="list-group-item"><label for=""><b>To: </b></label> {{ shipments.client_city }}</li>
                                 </ul>
                             </v-flex>
                             <!-- </div> -->
                         </v-layout>
 
                         <v-toolbar card blue-grey darken-1>
-                            <v-toolbar-title class="body-2">Proof of Delivery (POD) for this parcel</v-toolbar-title>
+                            <v-toolbar-title class="body-2">Product Details</v-toolbar-title>
                         </v-toolbar>
                         <v-layout wrap>
                             <v-flex xs12 sm6>
                                 <ul class="list-group">
-                                    <li class="list-group-item"><label for="">Waybill Status: </label>{{ shipments.status }}</li>
-                                    <li class="list-group-item"><label for="">Receiver Name: </label>{{ shipments.client_name }}</li>
-                                    <li class="list-group-item"><label for="">Delivery Date: </label>{{ shipments.derivery_date }}</li>
-                                    <li class="list-group-item"><label for="">Parcels PODed: </label>{{ shipments.products.length }}</li>
+                                    <li class="list-group-item"><label for=""><b>Waybill Status:</b></label>{{ shipments.status }}</li>
+                                    <!-- <li class="list-group-item"><label for="">Receiver Name: </label>{{ shipments.client_name }}</li> -->
+                                    <li class="list-group-item"><label for=""><b>Delivery Date: </b></label>{{ shipments.derivery_date }}</li>
                                 </ul>
                             </v-flex>
 
+                            <v-flex xs12 sm6>
+                                <ul class="list-group">
+                                    <li class="list-group-item"><label for=""><b>COD amount: </b></label> {{ shipments.cod_amount }}</li>
+                                    <li class="list-group-item"><label for=""><b>product Description: </b></label> {{ shipments.bar_code }}</li>
+                                    <li class="list-group-item"><label for=""><b>Quantity: </b></label> {{ shipments.amount_ordered }}</li>
+                                </ul>
+                            </v-flex>
                         </v-layout>
 
                         <v-toolbar card blue-grey darken-1>
                             <v-toolbar-title class="body-2">
                                 <v-layout wrap>
-                                    <v-flex sm6>Sender Details</v-flex>
-                                    <v-flex sm6 style="margin-left: 750px;margin-top: -20px;">Recipient Details</v-flex>
+                                    <v-flex sm6>Client Details</v-flex>
+                                    <v-flex sm6 style="margin-left: 750px;margin-top: -20px;"><b>Sender Details</b></v-flex>
                                 </v-layout>
                             </v-toolbar-title>
                         </v-toolbar>
                         <v-layout wrap>
                             <v-flex xs12 sm6>
                                 <ul class="list-group">
-                                    <li class="list-group-item"><label for="">Receiver Name: </label>{{ shipments.client_name }}</li>
-                                    <li class="list-group-item"><label for="">Delivery Date: </label>{{ shipments.derivery_date }}</li>
-                                    <li class="list-group-item"><label for="">Parcels PODed: </label>{{ shipments.products.length }}</li>
+                                    <li class="list-group-item"><label for=""><b>Client Name:</b> </label>{{ shipments.client_name }}</li>
+                                    <li class="list-group-item"><label for=""><b>Client Email:</b> </label>{{ shipments.client_email }}</li>
+                                    <li class="list-group-item"><label for=""><b>Client Phone:</b> </label>{{ shipments.client_phone }}</li>
+                                </ul>
+                            </v-flex>
+                            <v-flex xs12 sm6>
+                                <ul class="list-group">
+                                    <li class="list-group-item"><label for=""><b>Sender Name:</b> </label>SpeedBall Courier Services</li>
+                                    <li class="list-group-item"><label for=""><b>Sender Email:</b> </label>info@speedballcourier.com</li>
+                                    <li class="list-group-item"><label for=""><b>Sender Phone:</b> </label>+254728492446</li>
                                 </ul>
                             </v-flex>
 
-                            <v-flex xs12 sm6>
-                                <ul class="list-group">
-                                    <li class="list-group-item"><label for="">ID Number: </label> {{ shipments.derivery_date }}</li>
-                                    <li class="list-group-item"><label for="">Delivery Time: </label> {{ shipments.derivery_time }}</li>
-                                </ul>
-                            </v-flex>
                         </v-layout>
 
                         <v-toolbar card blue-grey darken-1>
@@ -139,15 +142,9 @@
 </template>
 
 <script>
-// let AddCustomer = require('./AddCustomer.vue')
-// let ShowCustomer = require('./ShowCustomer.vue')
-// let EditCustomer = require('./EditCustomer.vue')
 export default {
     props: ['user', 'role'],
     components: {
-        // AddCustomer,
-        // ShowCustomer,
-        // EditCustomer
     },
     data() {
         return {
@@ -187,6 +184,7 @@ export default {
                 })
         },
         refresh() {
+            this.loader = true
             axios.get('customerShip')
                 .then((response) => {
                     this.AllShip = response.data

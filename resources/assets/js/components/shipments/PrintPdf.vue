@@ -65,74 +65,71 @@ export default {
                 const element = this.Scheduled[i];
                 doc.setFont("times");
                 doc.setFontType("normal");
-                doc.text(150, 40, 'WayBill Number:' + element.bar_code);
+                doc.text(150, 40, 'WayBill Number:' + element['bar_code']);
 
                 doc.text(100, 70, 'WAYBILL');
                 // Rectangles
                 doc.rect(18, 75, 170, 185);
                 doc.rect(18, 75, 170, 10);
                 doc.text(100, 80, 'DISPATCH SECTION', null, null, 'center');
-                doc.rect(18, 85, 170, 15);
+                doc.rect(18, 85, 170, 30);
                 doc.text(20, 91, 'From: ' + element['sender_address']);
-                doc.text(120, 91, 'To: ' + element['client_address']);
-                // Sender Details
-                doc.rect(18, 100, 170, 10);
-                doc.setFontSize(14)
-                doc.text(100, 105, 'Sender Details', null, null, 'center');
+                doc.setFontSize(11)
+                doc.text(20, 109, 'To: ' + element['client_address']);
                 doc.setFontSize(12)
-                doc.rect(18, 110, 170, 20);
-                doc.text(20, 117, 'Delivery Date: ' + element['derivery_date']);
-                doc.text(120, 117, 'Sent By: SpeedBall Courier Services');
-                doc.text(20, 124, 'Phone: +254728492446');
-                doc.text(120, 124, 'Email: info@speedballcourier.com');
+                // Sender Details 
+                doc.rect(18, 115, 170, 10);
+                doc.setFontSize(14)
+                doc.text(100, 120, 'Sender Details', null, null, 'center');
+                doc.setFontSize(12)
+                doc.rect(18, 125, 170, 20);
+                doc.text(20, 132, 'Delivery Date: ' + element['derivery_date']);
+                doc.text(120, 132, 'Sent By: SpeedBall Courier Services');
+                doc.text(20, 139, 'Phone: +254728492446');
+                doc.text(120, 139, 'Email: info@speedballcourier.com');
                 // Client Details
-                doc.rect(18, 130, 170, 10);
+                doc.rect(18, 145, 170, 10);
                 doc.setFontSize(14)
-                doc.text(100, 136, 'Client Details', null, null, 'center');
+                doc.text(100, 151, 'Client Details', null, null, 'center');
                 doc.setFontSize(12)
-                doc.rect(18, 188, 170, 20);
-                doc.text(20, 147, 'Client: ' + element.client_name);
-                doc.text(120, 147, 'Phone: ' + element.client_phone);
-                doc.text(20, 154, 'Email: ' + element.client_email);
-                doc.text(120, 154, 'Address: ' + element['derivery_date']);
+                doc.rect(18, 155, 170, 20);
+                doc.text(20, 160, 'Client: ' + element['client_name']);
+                doc.text(120, 160, 'Phone: ' + element['client_phone']);
+                doc.text(20, 170, 'Email: ' + element['client_email']);
+                doc.text(120, 170, 'Address: ' + element['derivery_date']);
 
                 // Product
-                doc.rect(18, 160, 170, 10);
+                doc.rect(18, 175, 170, 10);
                 doc.setFontSize(14)
-                doc.text(100, 166, 'Product Details', null, null, 'center');
+                doc.text(100, 181, 'Product Details', null, null, 'center');
                 doc.setFontSize(12)
-                doc.rect(18, 170, 170, 10);
-                doc.text(20, 176, 'Product Description');
-                doc.text(80, 176, 'Price', null, null, 'left');
-                doc.text(150, 176, 'Quantity', null, null, 'left');
+                doc.rect(18, 185, 170, 10);
+                doc.text(20, 191, 'Product Description');
+                doc.text(80, 191, 'Price', null, null, 'left');
+                doc.text(150, 191, 'Quantity', null, null, 'left');
 
-                doc.rect(18, 180, 170, 15);
-                doc.line(70, 180, 70, 188); // vertical line
-                doc.line(140, 180, 140, 188); // vertical line
-                doc.text(20, 185, '' + element['bar_code']);
-                doc.text(80, 185, '' + element['cod_amount'], null, null, 'left');
-                doc.text(150, 185, '' + element['amount_ordered'], null, null, 'left');
-
-
-
-
-
+                doc.rect(18, 195, 170, 15);
+                doc.line(70, 195, 70, 198); // vertical line
+                doc.line(140, 195, 140, 198); // vertical line
+                doc.text(20, 200, '' + element['bar_code']);
+                doc.text(80, 200, '' + element['cod_amount'], null, null, 'left');
+                doc.text(150, 200, '' + element['amount_ordered'], null, null, 'left');
 
                 // Lines
 
-                doc.rect(18, 195, 170, 20);
+                doc.rect(18, 210, 170, 20);
                 doc.setFontSize(14)
-                doc.text(20, 205, 'Special Instructions: ' + element['speciial_instruction']);
+                doc.text(20, 220, 'Special Instructions: ' + element['speciial_instruction']);
 
-                doc.rect(18, 215, 170, 30);
-                doc.text(20, 220, 'NOTE: ');
-                doc.text(20, 225, 'Clients are requested to pay through M-PESA TILL NUMBER - 877838 ');
-                doc.text(20, 233, '(If asked to pay cash please call 0728 492 446 or 0799 869 844) ');
+                doc.rect(18, 230, 170, 30);
+                doc.text(20, 235, 'NOTE: ');
+                doc.text(20, 240, 'Clients are requested to pay through M-PESA TILL NUMBER - 877838 ');
+                doc.text(20, 248, '(If asked to pay cash please call 0728 492 446 or 0799 869 844) ');
 
                 doc.setFontSize(12)
-                doc.rect(18, 245, 170, 20);
-                doc.text(20, 255, 'Authorizer Signature__________________');
-                doc.text(185, 255, 'Customer Signature___________________', null, null, 'right');
+                doc.rect(18, 260, 170, 20);
+                doc.text(20, 270, 'Authorizer Signature__________________');
+                doc.text(185, 270, 'Customer Signature___________________', null, null, 'right');
                 doc.addPage()
             }
             doc.save(pdfName + '.pdf');

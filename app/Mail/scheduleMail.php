@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Shipment;
 use App\User;
 
-class scheduleMail extends Mailable 
+class scheduleMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -44,8 +44,8 @@ class scheduleMail extends Mailable
 
         return $this->from('jimlaravel@gmail.com')
                     // ->view('emails.InvoiceMail')
-                    ->markdown('mail/scheduleNotification')
-                    ->to('jimlaravel@gmail.com')
+            ->markdown('mail/scheduleNotification')
+            ->to('jimlaravel@gmail.com')
                     // ->to($mail)
                     // ->attachData($this->pdf, 'name.csv', [
                     //     'mime' => 'application/csv',
@@ -55,7 +55,7 @@ class scheduleMail extends Mailable
                     //     'mime' => 'application/pdf',
                     // ])
                     // ->attach($this->pdf, ['as' => 'Your_Invoice.pdf', 'mime' => 'application/pdf'])
-                    ->subject( 'Schedule derivery' );
+            ->subject('Schedule derivery');
     }
 }
 

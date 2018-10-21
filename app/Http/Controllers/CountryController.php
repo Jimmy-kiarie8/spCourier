@@ -17,14 +17,14 @@ class CountryController extends Controller
     public function store(Request $request)
     {
 		// return $request->all();
-		$this->Validate($request, [
-			'country_name' => 'required',
-		]);
-		$country = new Country;
-		$country->country_name = $request->country_name;
-		$country->user_id = Auth::id();
-		$country->save();
-		return $country;
+        $this->Validate($request, [
+            'country_name' => 'required',
+        ]);
+        $country = new Country;
+        $country->country_name = $request->country_name;
+        $country->user_id = Auth::id();
+        $country->save();
+        return $country;
     }
 
     /**
@@ -36,11 +36,11 @@ class CountryController extends Controller
      */
     public function update(Request $request, Country $country)
     {
-        
-		$country = Country::find($request->id);
-		$country->country_name = $request->country_name;
-		$country->save();
-		return $country;
+
+        $country = Country::find($request->id);
+        $country->country_name = $request->country_name;
+        $country->save();
+        return $country;
     }
 
     /**

@@ -37,10 +37,17 @@
                                     </select>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label class="col-md-6 col-form-label text-md-right" for="">Brach</label>
+                                        <label class="col-md-6 col-form-label text-md-right" for="">Branch</label>
                                         <select class="custom-select custom-select-md col-md-12" v-model="form.branch_id">
                                             <option v-for="branches in AllBranches" :key="branches.id" :value="branches.id">{{ branches.branch_name }}</option>
                                     </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="col-md-6 col-form-label text-md-right" for="">Country</label>
+                                        <select class="custom-select custom-select-md col-md-12" v-model="form.countryList">
+                                        <option v-for="country in countryList" :key="country.id" :value="country.id">{{ country.country_name }}</option>
+                                    </select>
+                                        <!-- <small class="has-text-danger" v-if="errors.branch_id">{{ errors.branch_id[0] }}</small> -->
                                     </div>
                                     <v-flex xs12>
                                         <v-expansion-panel inset>
@@ -83,7 +90,7 @@
 
 <script>
 export default {
-    props: ['openEditRequest', 'form', 'AllBranches', 'AllRoles'],
+    props: ['openEditRequest', 'form', 'AllBranches', 'AllRoles', 'countryList'],
     data() {
         return {
             e1: true,

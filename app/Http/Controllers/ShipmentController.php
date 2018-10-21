@@ -22,9 +22,9 @@ class ShipmentController extends Controller
 	public function getShipments()
 	{
 		if (Auth::user()->hasRole('Client')) {
-			return Shipment::latest()->where('client_id', Auth::id())->take(500)->orderBy('id', 'DESC')->get();
+			return Shipment::latest()->where('client_id', Auth::id())->take(500)->orderBy('country_id', 'DESC')->get();
 		} else {
-			return Shipment::latest()->take(500)->orderBy('id', 'DESC')->get();
+			return Shipment::latest()->take(500)->orderBy('id', 'DESC')->where('country_id', Auth::user()->country_id)->get();
 		}
 	}
 
@@ -370,6 +370,7 @@ class ShipmentController extends Controller
 
 	public function assignDriver(Request $request, Shipment $shipment)
 	{
+		// return $request->all();
 		$id = [];
 		foreach ($request->selected as $selectedItems) {
 			$id[] = $selectedItems['id'];
@@ -377,7 +378,7 @@ class ShipmentController extends Controller
 		$driver = $request->form['driver'];
 		$remark = $request->form['remark'];
 		$shipment = Shipment::whereIn('id', $id)->update(['driver' => $driver, 'remark' => $remark]);
-		return $shipment;
+		// return $shipment;
 	}
 
 	public function assignBranch(Request $request, Shipment $shipment)
@@ -387,10 +388,6 @@ class ShipmentController extends Controller
 		foreach ($request->selected as $selectedItems) {
 			$id[] = $selectedItems['id'];
 		}
-		// $status = $request->form['status'];
-		// $remark = $request->form['remark'];
-		// $shipment = Shipment::whereIn('id', $id)->update(['branch_id' => $branch, 'remark' => $remark]);
-		// return $shipment;
 		$branch = $request->form['branch_id'];
 		$remark = $request->form['remark'];
 		$shipment = Shipment::whereIn('id', $id)->update(['branch_id' => $branch, 'remark' => $remark]);
@@ -428,56 +425,138 @@ class ShipmentController extends Controller
 	}
 	public function filterShipment(Request $request)
 	{
+		if (Auth::user()->hasRole('User')) {
 		// return $request->all();
-		if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
-			if ($request->select['id'] == 'all') {
-				if ($request->selectStatus['state'] == 'All') {
+			if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
+				if ($request->select['id'] == 'all') {
+					if ($request->selectStatus['state'] == 'All') {
 				// return 'st6';
-					return Shipment::latest()->take(500)->get();
-				} else {
+						return Shipment::latest()->where('country_id', Auth::user()->country_id)->take(500)->get();
+					} else {
 				// return 'st5';
-					return Shipment::where('status', $request->selectStatus['state'])->latest()->take(500)->get();
-				}
+						return Shipment::where('status', $request->selectStatus['state'])->where('country_id', Auth::user()->country_id)->latest()->take(500)->get();
+					}
 
-			} else {
+				} else {
+					if ($request->selectStatus['state'] == 'All') {
+						// return 'st6';
+						return Shipment::latest()->where('branch_id', $request->select['id'])->where('country_id', Auth::user()->country_id)->where('country_id', Auth::user()->country_id)->take(500)->get();
+					} else {
+						// return 'st5';
+						return Shipment::where('status', $request->selectStatus['state'])->where('branch_id', $request->select['id'])->where('country_id', Auth::user()->country_id)->where('country_id', Auth::user()->country_id)->latest()->take(500)->get();
+					}
 				// return 'st4';
-				return Shipment::where('branch_id', $request->select['id'])->latest()->take(500)->get();
-			}
-		} else {
-			if ($request->select['id'] == 'all') {
-				if ($request->selectStatus['state'] == 'All') {
-				// return 'st1';
-					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->get();
-				} else {
-				// return 'st2';
-					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->where('status', $request->selectStatus['state'])->get();
+					// return Shipment::where('branch_id', $request->select['id'])->where('country_id', Auth::user()->country_id)->latest()->take(500)->get();
 				}
 			} else {
-				if ($request->selectStatus['state'] == 'All') {
+				if ($request->select['id'] == 'all') {
+					if ($request->selectStatus['state'] == 'All') {
 				// return 'st1';
-					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->where('status', $request->selectStatus['state'])->latest()->take(500)->get();
-				} else {
+						return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('country_id', Auth::user()->country_id)->latest()->take(500)->get();
+					} else {
 				// return 'st2';
-					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->latest()->take(500)->where('status', $request->selectStatus['state'])->get();
+						return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('country_id', Auth::user()->country_id)->latest()->take(500)->where('status', $request->selectStatus['state'])->get();
+					}
+				} else {
+					if ($request->selectStatus['state'] == 'All') {
+				// return 'st1';
+						return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('country_id', Auth::user()->country_id)->where('branch_id', $request->select['id'])->latest()->take(500)->get();
+					} else {
+				// return 'st2';
+						return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('country_id', Auth::user()->country_id)->where('branch_id', $request->select['id'])->latest()->take(500)->where('status', $request->selectStatus['state'])->get();
+					}
 				}
-				// return 'st3';
-				// return Shipment::where('branch_id', $request->select['id'])
-				// 				// ->where('status', $request->selectStatus['state'])
-				// 				->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])
-				// 				->latest()->take(500)->get();
 			}
-		}
+		} elseif (Auth::user()->hasRole('Admin')) {
+			if ($request->selectCountry['id'] == 'all') {
+				if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
+					if ($request->select['id'] == 'all') {
+						if ($request->selectStatus['state'] == 'All') {
+				// return 'st6';
+							return Shipment::latest()->take(500)->get();
+						} else {
+				// return 'st5';
+							return Shipment::where('status', $request->selectStatus['state'])->latest()->take(500)->get();
+						}
 
+					} else {
+						if ($request->selectStatus['state'] == 'All') {
+						// return 'st6';
+							return Shipment::latest()->where('branch_id', $request->select['id'])->take(500)->get();
+						} else {
+						// return 'st5';
+							return Shipment::where('status', $request->selectStatus['state'])->where('branch_id', $request->select['id'])->latest()->take(500)->get();
+						}
+				// return 'st4';
+					// return Shipment::where('branch_id', $request->select['id'])->latest()->take(500)->get();
+					}
+				} else {
+					if ($request->select['id'] == 'all') {
+						if ($request->selectStatus['state'] == 'All') {
+				// return 'st1';
+							return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->get();
+						} else {
+				// return 'st2';
+							return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->where('status', $request->selectStatus['state'])->get();
+						}
+					} else {
+						if ($request->selectStatus['state'] == 'All') {
+				// return 'st1';
+							return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->latest()->take(500)->get();
+						} else {
+				// return 'st2';
+							return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->latest()->take(500)->where('status', $request->selectStatus['state'])->get();
+						}
+					}
+				}
+			} else {
+
+				if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
+					if ($request->select['id'] == 'all') {
+						if ($request->selectStatus['state'] == 'All') {
+				// return 'st6';
+							return Shipment::latest()->where('country_id', $request->selectCountry['id'])->take(500)->get();
+						} else {
+				// return 'st5';
+							return Shipment::where('status', $request->selectStatus['state'])->latest()->where('country_id', $request->selectCountry['id'])->take(500)->get();
+						}
+
+					} else {
+				// return 'st4';
+						return Shipment::where('branch_id', $request->select['id'])->latest()->where('country_id', $request->selectCountry['id'])->take(500)->get();
+					}
+				} else {
+					if ($request->select['id'] == 'all') {
+						if ($request->selectStatus['state'] == 'All') {
+				// return 'st1';
+							return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('country_id', $request->selectCountry['id'])->latest()->take(500)->get();
+						} else {
+				// return 'st2';
+							return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('country_id', $request->selectCountry['id'])->latest()->take(500)->where('status', $request->selectStatus['state'])->get();
+						}
+					} else {
+						if ($request->selectStatus['state'] == 'All') {
+				// return 'st1';
+							return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('country_id', $request->selectCountry['id'])->where('branch_id', $request->select['id'])->where('status', $request->selectStatus['state'])->latest()->take(500)->get();
+						} else {
+				// return 'st2';
+							return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('country_id', $request->selectCountry['id'])->where('branch_id', $request->select['id'])->latest()->take(500)->where('status', $request->selectStatus['state'])->get();
+						}
+					}
+				}
+			}
+
+		}
 	}
 	public function betweenShipments(Request $request)
 	{
-		return Shipment::latest()->skip($request->end)->take(500)->get();
+		return Shipment::where('country_id', Auth::user()->country_id)->latest()->skip($request->end)->take(500)->get();
 	}
 
 	public function getScheduled(Request $request)
 	{
 		// return $request->all();
-		$print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->get();
+		$print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->take(500)->latest()->get();
 		$id = [];
 		foreach ($print_shipment as $selectedItems) {
 			$id[] = $selectedItems['id'];
@@ -486,8 +565,18 @@ class ShipmentController extends Controller
 		$derivery_time = $request->form['derivery_time'];
 		$remark = $request->form['remark'];
 		$derivery_date = $request->form['scheduled_date'];
-		// $shipment = Shipment::whereIn('id', $id)->update(['printed' => 1]);
+		$shipment = Shipment::whereIn('id', $id)->update(['printed' => 1]);
 		return $print_shipment;
+	}
+
+	public function getDeriveredA()
+	{
+		return Shipment::where('status', 'Delivered')->latest()->take(500)->get();
+	}
+
+	public function getShipSingle($id)
+	{
+		return Shipment::find($id);
 	}
 
 	public function getDeriveredS(Request $request)
@@ -496,43 +585,123 @@ class ShipmentController extends Controller
 			if ($request->select['id'] == 'all') {
 				if ($request->selectStatus['state'] == 'All') {
 				// return 'st6';
-					return Shipment::where('status', 'Delivered')->latest()->take(500)->get();
+					return Shipment::where('status', 'Delivered')->count();
 				} else {
 				// return 'st5';
-					return Shipment::where('status', 'Delivered')->latest()->take(500)->get();
+					return Shipment::where('status', 'Delivered')->count();
 				}
 
 			} else {
 				// return 'st4';
-				return Shipment::where('status', 'Delivered')->where('branch_id', $request->select['id'])->latest()->take(500)->get();
+				return Shipment::where('status', 'Delivered')->where('branch_id', $request->select['id'])->count();
 			}
 		} else {
 			if ($request->select['id'] == 'all') {
 				if ($request->selectStatus['state'] == 'All') {
 				// return 'st1';
-					return Shipment::where('status', 'Delivered')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->get();
+					return Shipment::where('status', 'Delivered')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->count();
 				} else {
 				// return 'st2';
-					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->latest()->take(500)->where('status', 'Delivered')->get();
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('status', 'Delivered')->count();
 				}
 			} else {
 				if ($request->selectStatus['state'] == 'All') {
 				// return 'st1';
-					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->where('status', 'Delivered')->latest()->take(500)->get();
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->where('status', 'Delivered')->count();
 				} else {
 				// return 'st2';
-					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->latest()->take(500)->where('status', 'Delivered')->get();
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->where('status', 'Delivered')->count();
 				}
 				// return 'st3';
 				// return Shipment::where('branch_id', $request->select['id'])
 				// 				// ->where('status', 'Delivered')
 				// 				->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])
-				// 				->latest()->take(500)->get();
+				// 				->count();
 			}
 		}
 	}
-	public function getDeriveredA()
+
+	public function getOrdersS(Request $request)
 	{
-		return Shipment::where('status', 'Delivered')->latest()->take(500)->get();
+		if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
+			if ($request->select['id'] == 'all') {
+				if ($request->selectStatus['state'] == 'All') {
+				// return 'st6';
+					return Shipment::count();
+				} else {
+				// return 'st5';
+					return Shipment::count();
+				}
+
+			} else {
+				// return 'st4';
+				return Shipment::where('branch_id', $request->select['id'])->count();
+			}
+		} else {
+			if ($request->select['id'] == 'all') {
+				if ($request->selectStatus['state'] == 'All') {
+				// return 'st1';
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->count();
+				} else {
+				// return 'st2';
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->count();
+				}
+			} else {
+				if ($request->selectStatus['state'] == 'All') {
+				// return 'st1';
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->count();
+				} else {
+				// return 'st2';
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->count();
+				}
+				// return 'st3';
+				// return Shipment::where('branch_id', $request->select['id'])
+				// 				// 
+				// 				->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])
+				// 				->count();
+			}
+		}
+	}
+
+	public function getPendingS(Request $request)
+	{
+		if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
+			if ($request->select['id'] == 'all') {
+				if ($request->selectStatus['state'] == 'All') {
+				// return 'st6';
+					return Shipment::where('status', '!=', 'Delivered')->count();
+				} else {
+				// return 'st5';
+					return Shipment::where('status', '!=', 'Delivered')->count();
+				}
+
+			} else {
+				// return 'st4';
+				return Shipment::where('status', '!=', 'Delivered')->where('branch_id', $request->select['id'])->count();
+			}
+		} else {
+			if ($request->select['id'] == 'all') {
+				if ($request->selectStatus['state'] == 'All') {
+				// return 'st1';
+					return Shipment::where('status', '!=', 'Delivered')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->count();
+				} else {
+				// return 'st2';
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('status', '!=', 'Delivered')->count();
+				}
+			} else {
+				if ($request->selectStatus['state'] == 'All') {
+				// return 'st1';
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->where('status', '!=', 'Delivered')->count();
+				} else {
+				// return 'st2';
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->where('status', '!=', 'Delivered')->count();
+				}
+				// return 'st3';
+				// return Shipment::where('branch_id', $request->select['id'])
+				// 				// ->where('status', '!=', 'Delivered')
+				// 				->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])
+				// 				->count();
+			}
+		}
 	}
 }

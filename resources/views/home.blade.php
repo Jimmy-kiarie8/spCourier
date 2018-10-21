@@ -6,10 +6,6 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">Home</div>
-                {{-- <v-form method="POST" action="{{ route('generate_pdf') }}">
-                    @csrf
-                    <v-btn type="submit" flat color="primary">Submit</v-btn>
-                </v-form> --}}
 
                 <div class="card-body">
                     @if (session('status'))

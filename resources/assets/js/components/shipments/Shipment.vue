@@ -33,12 +33,15 @@
                             <v-flex xs4 sm2 offset-sm1>
                                 <v-select :items="statuses" v-model="selectItem" :hint="`${selectItem.state}, ${selectItem.state}`" label="Filter By Status" single-line item-text="state" item-value="state" return-object persistent-hint></v-select>
                             </v-flex>
+                            <v-flex xs4 sm2 offset-sm1 v-for="role in user.roles" v-if="role.name === 'Admin'" :key="role.id">
+                                <v-select :items="AllCountries" v-model="selectCountry" :hint="`${selectCountry.country_name}, ${selectCountry.id}`" label="Filter By country" single-line item-text="country_name" item-value="id" return-object persistent-hint></v-select>
+                            </v-flex>
                             <!-- <v-spacer></v-spacer> -->
                             <v-flex xs12 sm2 offset-sm1>
-                                <v-text-field v-model="form.start_date" color="blue darken-2" type="date" required></v-text-field>
+                                <v-text-field label="Start Date" v-model="form.start_date" color="blue darken-2" type="date" required></v-text-field>
                             </v-flex>
-                            <v-flex xs12 sm2 offset-sm1>
-                                <v-text-field v-model="form.end_date" color="blue darken-2" type="date" required></v-text-field>
+                            <v-flex xs12 sm2>
+                                <v-text-field label="End Date" v-model="form.end_date" color="blue darken-2" type="date" required></v-text-field>
                             </v-flex>
                             <!-- <v-spacer></v-spacer> -->
                             <v-flex xs4 sm1>
@@ -163,7 +166,7 @@
     </v-content>
     <AddShipment :addShipment="dialog" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers"></AddShipment>
     <EditShipment :EditShipment="dialog1" @closeRequest="close" :customers="Allcustomers" :form="editedItem" @alertRequest="showalert" :role="role"></EditShipment>
-    <ShowShipment :ShowShipment="showdialog1" @closeRequest="close" :customers="Allcustomers" :showItems="showItem"></ShowShipment>
+    <ShowShipment :element="element" @closeRequest="close" :customers="Allcustomers" :showItems="showItem"></ShowShipment>
     <UpdateShipment :UpdateShipment="updateModal" @closeRequest="close" :markers="markers" :updateitedItem="updateitedItem" @alertRequest="showalert"></UpdateShipment>
     <UpdateShipmentStatus :UpdateShipmentStatus="UpdateShipmentModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></UpdateShipmentStatus>
     <AssignDriver :AllDrivers="AllDrivers" :OpenAssignDriver="AssignDriverModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></AssignDriver>
@@ -184,7 +187,7 @@
 import VueBarcode from "vue-barcode";
 let AddShipment = require("./AddShipment");
 let EditShipment = require("./EditShipment");
-let ShowShipment = require("./ShowShipments");
+let ShowShipment = require("./PrintSPdf");
 let UpdateShipment = require('./UpdateShipment')
 let UpdateShipmentStatus = require('./UpdateShipmentStatus')
 let AssignDriver = require('./AssignDriver')
@@ -194,6 +197,7 @@ let myCsvFile = require('../csv/CsvFile')
 let mySCharges = require('./Charge')
 // let myPrintPod = require('./PrintPod')
 let myRows = require('./rows/Rows')
+// let myPrintSPdf = require('./PrintSPdf.js');
 export default {
     props: ["user", "role"],
     components: {
@@ -209,6 +213,7 @@ export default {
         TrackShipment,
         myCsvFile,
         mySCharges,
+        // myPrintSPdf,
         // myPrintPod
     },
     data() {
@@ -223,7 +228,13 @@ export default {
             nloading: false,
             mloading: false,
             AllBranches: [],
+            AllCountries: [],
             AllDrivers: [],
+            element: [],
+            selectCountry: {
+                country_id: 'All',
+                id: 'all'
+            },
             select: {
                 branch_name: 'All',
                 id: 'all'
@@ -300,8 +311,8 @@ export default {
                 'Client City': 'client_city',
                 'Client Address': 'client_address',
                 'Derivery Status': 'status',
-                'From': 'from_city',
-                'To': 'to_city',
+                'From': 'sender_address',
+                'To': 'client_address',
                 'Derivery Date': 'derivery_date',
                 'Derivery Time': 'derivery_time',
                 'Quantity': 'amount_ordered',
@@ -499,14 +510,7 @@ export default {
             this.dialog1 = true;
         },
         showDetails(item) {
-            this.showItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
-            this.showdialog1 = true;
-            //     axios
-            //         .post("/getProducts")
-            //         .then(response => (this.newProducts = response.data))
-            //         .catch(error => (this.errors = error.response.data.errors));
-            //     // console.log(this.newProducts);
+            eventBus.$emit('printEvent', item);
         },
         ShipmentTrack(item) {
             this.shipment = Object.assign({}, item);
@@ -647,7 +651,8 @@ export default {
             axios.post('filterShipment', {
                     select: this.select,
                     selectStatus: this.selectItem,
-                    form: this.form
+                    form: this.form,
+                    selectCountry: this.selectCountry,
                 })
                 .then((response) => {
                     this.loading = false
@@ -703,6 +708,14 @@ export default {
             }
             this.selectItem = {
                 state: 'All',
+            }
+            this.selectCountry = {
+                country_id: 'All',
+                id: 'all'
+            }
+            this.select = {
+                branch_name: 'All',
+                id: 'all'
             }
             this.form.start_date = this.form.end_date = ''
             this.getShipments()
@@ -767,17 +780,17 @@ export default {
     mounted() {
         this.loader = true;
         this.getBranch()
-        // axios
-        //     .get("/getRows")
-        //     .then(response => {
-        //         this.AllRows = response.data;
-        //         this.loader = false;
-        //     })
-        //     .catch(error => {
-        //         console.log(error);
-        //         this.errors = error.response.data.errors;
-        //         this.loader = false;
-        //     });
+        axios
+            .get("/getCountry")
+            .then(response => {
+                this.AllCountries = response.data;
+                this.loader = false;
+            })
+            .catch(error => {
+                console.log(error);
+                this.errors = error.response.data.errors;
+                this.loader = false;
+            });
 
         axios.get('getShipmentsCount')
             .then((response) => {
@@ -788,11 +801,20 @@ export default {
             })
         this.getShipments()
     },
-};
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            if (vm.user.can['view shipments']) {
+                next();
+            } else {
+                next('/');
+            }
+        })
+    }
+
+}
 </script>
 
 <style>
-/* This is for documentation purposes and will not be needed in your application */
 
 #create .speed-dial {
     position: absolute;

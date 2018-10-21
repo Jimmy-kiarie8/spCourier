@@ -70,9 +70,9 @@
             <v-icon dark right>check_circle</v-icon>
         </v-snackbar>
     </v-content>
-    <AddUser @closeRequest="close" :openAddRequest="dispAdd" @alertRequest="showAlert" :AllBranches="AllBranches" :AllRoles="AllRoles"></AddUser>
+    <AddUser @closeRequest="close" :openAddRequest="dispAdd" @alertRequest="showAlert" :AllBranches="AllBranches" :AllRoles="AllRoles" :countryList="Allcountries"></AddUser>
     <!-- <ShowUser @closeRequest="close" :openShowRequest="dispShow"></ShowUser> -->
-    <EditUser @closeRequest="close" :openEditRequest="dispEdit" @alertRequest="showAlert" :form="editedItem" :AllBranches="AllBranches" :AllRoles="AllRoles"></EditUser>
+    <EditUser @closeRequest="close" :openEditRequest="dispEdit" @alertRequest="showAlert" :form="editedItem" :AllBranches="AllBranches" :AllRoles="AllRoles" :countryList="Allcountries"></EditUser>
     <UserProfile @closeRequest="close" :openShowRequest="dispShow" :user="editedItem" :AllShips="AllShips"></UserProfile>
 </div>
 </template>
@@ -93,6 +93,7 @@ export default {
     data() {
         return {
             AllShips: [],
+            Allcountries: [],
             select: {
                 state: 'All',
                 abbr: 'all'
@@ -224,8 +225,10 @@ export default {
         // },
         openAdd() {
             this.dispAdd = true
+            this.getCountry()
         },
         openEdit(item) {
+            this.getCountry()
             this.editedIndex = this.Allusers.indexOf(item)
             this.editedItem = Object.assign({}, item)
             axios.post(`getUserPerm/${item.id}`)
@@ -302,7 +305,19 @@ export default {
                     this.loading = false
                     this.errors = error.response.data.errors
                 })
-        }
+        },
+        getCountry() {
+            this.loading = true
+            axios.get('getCountry')
+                .then((response) => {
+                    this.loading = false
+                    this.Allcountries = response.data
+                })
+                .catch((error) => {
+                    this.loading = false
+                    this.errors = error.response.data.errors
+                })
+        },
     },
     mounted() {
         this.loader = true
@@ -325,15 +340,15 @@ export default {
                 this.errors = error.response.data.errors
             })
     },
-    // beforeRouteEnter(to, from, next) {
-    //     next(vm => {
-    //         if (vm.user.can['create users']) {
-    //             next();
-    //         } else {
-    //             next('/');
-    //         }
-    //     })
-    // }
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            if (vm.user.can['view users']) {
+                next();
+            } else {
+                next('/');
+            }
+        })
+    }
 }
 </script>
 

@@ -13,7 +13,7 @@
                         <v-toolbar-title class="white--text">Orders</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-tooltip bottom>
-                            <v-btn slot="activator" color="info darken-2" class="mx-0">{{ AllShipments.length }}
+                            <v-btn slot="activator" color="info darken-2" class="mx-0">{{ AllShip }}
                                 <v-icon color="white darken-2" small>check_circle</v-icon>
                             </v-btn>
                             <span>Orders</span>
@@ -22,7 +22,7 @@
                         <v-divider vertical></v-divider>
                         <v-divider vertical></v-divider>
                         <v-tooltip bottom>
-                            <v-btn slot="activator" color="green darken-2" class="mx-0">{{ AllDel.length }}
+                            <v-btn slot="activator" color="green darken-2" class="mx-0">{{ AllDelShip }}
                                 <v-icon color="white darken-2" small>check_circle</v-icon>
                             </v-btn>
                             <span>Delivered</span>
@@ -31,7 +31,7 @@
                         <v-divider vertical></v-divider>
                         <v-divider vertical></v-divider>
                         <v-tooltip bottom>
-                            <v-btn slot="activator" color="brown darken-2" class="mx-0">{{ AllShipments.length - AllDel.length }}
+                            <v-btn slot="activator" color="brown darken-2" class="mx-0">{{ AllPe }}
                                 <v-icon color="white darken-2" small>block</v-icon>
                             </v-btn>
                             <span>Pending</span>
@@ -202,8 +202,8 @@ export default {
                 'Client City': 'client_city',
                 'Client Address': 'client_address',
                 'Derivery Status': 'status',
-                'From': 'from_city',
-                'To': 'to_city',
+                'From': 'sender_address',
+                'To': 'client_address',
                 'Derivery Date': 'derivery_date',
                 'Derivery Time': 'derivery_time',
                 'Quantity': 'amount_ordered',
@@ -307,6 +307,9 @@ export default {
             AllRows: [],
             selectStatus: [],
             markers: [],
+            AllDelShip: [],
+            AllShip: [],
+            AllPe: [],
         };
     },
     methods: {
@@ -327,6 +330,8 @@ export default {
                     this.loading = false
                     this.AllShipments = response.data
                     this.getDeriveredS()
+                    this.getOrdersS()
+                    this.getPendingS()
                 })
                 .catch((error) => {
                     this.loading = false
@@ -349,9 +354,6 @@ export default {
         },
         getShipBranch() {
             this.loading = true
-            this.between.start = 1;
-            this.between.end = 500;
-
             axios
                 .get("/getShipments")
                 .then(response => {
@@ -373,7 +375,39 @@ export default {
                     selectAss: this.selectAss
                 })
                 .then(response => {
-                    this.AllDel = response.data;
+                    this.AllDelShip = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.errors = error.response.data.errors;
+                });
+        },
+        getOrdersS() {
+            axios
+                .post("/getOrdersS", {
+                    select: this.select,
+                    selectStatus: this.selectItem,
+                    form: this.form,
+                    selectAss: this.selectAss
+                })
+                .then(response => {
+                    this.AllShip = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.errors = error.response.data.errors;
+                });
+        },
+        getPendingS() {
+            axios
+                .post("/getPendingS", {
+                    select: this.select,
+                    selectStatus: this.selectItem,
+                    form: this.form,
+                    selectAss: this.selectAss
+                })
+                .then(response => {
+                    this.AllPe = response.data;
                 })
                 .catch(error => {
                     console.log(error);
@@ -395,9 +429,45 @@ export default {
                 state: 'All',
             }
             this.form.start_date = this.form.end_date = ''
-        }
+        },
+        countOrders() {
+            axios
+                .get("/getShipmentsCount")
+                .then(response => {
+                    this.AllShip = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.errors = error.response.data.errors;
+                });
+        },
+        countDelivered() {
+            axios
+                .get("/countDelivered")
+                .then(response => {
+                    this.AllDelShip = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.errors = error.response.data.errors;
+                });
+        },
+        countPending() {
+            axios
+                .get("/countPending")
+                .then(response => {
+                    this.AllPe = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.errors = error.response.data.errors;
+                });
+        },
     },
     mounted() {
+        this.countPending()
+        this.countDelivered()
+        this.countOrders()
         this.loader = true;
         axios
             .get("/getDeriveredA")

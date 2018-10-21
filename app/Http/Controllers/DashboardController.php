@@ -231,4 +231,20 @@ class DashboardController extends Controller
         );
         return response()->json(['data' => $data]);
     }
+
+    public function countDelivered()
+    {
+        return Shipment::where('status', 'Delivered')->count();
+    }
+
+    public function countPending()
+    {
+        // return Shipment::count();
+        return Shipment::where('status', '!=', 'Delivered')->count();
+    }
+
+    public function countOrders()
+    {
+        return Shipment::count();
+    }
 }

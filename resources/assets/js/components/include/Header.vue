@@ -6,8 +6,8 @@
         </v-navigation-drawer>
         <!-- temporary -->
         <v-navigation-drawer fixed :color="color" :clipped="$vuetify.breakpoint.lgAndUp" app v-model="drawer">
-            <v-list dense>
-                <v-img :aspect-ratio="16/9" src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
+            <v-list dense id="navigation">
+                <!-- <v-img :aspect-ratio="16/9" src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
                     <v-layout pa-2 column fill-height class="lightbox white--text">
                         <v-spacer></v-spacer>
                         <v-flex shrink>
@@ -15,9 +15,10 @@
                             <div class="body-1">{{ user.email }}</div>
                         </v-flex>
                     </v-layout>
-                </v-img>
+                </v-img> -->
                 <template>
                     <v-card>
+                    <!-- <v-card style="background: url('storage/ps/landS.jpg')"> -->
                         <router-link to="/" class="v-list__tile v-list__tile--link">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">dashboard</i></div>
                             <div class="v-list__tile__content">
@@ -63,7 +64,7 @@
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">email</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
-                                    Manage Subscribers
+                                    Subscribers
                                 </div>
                             </div>
                         </router-link>
@@ -73,14 +74,6 @@
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
                                     Scan Shipments
-                                </div>
-                            </div>
-                        </router-link>
-                        <router-link to="/reports" class="v-list__tile v-list__tile--link">
-                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
-                            <div class="v-list__tile__content">
-                                <div class="v-list__tile__title">
-                                    Reports
                                 </div>
                             </div>
                         </router-link>
@@ -109,6 +102,14 @@
                                 </div>
                             </div>
                         </router-link>
+                        <router-link to="/reports" class="v-list__tile v-list__tile--link">
+                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
+                            <div class="v-list__tile__content">
+                                <div class="v-list__tile__title">
+                                    Reports
+                                </div>
+                            </div>
+                        </router-link>
                         <router-link to="/customers" class="v-list__tile v-list__tile--link" v-for="role in user.roles" :key="role.id" v-if="role.name === 'Client'">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">print</i></div>
                             <div class="v-list__tile__content">
@@ -122,7 +123,7 @@
                                 <v-list-tile-title>User&Roles</v-list-tile-title>
                             </v-list-tile>
 
-                            <router-link to="/users" class="v-list__tile theme--light" style="text-decoration: none">
+                            <router-link to="/users" class="v-list__tile theme--light" style="text-decoration: none" id="link-router">
                                     <v-list-tile-action>
                                         <v-icon>people_outline</v-icon>
                                     </v-list-tile-action>
@@ -182,7 +183,7 @@ export default {
     data() {
         return {
             sheet: false,
-            color: 'indigo',
+            color: '#132f51',
             panel: false,
             dialog: false,
             changeColor: 'item.color',
@@ -220,4 +221,10 @@ export default {
     background: #e3edfe !important;
     color: #1a73e8 !important;
 }
+.theme--light{
+    background-color: #212120 !important;
+    /* background: url('storage/logo1.jpg') !important; */
+    color: #fff !important;
+}
+
 </style>

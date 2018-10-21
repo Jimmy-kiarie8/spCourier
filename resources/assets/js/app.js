@@ -74,8 +74,6 @@ let mysubsicriber = require('./components/emails/Subscribe.vue');
 let myInvice = require('./components/invoices/Invoice.vue');
 let myReceipt = require('./components/receipt/Receipt.vue');
 let myReports = require('./components/reports/Reports.vue');
-// let myPdf = require('./components/csv/Csv.vue');
-// let myPdf = require('./components/csv/test.vue');
 let mybranchShip = require('./components/branches/BranchShipments.vue');
 let myRoles = require('./components/users/roles/Roles.vue');
 let myscheduled = require('./components/shipments/Scheduled.vue');
@@ -86,6 +84,7 @@ let myTown = require('./components/town/Town.vue');
 let myPrintPdf = require('./components/shipments/PrintPdf.vue');
 let myStatus = require('./components/shipments/status/Status.vue');
 let myCountry = require('./components/country/Country.vue');
+let myRinder = require('./components/drivers/Driver.vue');
 
 const routes = [
     {path: '/', component: dashboard },
@@ -102,7 +101,6 @@ const routes = [
     {path: '/invoices', component: myInvice },
     {path: '/receipts', component: myReceipt },
     {path: '/reports', component: myReports },
-    // {path: '/csv', component: myPdf },
     {path: '/roles', component: myRoles },
     {path: '/branch/:id', component: mybranchShip },
     {path: '/scheduled', component: myscheduled },
@@ -115,6 +113,7 @@ const routes = [
     {path: '/status', component: myStatus },
     {path: '/chart', component: myChart },
     {path: '/country', component: myCountry },
+    {path: '/rinders', component: myRinder },
 
 ]
 const router = new VueRouter({
@@ -129,7 +128,7 @@ const app = new Vue({
     	myHeader, myUser, myDrivers, myShipment, myScanner, myContainer, myMap,
         myBranch, myProfile, myCompany, myCustomer, mysubsicriber, myInvice, myReceipt,
         myReports, mybranchShip, myRoles, myscheduled, myTasks, myUploadFile, myCharges,
-        myTown, myPrintPdf, myStatus, myChart, myCountry
+        myTown, myPrintPdf, myStatus, myChart, myCountry, myRinder
     },
     data: {
     shipments: [],

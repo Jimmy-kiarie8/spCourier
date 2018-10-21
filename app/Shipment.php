@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Shipment extends Model
 {
-	use SoftDeletes;
+    use SoftDeletes;
     public $with = ['products', 'statuses'];
     // use Searchable;
     /**
@@ -20,7 +20,7 @@ class Shipment extends Model
     // {
     //     return 'client_name';
     // }
-    
+
     public function products()
     {
         return $this->hasMany('App\Product', 'shipments_id');
@@ -37,9 +37,13 @@ class Shipment extends Model
     }
 
     public $fillable = [
-        'client_name','client_phone','client_email','client_address','client_city',
-        'assign_staff','airway_bill_no','shipment_type','payment','insuarance_status',
-        'booking_date','derivery_date','bar_code','derivery_time','sender_name',
-        'sender_phone','sender_address','sender_city','total_freight',
+        'client_name', 'client_phone', 'client_email', 'client_address', 'client_city',
+        'assign_staff', 'airway_bill_no', 'shipment_type', 'payment', 'insuarance_status',
+        'booking_date', 'derivery_date', 'bar_code', 'derivery_time', 'sender_name',
+        'sender_phone', 'sender_address', 'sender_city', 'total_freight',
     ];
+
+    // public  function scopeLike($query, $field, $value){
+    //     return $query->where($field, 'LIKE', "%$value%");
+    // }
 }

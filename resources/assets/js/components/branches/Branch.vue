@@ -108,7 +108,7 @@
 <script>
 let AddBranch = require('./AddBranch')
 export default {
-    props: ['user', 'role'],
+    props: ['user'],
     components: {
         AddBranch
     },
@@ -264,5 +264,14 @@ export default {
             )
         },
     },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            if (vm.user.can['view branches']) {
+                next();
+            } else {
+                next('/');
+            }
+        })
+    }
 }
 </script>

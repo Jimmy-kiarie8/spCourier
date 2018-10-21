@@ -11,8 +11,9 @@ class RowsController extends Controller
 {
     public function getRows()
     {
-        $rows = Auth::user()->row;
-        return unserialize($rows->rows);  
+        // $rows = Auth::user()->row;
+		// return unserialize($rows->rows);  
+		return;
     }
 
     public function rows(Request $request)

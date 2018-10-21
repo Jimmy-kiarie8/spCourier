@@ -1,5 +1,6 @@
 <?php
 use App\Shipment;
+use Illuminate\Support\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,17 +42,15 @@ Route::group(['middleware' => ['auth']], function () {
 	// 	return redirect('/');
 	// })->where('name', '[A-Za-z]+');
 
-	// Route::get('/courier', function () {
-	//     $companies = Company::where('id', Auth::user()->company_id)->get();
-	//     foreach ($companies as $company) {
-	//         $company_logo = $company->logo;
-	//     }
-	// 	$newrole = Auth::user()->roles;
-	// 	foreach ($newrole as $name) {
-	// 		$rolename = $name->name;
-	// 	}
-	// 	return view('welcome', compact('rolename', 'company_logo'));
-	// });
+	Route::get('/testSS', function () {
+	    $today = Carbon::today();
+		// $prev_month = $today->subMonth();
+		// $nxt_month = $today->addMonth();
+		
+		// dd($today->addMonth());
+		$shipments = (Shipment::whereBetween('created_at', [$today->subMonth(1), $today->addMonth(1)])->get());
+		return view('home', compact('shipments'));
+	});
 
 	Route::get('/home', 'HomeController@index')->name('home');
 	Route::get('/courier', 'HomeController@courier')->name('courier');
@@ -81,6 +80,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('assignDriver', 'ShipmentController@assignDriver')->name('assignDriver');
 	Route::post('filterShipment', 'ShipmentController@filterShipment')->name('filterShipment');
 	Route::post('betweenShipments', 'ShipmentController@betweenShipments')->name('betweenShipments');
+	Route::post('getShipSingle/{id}', 'ShipmentController@getShipSingle')->name('getShipSingle');
 
 	Route::post('AddShipments/{id}', 'ContainerController@AddShipments')->name('AddShipments');
 	Route::post('conupdateStatus/{id}', 'ContainerController@conupdateStatus')->name('conupdateStatus');
@@ -115,7 +115,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('getBranchC', 'BranchController@getBranchC')->name('getBranchC');
 
 	Route::get('getCountry', 'CountryController@getCountry')->name('getCountry');
-	
+
 	Route::post('getCompanies', 'CompanyController@getCompanies')->name('getCompanies');
 	Route::post('getCompanyAdmin', 'CompanyController@getCompanyAdmin')->name('getCompanyAdmin');
 	Route::post('companupdate/{id}', 'CompanyController@companupdate')->name('companupdate');
@@ -156,6 +156,8 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('getScheduled', 'ShipmentController@getScheduled')->name('getScheduled');
 
 	Route::post('getDeriveredS', 'ShipmentController@getDeriveredS')->name('getDeriveredS');
+	Route::post('getOrdersS', 'ShipmentController@getOrdersS')->name('getOrdersS');
+	Route::post('getPendingS', 'ShipmentController@getPendingS')->name('getPendingS');
 	Route::get('getDeriveredA', 'ShipmentController@getDeriveredA')->name('getDeriveredA');
 
 	
@@ -247,6 +249,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::any('register_url', 'SafaricomController@register_url')->name('register_url');
 
 	// Customers 
+	Route::get('DriverShip', 'CustomerController@DriverShip')->name('DriverShip');
 	Route::get('customerShip', 'CustomerController@customerShip')->name('customerShip');
 	Route::post('getsearchRe', 'CustomerController@getsearchRe')->name('getsearchRe');
 
@@ -264,7 +267,15 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('getChartCount', 'DashboardController@getChartCount')->name('getChartCount');
 	Route::get('getCountryhipments', 'DashboardController@getCountryhipments')->name('getCountryhipments');
 	Route::get('getChartCountry', 'DashboardController@getChartCountry')->name('getChartCountry');
-	
+
+	Route::get('countDelivered', 'DashboardController@countDelivered')->name('countDelivered');
+	Route::get('countPending', 'DashboardController@countPending')->name('countPending');
+	Route::get('countOrders', 'DashboardController@countOrders')->name('countOrders');
+
+
+
+
+
 });
 
 
