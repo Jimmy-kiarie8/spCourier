@@ -3,6 +3,8 @@
 /public/storage
 /storage/*.key
 /vendor
+/app.yalm
+/cron.yalm
 /.idea
 /.vscode
 /.vagrant
