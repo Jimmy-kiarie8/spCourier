@@ -16,7 +16,7 @@
                                     <v-flex xs6 sm4>
                                         <v-text-field v-model="form.scan_date" :type="'date'" color="blue darken-2" label="Date" required></v-text-field>
                                     </v-flex>
-                                    <div class="form-group col-md-4">
+                                    <!-- <div class="form-group col-md-4">
                                         <label for="inputState">Status</label>
                                         <select class="custom-select" v-model="form.status_in">
                                             <option value="Awaiting Approval" selected>Awaiting Approval</option>
@@ -37,6 +37,12 @@
                                             <option value="Shipment Collected">Shipment Collected</option>
                                             <option value="Transit">Transit</option>
                                             <option value="Waiting for Scan">Waiting for scan</option>
+                                        </select>
+                                    </div> -->
+                                    <div class="form-group col-md-4">
+                                        <label for="">Status</label>
+                                        <select v-model="form.status_in" class="custom-select custom-select-md col-md-12">
+                                            <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-4">
@@ -76,7 +82,7 @@
                                     <v-flex xs6 sm5>
                                         <v-text-field v-model="form.scan_date_out" :type="'date'" color="blue darken-2" label="Date" required></v-text-field>
                                     </v-flex>
-                                    <div class="form-group col-md-3">
+                                    <!-- <div class="form-group col-md-3">
                                         <label for="inputState">Status</label>
                                         <select class="custom-select" v-model="form.status_out">
                                             <option value="Awaiting Approval" selected>Awaiting Approval</option>
@@ -97,6 +103,12 @@
                                             <option value="Shipment Collected">Shipment Collected</option>
                                             <option value="Transit">Transit</option>
                                             <option value="Waiting for Scan">Waiting for scan</option>
+                                        </select>
+                                    </div> -->
+                                    <div class="form-group col-md-4">
+                                        <label for="">Status</label>
+                                        <select v-model="form.status_out" class="custom-select custom-select-md col-md-12">
+                                            <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-4">
@@ -198,6 +210,7 @@ export default {
             loading_in: false,
             loading: false,
             AllScanned: [],
+            AllStatus: [],
         }
     },
     methods: {
@@ -347,6 +360,13 @@ export default {
             .catch((error) => {
                 this.errors = error.response.data.errors
                 this.loader = false
+            })
+        axios.get('getStatuses')
+            .then((response) => {
+                this.statuses = response.data
+            })
+            .catch((error) => {
+                this.errors = error.response.data.errors
             })
     },
     computed: {

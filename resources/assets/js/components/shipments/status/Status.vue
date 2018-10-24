@@ -54,7 +54,7 @@
                                 <v-select :items="AllBranches" v-model="select" :hint="`${select.branch_name}, ${select.id}`" label="Filter By Branch" single-line item-text="branch_name" item-value="id" return-object persistent-hint></v-select>
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>
-                                <v-select :items="statuses" v-model="selectItem" :hint="`${selectItem.state}, ${selectItem.state}`" label="Filter By Status" single-line item-text="state" item-value="state" return-object persistent-hint></v-select>
+                                <v-select :items="statuses" v-model="selectItem" :hint="`${selectItem.name}, ${selectItem.name}`" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint></v-select>
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>
                                 <v-select :items="items" v-model="selectAss" label="Filter By Assigned" single-line item-text="Assigned" item-value="Assigned" return-object persistent-hint></v-select>
@@ -159,25 +159,7 @@ export default {
             selectItem: {
                 state: 'All',
             },
-            statuses: [{
-                    state: 'Dispatched',
-                },
-                {
-                    state: 'Delivered',
-                },
-                {
-                    state: 'Not Picking',
-                },
-                {
-                    state: 'Cancelled',
-                },
-                {
-                    state: 'Awaiting Confirmation',
-                },
-                {
-                    state: 'Scheduled',
-                },
-            ],
+            statuses: [],
             items: [{
                     Assigned: 'All',
                 },
@@ -489,8 +471,16 @@ export default {
                 this.loader = false;
                 console.log(error);
                 this.errors = error.response.data.errors;
-            });
-
+            })
+            
+        axios.get('getStatuses')
+            .then((response) => {
+                this.statuses = response.data
+            })
+            .catch((error) => {
+                this.errors = error.response.data.errors
+            })
+            
     }
 }
 </script>

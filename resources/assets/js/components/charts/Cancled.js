@@ -29,7 +29,7 @@
         labels: this.label,
         datasets: [
           {
-            label: 'Data One',
+            label: 'Canceled',
             backgroundColor: '#fdc1ad',
             data: this.rows
           }

@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
 	// })->where('name', '[A-Za-z]+');
 
 	Route::get('/testSS', function () {
-	    $today = Carbon::today();
+		$today = Carbon::today();
 		// $prev_month = $today->subMonth();
 		// $nxt_month = $today->addMonth();
 		
@@ -65,7 +65,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::resource('companies', 'CompanyController');
 	Route::resource('email', 'EmailController');
 	Route::resource('invoice', 'InvoiceController');
-	// Route::resource('tasks', 'TaskController');
+	Route::resource('status', 'StatusController');
 	Route::resource('charges', 'ChargeController');
 	Route::resource('towns', 'TownController');
 	Route::resource('country', 'CountryController');
@@ -247,15 +247,42 @@ Route::group(['middleware' => ['auth']], function () {
 	// M-pesa
 	Route::any('confirmation', 'SafaricomController@confirmation')->name('confirmation');
 	Route::any('register_url', 'SafaricomController@register_url')->name('register_url');
-
+	
+	// Drivers
+	Route::get('DriverShip', 'DriverController@DriverShip')->name('DriverShip');
+	
 	// Customers 
-	Route::get('DriverShip', 'CustomerController@DriverShip')->name('DriverShip');
 	Route::get('customerShip', 'CustomerController@customerShip')->name('customerShip');
 	Route::post('getsearchRe', 'CustomerController@getsearchRe')->name('getsearchRe');
 
+	// DashBoard
+	Route::get('customerCount', 'CustomerController@customerCount')->name('customerCount');
+	Route::get('customerScheduled', 'CustomerController@customerScheduled')->name('customerScheduled');
+	Route::get('customerDelivered', 'CustomerController@customerDelivered')->name('customerDelivered');
+	Route::get('customerCanceled', 'CustomerController@customerCanceled')->name('customerCanceled');
+	Route::get('delayedCount', 'CustomerController@delayedCount')->name('delayedCount');
+
+	// DashBoard
+	Route::get('driverCount', 'DriverController@driverCount')->name('driverCount');
+	Route::get('driverScheduled', 'DriverController@driverScheduled')->name('driverScheduled');
+	Route::get('driverDelivered', 'DriverController@driverDelivered')->name('driverDelivered');
+	Route::get('driverCanceled', 'DriverController@driverCanceled')->name('driverCanceled');
+	Route::get('delayedCount', 'DriverController@delayedCount')->name('delayedCount');
+
+	// Chart
+	Route::get('getClientShip', 'CustomerController@getClientShip')->name('getClientShip');
+	Route::get('getClientScheduled', 'CustomerController@getClientScheduled')->name('getClientScheduled');
+	Route::get('getClientDelivered', 'CustomerController@getClientDelivered')->name('getClientDelivered');
+	Route::get('getClientCancled', 'CustomerController@getClientCancled')->name('getClientCancled');
+
+	// Chart
+	Route::get('getRinderShip', 'DriverController@getRinderShip')->name('getRinderShip');
+	Route::get('getRinderScheduled', 'DriverController@getRinderScheduled')->name('getRinderScheduled');
+	Route::get('getRinderDelivered', 'DriverController@getRinderDelivered')->name('getRinderDelivered');
+	Route::get('getRinderCancled', 'DriverController@getRinderCancled')->name('getRinderCancled');
+
+	
 	Route::get('getBranchShipments', 'DashboardController@getBranchShipments')->name('getBranchShipments');
-
-
 	Route::get('getChartScheduled', 'DashboardController@getChartScheduled')->name('getChartScheduled');
 	Route::get('getChartDelivered', 'DashboardController@getChartDelivered')->name('getChartDelivered');
 	Route::get('getChartData', 'DashboardController@getChartData')->name('getChartData');
@@ -272,11 +299,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('countPending', 'DashboardController@countPending')->name('countPending');
 	Route::get('countOrders', 'DashboardController@countOrders')->name('countOrders');
 
-
-
-
-
+	Route::get('getStatuses', 'StatusController@getStatuses')->name('getStatuses');
+	Route::get('getStat', 'StatusController@getStat')->name('getStat');
 });
 
-
-//  ALTER TABLE `shipments` ADD `printReceipt` BOOLEAN NOT NULL DEFAULT FALSE AFTER `country`;

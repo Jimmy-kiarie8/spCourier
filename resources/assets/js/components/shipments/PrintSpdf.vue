@@ -54,7 +54,7 @@ export default {
             doc.setFont("times");
             doc.setFontType("normal");
             // console.log(this.element)
-            doc.text(150, 40, 'WayBill Number:  ' + this.element.bar_code);
+            doc.text(130, 40, 'WayBill Number:  ' + this.element.bar_code);
 
             doc.text(100, 70, 'WAYBILL');
             // Rectangles
@@ -63,6 +63,7 @@ export default {
             doc.text(100, 80, 'DISPATCH SECTION', null, null, 'center');
             doc.rect(18, 85, 170, 30);
             doc.text(20, 91, 'From: ' + this.element.sender_address);
+            doc.text(120, 91, 'Delivery Date: ' + this.element.derivery_date);
             doc.text(20, 109, 'To: ' + this.element.client_address);
             // Sender Details 
             doc.rect(18, 115, 170, 10);
@@ -70,10 +71,9 @@ export default {
             doc.text(100, 120, 'Sender Details', null, null, 'center');
             doc.setFontSize(12)
             doc.rect(18, 125, 170, 20);
-            doc.text(20, 132, 'Delivery Date: ' + this.element.derivery_date);
-            doc.text(120, 132, 'Sent By: SpeedBall Courier Services');
-            doc.text(20, 139, 'Phone: +254728492446');
-            doc.text(120, 139, 'Email: info@speedballcourier.com');
+            doc.text(20, 132, 'Sent By: SpeedBall Courier Services');
+            doc.text(120, 132, 'Phone: +254728492446');
+            doc.text(20, 139, 'Email: info@speedballcourier.com');
             // Client Details
             doc.rect(18, 145, 170, 10);
             doc.setFontSize(14)
@@ -83,7 +83,7 @@ export default {
             doc.text(20, 160, 'Client: ' + this.element.client_name);
             doc.text(120, 160, 'Phone: ' + this.element.client_phone);
             doc.text(20, 170, 'Email: ' + this.element.client_email);
-            doc.text(120, 170, 'Address: ' + this.element.derivery_date);
+            // doc.text(120, 170, 'Address: ' + this.element.derivery_date);
 
             // Product
             doc.rect(18, 175, 170, 10);
@@ -96,8 +96,8 @@ export default {
             doc.text(150, 191, 'Quantity', null, null, 'left');
 
             doc.rect(18, 195, 170, 15);
-            doc.line(70, 195, 70, 198); // vertical line
-            doc.line(140, 195, 140, 198); // vertical line
+            doc.line(70, 195, 70, 200); // vertical line
+            doc.line(140, 195, 140, 200); // vertical line
             doc.text(20, 200, '' + this.element.bar_code);
             doc.text(80, 200, '' + this.element.cod_amount, null, null, 'left');
             doc.text(150, 200, '' + this.element.amount_ordered, null, null, 'left');

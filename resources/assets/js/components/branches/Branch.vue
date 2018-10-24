@@ -269,7 +269,7 @@ export default {
             if (vm.user.can['view branches']) {
                 next();
             } else {
-                next('/');
+                next('/unauthorized');
             }
         })
     }

@@ -65,7 +65,7 @@ export default {
                 const element = this.Scheduled[i];
                 doc.setFont("times");
                 doc.setFontType("normal");
-                doc.text(150, 40, 'WayBill Number:' + element['bar_code']);
+                doc.text(130, 40, 'WayBill Number:' + element['bar_code']);
 
                 doc.text(100, 70, 'WAYBILL');
                 // Rectangles
@@ -76,6 +76,7 @@ export default {
                 doc.text(20, 91, 'From: ' + element['sender_address']);
                 doc.setFontSize(11)
                 doc.text(20, 109, 'To: ' + element['client_address']);
+                doc.text(120, 91, 'Delivery Date: ' + element['derivery_date']);
                 doc.setFontSize(12)
                 // Sender Details 
                 doc.rect(18, 115, 170, 10);
@@ -83,10 +84,9 @@ export default {
                 doc.text(100, 120, 'Sender Details', null, null, 'center');
                 doc.setFontSize(12)
                 doc.rect(18, 125, 170, 20);
-                doc.text(20, 132, 'Delivery Date: ' + element['derivery_date']);
                 doc.text(120, 132, 'Sent By: SpeedBall Courier Services');
-                doc.text(20, 139, 'Phone: +254728492446');
-                doc.text(120, 139, 'Email: info@speedballcourier.com');
+                doc.text(120, 132, 'Phone: +254728492446');
+                doc.text(20, 139, 'Email: info@speedballcourier.com');
                 // Client Details
                 doc.rect(18, 145, 170, 10);
                 doc.setFontSize(14)
@@ -96,7 +96,7 @@ export default {
                 doc.text(20, 160, 'Client: ' + element['client_name']);
                 doc.text(120, 160, 'Phone: ' + element['client_phone']);
                 doc.text(20, 170, 'Email: ' + element['client_email']);
-                doc.text(120, 170, 'Address: ' + element['derivery_date']);
+                // doc.text(120, 170, 'Address: ' + element['client_address']);
 
                 // Product
                 doc.rect(18, 175, 170, 10);

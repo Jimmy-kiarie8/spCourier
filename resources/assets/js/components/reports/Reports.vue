@@ -42,7 +42,7 @@
                         <h1>Status Reports</h1>
                         <hr>
                         <form action="displayReport" method="post">
-                            <select class="custom-select custom-select-md col-md-12" v-model="statusR.status">
+                            <!-- <select class="custom-select custom-select-md col-md-12" v-model="statusR.status">
                                             <option value="Awaiting Approval">Awaiting Approval</option>
                                             <option value="Approved">Approved</option>
                                             <option value="Arrived">Arrived</option>
@@ -51,7 +51,6 @@
                                             <option value="Cleared">Cleared</option>
                                             <option value="Delivered">Delivered</option>
                                             <option value="Dispatched">Dispatched</option>
-                                            <!-- <option value="Cancled">Cancled</option> -->
                                             <option value="Hold">Hold</option>
                                             <option value="Not Picking">Not Picking</option>
                                             <option value="Out For Destination">Out For Destination</option>
@@ -62,7 +61,13 @@
                                             <option value="Shipment Collected">Shipment Collected</option>
                                             <option value="Transit">Transit</option>
                                             <option value="Waiting for Scan">Waiting for scan</option>
-                                        </select> Between
+                                        </select> Between -->
+                            <div class="custom-select custom-select-md col-md-12">
+                                <label for="">Status</label>
+                                <select v-model="updateitedItem.status" class="custom-select custom-select-md col-md-12">
+                                    <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
+                                </select>
+                            </div>
                             <hr>
                             <v-flex xs12 sm12>
                                 <v-text-field v-model="statusR.start_date" label="start date" type="date" color="blue darken-2" required></v-text-field>
@@ -148,6 +153,7 @@ export default {
             AllRinder: [],
             branchR: {},
             AllBranchD: [],
+            statuses: [],
             loader: false,
             Sload: false,
             Cload: false,
@@ -269,7 +275,15 @@ export default {
             .catch(error => {
                 this.loader = false;
                 this.errors = error.response.data.errors;
-            });
+            })
+
+            axios.get('getStatuses')
+            .then((response) => {
+                this.statuses = response.data
+            })
+            .catch((error) => {
+                this.errors = error.response.data.errors
+            })
 
     }
 }

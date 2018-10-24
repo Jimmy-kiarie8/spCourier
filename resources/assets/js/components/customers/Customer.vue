@@ -143,7 +143,7 @@
 
 <script>
 export default {
-    props: ['user', 'role'],
+    props: ['user'],
     components: {
     },
     data() {
@@ -184,11 +184,11 @@ export default {
                 })
         },
         refresh() {
-            this.loader = true
+            // this.loader = true
             axios.get('customerShip')
                 .then((response) => {
-                    this.AllShip = response.data
                     this.loader = false
+                    this.AllShip = response.data
                 })
                 .catch((error) => {
                     this.errors = error.response.data.errors
@@ -223,7 +223,7 @@ export default {
     //         if (vm.role === 'Admin' || vm.role === 'companyAdmin') {
     //             next();
     //         } else {
-    //             next('/');
+    //             next('/unauthorized');
     //         }
     //     })
     // }

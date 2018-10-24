@@ -18,12 +18,29 @@
                 </v-img> -->
                 <template>
                     <v-card>
-                    <!-- <v-card style="background: url('storage/ps/landS.jpg')"> -->
+                        <!-- <v-card style="background: url('storage/ps/landS.jpg')"> -->
                         <router-link to="/" class="v-list__tile v-list__tile--link">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">dashboard</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
                                     Dashboard
+                                </div>
+                            </div>
+                        </router-link>
+
+                        <router-link to="/customers" class="v-list__tile v-list__tile--link" v-for="roleC in user.roles" :key="roleC.id" v-if="roleC.name === 'Client'">
+                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">local_shipping</i></div>
+                            <div class="v-list__tile__content">
+                                <div class="v-list__tile__title">
+                                    My Shipments
+                                </div>
+                            </div>
+                        </router-link>
+                        <router-link to="/rinders" class="v-list__tile v-list__tile--link" v-for="roleR in user.roles" :key="roleR.id" v-if="roleR.name === 'Rider'">
+                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">local_shipping</i></div>
+                            <div class="v-list__tile__content">
+                                <div class="v-list__tile__title">
+                                    My Shipments
                                 </div>
                             </div>
                         </router-link>
@@ -43,22 +60,6 @@
                                 </div>
                             </div>
                         </router-link>
-                        <!-- <router-link to="/roles" class="v-list__tile v-list__tile--link">
-                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">attach_money</i></div>
-                            <div class="v-list__tile__content">
-                                    <div class="v-list__tile__title">
-                                        Manage Roles
-                                    </div>
-                            </div>
-                        </router-link> -->
-                        <!-- <v-expansion-panel v-model="panel" expand>
-                            <v-expansion-panel-content>
-                                <template slot="header">Regular</template>
-                                <v-card>
-                                    <v-card-text>Some content</v-card-text>
-                                </v-card>
-                            </v-expansion-panel-content>
-                        </v-expansion-panel> -->
 
                         <router-link to="/subscribers" class="v-list__tile v-list__tile--link" v-if="user.can['view subscribers']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">email</i></div>
@@ -85,16 +86,10 @@
                                 </div>
                             </div>
                         </router-link>
-
-                        <!-- <router-link to="/companies" class="v-list__tile v-list__tile--link" v-if="user.can['create users', 'delete users', 'view users']">
-                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">home</i></div>
-                            <div class="v-list__tile__content">
-                                <div class="v-list__tile__title">
-                                    Company Profile
-                                </div>
-                            </div>
-                        </router-link> -->
-                        <router-link to="/print" class="v-list__tile v-list__tile--link">
+                        <!--  -->
+                        <!--  -->
+                        <!--  -->
+                        <router-link to="/print" class="v-list__tile v-list__tile--link" v-if="user.can['prin']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">print</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
@@ -102,7 +97,7 @@
                                 </div>
                             </div>
                         </router-link>
-                        <router-link to="/reports" class="v-list__tile v-list__tile--link">
+                        <router-link to="/reports" class="v-list__tile v-list__tile--link" v-if="user.can['view reports']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
@@ -110,24 +105,19 @@
                                 </div>
                             </div>
                         </router-link>
-                        <router-link to="/customers" class="v-list__tile v-list__tile--link" v-for="role in user.roles" :key="role.id" v-if="role.name === 'Client'">
-                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">print</i></div>
-                            <div class="v-list__tile__content">
-                                <div class="v-list__tile__title">
-                                    My Shipments
-                                </div>
-                            </div>
-                        </router-link>
+                        <!--  -->
+                        <!--  -->
+                        <!--  -->
                         <v-list-group prepend-icon="account_circle" v-if="user.can['view users']">
                             <v-list-tile slot="activator">
                                 <v-list-tile-title>User&Roles</v-list-tile-title>
                             </v-list-tile>
 
                             <router-link to="/users" class="v-list__tile theme--light" style="text-decoration: none" id="link-router">
-                                    <v-list-tile-action>
-                                        <v-icon>people_outline</v-icon>
-                                    </v-list-tile-action>
-                                    <v-list-tile-title>Manage Users</v-list-tile-title>
+                                <v-list-tile-action>
+                                    <v-icon>people_outline</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title>Manage Users</v-list-tile-title>
                             </router-link>
                             <router-link to="/roles" class="v-list__tile theme--light" style="text-decoration: none">
                                 <v-list-tile-action>
@@ -139,15 +129,22 @@
 
                         <v-list-group prepend-icon="insert_drive_file" v-if="user.can['view branches']">
                             <v-list-tile slot="activator">
-                                <v-list-tile-title>Manage Branches</v-list-tile-title>
+                                <v-list-tile-title>Branches$Countries</v-list-tile-title>
                             </v-list-tile>
 
                             <router-link to="/branches" class="v-list__tile theme--light" style="text-decoration: none">
-                                    <v-list-tile-action>
-                                        <v-icon>book</v-icon>
-                                    </v-list-tile-action>
-                                    <v-list-tile-title>Branches</v-list-tile-title>
+                                <v-list-tile-action>
+                                    <v-icon>book</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title>Branches</v-list-tile-title>
                             </router-link>
+                            <router-link to="/country" class="v-list__tile theme--light" style="text-decoration: none">
+                                <v-list-tile-action>
+                                    <v-icon>map</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title>Countries</v-list-tile-title>
+                            </router-link>
+
                             <router-link to="/status" class="v-list__tile theme--light" style="text-decoration: none">
                                 <v-list-tile-action>
                                     <v-icon>question_answer</v-icon>
@@ -156,6 +153,23 @@
                             </router-link>
                         </v-list-group>
 
+                        <v-list-group prepend-icon="insert_drive_file" v-for="roleQ in user.roles" :key="roleQ.id" v-if="roleQ.name === 'Admin'">
+                            <v-list-tile slot="activator">
+                                <v-list-tile-title>App Settings</v-list-tile-title>
+                            </v-list-tile>
+                            <router-link to="/towns" class="v-list__tile theme--light" style="text-decoration: none">
+                                <v-list-tile-action>
+                                    <v-icon>map</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title>Towns</v-list-tile-title>
+                            </router-link>
+                            <router-link to="/charges" class="v-list__tile theme--light" style="text-decoration: none">
+                                <v-list-tile-action>
+                                    <v-icon>attach_money</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title>Charges</v-list-tile-title>
+                            </router-link>
+                        </v-list-group>
                     </v-card>
                 </template>
             </v-list>
@@ -171,7 +185,6 @@
                 <form action="/logout" method="post">
                     <v-btn flat color="white" type="submit">Logout</v-btn>
                 </form>
-                <!-- <v-toolbar-side-icon></v-toolbar-side-icon> -->
         </v-toolbar>
     </v-app>
 </div>
@@ -221,10 +234,10 @@ export default {
     background: #e3edfe !important;
     color: #1a73e8 !important;
 }
-.theme--light{
+
+.theme--light {
     background-color: #212120 !important;
     /* background: url('storage/logo1.jpg') !important; */
     color: #fff !important;
 }
-
 </style>

@@ -35,33 +35,35 @@
                             <v-divider></v-divider>
                         </v-flex>
                         <v-flex sm4 style="border-left: 1px solid #c1c1c1;">
-                            <div class="form-group col-md-6">
-                                <label for="insurance" class="col-md-4 col-form-label text-md-right">Status</label>
+                            <div class="form-group col-md-12">
+                                <label for="">Status</label>
+                                <!-- <select class="custom-select custom-select-md col-md-12" v-model="updateitedItem.status">
+                                    <option value="Awaiting Approval">Awaiting Approval</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Arrived">Arrived</option>
+                                    <option value="Awaiting Confirmation">Awaiting Confirmation</option>
+                                    <option value="Cancelled ">Call Back</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                    <option value="Cleared">Cleared</option>
+                                    <option value="Delivered">Delivered</option>
+                                    <option value="Dispatched">Dispatched</option>
+                                    <option value="Hold">Hold</option>
+                                    <option value="Not Available">Not Available</option>
+                                    <option value="Not Picking">Not Picking</option>
+                                    <option value="Out For Destination">Out For Destination</option>
+                                    <option value="Offline">Offline</option>
+                                    <option value="Out For Delivery">Out For Delivery</option>
+                                    <option value="Returned">Returned</option>
+                                    <option value="Ready For Depart">Ready For Depart</option>
+                                    <option value="Scheduled">Scheduled</option>
+                                    <option value="Shipment Collected">Shipment Collected</option>
+                                    <option value="Transit">Transit</option>
+                                    <option value="Waiting for Scan">Waiting for scan</option>
+                                    <option value="Wrong Number">Wrong Number</option>
+                                </select> -->
                                 <select class="custom-select custom-select-md col-md-12" v-model="updateitedItem.status">
-                                <option value="Awaiting Approval">Awaiting Approval</option>
-                                <option value="Approved">Approved</option>
-                                <option value="Arrived">Arrived</option>
-                                <option value="Awaiting Confirmation">Awaiting Confirmation</option>
-                                <option value="Cancelled ">Call Back</option>
-                                <option value="Cancelled">Cancelled</option>
-                                <option value="Cleared">Cleared</option>
-                                <option value="Delivered">Delivered</option>
-                                <option value="Dispatched">Dispatched</option>
-                                <!-- <option value="Cancled">Cancled</option> -->
-                                <option value="Hold">Hold</option>
-                                <option value="Not Available">Not Available</option>
-                                <option value="Not Picking">Not Picking</option>
-                                <option value="Out For Destination">Out For Destination</option>
-                                <option value="Offline">Offline</option>
-                                <option value="Out For Delivery">Out For Delivery</option>
-                                <option value="Returned">Returned</option>
-                                <option value="Ready For Depart">Ready For Depart</option>
-                                <option value="Scheduled">Scheduled</option>
-                                <option value="Shipment Collected">Shipment Collected</option>
-                                <option value="Transit">Transit</option>
-                                <option value="Waiting for Scan">Waiting for scan</option>
-                                <option value="Wrong Number">Wrong Number</option>
-                            </select>
+                                    <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
+                                </select>
                             </div>
                             <div v-if="updateitedItem.status === 'Scheduled'">
                                 <v-flex xs12 sm12>
@@ -130,6 +132,7 @@ export default {
             loading: false,
             loading_loc: false,
             // markers: [],
+            statuses: [],
             showMap: false,
             place: null,
             dist: ''
@@ -292,7 +295,13 @@ export default {
     },
 
     mounted() {
-
+        axios.get('getStatuses')
+            .then((response) => {
+                this.statuses = response.data
+            })
+            .catch((error) => {
+                this.errors = error.response.data.errors
+            })
     }
 }
 </script>

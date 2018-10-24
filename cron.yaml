@@ -1,0 +1,4 @@
+cron:
+- description: "Scheduled shipments"
+  url: /scheduler
+  schedule: every 10 mins

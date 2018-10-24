@@ -9,7 +9,7 @@
                 <v-layout row wrap>
                     <v-flex xs12>
                         <v-card>
-                            <select class="custom-select custom-select-md col-md-12" v-model="form.status">
+                            <!-- <select class="custom-select custom-select-md col-md-12" v-model="form.status">
                                 <option value="Awaiting Approval">Awaiting Approval</option>
                                 <option value="Approved">Approved</option>
                                 <option value="Arrived">Arrived</option>
@@ -19,7 +19,6 @@
                                 <option value="Cleared">Cleared</option>
                                 <option value="Delivered">Delivered</option>
                                 <option value="Dispatched">Dispatched</option>
-                                <!-- <option value="Cancled">Cancled</option> -->
                                 <option value="Hold">Hold</option>
                                 <option value="Not Available">Not Available</option>
                                 <option value="Not Picking">Not Picking</option>
@@ -33,7 +32,13 @@
                                 <option value="Transit">Transit</option>
                                 <option value="Waiting for Scan">Waiting for scan</option>
                                 <option value="Wrong Number">Wrong Number</option>
-                            </select>
+                            </select> -->
+                            <div class="form-group col-md-12">
+                                <label for="">Status</label>
+                                <select v-model="form.status" class="custom-select custom-select-md col-md-12">
+                                    <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
+                                </select>
+                            </div>
                             <div v-if="form.status === 'Scheduled'">
                                 <v-flex xs12 sm12>
                                     <v-text-field v-model="form.scheduled_date" color="blue darken-2" label="Schedule Date" type="date"></v-text-field>
@@ -77,6 +82,7 @@ export default {
             timeout: 5000,
             message: "",
             color: "",
+            statuses: [],
             form: {
                 scheduled_date: '',
                 derivery_time: '',
@@ -113,6 +119,14 @@ export default {
             this.$emit("closeRequest");
         },
     },
-    mounted() {}
+    mounted() {
+        axios.get('getStatuses')
+            .then((response) => {
+                this.statuses = response.data
+            })
+            .catch((error) => {
+                this.errors = error.response.data.errors
+            })
+    }
 }
 </script>

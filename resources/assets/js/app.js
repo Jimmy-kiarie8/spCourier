@@ -51,17 +51,16 @@ Vue.use(VueRouter)
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-let myChart = require('./components/Chat.vue');
+let myStatuses = require('./components/status/Status.vue');
 // axios.defaults.baseURL = 'http://courier.dev/api/getData';
 Vue.component('downloadExcel', JsonExcel)
 Vue.component('file-management', require('./components/upload/FileManagement.vue'));
 Vue.component('attachment-list', require('./components/upload/AttachmentList.vue'));
 Vue.component('upload-list', require('./components/upload/Upload.vue'));
-let dashboard = require('./components/Dashboard.vue');
+// let dashboard = require('./components/Dashboard.vue');
 
 let myHeader = require('./components/include/Header.vue');
 let myUser = require('./components/users/User.vue');
-let myDrivers = require('./components/drivers/Driver.vue');
 let myShipment = require('./components/shipments/Shipment.vue');
 let myScanner = require('./components/scanner/Scanner.vue');
 let myContainer = require('./components/containers/Container.vue');
@@ -85,11 +84,17 @@ let myPrintPdf = require('./components/shipments/PrintPdf.vue');
 let myStatus = require('./components/shipments/status/Status.vue');
 let myCountry = require('./components/country/Country.vue');
 let myRinder = require('./components/drivers/Driver.vue');
+let myunauth = require('./components/Unauthorized.vue');
+
+let myCustDash = require('./components/customers/Dashboard.vue');
+let myDrivDash = require('./components/drivers/Dashboard.vue');
+
+let myDash = require('./components/App.vue');
+
 
 const routes = [
-    {path: '/', component: dashboard },
+    // {path: '/', component: dashboard },
     {path: '/users', component: myUser },
-    {path: '/drivers', component: myDrivers },
     {path: '/shipments', component: myShipment },
     {path: '/scanner', component: myScanner },
     {path: '/containers', component: myContainer },
@@ -111,9 +116,15 @@ const routes = [
     {path: '/maps', component: myMap },
     {path: '/print', component: myPrintPdf },
     {path: '/status', component: myStatus },
-    {path: '/chart', component: myChart },
     {path: '/country', component: myCountry },
     {path: '/rinders', component: myRinder },
+    {path: '/unauthorized', component: myunauth },
+
+    {path: '/clientDashboard', component: myCustDash },
+    {path: '/rinderDashboard', component: myDrivDash },
+
+    {path: '/', component: myDash },
+    {path: '/statuses', component: myStatuses },
 
 ]
 const router = new VueRouter({
@@ -125,17 +136,22 @@ const app = new Vue({
     el: '#app',
     router,
     components: {
-    	myHeader, myUser, myDrivers, myShipment, myScanner, myContainer, myMap,
+    	myHeader, myUser, myShipment, myScanner, myContainer, myMap,
         myBranch, myProfile, myCompany, myCustomer, mysubsicriber, myInvice, myReceipt,
         myReports, mybranchShip, myRoles, myscheduled, myTasks, myUploadFile, myCharges,
-        myTown, myPrintPdf, myStatus, myChart, myCountry, myRinder
+        myTown, myPrintPdf, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash, 
+        myunauth, myDash
     },
     data: {
     shipments: [],
     loading: false,
     error: false,
-    query: ''
+    query: '',
+    chats: '',
 }, 
+created() {
+    // const userId = ${meta.}
+},
 methods: {
     search: function() {
         // Clear the error message.

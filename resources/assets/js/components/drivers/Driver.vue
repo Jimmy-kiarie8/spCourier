@@ -217,7 +217,7 @@ export default {
     //         if (vm.role === 'Admin' || vm.role === 'companyAdmin') {
     //             next();
     //         } else {
-    //             next('/');
+    //             next('/unauthorized');
     //         }
     //     })
     // }

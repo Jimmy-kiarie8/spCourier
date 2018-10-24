@@ -270,7 +270,7 @@ export default {
             if (vm.user.can['view subscribers']) {
                 next();
             } else {
-                next('/');
+                next('/unauthorized');
             }
         })
     }

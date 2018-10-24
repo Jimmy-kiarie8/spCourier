@@ -365,6 +365,15 @@ export default {
         //         this.errors = error.response.data.errors
         //     })
 
+    },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            if (vm.user.can['view users']) {
+                next();
+            } else {
+                next('/unauthorized');
+            }
+        })
     }
 }
 </script>

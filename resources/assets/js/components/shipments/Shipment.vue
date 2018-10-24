@@ -31,7 +31,7 @@
                                 <v-select :items="AllBranches" v-model="select" :hint="`${select.branch_name}, ${select.id}`" label="Filter By Branch" single-line item-text="branch_name" item-value="id" return-object persistent-hint></v-select>
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>
-                                <v-select :items="statuses" v-model="selectItem" :hint="`${selectItem.state}, ${selectItem.state}`" label="Filter By Status" single-line item-text="state" item-value="state" return-object persistent-hint></v-select>
+                                <v-select :items="AllStatus" v-model="selectItem" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint></v-select>
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1 v-for="role in user.roles" v-if="role.name === 'Admin'" :key="role.id">
                                 <v-select :items="AllCountries" v-model="selectCountry" :hint="`${selectCountry.country_name}, ${selectCountry.id}`" label="Filter By country" single-line item-text="country_name" item-value="id" return-object persistent-hint></v-select>
@@ -240,7 +240,7 @@ export default {
                 id: 'all'
             },
             selectItem: {
-                state: 'All',
+                name: 'All',
             },
             statuses: [{
                     state: 'Awaiting Confirmation',
@@ -441,6 +441,7 @@ export default {
             Allcustomers: [],
             shipment: {},
             markers: [],
+            AllStatus: [],
             shipmentsCount: null
         };
     },
@@ -707,7 +708,7 @@ export default {
                 Assigned: 'All',
             }
             this.selectItem = {
-                state: 'All',
+                name: 'All',
             }
             this.selectCountry = {
                 country_id: 'All',
@@ -799,6 +800,14 @@ export default {
             .catch((error) => {
                 this.errors = error.response.data.errors
             })
+        axios.get('getStatuses')
+            .then((response) => {
+                this.AllStatus = response.data
+            })
+            .catch((error) => {
+                this.errors = error.response.data.errors
+            })
+            
         this.getShipments()
     },
     beforeRouteEnter(to, from, next) {
@@ -806,7 +815,7 @@ export default {
             if (vm.user.can['view shipments']) {
                 next();
             } else {
-                next('/');
+                next('/unauthorized');
             }
         })
     }

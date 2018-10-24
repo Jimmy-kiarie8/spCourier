@@ -245,7 +245,7 @@ export default {
     //         if (vm.role === 'Admin') {
     //             next();
     //         } else {
-    //             next('/');
+    //             next('/unauthorized');
     //         }
     //     })
     // }

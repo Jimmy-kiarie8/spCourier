@@ -345,7 +345,7 @@ export default {
             if (vm.user.can['view users']) {
                 next();
             } else {
-                next('/');
+                next('/unauthorized');
             }
         })
     }
