@@ -6,33 +6,45 @@ use Illuminate\Http\Request;
 use App\Shipment;
 use App\ShipmentStatus;
 use Auth;
+use Illuminate\Support\Carbon;
+
 class ScanController extends Controller
 {
-	public function barcodeUpdate(Request $request, Shipment $shipment, $bar_code = null) {
+	// Out Scan
+	public function barcodeUpdate(Request $request, Shipment $shipment, $bar_code = null)
+	{
 		// return $request->all();
-		$barcode = Shipment::where('bar_code', $request->bar_code)->first();
+		$bar_code = str_replace("-", "", $request->bar_code_out);
+		$barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->first();
 		if ($barcode) {
 			return $barcode;
-		}else{
-			return response()->json(['errors'=>'This Shipment Does not exist in our records']);
+		} else {
+			return response()->json(['errors' => 'errors']);
 		}
 	}
 
-    
-    public function statusUpdate(Request $request)
-    {
+
+	public function statusUpdate(Request $request)
+	{
 		// return $request->all();
-        $id = [];
-		foreach ($request->scan as $selectedItems ) {
+		// $this->validate($request, [
+		// 	'form.status_out' => 'required',
+		// 	'form.rider_out' => 'required',
+			
+		// ]);
+		$id = [];
+		foreach ($request->scan as $selectedItems) {
 			$id[] = $selectedItems['id'];
-        }
+		}
         // return $id;
 		$status = $request->form['status_out'];
 		// $derivery_time = $request->derivery_time;
 		$remark = $request->form['remarks_out'];
-		$location = $request->form['location'];
-		// $derivery_date = $request->scheduled_date;
-		$shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark]);
+		$rider_out = $request->form['rider_out'];
+		$location = $request->form['location_out'];
+		$assign_date = date("Y-m-d");
+		// dd($assign_date);
+		$shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'driver' => $rider_out, 'assign_date' => $assign_date]);
 		$shipStatus = Shipment::whereIn('id', $id)->get();
 		foreach ($shipStatus as $statuses) {
 			$statusUpdate = new ShipmentStatus;
@@ -47,34 +59,44 @@ class ScanController extends Controller
 			$statusUpdate->save();
 			// return $statusUpdate;
 		}
-		// $shipStatus->statuses()->saveMany($shipStatus);
 		return $shipment;
 
-    }
+	}
 
-	public function barcodeIn(Request $request, Shipment $shipment, $bar_code_in = null) {
-		$barcode = Shipment::where('bar_code', $request->bar_code_in)->first();
+
+	// In Scan
+	public function barcodeIn(Request $request, Shipment $shipment, $bar_code_in = null)
+	{
+		$bar_code = str_replace("-", "", $request->bar_code_in);
+		// dd($barcode);
+		$barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code_in}%")->first();
 		if ($barcode) {
 			return $barcode;
-		}else{
-			return response()->json(['errors'=>'This Shipment Does not exist in our records']);
+		} else {
+			return response()->json(['errors' => 'errors']);
 		}
-    }
-    
-    public function statusUpdateIn(Request $request)
-    {
+	}
+
+	public function statusUpdateIn(Request $request)
+	{
 		// return $request->all();
-        $id = [];
-		foreach ($request->scan as $selectedItems ) {
+		$this->validate($request, [
+			'form.status_in' => 'required',
+			'form.rider_in' => 'required',
+			
+		]);
+		$id = [];
+		foreach ($request->scan as $selectedItems) {
 			$id[] = $selectedItems['id'];
-        }
+		}
         // return $id;
 		$status = $request->form['status_in'];
 		// $derivery_time = $request->derivery_time;
 		$remark = $request->form['remarks_in'];
-		$location = $request->form['location'];
+		$rider_in = $request->form['rider_in'];
+		$location = $request->form['location_in'];
 		// $derivery_date = $request->scheduled_date;
-		$shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark]);
+		$shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'driver' => $rider_in]);
 		$shipStatus = Shipment::whereIn('id', $id)->get();
 		foreach ($shipStatus as $statuses) {
 			$statusUpdate = new ShipmentStatus;
@@ -91,6 +113,29 @@ class ScanController extends Controller
 		}
 		// $shipStatus->statuses()->saveMany($shipStatus);
 		return $shipment;
+	}
 
-    }
+	public function filterR(Request $request)
+	{
+		$driver = $request->selectRider['id'];
+		$start_date = $request->form['start_date'];
+		$end_date = $request->form['end_date'];
+		return Shipment::where('driver', $driver)->whereBetween('assign_date', [$start_date, $end_date])->take(500)->latest()->get();
+	}
+
+	public function getDelScan(Request $request)
+	{
+		$driver = $request->selectRider['id'];
+		$start_date = $request->form['start_date'];
+		$end_date = $request->form['end_date'];
+		return Shipment::where('driver', $driver)->where('status', 'Delivered')->whereBetween('assign_date', [$start_date, $end_date])->take(500)->latest()->count();
+	}
+	
+	public function getNotDelScan(Request $request)
+	{
+		$driver = $request->selectRider['id'];
+		$start_date = $request->form['start_date'];
+		$end_date = $request->form['end_date'];
+		return Shipment::where('driver', $driver)->where('status', '!=', 'Delivered')->whereBetween('assign_date', [$start_date, $end_date])->take(500)->latest()->count();
+	}
 }

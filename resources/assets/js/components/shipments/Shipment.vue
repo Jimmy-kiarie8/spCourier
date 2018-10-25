@@ -188,657 +188,662 @@ import VueBarcode from "vue-barcode";
 let AddShipment = require("./AddShipment");
 let EditShipment = require("./EditShipment");
 let ShowShipment = require("./PrintSPdf");
-let UpdateShipment = require('./UpdateShipment')
-let UpdateShipmentStatus = require('./UpdateShipmentStatus')
-let AssignDriver = require('./AssignDriver')
-let AssignBranch = require('./AssignBranch')
-let TrackShipment = require('./TrackShipment')
-let myCsvFile = require('../csv/CsvFile')
-let mySCharges = require('./Charge')
+let UpdateShipment = require("./UpdateShipment");
+let UpdateShipmentStatus = require("./UpdateShipmentStatus");
+let AssignDriver = require("./AssignDriver");
+let AssignBranch = require("./AssignBranch");
+let TrackShipment = require("./TrackShipment");
+let myCsvFile = require("../csv/CsvFile");
+let mySCharges = require("./Charge");
 // let myPrintPod = require('./PrintPod')
-let myRows = require('./rows/Rows')
+let myRows = require("./rows/Rows");
 // let myPrintSPdf = require('./PrintSPdf.js');
 export default {
-    props: ["user", "role"],
-    components: {
-        myRows,
-        AddShipment,
-        ShowShipment,
-        EditShipment,
-        barcode: VueBarcode,
-        UpdateShipmentStatus,
-        UpdateShipment,
-        AssignDriver,
-        AssignBranch,
-        TrackShipment,
-        myCsvFile,
-        mySCharges,
-        // myPrintSPdf,
-        // myPrintPod
-    },
-    data() {
-        return {
-            RowModal: false,
-            csvModel: false,
-            trackModel: false,
-            chargeModal: false,
-            printColor: '',
-            printModal: false,
-            ploading: false,
-            nloading: false,
-            mloading: false,
-            AllBranches: [],
-            AllCountries: [],
-            AllDrivers: [],
-            element: [],
-            selectCountry: {
-                country_id: 'All',
-                id: 'all'
-            },
-            select: {
-                branch_name: 'All',
-                id: 'all'
-            },
-            selectItem: {
-                name: 'All',
-            },
-            statuses: [{
-                    state: 'Awaiting Confirmation',
-                },
-                {
-                    state: 'Cancelled',
-                },
-                {
-                    state: 'Call Back',
-                },
-                {
-                    state: 'Dispatched',
-                },
-                {
-                    state: 'Delivered',
-                },
-                {
-                    state: 'Not Available',
-                },
-                {
-                    state: 'Not Picking',
-                },
-                {
-                    state: 'Offline',
-                },
-                {
-                    state: 'Returned',
-                },
-                {
-                    state: 'Scheduled',
-                },
-                {
-                    state: 'Wrong Number',
-                },
-            ],
-            items: [{
-                    state: 'All',
-                    abbr: 'all'
-                },
-                {
-                    state: 'Admin',
-                    abbr: 'Admin'
-                },
-                {
-                    state: 'company Admin',
-                    abbr: 'companyAdmin'
-                },
-                {
-                    state: 'Customers',
-                    abbr: 'Customer'
-                },
-                {
-                    state: 'Drivers',
-                    abbr: 'Driver'
-                },
-            ],
-            json_fields: {
-                'Order Id': 'order_id',
-                'Sender Name': 'sender_name',
-                'Sender Email': 'sender_email',
-                'Sender Phone': 'sender_phone',
-                'Sender City': 'sender_city',
-                'Sender Address': 'sender_address',
-                'Driver': 'driver',
-                'Client Name': 'client_name',
-                'Client Email': 'client_email',
-                'Client Phone': 'client_phone',
-                'Client City': 'client_city',
-                'Client Address': 'client_address',
-                'Derivery Status': 'status',
-                'From': 'sender_address',
-                'To': 'client_address',
-                'Derivery Date': 'derivery_date',
-                'Derivery Time': 'derivery_time',
-                'Quantity': 'amount_ordered',
-                'COD Amount': 'cod_amount',
-                'Booking Date': 'booking_date',
-                'Special Instructions': 'speciial_instruction'
-            },
-            snackbar: false,
-            timeout: 5000,
-            message: "Success",
-            color: "black",
-            loader: false,
-            updateModal: false,
-            AssignBranchModel: false,
-            UpdateShipmentModel: false,
-            showdialog1: false,
-            AllShipments: [],
-            search: "",
-            temp: "",
-            dialog: false,
-            loading: false,
-            dialog1: false,
-            pdialog2: false,
-            AssignDriverModel: false,
-            updateitedItem: {},
-            AllProducts: {},
-            newProducts: {},
-            coordinatesArr: [],
-            showItem: {},
-            editedItem: {},
-            between: {
-                start: 1,
-                end: 500,
-            },
-            form: {
-                start_date: '',
-                end_date: '',
-            },
-            headers: [{
-                    text: "Waybill Number",
-                    value: "airway_bill_no"
-                },
-                {
-                    text: "Barcode",
-                    value: "bar_code"
-                },
-                {
-                    text: "Client",
-                    value: "client_name"
-                },
-                {
-                    text: "From",
-                    value: "sender_name"
-                },
-                {
-                    text: "Client Phone",
-                    value: "client_phone"
-                },
-                {
-                    text: "Client Email",
-                    value: "client_email"
-                },
-                {
-                    text: "Client Address",
-                    value: "client_address"
-                },
-                {
-                    text: "Client City",
-                    value: "client_city"
-                },
-                {
-                    text: "Sender Name",
-                    value: "sender_name"
-                },
-                {
-                    text: "Sender City",
-                    value: "sender_city"
-                },
-                {
-                    text: "Order Date",
-                    value: "booking_date"
-                },
-                {
-                    text: "Cod Amount",
-                    value: "cod_amount"
-                },
-                {
-                    text: "Quantity",
-                    value: "amount_ordered"
-                },
-                {
-                    text: "Status",
-                    value: "status"
-                },
-                {
-                    text: "Derivery Date",
-                    value: "derivery_date"
-                },
-                {
-                    text: "Charges",
-                    value: "charges"
-                },
-                {
-                    text: "Created",
-                    value: "created_at"
-                },
-
-                {
-                    text: "Waybill Printed",
-                    value: "created_at"
-                },
-                {
-                    text: 'Receipt Printed',
-                    value: 'name',
-                },
-                {
-                    text: 'Actions',
-                    value: 'name',
-                    sortable: false
-                }
-            ],
-            selected: [],
-            AllRows: [],
-            selectStatus: [],
-            direction: "left",
-            Allcustomers: [],
-            shipment: {},
-            markers: [],
-            AllStatus: [],
-            shipmentsCount: null
-        };
-    },
-    methods: {
-        UpdateStatus() {
-            // alert(this.updateitedItem.id);
-            axios
-                .post(`/updateStatus/${this.updateitedItem.id}`, {
-                    formobg: this.$data.updateitedItem,
-                    address: this.$data.address
-                })
-                .then(response => {
-                    this.resetForm();
-                    // console.log(response);
-                    this.message = "Updated";
-                    this.color = "black";
-                    this.snackbar = true;
-                    // this.markers.push(response.data);
-                });
+  props: ["user", "role"],
+  components: {
+    myRows,
+    AddShipment,
+    ShowShipment,
+    EditShipment,
+    barcode: VueBarcode,
+    UpdateShipmentStatus,
+    UpdateShipment,
+    AssignDriver,
+    AssignBranch,
+    TrackShipment,
+    myCsvFile,
+    mySCharges
+    // myPrintSPdf,
+    // myPrintPod
+  },
+  data() {
+    return {
+      RowModal: false,
+      csvModel: false,
+      trackModel: false,
+      chargeModal: false,
+      printColor: "",
+      printModal: false,
+      ploading: false,
+      nloading: false,
+      mloading: false,
+      AllBranches: [],
+      AllCountries: [],
+      AllDrivers: [],
+      element: [],
+      selectCountry: {
+        country_id: "All",
+        id: "all"
+      },
+      select: {
+        branch_name: "All",
+        id: "all"
+      },
+      selectItem: {
+        name: "All"
+      },
+      statuses: [
+        {
+          state: "Awaiting Confirmation"
         },
-        resetForm() {
-            this.form = Object.assign({}, this.defaultForm);
-            this.$refs.form.reset();
+        {
+          state: "Cancelled"
         },
-        openShipment() {
-            this.dialog = true;
-            this.getBranch()
-            this.getCustomer()
-            this.getDrivers()
+        {
+          state: "Call Back"
         },
-        addProduct() {
-            // alert(this.updateitedItem.id);
-            axios
-                .post(`/productAdd/${this.updateitedItem.id}`, this.$data.form)
-                .then(response => {
-                    // console.log(response.data);
-                    this.message = "Product Added";
-                    this.color = "black";
-                    this.snackbar = true;
-                    this.resetForm();
-                    this.AllProducts.push(response.data);
-                    this.pdialog2 = false;
-                });
+        {
+          state: "Dispatched"
         },
-        editShipment(key) {
-            // alert(key);
-            this.$children[2].list = this.AllShipments[key];
-            this.dialog1 = true;
+        {
+          state: "Delivered"
         },
-        openProduct(updateitedItem) {
-            this.pdialog2 = true;
+        {
+          state: "Not Available"
         },
-        UpdateItems(item) {
-            axios
-                .post(`/getcoordinatesArray/${item.id}`)
-                .then(response => (this.markers = response.data))
-                .catch(error => (this.errors = error.response.data.errors));
-            console.log(this.coordinatesArr);
-            this.updateitedItem = Object.assign({}, item);
-            this.updatedIndex = this.AllShipments.indexOf(item);
-            this.updateModal = true;
+        {
+          state: "Not Picking"
         },
-        editItem(item) {
-            this.editedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
-            // console.log(this.editedItem);
-            this.dialog1 = true;
+        {
+          state: "Offline"
         },
-        showDetails(item) {
-            eventBus.$emit('printEvent', item);
+        {
+          state: "Returned"
         },
-        ShipmentTrack(item) {
-            this.shipment = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
-            this.trackModel = true
+        {
+          state: "Scheduled"
         },
-        Shipcharges(item) {
-            this.shipment = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
-            this.chargeModal = true
+        {
+          state: "Wrong Number"
+        }
+      ],
+      items: [
+        {
+          state: "All",
+          abbr: "all"
         },
-        openRow() {
-            this.RowModal = true
+        {
+          state: "Admin",
+          abbr: "Admin"
         },
-        ShipmentCsv() {
-            this.csvModel = true
-            this.getCustomer()
+        {
+          state: "company Admin",
+          abbr: "companyAdmin"
         },
-        deleteItem(item) {
-            const index = this.AllShipments.indexOf(item);
-            if (confirm("Are you sure you want to delete this item?")) {
-                axios
-                    .delete(`/shipment/${item.id}`)
-                    .then(response => {
-                        this.message = "Deleted";
-                        this.color = "black";
-                        this.snackbar = true;
-                        this.AllShipments.splice(index, 1);
-                        // console.log(response);
-                    })
-                    .catch(error => (this.errors = error.response.data.errors));
-            }
+        {
+          state: "Customers",
+          abbr: "Customer"
         },
-        notPrinted(item) {
-
-            this.editedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
-            this.loading = true,
-                axios.post(`/notprinted/${item.id}`)
-                .then(response => {
-                    // this.printColor = 'red'
-                    // this.loading = false,
-                    this.getShipments()
-                    this.message = "Not Printed";
-                    this.color = "black";
-                    this.snackbar = true;
-                    // Object.assign(this.AllShipments[this.editedIndex], this.editedItem)
-                    // console.log(response);
-                })
-                .catch(error => (this.errors = error.response.data.errors));
+        {
+          state: "Drivers",
+          abbr: "Driver"
+        }
+      ],
+      json_fields: {
+        "Order Id": "order_id",
+        "Sender Name": "sender_name",
+        "Sender Email": "sender_email",
+        "Sender Phone": "sender_phone",
+        "Sender City": "sender_city",
+        "Sender Address": "sender_address",
+        Driver: "driver",
+        "Client Name": "client_name",
+        "Client Email": "client_email",
+        "Client Phone": "client_phone",
+        "Client City": "client_city",
+        "Client Address": "client_address",
+        "Derivery Status": "status",
+        From: "sender_address",
+        To: "client_address",
+        "Derivery Date": "derivery_date",
+        "Derivery Time": "derivery_time",
+        Quantity: "amount_ordered",
+        "COD Amount": "cod_amount",
+        "Booking Date": "booking_date",
+        "Special Instructions": "speciial_instruction"
+      },
+      snackbar: false,
+      timeout: 5000,
+      message: "Success",
+      color: "black",
+      loader: false,
+      updateModal: false,
+      AssignBranchModel: false,
+      UpdateShipmentModel: false,
+      showdialog1: false,
+      AllShipments: [],
+      search: "",
+      temp: "",
+      dialog: false,
+      loading: false,
+      dialog1: false,
+      pdialog2: false,
+      AssignDriverModel: false,
+      updateitedItem: {},
+      AllProducts: {},
+      newProducts: {},
+      coordinatesArr: [],
+      showItem: {},
+      editedItem: {},
+      between: {
+        start: 1,
+        end: 500
+      },
+      form: {
+        start_date: "",
+        end_date: ""
+      },
+      headers: [
+        {
+          text: "Waybill Number",
+          value: "airway_bill_no"
         },
-        printed(item) {
-            this.editedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
-            this.loading = true,
-                axios.post(`/printed/${item.id}`)
-                .then(response => {
-                    // this.printColor = 'green'
-                    this.getShipments()
-                    // this.loading = false,
-                    this.message = "Printed";
-                    this.color = "black";
-                    this.snackbar = true;
-                    // Object.assign(this.AllShipments[this.editedIndex], this.editedItem)
-                    // console.log(response);
-                })
-                .catch(error => (this.errors = error.response.data.errors));
+        {
+          text: "Barcode",
+          value: "bar_code"
         },
-        pending(item) {
-            this.editedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
-            this.mloading = true,
-                axios.post(`/pending/${item.id}`)
-                .then(response => {
-                    // this.printColor = 'blue'
-                    this.mloading = false,
-                        this.message = "Pending";
-                    this.color = "black";
-                    this.snackbar = true;
-                    Object.assign(this.AllShipments[this.editedIndex], this.editedItem)
-                    // console.log(response);
-                })
-                .catch(error => (this.errors = error.response.data.errors));
+        {
+          text: "Client",
+          value: "client_name"
         },
-        UpdateShipmentStatus(item) {
-            if (this.selected.length < 1) {
-                this.message = 'please select a shipment'
-                this.color = 'red'
-                this.snackbar = true
-            } else {
-                this.UpdateShipmentModel = true
-            }
+        {
+          text: "From",
+          value: "sender_name"
         },
-        assignDriver() {
-            if (this.selected.length < 1) {
-                this.message = 'please select a shipment'
-                this.color = 'red'
-                this.snackbar = true
-            } else {
-                this.AssignDriverModel = true
-                this.getDrivers()
-            }
+        {
+          text: "Client Phone",
+          value: "client_phone"
         },
-        assignBranch() {
-            if (this.selected.length < 1) {
-                this.message = 'please select a shipment'
-                this.color = 'red'
-                this.snackbar = true
-            } else {
-                this.AssignBranchModel = true
-                this.getBranch()
-            }
+        {
+          text: "Client Email",
+          value: "client_email"
         },
-        assignPrint() {
-            if (this.selected.length < 1) {
-                this.message = 'please select a shipment'
-                this.color = 'red'
-                this.snackbar = true
-            } else {
-                this.printModal = true
-            }
+        {
+          text: "Client Address",
+          value: "client_address"
         },
-        getTotal() {
-            this.gettotlaAmount = true;
-            if (this.form.quantity && this.form.price) {
-                this.form.total = this.form.quantity * this.form.price;
-            } else {
-                this.form.total = 0;
-            }
+        {
+          text: "Client City",
+          value: "client_city"
         },
-        showalert() {
-            this.message = "success";
-            this.color = "indigo";
-            this.snackbar = true;
+        {
+          text: "Sender Name",
+          value: "sender_name"
         },
-        sort() {
-            this.loading = true
-            axios.post('filterShipment', {
-                    select: this.select,
-                    selectStatus: this.selectItem,
-                    form: this.form,
-                    selectCountry: this.selectCountry,
-                })
-                .then((response) => {
-                    this.loading = false
-                    this.AllShipments = response.data
-                })
-                .catch((error) => {
-                    this.loading = false
-                    this.errors = error.response.data.errors
-                })
+        {
+          text: "Sender City",
+          value: "sender_city"
         },
-        next() {
-            this.loading = true
-            this.between.start = parseInt(this.between.start) + 500;
-            this.between.end = parseInt(this.between.end) + 500;
-            axios.post('betweenShipments', this.$data.between)
-                .then((response) => {
-                    this.loading = false
-                    this.AllShipments = response.data
-                })
-                .catch((error) => {
-                    this.loading = false
-                    this.errors = error.response.data.errors
-                })
+        {
+          text: "Order Date",
+          value: "booking_date"
         },
-        previous() {
-            this.loading = true
-            if (this.between.start >= 500) {
-                this.between.start = parseInt(this.between.start) - 500;
-                this.between.end = parseInt(this.between.end) - 500;
-                axios.post('betweenShipments', this.$data.between)
-                    .then((response) => {
-                        this.loading = false
-                        this.AllShipments = response.data
-                    })
-                    .catch((error) => {
-                        this.loading = false
-                        this.errors = error.response.data.errors
-                    })
-            } else {
-                return;
-                this.loading = false
-            }
-
+        {
+          text: "Cod Amount",
+          value: "cod_amount"
+        },
+        {
+          text: "Quantity",
+          value: "amount_ordered"
+        },
+        {
+          text: "Status",
+          value: "status"
+        },
+        {
+          text: "Derivery Date",
+          value: "derivery_date"
+        },
+        {
+          text: "Charges",
+          value: "charges"
+        },
+        {
+          text: "Created",
+          value: "created_at"
         },
 
-        close() {
-            this.dialog1 = this.dialog = this.pdialog2 = this.updateModal = this.showdialog1 =
-                this.UpdateShipmentModel = this.AssignDriverModel = this.AssignBranchModel = this.trackModel = this.csvModel = this.chargeModal = this.RowModal = this.printModal = false;
+        {
+          text: "Waybill Printed",
+          value: "created_at"
         },
-        filReset() {
-            this.selectAss = {
-                Assigned: 'All',
-            }
-            this.selectItem = {
-                name: 'All',
-            }
-            this.selectCountry = {
-                country_id: 'All',
-                id: 'all'
-            }
-            this.select = {
-                branch_name: 'All',
-                id: 'all'
-            }
-            this.form.start_date = this.form.end_date = ''
-            this.getShipments()
+        {
+          text: "Receipt Printed",
+          value: "name"
         },
-
-        getCustomer() {
-            axios
-                .get("getCustomer")
-                .then(response => {
-                    this.Allcustomers = response.data;
-                })
-                .catch(error => {
-                    this.errors = error.response.data.errors;
-                });
-        },
-        getDrivers() {
-            axios
-                .get("/getDrivers")
-                .then(response => {
-                    this.AllDrivers = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.errors = error.response.data.errors;
-                });
-        },
-        getBranch() {
-            axios
-                .get("/getBranchEger")
-                .then(response => {
-                    this.AllBranches = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.errors = error.response.data.errors;
-                });
-        },
-        getShipments() {
-            this.loading = true
-            this.between.start = 1;
-            this.between.end = 500;
-            axios
-                .get("/getShipments")
-                .then(response => {
-                    this.loading = false
-                    this.loader = false;
-                    this.AllShipments = response.data;
-                })
-                .catch(error => {
-                    this.loading = false
-                    this.loader = false;
-                    this.errors = error.response.data.errors;
-                });
-        },
-    },
-
-    created() {
-        eventBus.$on('selectClear', data => {
-            this.selected = [];
+        {
+          text: "Actions",
+          value: "name",
+          sortable: false
+        }
+      ],
+      selected: [],
+      AllRows: [],
+      selectStatus: [],
+      direction: "left",
+      Allcustomers: [],
+      shipment: {},
+      markers: [],
+      AllStatus: [],
+      shipmentsCount: null
+    };
+  },
+  methods: {
+    UpdateStatus() {
+      // alert(this.updateitedItem.id);
+      axios
+        .post(`/updateStatus/${this.updateitedItem.id}`, {
+          formobg: this.$data.updateitedItem,
+          address: this.$data.address
+        })
+        .then(response => {
+          this.resetForm();
+          // console.log(response);
+          this.message = "Updated";
+          this.color = "black";
+          this.snackbar = true;
+          // this.markers.push(response.data);
         });
     },
-    mounted() {
-        this.loader = true;
-        this.getBranch()
-        axios
-            .get("/getCountry")
-            .then(response => {
-                this.AllCountries = response.data;
-                this.loader = false;
-            })
-            .catch(error => {
-                console.log(error);
-                this.errors = error.response.data.errors;
-                this.loader = false;
-            });
-
-        axios.get('getShipmentsCount')
-            .then((response) => {
-                this.shipmentsCount = response.data
-            })
-            .catch((error) => {
-                this.errors = error.response.data.errors
-            })
-        axios.get('getStatuses')
-            .then((response) => {
-                this.AllStatus = response.data
-            })
-            .catch((error) => {
-                this.errors = error.response.data.errors
-            })
-            
-        this.getShipments()
+    resetForm() {
+      this.form = Object.assign({}, this.defaultForm);
+      this.$refs.form.reset();
     },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            if (vm.user.can['view shipments']) {
-                next();
-            } else {
-                next('/unauthorized');
-            }
+    openShipment() {
+      this.dialog = true;
+      this.getBranch();
+      this.getCustomer();
+      this.getDrivers();
+    },
+    addProduct() {
+      // alert(this.updateitedItem.id);
+      axios
+        .post(`/productAdd/${this.updateitedItem.id}`, this.$data.form)
+        .then(response => {
+          // console.log(response.data);
+          this.message = "Product Added";
+          this.color = "black";
+          this.snackbar = true;
+          this.resetForm();
+          this.AllProducts.push(response.data);
+          this.pdialog2 = false;
+        });
+    },
+    editShipment(key) {
+      // alert(key);
+      this.$children[2].list = this.AllShipments[key];
+      this.dialog1 = true;
+    },
+    openProduct(updateitedItem) {
+      this.pdialog2 = true;
+    },
+    UpdateItems(item) {
+      axios
+        .post(`/getcoordinatesArray/${item.id}`)
+        .then(response => (this.markers = response.data))
+        .catch(error => (this.errors = error.response.data.errors));
+      console.log(this.coordinatesArr);
+      this.updateitedItem = Object.assign({}, item);
+      this.updatedIndex = this.AllShipments.indexOf(item);
+      this.updateModal = true;
+    },
+    editItem(item) {
+      this.editedItem = Object.assign({}, item);
+      this.editedIndex = this.AllShipments.indexOf(item);
+      // console.log(this.editedItem);
+      this.dialog1 = true;
+    },
+    showDetails(item) {
+      eventBus.$emit("printEvent", item);
+    },
+    ShipmentTrack(item) {
+      this.shipment = Object.assign({}, item);
+      this.editedIndex = this.AllShipments.indexOf(item);
+      this.trackModel = true;
+    },
+    Shipcharges(item) {
+      this.shipment = Object.assign({}, item);
+      this.editedIndex = this.AllShipments.indexOf(item);
+      this.chargeModal = true;
+    },
+    openRow() {
+      this.RowModal = true;
+    },
+    ShipmentCsv() {
+      this.csvModel = true;
+      this.getCustomer();
+    },
+    deleteItem(item) {
+      const index = this.AllShipments.indexOf(item);
+      if (confirm("Are you sure you want to delete this item?")) {
+        axios
+          .delete(`/shipment/${item.id}`)
+          .then(response => {
+            this.message = "Deleted";
+            this.color = "black";
+            this.snackbar = true;
+            this.AllShipments.splice(index, 1);
+            // console.log(response);
+          })
+          .catch(error => (this.errors = error.response.data.errors));
+      }
+    },
+    notPrinted(item) {
+      this.editedItem = Object.assign({}, item);
+      this.editedIndex = this.AllShipments.indexOf(item);
+      (this.loading = true),
+        axios
+          .post(`/notprinted/${item.id}`)
+          .then(response => {
+            // this.printColor = 'red'
+            // this.loading = false,
+            this.getShipments();
+            this.message = "Not Printed";
+            this.color = "black";
+            this.snackbar = true;
+            // Object.assign(this.AllShipments[this.editedIndex], this.editedItem)
+            // console.log(response);
+          })
+          .catch(error => (this.errors = error.response.data.errors));
+    },
+    printed(item) {
+      this.editedItem = Object.assign({}, item);
+      this.editedIndex = this.AllShipments.indexOf(item);
+      (this.loading = true),
+        axios
+          .post(`/printed/${item.id}`)
+          .then(response => {
+            // this.printColor = 'green'
+            this.getShipments();
+            // this.loading = false,
+            this.message = "Printed";
+            this.color = "black";
+            this.snackbar = true;
+            // Object.assign(this.AllShipments[this.editedIndex], this.editedItem)
+            // console.log(response);
+          })
+          .catch(error => (this.errors = error.response.data.errors));
+    },
+    pending(item) {
+      this.editedItem = Object.assign({}, item);
+      this.editedIndex = this.AllShipments.indexOf(item);
+      (this.mloading = true),
+        axios
+          .post(`/pending/${item.id}`)
+          .then(response => {
+            // this.printColor = 'blue'
+            (this.mloading = false), (this.message = "Pending");
+            this.color = "black";
+            this.snackbar = true;
+            Object.assign(this.AllShipments[this.editedIndex], this.editedItem);
+            // console.log(response);
+          })
+          .catch(error => (this.errors = error.response.data.errors));
+    },
+    UpdateShipmentStatus(item) {
+      if (this.selected.length < 1) {
+        this.message = "please select a shipment";
+        this.color = "red";
+        this.snackbar = true;
+      } else {
+        this.UpdateShipmentModel = true;
+      }
+    },
+    assignDriver() {
+      if (this.selected.length < 1) {
+        this.message = "please select a shipment";
+        this.color = "red";
+        this.snackbar = true;
+      } else {
+        this.AssignDriverModel = true;
+        this.getDrivers();
+      }
+    },
+    assignBranch() {
+      if (this.selected.length < 1) {
+        this.message = "please select a shipment";
+        this.color = "red";
+        this.snackbar = true;
+      } else {
+        this.AssignBranchModel = true;
+        this.getBranch();
+      }
+    },
+    assignPrint() {
+      if (this.selected.length < 1) {
+        this.message = "please select a shipment";
+        this.color = "red";
+        this.snackbar = true;
+      } else {
+        this.printModal = true;
+      }
+    },
+    getTotal() {
+      this.gettotlaAmount = true;
+      if (this.form.quantity && this.form.price) {
+        this.form.total = this.form.quantity * this.form.price;
+      } else {
+        this.form.total = 0;
+      }
+    },
+    showalert() {
+      this.message = "success";
+      this.color = "indigo";
+      this.snackbar = true;
+    },
+    sort() {
+      this.loading = true;
+      axios
+        .post("filterShipment", {
+          select: this.select,
+          selectStatus: this.selectItem,
+          form: this.form,
+          selectCountry: this.selectCountry
         })
-    }
+        .then(response => {
+          this.loading = false;
+          this.AllShipments = response.data;
+        })
+        .catch(error => {
+          this.loading = false;
+          this.errors = error.response.data.errors;
+        });
+    },
+    next() {
+      this.loading = true;
+      this.between.start = parseInt(this.between.start) + 500;
+      this.between.end = parseInt(this.between.end) + 500;
+      axios
+        .post("betweenShipments", this.$data.between)
+        .then(response => {
+          this.loading = false;
+          this.AllShipments = response.data;
+        })
+        .catch(error => {
+          this.loading = false;
+          this.errors = error.response.data.errors;
+        });
+    },
+    previous() {
+      this.loading = true;
+      if (this.between.start >= 500) {
+        this.between.start = parseInt(this.between.start) - 500;
+        this.between.end = parseInt(this.between.end) - 500;
+        axios
+          .post("betweenShipments", this.$data.between)
+          .then(response => {
+            this.loading = false;
+            this.AllShipments = response.data;
+          })
+          .catch(error => {
+            this.loading = false;
+            this.errors = error.response.data.errors;
+          });
+      } else {
+        return;
+        this.loading = false;
+      }
+    },
 
-}
+    close() {
+      this.dialog1 = this.dialog = this.pdialog2 = this.updateModal = this.showdialog1 = this.UpdateShipmentModel = this.AssignDriverModel = this.AssignBranchModel = this.trackModel = this.csvModel = this.chargeModal = this.RowModal = this.printModal = false;
+    },
+    filReset() {
+      this.selectAss = {
+        Assigned: "All"
+      };
+      this.selectItem = {
+        name: "All"
+      };
+      this.selectCountry = {
+        country_id: "All",
+        id: "all"
+      };
+      this.select = {
+        branch_name: "All",
+        id: "all"
+      };
+      this.form.start_date = this.form.end_date = "";
+      this.getShipments();
+    },
+
+    getCustomer() {
+      axios
+        .get("getCustomer")
+        .then(response => {
+          this.Allcustomers = response.data;
+        })
+        .catch(error => {
+          this.errors = error.response.data.errors;
+        });
+    },
+    getDrivers() {
+      axios
+        .get("/getDrivers")
+        .then(response => {
+          this.AllDrivers = response.data;
+        })
+        .catch(error => {
+          console.log(error);
+          this.errors = error.response.data.errors;
+        });
+    },
+    getBranch() {
+      axios
+        .get("/getBranchEger")
+        .then(response => {
+          this.AllBranches = response.data;
+        })
+        .catch(error => {
+          console.log(error);
+          this.errors = error.response.data.errors;
+        });
+    },
+    getShipments() {
+      this.loading = true;
+      this.between.start = 1;
+      this.between.end = 500;
+      axios
+        .get("/getShipments")
+        .then(response => {
+          this.loading = false;
+          this.loader = false;
+          this.AllShipments = response.data;
+        })
+        .catch(error => {
+          this.loading = false;
+          this.loader = false;
+          this.errors = error.response.data.errors;
+        });
+    }
+  },
+
+  created() {
+    eventBus.$on("selectClear", data => {
+      this.selected = [];
+    });
+  },
+  mounted() {
+    this.loader = true;
+    this.getBranch();
+    axios
+      .get("/getCountry")
+      .then(response => {
+        this.AllCountries = response.data;
+        this.loader = false;
+      })
+      .catch(error => {
+        console.log(error);
+        this.errors = error.response.data.errors;
+        this.loader = false;
+      });
+
+    axios
+      .get("getShipmentsCount")
+      .then(response => {
+        this.shipmentsCount = response.data;
+      })
+      .catch(error => {
+        this.errors = error.response.data.errors;
+      });
+    axios
+      .get("getStatuses")
+      .then(response => {
+        this.AllStatus = response.data;
+      })
+      .catch(error => {
+        this.errors = error.response.data.errors;
+      });
+
+    this.getShipments();
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (vm.user.can["view shipments"]) {
+        next();
+      } else {
+        next("/unauthorized");
+      }
+    });
+  }
+};
 </script>
 
 <style>
-
 #create .speed-dial {
-    position: absolute;
+  position: absolute;
 }
 
 #create .btn--floating {
-    position: relative;
+  position: relative;
 }
 
 .btn__content i {
-    color: #fff !important;
-    width: 50px;
+  color: #fff !important;
+  width: 50px;
 }
 
 .speed-dial__list i {
-    color: #fff !important;
+  color: #fff !important;
 }
 </style>

@@ -88,7 +88,6 @@ export default {
             headers: [{
                     text: 'Town',
                     align: 'left',
-                    sortable: false,
                     value: 'town'
                 },
                 {

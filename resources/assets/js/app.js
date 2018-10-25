@@ -54,10 +54,9 @@ Vue.use(VueRouter)
 let myStatuses = require('./components/status/Status.vue');
 // axios.defaults.baseURL = 'http://courier.dev/api/getData';
 Vue.component('downloadExcel', JsonExcel)
-Vue.component('file-management', require('./components/upload/FileManagement.vue'));
-Vue.component('attachment-list', require('./components/upload/AttachmentList.vue'));
+// Vue.component('file-management', require('./components/upload/FileManagement.vue'));
+// Vue.component('attachment-list', require('./components/upload/AttachmentList.vue'));
 Vue.component('upload-list', require('./components/upload/Upload.vue'));
-// let dashboard = require('./components/Dashboard.vue');
 
 let myHeader = require('./components/include/Header.vue');
 let myUser = require('./components/users/User.vue');
@@ -91,6 +90,8 @@ let myDrivDash = require('./components/drivers/Dashboard.vue');
 
 let myDash = require('./components/App.vue');
 
+let myFilter = require('./components/scanner/Filter.vue');
+
 
 const routes = [
     // {path: '/', component: dashboard },
@@ -113,7 +114,6 @@ const routes = [
     {path: '/uploads', component: myUploadFile },
     {path: '/charges', component: myCharges },
     {path: '/towns', component: myTown },
-    {path: '/maps', component: myMap },
     {path: '/print', component: myPrintPdf },
     {path: '/status', component: myStatus },
     {path: '/country', component: myCountry },
@@ -125,6 +125,8 @@ const routes = [
 
     {path: '/', component: myDash },
     {path: '/statuses', component: myStatuses },
+
+    {path: '/filter', component: myFilter },
 
 ]
 const router = new VueRouter({
@@ -140,7 +142,7 @@ const app = new Vue({
         myBranch, myProfile, myCompany, myCustomer, mysubsicriber, myInvice, myReceipt,
         myReports, mybranchShip, myRoles, myscheduled, myTasks, myUploadFile, myCharges,
         myTown, myPrintPdf, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash, 
-        myunauth, myDash
+        myunauth, myDash, myFilter
     },
     data: {
     shipments: [],

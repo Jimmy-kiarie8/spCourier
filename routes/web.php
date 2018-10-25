@@ -203,6 +203,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('/Notyshpments/{id}', 'NotificationController@Notyshpments')->name('Notyshpments');
 	Route::post('/read', 'NotificationController@read')->name('read');
 
+	Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 	// Tasks
 	// Route::get('/getTasks', 'TaskController@getTasks')->name('getTasks');
@@ -223,9 +224,10 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('barcodeUpdate/{bar_code}', 'ScanController@barcodeUpdate')->name('barcodeUpdate');
 	Route::post('barcodeIn/{bar_code}', 'ScanController@barcodeIn')->name('barcodeIn');
 	Route::post('statusUpdate', 'ScanController@statusUpdate')->name('statusUpdate');
-	Route::post('statusUpdateIn', 'ScanController@statusUpdateIn')->name('statusUpdateIn');
-	Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
-
+	Route::post('filterR', 'ScanController@filterR')->name('filterR');
+	Route::post('getDelScan', 'ScanController@getDelScan')->name('getDelScan');
+	Route::post('getNotDelScan', 'ScanController@getNotDelScan')->name('getNotDelScan');
+	
 	Route::post('rows', 'RowsController@rows')->name('rows');
 	Route::get('getRows', 'RowsController@getRows')->name('getRows');
 	Route::post('notprinted/{id}', 'RowsController@notprinted')->name('notprinted');
@@ -281,7 +283,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('getRinderDelivered', 'DriverController@getRinderDelivered')->name('getRinderDelivered');
 	Route::get('getRinderCancled', 'DriverController@getRinderCancled')->name('getRinderCancled');
 
-	
+
 	Route::get('getBranchShipments', 'DashboardController@getBranchShipments')->name('getBranchShipments');
 	Route::get('getChartScheduled', 'DashboardController@getChartScheduled')->name('getChartScheduled');
 	Route::get('getChartDelivered', 'DashboardController@getChartDelivered')->name('getChartDelivered');
