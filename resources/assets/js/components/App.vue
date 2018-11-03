@@ -13,19 +13,18 @@
 </template>
 
 <script>
-import Dashboard from './Dashboard.vue'
-import DrDashboard from './customers/Dashboard.vue'
-import ClDashboard from './drivers/Dashboard.vue'
+import Dashboard from "./Dashboard.vue";
+import DrDashboard from "./customers/Dashboard.vue";
+import ClDashboard from "./drivers/Dashboard.vue";
 export default {
-    props: ['user'],
-    components: {
-        Dashboard,
-        DrDashboard,
-        ClDashboard
-    }
-}
+  props: ["user"],
+  components: {
+    Dashboard,
+    DrDashboard,
+    ClDashboard
+  }
+};
 </script>
 
 <style>
-
 </style>

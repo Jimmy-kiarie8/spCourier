@@ -15,69 +15,42 @@ use Mail;
 
 class EmailController extends Controller
 {
-    
-    public function verify($verifyToken) {
+
+    public function verify($verifyToken)
+    {
         $verifyToken = User::where('verifyToken', $verifyToken)->firstOrFail()
             ->update(['verifyToken' => null, 'status' => '1']);
         return redirect()->route('login')->with('success', 'Email verified please login');
         // $this->guard()->login($user);
         // Auth::login($verifyToken->verifyToken);
     }
-    public function sendmail(SendRequest $request){
+    public function sendmail(SendRequest $request)
+    {
         // return $request->all();
         $subscribers = Subscriber::all();
-        
+
         foreach ($subscribers as $subscriber) {
-            Mail::queue( new CampaignReady($subscriber, $request->title, $request->content));
+            Mail::queue(new CampaignReady($subscriber, $request->title, $request->content));
         }
-        return $subscribers;       
+        return $subscribers;
     }
 
-    public function subscribe(SubscribeRequest $request){
+    public function subscribe(SubscribeRequest $request)
+    {
         // return $request->all();
         $subscriber = new Subscriber;
         $subscriber->name = $request->name;
         $subscriber->email = $request->email;
         $subscriber->user_id = Auth::id();
         $subscriber->save();
-        $mail = Mail::send('emails.subscribed', ['name' => $subscriber->name ], function ($message) use ( $subscriber ){
+        $mail = Mail::send('emails.subscribed', ['name' => $subscriber->name], function ($message) use ($subscriber) {
             $message->from('courier@courier.com', 'Email Platform');
-            $message->to( $subscriber->email );
+            $message->to($subscriber->email);
         });
 
         return $subscriber;
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        // return $request->all();
-        $event = new Email;
-        $event->title = $request->title;
-        $event->user_id = Auth::id();
-        $event->save();
-        event(new eventEvent($event));
-        return $request->all();
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Email  $email
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Email $email)
-    {
-        //
-    }
-
+    
     /**
      * Remove the specified resource from storage.
      *
@@ -96,28 +69,6 @@ class EmailController extends Controller
         return $id;
     }
 
-
-    // Notifications
-    public function slack()
-    {
-        foreach (Auth()->user()->unreadNotifications as $notification){
-            $converted = class_basename($notification->data['thread']);
-            $convert = class_basename($notification->data['user']['name']);
-            
-        }
-        $notification = ['converted' => $converted, 'convert' => $convert] ;
-        return $notification;
-        
-        
-        // return view('calendar', compact('notification'));
-    }
-
-    public function slacks()
-    {
-       // Auth::user()->notify(new Slack);
-        $thread = 'some notifications';
-        Notification::send(Auth::user(), new Slack($thread));
-    }
 
     public function getsubscribers()
     {

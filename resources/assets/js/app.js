@@ -27,6 +27,7 @@ import { abilitiesPlugin } from '@casl/vue'
 import VueCharts from 'vue-chartjs'
 import { Bar, Line } from 'vue-chartjs'
 window.eventBus = new Vue()
+import Pusher from 'pusher-js';
 
 import jsPDF from 'jsPDF'
 // vue.use(Vuetify, {
@@ -91,6 +92,7 @@ let myDrivDash = require('./components/drivers/Dashboard.vue');
 let myDash = require('./components/App.vue');
 
 let myFilter = require('./components/scanner/Filter.vue');
+let myChatty = require('./components/chat/Chatty.vue');
 
 
 const routes = [
@@ -127,6 +129,7 @@ const routes = [
     {path: '/statuses', component: myStatuses },
 
     {path: '/filter', component: myFilter },
+    {path: '/chatty', component: myChatty },
 
 ]
 const router = new VueRouter({
@@ -142,7 +145,7 @@ const app = new Vue({
         myBranch, myProfile, myCompany, myCustomer, mysubsicriber, myInvice, myReceipt,
         myReports, mybranchShip, myRoles, myscheduled, myTasks, myUploadFile, myCharges,
         myTown, myPrintPdf, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash, 
-        myunauth, myDash, myFilter
+        myunauth, myDash, myFilter, myChatty
     },
     data: {
     shipments: [],
@@ -151,10 +154,8 @@ const app = new Vue({
     query: '',
     chats: '',
 }, 
-created() {
-    // const userId = ${meta.}
-},
 methods: {
+
     search: function() {
         // Clear the error message.
         this.error = '';
@@ -173,5 +174,12 @@ methods: {
             this.query = '';
         });
     }
-}
+},
+
+// mounted() {
+//     Echo.private('chat_channel')
+//         .listen('chat_save', (e) => {
+//             console.log(e);
+//         });
+// }
 });

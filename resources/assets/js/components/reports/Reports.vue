@@ -16,6 +16,7 @@
                         <h1>Clients Reports</h1>
                         <hr>
                         <!-- <form action="userDateExpo" method="post"> -->
+                        <label for="">Client</label>
                         <select class="custom-select custom-select-md col-md-12 col-md-12" v-model="Client.client_id" style="font-size: 13px;">
                                     <option v-for="customer in Allcustomers" :value="customer.id" :key="customer.id">{{ customer.name }}</option>
                             </select> Between
@@ -62,9 +63,9 @@
                                             <option value="Transit">Transit</option>
                                             <option value="Waiting for Scan">Waiting for scan</option>
                                         </select> Between -->
-                            <div class="custom-select custom-select-md col-md-12">
+                            <div>
                                 <label for="">Status</label>
-                                <select v-model="updateitedItem.status" class="custom-select custom-select-md col-md-12">
+                                <select v-model="statusR.status" class="custom-select custom-select-md col-md-12">
                                     <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
                                 </select>
                             </div>
@@ -89,6 +90,7 @@
                         <h1>Branch Reports</h1>
                         <hr>
                         <!-- <form action="DriverReport" method="post"> -->
+                        <label for="">Branch</label>
                         <select class="custom-select custom-select-md col-md-12" v-model="branchR.branch_id">
                                     <option v-for="branch in AllBranches" :key="branch.id" :value="branch.id">{{ branch.branch_name }}</option>
                                 </select> Between
@@ -113,6 +115,7 @@
                         <h1>Rider Reports</h1>
                         <hr>
                         <!-- <form action="DriverReport" method="post"> -->
+                        <label for="">Rider</label>
                         <select class="custom-select custom-select-md col-md-12" v-model="Rinder.rinder_id">
                                     <option v-for="driver in AllDrivers" :key="driver.id" :value="driver.id">{{ driver.name }}</option>
                                 </select> Between
@@ -129,10 +132,15 @@
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
                             <!-- </form> -->
+                            <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
+                                {{ message }}
+                                <v-icon dark right>check_circle</v-icon>
+                            </v-snackbar>
                     </v-card>
                 </v-flex>
             </v-layout>
         </v-layout>
+
         <!-- </div> -->
     </v-container>
 </v-content>
@@ -163,6 +171,10 @@ export default {
             Bdown: false,
             Sdown: false,
             Rdown: false,
+            snackbar: false,
+            timeout: 5000,
+            message: 'Success',
+            color: 'black',
             json_fields: {
                 'Order Id': 'order_id',
                 'Sender Name': 'sender_name',
@@ -191,11 +203,22 @@ export default {
     methods: {
         ClientReport() {
             this.Cload = true
+            this.AllClientR = []
             axios.post("userDateExpo", this.$data.Client)
                 .then(response => {
-                    this.Cdown = true
                     this.Cload = false
-                    this.AllClientR = response.data;
+                    this.AllClientR = response.data
+                    if (this.AllClientR.length < 1) {
+                        this.message = 'no data'
+                        this.color = 'red'
+                        this.snackbar = true
+                        this.Cdown = false
+                    } else {
+                        this.Cdown = true
+                        this.message = 'success'
+                        this.color = 'black'
+                        this.snackbar = true
+                    }
                 })
                 .catch(error => {
                     this.Cload = false
@@ -205,11 +228,23 @@ export default {
 
         AllStatusR() {
             this.Sload = true
+            this.AllStatus = []
             axios.post("displayReport", this.$data.statusR)
                 .then(response => {
-                    this.Sdown = true
                     this.Sload = false
-                    this.AllStatus = response.data;
+                    this.AllStatus = response.data
+                    // console.log(response.data)
+                    if (this.AllStatus.length < 1) {
+                        this.message = 'no data'
+                        this.color = 'red'
+                        this.snackbar = true
+                        this.Sdown = false
+                    } else {
+                        this.Sdown = true
+                        this.message = 'success'
+                        this.color = 'black'
+                        this.snackbar = true
+                    }
                 })
                 .catch(error => {
                     this.Sload = false
@@ -219,11 +254,22 @@ export default {
 
         AllRinderR() {
             this.Rload = true
+            this.AllRinder = []
             axios.post("DriverReport", this.$data.Rinder)
                 .then(response => {
-                    this.Rdown = true
                     this.Rload = false
-                    this.AllRinder = response.data;
+                    this.AllRinder = response.data
+                    if (this.AllRinder.length < 1) {
+                        this.message = 'no data'
+                        this.color = 'red'
+                        this.snackbar = true
+                        this.Rdown = false
+                    } else {
+                        this.Rdown = true
+                        this.message = 'success'
+                        this.color = 'black'
+                        this.snackbar = true
+                    }
                 })
                 .catch(error => {
                     this.Rload = false
@@ -232,11 +278,23 @@ export default {
         },
         AllbranchR() {
             this.Bload = true
+            this.AllBranchD = []
             axios.post("branchesExpo", this.$data.branchR)
                 .then(response => {
-                    this.Bdown = true
                     this.Bload = false
                     this.AllBranchD = response.data;
+                    if (this.AllBranchD.length < 1) {
+                        this.message = 'no data'
+                        this.color = 'red'
+                        this.snackbar = true
+                        this.Bdown = false
+                    } else {
+                        this.Bdown = true
+                        this.message = 'success'
+                        this.color = 'black'
+                        this.snackbar = true
+                        this.AllRinder = response.data
+                    }
                 })
                 .catch(error => {
                     this.Bload = false
@@ -277,7 +335,7 @@ export default {
                 this.errors = error.response.data.errors;
             })
 
-            axios.get('getStatuses')
+        axios.get('getStatuses')
             .then((response) => {
                 this.statuses = response.data
             })

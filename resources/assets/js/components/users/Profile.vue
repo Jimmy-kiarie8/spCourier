@@ -11,26 +11,15 @@
                         <v-card>
                             <img :src="avatar" style="width: 100px; height: 100px; border-radius: 50%; text-align:center; margin-top 70px;margin-left-100px">
                             <v-divider></v-divider>
-                            <h6 class="text-center" color="green">{{ user.name }}</h6>
+                            <h5 class="text-center">{{ user.name }}</h5>
+                            <h6 class="text-center" v-for="role in user.roles" :key="role.id">{{ role.name }}</h6>
                             <v-btn color="red" darken-1 raised @click="onPickFile" style="color: #fff;">Upload</v-btn>
                             <input type="file" @change="Getimage" accept="image/*" style="display: none" ref="fileInput">
                             <img v-show="imagePlaced" :src="avatar" style="width: 200px; height: 200px;">
                             <v-btn @click="upload" flat v-show="imagePlaced" :loading="loading" :disabled="loading">Upload</v-btn>
                             <v-btn @click="cancle" flat v-show="imagePlaced">Cancel</v-btn>
                         </v-card>
-                        <v-card-text>
-                            <v-form ref="form" @submit.prevent>
-                                <v-flex xs12 sm12>
-                                    <v-text-field :append-icon="e1 ? 'visibility_off' : 'visibility'" :type="e1 ? 'password' : 'text'" v-model="form.password" name="input-10-2" label="Enter your password" hint="At least 6 characters" min="8" value="" class="input-group--focused"></v-text-field>
-                                    <small class="has-text-danger" v-if="errors.password">{{ errors.password[0] }}</small>
-                                </v-flex>
-                            </v-form>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-btn :disabled="ploading" :loading="ploading" flat color="primary" @click="passwordChange">Change Password</v-btn>
-                        </v-card-actions>
-                        <v-card>
-                        </v-card>
+
                     </v-flex>
 
                     <!-- User Form -->
@@ -72,6 +61,18 @@
                                     <v-btn :disabled="loading" :loading="loading" flat color="primary" @click="update">Submit</v-btn>
                                 </v-card-actions>
                             </v-form>
+                            <v-divider></v-divider>
+                            <v-card-text>
+                                <v-form ref="form" @submit.prevent>
+                                    <v-flex xs12 sm12>
+                                        <v-text-field :append-icon="e1 ? 'visibility_off' : 'visibility'" :type="e1 ? 'password' : 'text'" v-model="form.password" name="input-10-2" label="Enter your password" hint="At least 6 characters" min="8" value="" class="input-group--focused"></v-text-field>
+                                        <small class="has-text-danger" v-if="errors.password">{{ errors.password[0] }}</small>
+                                    </v-flex>
+                                </v-form>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-btn :disabled="ploading" :loading="ploading" flat color="primary" @click="passwordChange">Change Password</v-btn>
+                            </v-card-actions>
                         </v-card>
                     </v-flex>
                     <!-- User Form -->
@@ -198,9 +199,7 @@ export default {
             then((response) => {
                     // console.log(response);
                     this.loading = false
-                    this.close;
-                    this.$emit('alertRequest');
-
+                    this.snackbar = true
                 })
                 .catch((error) => {
                     this.errors = error.response.data.errors

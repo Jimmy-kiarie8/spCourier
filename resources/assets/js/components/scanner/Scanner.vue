@@ -6,7 +6,7 @@
                 <span>{{message}}</span>
                 <v-icon dark>{{ icon }}</v-icon>
             </v-snackbar>
-            <v-card> 
+            <v-card>
                 <!-- <small class="has-text-danger" v-if="errors.form.status_in">{{ errors.status_in[0] }}</small><br>
                 <small class="has-text-danger" v-if="errors.form.rider_in">{{ errors.rider_in[0] }}</small><br>
                 <small class="has-text-danger" v-if="errors.form.status_out">{{ errors.status_out[0] }}</small><br>
@@ -64,9 +64,6 @@
                             <v-container grid-list-md text-xs-center>
                                 <h2>Out Scan</h2>
                                 <v-layout row wrap>
-                                    <!-- <v-flex xs6 sm6>
-                                        <v-text-field v-model="form_out.scan_date_out" :type="'date'" color="blue darken-2" label="Date" required></v-text-field>
-                                    </v-flex> -->
                                     <div class="form-group col-md-4">
                                         <label for="">Status</label>
                                         <select v-model="form_out.status_out" class="custom-select custom-select-md col-md-12">
@@ -83,10 +80,14 @@
                                         <label for="inputAddress2">Location</label>
                                         <input type="text" class="form-control" id="inputAddress2" placeholder="Location" v-model="form_out.location_out">
                                     </div>
-                                        <div class="form-group col-md-12">
-                                            <label for="inputCity">Remarks</label>
-                                            <textarea class="form-control" v-model="form_out.remarks_out" placeholder="Remarks" rows="3"></textarea>
-                                        </div>
+                                    
+                                    <v-flex xs6 sm6>
+                                        <v-text-field v-model="form_out.scan_date_out" :type="'date'" color="blue darken-2" label="Date" required></v-text-field>
+                                    </v-flex> 
+                                    <div class="form-group col-md-12">
+                                        <label for="inputCity">Remarks</label>
+                                        <textarea class="form-control" v-model="form_out.remarks_out" placeholder="Remarks" rows="3"></textarea>
+                                    </div>
                                 </v-layout>
                                 <v-layout row wrap>
                                     <v-flex xs12 sm12>
@@ -126,15 +127,16 @@
                             <td class="text-xs-right">{{ props.item.client_name }}</td>
                             <td class="text-xs-right">{{ props.item.client_address }}</td>
                             <td class="text-xs-right">{{ props.item.client_phone }}</td>
+                            <td class="text-xs-right">{{ props.item.derivery_date }}</td>
                             <td class="text-xs-right">{{ props.item.speciial_instruction }}</td>
-                            <td class="justify-center layout px-0">
+                            <!-- <td class="justify-center layout px-0">
                                 <v-tooltip bottom>
                                     <v-btn slot="activator" icon class="mx-0" @click="assignDriver(props.item)">
                                         <v-icon small color="blue darken-2">edit</v-icon>
                                     </v-btn>
                                     <span>Update</span>
                                 </v-tooltip>
-                            </td>
+                            </td> -->
                         </template>
                         <v-alert slot="no-results" :value="true" color="error" icon="warning">
                             Your search for "{{ search }}" found no results.
@@ -171,7 +173,7 @@ export default {
                 rider_out: '',
                 bar_code_out: '',
                 status_out: '',
-                // scan_date_out: '',
+                scan_date_out: '',
                 remarks_out: '',
                 location_out: ''
             },
@@ -216,13 +218,17 @@ export default {
                     value: 'client_phone'
                 },
                 {
+                    text: 'Delivery date',
+                    value: 'derivery_date'
+                },
+                {
                     text: 'Special Instructions',
                     value: 'speciial_instruction'
                 },
-                {
-                    text: 'Actions',
-                    sortable: false
-                }
+                // {
+                //     text: 'Actions',
+                //     sortable: false
+                // }
             ],
         }
     },
@@ -293,7 +299,7 @@ export default {
                     this.form_out.rider_out = ''
                     this.form_out.bar_code_out = ''
                     this.form_out.status_out = ''
-                    // this.form_out.scan_date_out = ''
+                    this.form_out.scan_date_out = ''
                     this.form_out.remarks_out = ''
                     this.form_out.location_out = ''
                 })

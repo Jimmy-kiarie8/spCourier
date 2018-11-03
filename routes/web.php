@@ -12,7 +12,9 @@ use Illuminate\Support\Carbon;
 | contains the "web" middleware group. Now create something great!
 |
  */
-
+// Route::get('scheduler', function (){
+// 	\Illuminate\Support\Facades\Artisan::call('notifications:SchedueledShipment');
+//  });
 Route::get('scheduler', function () {
 	\Illuminate\Support\Facades\Artisan::call('schedule:run');
 });
@@ -166,13 +168,13 @@ Route::group(['middleware' => ['auth']], function () {
 
 	// E-MAILS
 	Route::post('/sendmail', 'EmailController@sendmail')->name('sendmail');
-	Route::post('/getsubscribers', 'EmailController@getsubscribers')->name('getsubscribers');
+	Route::get('/getsubscribers', 'EmailController@getsubscribers')->name('getsubscribers');
 	Route::post('/subscribe', 'EmailController@subscribe')->name('subscribe');
 	Route::post('/refresh/{id}', 'EmailController@refresh')->name('refresh');
 
 
-	Route::get('/slack', 'EmailController@slack');
-	Route::get('/slacks', 'EmailController@slacks');
+	// Route::get('/slack', 'EmailController@slack');
+	// Route::get('/slacks', 'EmailController@slacks');
 
 	Route::get('/getunsubscribed', 'EmailController@getunsubscribed')->name('getunsubscribed');
 
@@ -223,13 +225,15 @@ Route::group(['middleware' => ['auth']], function () {
 
 	Route::post('barcodeUpdate/{bar_code}', 'ScanController@barcodeUpdate')->name('barcodeUpdate');
 	Route::post('barcodeIn/{bar_code}', 'ScanController@barcodeIn')->name('barcodeIn');
+	Route::post('statusUpdateIn', 'ScanController@statusUpdateIn')->name('statusUpdateIn');
 	Route::post('statusUpdate', 'ScanController@statusUpdate')->name('statusUpdate');
 	Route::post('filterR', 'ScanController@filterR')->name('filterR');
 	Route::post('getDelScan', 'ScanController@getDelScan')->name('getDelScan');
 	Route::post('getNotDelScan', 'ScanController@getNotDelScan')->name('getNotDelScan');
-	
+
 	Route::post('rows', 'RowsController@rows')->name('rows');
 	Route::get('getRows', 'RowsController@getRows')->name('getRows');
+	Route::get('getAllRows', 'RowsController@getAllRows')->name('getAllRows');
 	Route::post('notprinted/{id}', 'RowsController@notprinted')->name('notprinted');
 	Route::post('printed/{id}', 'RowsController@printed')->name('printed');
 
@@ -303,5 +307,11 @@ Route::group(['middleware' => ['auth']], function () {
 
 	Route::get('getStatuses', 'StatusController@getStatuses')->name('getStatuses');
 	Route::get('getStat', 'StatusController@getStat')->name('getStat');
+
+
+	// chatty
+	Route::post('getUserConvById/{id}', 'ChattyController@getUserConvById')->name('getUserConvById');
+	Route::post('saveUserChat/{id}', 'ChattyController@saveUserChat')->name('saveUserChat');
+
 });
 

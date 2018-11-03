@@ -11,10 +11,10 @@ See Shipments
 @endcomponent
 
 @component('mail::table')
-| Client Name        | Phone         | Email  | delivery Date 	 |
+| Waybill        | Client Name        | Phone         | Email  | delivery Date 	 |
 | ------------------ |:-------------:| ---------:|:---------:|
 @foreach  ($shipment as $value)
-| {{ $value->client_name }}   | {{ $value->client_phone }} | {{ $value->client_email }} | {{ $value->derivery_date }} |
+| {{ $value->bar_code }}   | {{ $value->client_name }}   | {{ $value->client_phone }} | {{ $value->client_email }} | {{ $value->derivery_date }} |
 @endforeach
 @endcomponent
 

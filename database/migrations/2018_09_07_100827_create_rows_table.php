@@ -16,7 +16,7 @@ class CreateRowsTable extends Migration
         Schema::create('rows', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
-            $table->text('rows');
+            $table->string('rows');
             $table->timestamps();
         });
     }

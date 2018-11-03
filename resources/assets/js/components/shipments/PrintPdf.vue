@@ -84,7 +84,7 @@ export default {
                 doc.text(100, 120, 'Sender Details', null, null, 'center');
                 doc.setFontSize(12)
                 doc.rect(18, 125, 170, 20);
-                doc.text(120, 132, 'Sent By: SpeedBall Courier Services');
+                doc.text(20, 132, 'Sent By: SpeedBall Courier Services');
                 doc.text(120, 132, 'Phone: +254728492446');
                 doc.text(20, 139, 'Email: info@speedballcourier.com');
                 // Client Details

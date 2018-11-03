@@ -43,8 +43,9 @@ class ScanController extends Controller
 		$rider_out = $request->form['rider_out'];
 		$location = $request->form['location_out'];
 		$assign_date = date("Y-m-d");
+		$scan_date_out = $request->form['scan_date_out'];
 		// dd($assign_date);
-		$shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'driver' => $rider_out, 'assign_date' => $assign_date]);
+		$shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'driver' => $rider_out, 'assign_date' => $assign_date, 'derivery_date' => $scan_date_out]);
 		$shipStatus = Shipment::whereIn('id', $id)->get();
 		foreach ($shipStatus as $statuses) {
 			$statusUpdate = new ShipmentStatus;
@@ -83,7 +84,7 @@ class ScanController extends Controller
 		$this->validate($request, [
 			'form.status_in' => 'required',
 			'form.rider_in' => 'required',
-			
+
 		]);
 		$id = [];
 		foreach ($request->scan as $selectedItems) {
@@ -130,7 +131,7 @@ class ScanController extends Controller
 		$end_date = $request->form['end_date'];
 		return Shipment::where('driver', $driver)->where('status', 'Delivered')->whereBetween('assign_date', [$start_date, $end_date])->take(500)->latest()->count();
 	}
-	
+
 	public function getNotDelScan(Request $request)
 	{
 		$driver = $request->selectRider['id'];

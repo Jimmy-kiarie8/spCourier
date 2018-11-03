@@ -63,6 +63,7 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
         ],
+    ],
 
         // 'gcs' => [
         //     'driver' => 'gcs',
@@ -72,7 +73,13 @@ return [
         //     'path_prefix' => env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', null), // optional: /default/path/to/apply/in/bucket
         //     'storage_api_uri' => env('GOOGLE_CLOUD_STORAGE_API_URI', 'https://storage.googleapis.com/my-buckets/'), // see: Public URLs below
 
-    ],
+    //     'google' => [ 
+    //         'driver' => 's3', 
+    //         'key' => 'xxx', 
+    //         'secret' => 'xxx', 
+    //         'bucket' => 'qrnotesfiles', 
+    //         'base_url'=>'https://storage.googleapis.com' ]
+
 
 ];
 

@@ -30,34 +30,34 @@
                 <div id="scrolling-techniques" class="scroll-y" style="max-height: 990px;">
                     <v-container>
                         <v-toolbar dark color="primary" v-if="shipFilter.length > 0">
-                        <!-- <v-toolbar-side-icon></v-toolbar-side-icon> -->
-                        <v-toolbar-title class="white--text">Orders</v-toolbar-title>
-                        <v-spacer></v-spacer>
-                        <v-tooltip bottom>
-                            <v-btn slot="activator" color="info darken-2" class="mx-0">{{ shipFilter.length }}
-                                <v-icon color="white darken-2" small>check_circle</v-icon>
-                            </v-btn>
-                            <span>Orders</span>
-                        </v-tooltip>
-                        <v-divider vertical></v-divider>
-                        <v-divider vertical></v-divider>
-                        <v-divider vertical></v-divider>
-                        <v-tooltip bottom>
-                            <v-btn slot="activator" color="green darken-2" class="mx-0">{{ AllDelShip }}
-                                <v-icon color="white darken-2" small>check_circle</v-icon>
-                            </v-btn>
-                            <span>Delivered</span>
-                        </v-tooltip>
-                        <v-divider vertical></v-divider>
-                        <v-divider vertical></v-divider>
-                        <v-divider vertical></v-divider>
-                        <v-tooltip bottom>
-                            <v-btn slot="activator" color="brown darken-2" class="mx-0">{{ AllPe }}
-                                <v-icon color="white darken-2" small>block</v-icon>
-                            </v-btn>
-                            <span>Pending</span>
-                        </v-tooltip>
-                    </v-toolbar>
+                            <!-- <v-toolbar-side-icon></v-toolbar-side-icon> -->
+                            <v-toolbar-title class="white--text">Orders</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                            <v-tooltip bottom>
+                                <v-btn slot="activator" color="info darken-2" class="mx-0">{{ shipFilter.length }}
+                                    <v-icon color="white darken-2" small>check_circle</v-icon>
+                                </v-btn>
+                                <span>Orders</span>
+                            </v-tooltip>
+                            <v-divider vertical></v-divider>
+                            <v-divider vertical></v-divider>
+                            <v-divider vertical></v-divider>
+                            <v-tooltip bottom>
+                                <v-btn slot="activator" color="green darken-2" class="mx-0">{{ AllDelShip }}
+                                    <v-icon color="white darken-2" small>check_circle</v-icon>
+                                </v-btn>
+                                <span>Delivered</span>
+                            </v-tooltip>
+                            <v-divider vertical></v-divider>
+                            <v-divider vertical></v-divider>
+                            <v-divider vertical></v-divider>
+                            <v-tooltip bottom>
+                                <v-btn slot="activator" color="brown darken-2" class="mx-0">{{ AllPe }}
+                                    <v-icon color="white darken-2" small>block</v-icon>
+                                </v-btn>
+                                <span>Pending</span>
+                            </v-tooltip>
+                        </v-toolbar>
                         <v-card v-if="shipFilter.length > 0" style="margin-top: 60px;">
                             <v-card-title>
                                 <download-excel :data="shipFilter" :fields="json_fields">
@@ -73,14 +73,19 @@
                                     <v-spacer></v-spacer>
                                     <!-- <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field> -->
                             </v-card-title>
-                            <v-data-table :headers="headers" :items="shipFilter" class="elevation-1" :loading="loading">
+                            <v-data-table :headers="headers" :items="shipFilter" select-all class="elevation-1" v-model="selected" :loading="loading">
                                 <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
                                 <template slot="items" slot-scope="props">
+                                    <td>
+                                        <v-checkbox v-model="props.selected" primary></v-checkbox>
+                                    </td>
                                     <td>{{ props.item.bar_code }}</td>
                                     <td class="text-xs-right">{{ props.item.cod_amount }}</td>
                                     <td class="text-xs-right">{{ props.item.client_name }}</td>
                                     <td class="text-xs-right">{{ props.item.client_address }}</td>
                                     <td class="text-xs-right">{{ props.item.client_phone }}</td>
+                                    <td class="text-xs-right">{{ props.item.status }}</td>
+                            <td class="text-xs-right">{{ props.item.derivery_date }}</td>
                                     <td class="text-xs-right">{{ props.item.speciial_instruction }}</td>
                                 </template>
                                 <!-- <v-alert slot="no-results" :value="true" color="error" icon="warning">
@@ -94,7 +99,7 @@
             </div>
         </v-layout>
     </v-container>
-    <UpdateShipmentStatus :UpdateShipmentStatus="UpdateShipmentModel" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="shipFilter"></UpdateShipmentStatus>
+    <UpdateShipmentStatus :UpdateShipmentStatus="UpdateShipmentModel" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></UpdateShipmentStatus>
 </v-content>
 </template>
 
@@ -106,6 +111,7 @@ export default {
     },
     data() {
         return {
+            selected: [],
             AllRiders: [],
             errors: {},
             shipFilter: [],
@@ -147,6 +153,14 @@ export default {
                 {
                     text: 'Client Phone',
                     value: 'client_phone'
+                },
+                {
+                    text: 'Status',
+                    value: 'status'
+                },
+                {
+                    text: 'Delivery date',
+                    value: 'derivery_date'
                 },
                 {
                     text: 'Special Instructions',
@@ -198,7 +212,7 @@ export default {
         },
 
         UpdateShipmentStatus(item) {
-            if (this.shipFilter.length < 1) {
+            if (this.selected.length < 1) {
                 this.message = "at least one shipment is need";
                 this.color = "red";
                 this.snackbar = true;
@@ -243,6 +257,16 @@ export default {
             this.UpdateShipmentModel = false;
         },
     },
+    
+  created() {
+    eventBus.$on("selectClear", data => {
+        this.snackbar = true
+        this.message = 'success'
+        this.color = 'black'
+        this.selected = [];
+        this.filterR()
+    });
+  },
     mounted() {
         this.loader = true
         axios.get('getDrivers')

@@ -12,7 +12,8 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Auth;
 
-class User extends Authenticatable {
+class User extends Authenticatable
+{
 	use Notifiable, SoftDeletes;
 	use HasRoles;
 	public $with = ['roles'];
@@ -39,41 +40,44 @@ class User extends Authenticatable {
 	/**
 	 * The roles that belong to the user.
 	 */
-	public function country() {
+	public function country()
+	{
 		return $this->belongsToMany('App\Country');
 	}
-	
-	public function branch() {
+
+	public function branch()
+	{
 		return $this->belongsTo('App\Branch');
 	}
 
-    public function verified()
-    {
-        return $this->verifyToken === null;
-    }
-
-    public function sendVerificationEmail()
-    {
-        $this->notify(new verifyEmail($this));
-	}
-	
-	
-	public function documents() {
-		return $this->hasMany('App\Attachment', 'client_id');	
-	}
-
-	public function row()
+	public function verified()
 	{
-		return $this->hasOne('App\Rows', 'user_id');
+		return $this->verifyToken === null;
+	}
+
+	public function sendVerificationEmail()
+	{
+		$this->notify(new verifyEmail($this));
+	}
+
+
+	public function documents()
+	{
+		return $this->hasMany('App\Attachment', 'client_id');
+	}
+
+	public function rows()
+	{
+		return $this->hasMany('App\Rows');
 	}
 
 	/**
-     * Get all user permissions.
-     *
-     * @return bool
-     */
-    public function getAllPermissionsAttribute()
-    {
-        return $this->getAllPermissions();
-    }
+	 * Get all user permissions.
+	 *
+	 * @return bool
+	 */
+	public function getAllPermissionsAttribute()
+	{
+		return $this->getAllPermissions();
+	}
 }

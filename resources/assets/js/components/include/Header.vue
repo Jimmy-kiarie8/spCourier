@@ -190,6 +190,12 @@
                                 </v-list-tile-action>
                                 <v-list-tile-title>Charges</v-list-tile-title>
                             </router-link>
+                            <router-link to="/statuses" class="v-list__tile theme--light" style="text-decoration: none">
+                                <v-list-tile-action>
+                                    <v-icon>dialpad</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title>Status</v-list-tile-title>
+                            </router-link>
                         </v-list-group>
                     </v-card>
                 </template>

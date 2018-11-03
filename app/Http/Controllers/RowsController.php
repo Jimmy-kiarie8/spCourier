@@ -9,25 +9,43 @@ use Auth;
 
 class RowsController extends Controller
 {
-    public function getRows()
-    {
-        // $rows = Auth::user()->row;
-		// return unserialize($rows->rows);  
-		return;
-    }
+	public function getRows()
+	{
+		$A_row = Auth::user()->rows;
+		$rows_select = [];
+		foreach ($A_row as $row) {
+			$rows_select[] = $row->text;
+		}
+		$arr_row = Rows::select('text')->get();
+		$to_arr = $arr_row->toArray();
+		$arr_flat = array_flatten($to_arr);
+		$row_res = [];
+		foreach ($arr_row as $row) {
+			if (in_array($row->text, $rows_select)) {
+				$row_res[] = [$row->text => true];
+			} else {
+				$row_res[] = [$row->text => false];
+			}
+		}
+		return array_collapse($row_res);
+	}
+	public function getAllRows()
+	{
+		return $arr_row = Auth::user()->rows;
+	}
+	public function rows(Request $request)
+	{
+		// return $request->all();
+		$all_rows = serialize($request->all());
+		return $rows = Rows::updateOrCreate(
+			['user_id' => Auth::id()],
+			['rows' => $all_rows]
+		);
+	}
 
-    public function rows(Request $request)
-    {
-        return $request->all();
-        $all_rows = serialize($request->all());
-        return $rows = Rows::updateOrCreate(
-            ['user_id' => Auth::id()],
-            ['rows' => $all_rows]
-        );
-    }
 
-
-    public function importBranch(Request $request) {
+	public function importBranch(Request $request)
+	{
 		// var_dump($request->all());die;
 		$user = User::find($request->client);
 		if ($request->file('shipment')) {
@@ -54,9 +72,9 @@ class RowsController extends Controller
 					Shipment::insert($dataArray);
 				}
 				return redirect('courier#/branches');
-				
+
 			}
-		}else{
+		} else {
 			var_dump('something went wrong');
 		}
 	}

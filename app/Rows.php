@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Rows extends Model
 {
     protected $fillable = [
-		'rows', 'user_id'
+		'text', 'user_id'
 	];
-    public function user()
+    public function users()
     {
-        return $this->hasOne('App\User');
+        return $this->hasMany('App\User');
     }
 }
