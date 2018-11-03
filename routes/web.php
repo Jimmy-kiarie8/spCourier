@@ -40,16 +40,8 @@ Route::get('signup/activate/{token}', 'AuthController@signupActivate');
 Auth::routes();
 
 Route::group(['middleware' => ['auth']], function () {
-	// Route::get('/courier/{name}', function () {
-	// 	return redirect('/');
-	// })->where('name', '[A-Za-z]+');
-
 	Route::get('/testSS', function () {
 		$today = Carbon::today();
-		// $prev_month = $today->subMonth();
-		// $nxt_month = $today->addMonth();
-		
-		// dd($today->addMonth());
 		$shipments = (Shipment::whereBetween('created_at', [$today->subMonth(1), $today->addMonth(1)])->get());
 		return view('home', compact('shipments'));
 	});
@@ -83,6 +75,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('filterShipment', 'ShipmentController@filterShipment')->name('filterShipment');
 	Route::post('betweenShipments', 'ShipmentController@betweenShipments')->name('betweenShipments');
 	Route::post('getShipSingle/{id}', 'ShipmentController@getShipSingle')->name('getShipSingle');
+	Route::any('updateCancelled', 'ShipmentController@updateCancelled')->name('updateCancelled');
 
 	Route::post('AddShipments/{id}', 'ContainerController@AddShipments')->name('AddShipments');
 	Route::post('conupdateStatus/{id}', 'ContainerController@conupdateStatus')->name('conupdateStatus');

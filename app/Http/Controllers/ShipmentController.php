@@ -21,7 +21,6 @@ class ShipmentController extends Controller
 {
 	public function getShipments()
 	{
-		$this->updateCancelled();
 		if (Auth::user()->hasRole('Client')) {
 			return Shipment::latest()->where('client_id', Auth::id())->take(500)->orderBy('country_id', 'DESC')->get();
 		} else {
@@ -53,7 +52,7 @@ class ShipmentController extends Controller
             $id[] = $ship->id;
         }
 		// $shipment = Shipment::whereIn('id', $id)->get();
-        $shipment = Shipment::whereIn('id', $id)->update(['status' => 'Cancelled']);
+        return Shipment::whereIn('id', $id)->update(['status' => 'Cancelled']);
 	}
 
 	public function csv()

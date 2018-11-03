@@ -814,6 +814,16 @@ export default {
       .catch(error => {
         this.errors = error.response.data.errors;
       });
+      
+    axios
+      .get("updateCancelled")
+      .then(response => {
+        // this.AllStatus = response.data;
+        console.log(response.data)
+      })
+      .catch(error => {
+        this.errors = error.response.data.errors;
+      });
 
     this.getShipments();
   },
