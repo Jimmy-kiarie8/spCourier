@@ -4,6 +4,10 @@
         <v-card v-if="mySCharges">
             <v-card-title>
                 Charges
+                <v-spacer></v-spacer>
+                <v-btn icon dark @click="close">
+                    <v-icon color="black">close</v-icon>
+                </v-btn>
             </v-card-title>
             <v-container grid-list-md>
                 <v-layout row wrap>
@@ -77,24 +81,25 @@
 
 <script>
 export default {
-    props: ['updateCharges', 'mySCharges'],
+    props: ["updateCharges", "mySCharges"],
     data() {
         return {
             AllTowns: [],
             form: {
-                type: '',
-                distance: '',
-                charges: '',
+                type: "",
+                distance: "",
+                charges: ""
             },
             select: [],
-            Stype: 'OVS',
-            loading: false,
-        }
+            Stype: "OVS",
+            loading: false
+        };
     },
     methods: {
         update() {
             this.loading = true;
-            axios.post(`/shipCharge/${this.updateCharges.id}`, {
+            axios
+                .post(`/shipCharge/${this.updateCharges.id}`, {
                     form: this.form,
                     select: this.select,
                     distance: this.getCharge,
@@ -103,9 +108,9 @@ export default {
                 .then(response => {
                     this.loading = false;
                     // console.log(response);
-                    this.$emit('alertRequest');
-                    // this.$emit('closeRequest');
-                    // this.close()
+                    this.$emit("alertRequest");
+                    Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.$parent.shipment)
+                    this.close()
                 })
                 .catch(error => {
                     this.loading = false;
@@ -114,21 +119,24 @@ export default {
         },
         close() {
             this.$emit("closeRequest");
-        },
+        }
     },
     computed: {
         getCharge() {
             if (this.form.distance <= 5) {
-                return parseInt(200)
+                return parseInt(200);
             } else {
-                return ((parseInt(this.form.distance) - parseInt(5)) * parseInt(25)) + parseInt(200)
+                return (
+                    (parseInt(this.form.distance) - parseInt(5)) * parseInt(25) +
+                    parseInt(200)
+                );
             }
         },
         getVat() {
-            return (parseInt(this.getCharge) * parseFloat(0.16))
+            return parseInt(this.getCharge) * parseFloat(0.16);
         },
         gettotal() {
-            return parseInt(this.getCharge) + parseFloat(this.getVat)
+            return parseInt(this.getCharge) + parseFloat(this.getVat);
         }
     },
     mounted() {
@@ -148,6 +156,6 @@ export default {
 
                 this.loader = false;
             });
-    },
-}
+    }
+};
 </script>

@@ -95,7 +95,8 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('getUserPerm/{id}', 'UserController@getUserPerm')->name('getUserPerm');
 	Route::post('password', 'UserController@password')->name('password');
 	Route::patch('AuthUserUp/{id}', 'UserController@AuthUserUp')->name('AuthUserUp');
-
+	Route::post('UserShip', 'UserController@UserShip')->name('UserShip');
+	
 
 	Route::get('getUsersRole', 'RoleController@getUsersRole')->name('getUsersRole');
 	Route::get('getRoles', 'RoleController@getRoles')->name('getRoles');
@@ -251,7 +252,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('DriverShip', 'DriverController@DriverShip')->name('DriverShip');
 	
 	// Customers 
-	Route::get('customerShip', 'CustomerController@customerShip')->name('customerShip');
+	Route::post('customerShip', 'CustomerController@customerShip')->name('customerShip');
 	Route::post('getsearchRe', 'CustomerController@getsearchRe')->name('getsearchRe');
 
 	// DashBoard

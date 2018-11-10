@@ -178,17 +178,17 @@ export default {
         },
     },
     mounted() {
-        axios
-            .get("/getRows")
-            .then(response => {
-                this.AllRows = response.data;
-                this.loader = false;
-            })
-            .catch(error => {
-                console.log(error);
-                this.errors = error.response.data.errors;
-                this.loader = false;
-            });
+        // axios
+        //     .get("/getRows")
+        //     .then(response => {
+        //         this.AllRows = response.data;
+        //         this.loader = false;
+        //     })
+        //     .catch(error => {
+        //         console.log(error);
+        //         this.errors = error.response.data.errors;
+        //         this.loader = false;
+        //     });
     },
 }
 </script>

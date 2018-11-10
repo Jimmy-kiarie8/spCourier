@@ -227,7 +227,7 @@ export default {
             this.dispAdd = true
             this.getCountry()
         },
-        openEdit(item) {
+        openEdit(item) { 
             this.getCountry()
             this.editedIndex = this.Allusers.indexOf(item)
             this.editedItem = Object.assign({}, item)
@@ -243,15 +243,17 @@ export default {
         openShow(item) {
             this.editedIndex = this.Allusers.indexOf(item)
             this.editedItem = Object.assign({}, item)
-            axios.post(`getUserPro/${this.editedItem.id}`)
-                .then((response) => {
-                    this.loader = false
-                    this.AllShips = response.data
-                })
-                .catch((error) => {
-                    this.loader = false
-                    this.errors = error.response.data.errors
-                })
+            eventBus.$emit('getShipEvent', this.editedItem)
+            // axios.post(`getUserPro/${this.editedItem.id}`)
+            //     .then((response) => {
+            //         this.loader = false
+            //         this.AllShips = response.data
+            //     })
+            //     .catch((error) => {
+            //         this.loader = false
+            //         this.errors = error.response.data.errors
+            //     })
+
             this.dispShow = true
         },
         showAlert() {

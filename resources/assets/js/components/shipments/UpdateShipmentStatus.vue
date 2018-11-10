@@ -4,6 +4,8 @@
         <v-card v-if="UpdateShipmentStatus">
             <v-card-title>
                 Update Shipment Status
+                <v-spacer></v-spacer>
+                <v-btn icon dark @click="close">                         <v-icon color="black">close</v-icon>                     </v-btn>
             </v-card-title>
             <v-container grid-list-md>
                 <v-layout row wrap>

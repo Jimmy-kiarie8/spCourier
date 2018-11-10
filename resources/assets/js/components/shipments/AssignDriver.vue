@@ -4,6 +4,8 @@
         <v-card v-if="OpenAssignDriver">
             <v-card-title>
                 Assign Driver
+                <v-spacer></v-spacer>
+                <v-btn icon dark @click="close">                         <v-icon color="black">close</v-icon>                     </v-btn>
             </v-card-title>
             <v-container grid-list-md>
                 <v-layout row wrap>
@@ -45,8 +47,8 @@ export default {
             message: "",
             color: "",
             form: {
-              'remark': '',
-              'driver': '',
+                'remark': '',
+                'driver': '',
             },
         }
     },
@@ -64,7 +66,7 @@ export default {
                     this.$emit("alertRequest");
                     this.$emit("alertRequest");
                     eventBus.$emit('selectClear');
-                      this.close();
+                    this.close();
                     //   this.$emit("closeRequest");
                 })
                 .catch(error => {

@@ -151,8 +151,8 @@
                         <v-alert slot="no-results" :value="true" color="error" icon="warning">
                             Your search for "{{ search }}" found no results.
                         </v-alert>
-                        <template slot="pageText" slot-scope="{ pageStart, pageStop }">
-                            From {{ pageStart }} to {{ pageStop }}
+                         
+                             
                         </template>
                     </v-data-table>
                     <v-btn color="primary" raised style="float: right;" @click="UpdateShipmentStatus">Update Status</v-btn>

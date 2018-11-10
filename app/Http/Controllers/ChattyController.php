@@ -16,7 +16,7 @@ class ChattyController extends Controller
         $auth_user = Auth::id();
         $chat = Chatty::whereIn('sender_id', [$auth_user, $user_id])
                         ->whereIn('receiver_id', [$auth_user, $user_id])
-                        ->orderBy('created_at', 'DESC')->get();
+                        ->orderBy('created_at', 'ASC')->get();
         return $chat;
     }
 
@@ -34,7 +34,7 @@ class ChattyController extends Controller
         ];
         $chat = Chatty::create($data);
         $finalData = Chatty::where('id', $chat->id)->first();
-        Pusher::trigger('chat_channel', 'chat_save', ['message' => $finalData]);
+        // Pusher::trigger('chat_channel', 'chat_save', ['message' => $finalData]);
         return $finalData;
     }
 }

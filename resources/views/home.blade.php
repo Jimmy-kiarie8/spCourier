@@ -23,3 +23,5 @@
     </div>
 </div>
 @endsection
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis laborum corporis iure, eius porro totam veniam commodi ullam quo placeat consequatur blanditiis? Et incidunt amet exercitationem officia quo! Voluptatum, alias!

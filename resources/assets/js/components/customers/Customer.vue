@@ -144,8 +144,7 @@
 <script>
 export default {
     props: ['user'],
-    components: {
-    },
+    components: {},
     data() {
         return {
             loader: false,
@@ -168,7 +167,7 @@ export default {
     methods: {
         next(page) {
             this.nextPage = true
-            axios.get(`/customerShip?page=` + this.AllShip.current_page)
+            axios.post(`/customerShip?page=` + this.AllShip.current_page, this.form)
                 .then((response) => {
                     this.nextPage = false
                     this.AllShip = response.data
@@ -184,15 +183,16 @@ export default {
                 })
         },
         refresh() {
-            // this.loader = true
-            axios.get('customerShip')
+            this.nextPage = true
+            this.form.search = ''
+            axios.post('customerShip')
                 .then((response) => {
-                    this.loader = false
+                    this.nextPage = false
                     this.AllShip = response.data
                 })
                 .catch((error) => {
                     this.errors = error.response.data.errors
-                    this.loader = false
+                    this.nextPage = false
                 })
         },
         close() {

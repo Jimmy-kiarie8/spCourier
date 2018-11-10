@@ -4,6 +4,8 @@
         <v-card>
             <v-card-title fixed>
                 <span class="headline">Add Charges</span>
+                <v-spacer></v-spacer>
+                <v-btn icon dark @click="close">                         <v-icon color="black">close</v-icon>                     </v-btn>
             </v-card-title>
             <v-card-text>
                 <v-container grid-list-md>

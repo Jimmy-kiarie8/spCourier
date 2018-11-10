@@ -4,6 +4,8 @@
         <v-card v-if="openAddRequest">
             <v-card-title fixed>
                 <span class="headline">Edit Charges</span>
+                <v-spacer></v-spacer>
+                <v-btn icon dark @click="close">                         <v-icon color="black">close</v-icon>                     </v-btn>
             </v-card-title>
             <v-card-text>
                 <v-container grid-list-md>
@@ -73,10 +75,10 @@ export default {
             then((response) => {
                     this.loading = false
                     console.log(response);
-                    // this.close;
+                    // this.close();
                     // this.resetForm();
                     this.$emit('alertRequest');
-                    Object.assign(this.$parent.AllCharges[this.$parent.editedIndex], this.$parent.edittask)
+                    Object.assign(this.$parent.AllCharges[this.$parent.editedIndex], this.$parent.editCharge)
                 })
                 .catch((error) => {
                     this.loading = false

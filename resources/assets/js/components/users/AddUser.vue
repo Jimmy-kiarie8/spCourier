@@ -4,6 +4,10 @@
         <v-card>
             <v-card-title fixed>
                 <span class="headline">Add User</span>
+                <v-spacer></v-spacer>
+                <v-btn icon dark @click="close">
+                    <v-icon color="black">close</v-icon>
+                </v-btn>
             </v-card-title>
             <v-card-text>
                 <v-container grid-list-md>
@@ -124,7 +128,9 @@ export default {
     methods: {
         save() {
             this.loading = true
-            axios.post('/users', {form: this.$data.form}).
+            axios.post('/users', {
+                form: this.$data.form
+            }).
             then((response) => {
                     this.loading = false
                     // console.log(response);

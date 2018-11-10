@@ -4,6 +4,10 @@
         <v-card>
             <v-card-title fixed>
                 <span class="headline">Add Branch</span>
+                <v-spacer></v-spacer>
+                <v-btn icon dark @click="close">
+                    <v-icon color="black">close</v-icon>
+                </v-btn>
             </v-card-title>
             <v-card-text>
                 <v-container grid-list-md>
@@ -50,66 +54,64 @@
 
 <script>
 export default {
-    props: ['openAddRequest'],
-    data() {
-        const defaultForm = Object.freeze({
-            branch_name: '',
-            email: '',
-            phone: '',
-            address: '',
+  props: ["openAddRequest"],
+  data() {
+    const defaultForm = Object.freeze({
+      branch_name: "",
+      email: "",
+      phone: "",
+      address: ""
+    });
+    return {
+      errors: {},
+      defaultForm,
+      loading: false,
+      form: Object.assign({}, defaultForm),
+      rules: {
+        name: [val => (val || "").length > 0 || "This field is required"]
+      }
+    };
+  },
+  methods: {
+    save() {
+      this.loading = true;
+      axios
+        .post("/branches", this.$data.form)
+        .then(response => {
+          this.loading = false;
+          console.log(response);
+          this.$parent.AllBranches.push(response.data);
+          this.close;
+          this.resetForm();
+          this.$emit("closeRequest");
+          this.$emit("alertRequest");
         })
-        return {
-            errors: {},
-            defaultForm,
-            loading: false,
-            form: Object.assign({}, defaultForm),
-            rules: {
-                name: [val => (val || '').length > 0 || 'This field is required']
-            },
-        }
+        .catch(error => {
+          this.loading = false;
+          this.errors = error.response.data.errors;
+        });
     },
-    methods: {
-        save() {
-            this.loading = true
-            axios.post('/branches', this.$data.form).
-            then((response) => {
-                    this.loading = false
-                    console.log(response);
-                    this.$parent.AllBranches.push(response.data)
-                    this.close;
-                    this.resetForm();
-                    this.$emit('closeRequest');
-                    this.$emit('alertRequest');
-
-                })
-                .catch((error) => {
-                    this.loading = false
-                    this.errors = error.response.data.errors
-                    })
-        },
-        resetForm() {
-            this.form = Object.assign({}, this.defaultForm)
-            this.$refs.form.reset()
-        },
-        alert() {
-            this.$emit('alertRequest')
-        },
-        close() {
-            this.$emit('closeRequest')
-        },
+    resetForm() {
+      this.form = Object.assign({}, this.defaultForm);
+      this.$refs.form.reset();
     },
-    computed: {
-        formIsValid() {
-            return (
-                this.form.branch_name &&
-                this.form.email &&
-                this.form.phone &&
-                this.form.address
-            )
-        },
+    alert() {
+      this.$emit("alertRequest");
     },
-    mounted() {
-
+    close() {
+      this.$emit("closeRequest");
     }
-}
+  },
+  computed: {
+    formIsValid() {
+      return (
+        this.form.branch_name &&
+        this.form.email &&
+        this.form.phone &&
+        this.form.address
+      );
+    }
+  },
+  mounted() {}
+};
 </script>

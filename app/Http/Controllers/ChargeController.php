@@ -17,11 +17,12 @@ class ChargeController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request->all();
         
-		$this->Validate($request, [
-			'form.charges' => 'required',
-			'form.town_name' => 'required',
-		]);
+		// $this->Validate($request, [
+		// 	'form.charges' => 'required',
+		// 	'form.town_name' => 'required',
+		// ]);
         // return $request->all();
         $charges = $request->form['charges'];
         $town = $request->schedule['town_name'];

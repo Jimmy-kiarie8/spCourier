@@ -4,6 +4,8 @@
         <v-card>
             <v-card-title fixed>
                 <span class="headline">Add User</span>
+                <v-spacer></v-spacer>
+                <v-btn icon dark @click="close">                         <v-icon color="black">close</v-icon>                     </v-btn>
             </v-card-title>
             <v-card-text>
                 <v-container grid-list-md>
@@ -45,11 +47,11 @@
                                     <div class="form-group col-md-6">
                                         <label class="col-md-6 col-form-label text-md-right" for="">Country</label>
                                         <select class="custom-select custom-select-md col-md-12" v-model="form.countryList">
-                                        <option v-for="country in countryList" :key="country.id" :value="country.id">{{ country.country_name }}</option>
+                                            <option v-for="country in countryList" :key="country.id" :value="country.id">{{ country.country_name }}</option>
                                     </select>
                                         <!-- <small class="has-text-danger" v-if="errors.branch_id">{{ errors.branch_id[0] }}</small> -->
                                     </div>
-                                    <v-flex xs12>
+                                    <!-- <v-flex xs12>
                                         <v-expansion-panel inset>
                                             <v-expansion-panel-content>
                                                 <div slot="header">Permissions</div>
@@ -66,7 +68,7 @@
                                                 </v-card>
                                             </v-expansion-panel-content>
                                         </v-expansion-panel>
-                                    </v-flex>
+                                    </v-flex> -->
 
                                 </v-layout>
                             </v-container>
@@ -120,11 +122,9 @@ export default {
             then((response) => {
                     // console.log(response);
                     this.loading = false
-                    this.close;
                     this.$emit('alertRequest');
+                    this.close();
                     Object.assign(this.$parent.Allusers[this.$parent.editedIndex], this.$parent.editedItem)
-                    this.$emit('closeRequest');
-
                 })
                 .catch((error) => {
                     this.errors = error.response.data.errors

@@ -6,6 +6,8 @@
             <v-card-title>
                 Assign Branch
             </v-card-title>
+                <v-spacer></v-spacer>
+                <v-btn icon dark @click="close">                         <v-icon color="black">close</v-icon>                     </v-btn>
             <v-container grid-list-md>
                 <v-layout row wrap>
                     <v-flex xs12>

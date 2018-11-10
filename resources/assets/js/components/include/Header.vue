@@ -7,7 +7,7 @@
         <!-- temporary -->
         <v-navigation-drawer fixed :color="color" :clipped="$vuetify.breakpoint.lgAndUp" app v-model="drawer">
             <v-list dense id="navigation">
-                <!-- <v-img :aspect-ratio="16/9" src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
+                <v-img :aspect-ratio="16/9" src="storage/ps/landS.jpg">
                     <v-layout pa-2 column fill-height class="lightbox white--text">
                         <v-spacer></v-spacer>
                         <v-flex shrink>
@@ -15,7 +15,7 @@
                             <div class="body-1">{{ user.email }}</div>
                         </v-flex>
                     </v-layout>
-                </v-img> -->
+                </v-img>
                 <template>
                     <v-card>
                         <!-- <v-card style="background: url('storage/ps/landS.jpg')"> -->
@@ -208,7 +208,8 @@
                 <img src="storage/logo1.jpg" alt="" style="width: 60px; height: 60px; border-radius: 25%;">
             </v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-icon @click.stop="right = !right" style="cursor: pointer">apps</v-icon>
+                <Notifications :user="user"></Notifications>
+                <!-- <v-icon @click.stop="right = !right" style="cursor: pointer">apps</v-icon> -->
                 <form action="/logout" method="post">
                     <v-btn flat color="white" type="submit">Logout</v-btn>
                 </form>
@@ -218,7 +219,11 @@
 </template>
 
 <script>
+import Notifications from '../notification/Notification'
 export default {
+    components: {
+        Notifications
+    },
     props: ['user', 'role', 'logo'],
     data() {
         return {
@@ -232,6 +237,7 @@ export default {
             right: null,
             menu: false,
             mode: '',
+            notifications: [],
             company: {},
             cruds: [
                 ['Create', 'add'],
@@ -242,13 +248,13 @@ export default {
         }
     },
     mounted() {
-        axios.post('getLogo')
-            .then((response) => {
-                this.company = response.data
-            })
-            .catch((error) => {
-                this.errors = error.response.data.errors
-            })
+        // axios.post('getLogo')
+        //     .then((response) => {
+        //         this.company = response.data
+        //     })
+        //     .catch((error) => {
+        //         this.errors = error.response.data.errors
+        //     })
     },
 }
 </script>

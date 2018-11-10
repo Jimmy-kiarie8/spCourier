@@ -10,14 +10,22 @@ use DB;
 
 class CustomerController extends Controller
 {
-    public function customerShip()
+    public function customerShip(Request $request)
     {
-        return Shipment::where('client_id', Auth::id())->paginate(10);
+        if ($request->search) {
+        $bar_code = $request->search;
+            return Shipment::where('client_id', Auth::id())->where('bar_code', 'LIKE', "%{$bar_code}%")->paginate(10);
+        } else {
+            return Shipment::where('client_id', Auth::id())->paginate(10);
+        }
+        
     }
     public function getsearchRe(Request $request)
     {
         // return $request->all();
-        return Shipment::where('bar_code', $request->all())->paginate(10);
+        $bar_code = $request->search;
+		return $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->where('client_id', Auth::id())->paginate(10);
+        // return Shipment::where('bar_code', $request->all())->paginate(10);
     }
     public function customerCount()
     {
@@ -44,19 +52,19 @@ class CustomerController extends Controller
     public function getClientShip()
     {
         $shipments = DB::table('shipments')
-			->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
-			->orderBy('id', 'asc')
-			->groupBy('date')
+            ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
+            ->orderBy('id', 'asc')
+            ->groupBy('date')
             ->where('client_id', Auth::id())
-			->get();
+            ->get();
         $lables = [];
         $rows = [];
-		foreach ($shipments as $key => $shipment) {
+        foreach ($shipments as $key => $shipment) {
             $lables[] = $shipment->date;
-			$rows[] = $shipment->count;
+            $rows[] = $shipment->count;
         }
         $data = array(
-            'lables' => $lables, 
+            'lables' => $lables,
             'rows' => $rows
         );
         return response()->json(['data' => $data]);

@@ -25,7 +25,7 @@
                     <v-divider vertical></v-divider>
                     <v-flex sm7 style="max-height: 600px;overflow: scroll;">
                         <v-card style="padding: 40px;" id="back">
-                            <v-layout row v-for="Chatmsg in AllMessages" :key="Chatmsg.sender.id">
+                            <v-layout row v-for="Chatmsg in AllMessages" :key="Chatmsg.id">
                                 <v-flex sm5 v-if="Chatmsg.sender.id === user.id" style="background: rgb(19, 47, 81); padding: 10px; color: #fff;" id="chatty">
                                     <div id="bordersR"></div>
                                     <p>{{ Chatmsg.chat }}</p>
@@ -71,7 +71,9 @@ export default {
       AllUsers: [],
       AllMessages: [],
       chat_id: null,
-      chatty_sms: {},
+      chatty_sms: {
+        chat: ''
+      },
       channel: null,
       pusher: null,
       message: null
@@ -104,6 +106,8 @@ export default {
         .post(`saveUserChat/${this.chat_id}`, this.$data.chatty_sms)
         .then(response => {
           console.log(response);
+          this.chatty_sms.chat = ''
+          this.AllMessages.push(response.data);
           // this.loader = false
           //   this.AllMessages = response.data;
         })

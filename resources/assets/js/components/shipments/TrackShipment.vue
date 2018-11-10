@@ -3,14 +3,13 @@
     <v-dialog v-model="OpenTrackBranch" hide-overlay persistent width="1500">
         <v-card v-if="OpenTrackBranch">
             <v-toolbar card blue-grey darken-1>
-                <v-toolbar-title class="body-2">Shipments Details</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-tooltip right>
-                    <v-btn icon slot="activator" class="mx-0" @click="refresh">
-                        <v-icon color="blue darken-2" small>refresh</v-icon>
+                <v-toolbar-title class="body-2">
+                    Shipments Details
+                    <v-spacer></v-spacer>
+                    <v-btn icon dark @click="close">
+                        <v-icon color="black">close</v-icon>
                     </v-btn>
-                    <span>Refresh</span>
-                </v-tooltip>
+                </v-toolbar-title>
             </v-toolbar>
             <v-card-text id="printMe">
                 <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
@@ -114,7 +113,7 @@
             <v-card-actions>
                 <v-btn color="blue darken-1" flat @click="close">Close</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn  v-print="'#printMe'" flat color="primary">Print</v-btn>
+                <v-btn v-print="'#printMe'" flat color="primary">Print</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>

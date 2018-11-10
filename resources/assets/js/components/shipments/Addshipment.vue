@@ -4,6 +4,10 @@
         <v-card>
             <v-card-title>
                 Add Shipment
+                <v-spacer></v-spacer>
+                <v-btn icon dark @click="close">
+                    <v-icon color="black">close</v-icon>
+                </v-btn>
             </v-card-title>
             <v-container grid-list-md v-show="!loader">
                 <v-card-text>
@@ -214,29 +218,6 @@
                                                         <option value="OVS">OVS</option>
                                                         <option value="Same day">Same day</option>
                                                     </select>
-                                                    <!-- <div class="form-group col-md-6">
-                                                        <label for="insurance" class="col-md-4 col-form-label text-md-right">Status</label>
-                                                        <select class="custom-select custom-select-md col-md-12" v-model="form.status">
-                                                            <option value="Awaiting Approval">Awaiting Approval</option>
-                                                            <option value="Approved">Approved</option>
-                                                            <option value="Arrived">Arrived</option>
-                                                            <option value="Awaiting Confirmation">Awaiting Confirmation</option>
-                                                            <option value="Cancelled">Cancelled</option>
-                                                            <option value="Cleared">Cleared</option>
-                                                            <option value="Delivered">Delivered</option>
-                                                            <option value="Dispatched">Dispatched</option>
-                                                            <option value="Hold">Hold</option>
-                                                            <option value="Not Picking">Not Picking</option>
-                                                            <option value="Out For Destination">Out For Destination</option>
-                                                            <option value="Out For Delivery">Out For Delivery</option>
-                                                            <option value="Returned">Returned</option>
-                                                            <option value="Ready For Depart">Ready For Depart</option>
-                                                            <option value="Scheduled">Scheduled</option>
-                                                            <option value="Shipment Collected">Shipment Collected</option>
-                                                            <option value="Transit">Transit</option>
-                                                            <option value="Waiting for Scan">Waiting for scan</option>
-                                                        </select>
-                                                    </div> -->
 
                                                     <div class="form-group col-md-6">
                                                         <label for="insurance" class="col-md-4 col-form-label text-md-right">Insuarance</label>
@@ -269,7 +250,6 @@
                                                         <option value="Cleared">Cleared</option>
                                                         <option value="Delivered">Delivered</option>
                                                         <option value="Dispatched">Dispatched</option>
-                                                        <!-- <option value="Cancled">Cancled</option> -->
                                                         <option value="Hold">Hold</option>
                                                         <option value="Not Available">Not Available</option>
                                                         <option value="Not Picking">Not Picking</option>
@@ -387,11 +367,11 @@ export default {
                 quantity: 1,
                 price: 0,
             }],
-            sender_name: '',
-            sender_email: '',
-            sender_phone: '',
-            sender_address: '',
-            sender_city: '',
+            sender_name: 'SpeedBall courier services',
+            sender_email: 'info@speedballcourier.com',
+            sender_phone: '+254728492446',
+            sender_address: '17254 00100',
+            sender_city: 'Embakasi, Nairobi',
         });
         return {
             selectCl: [],

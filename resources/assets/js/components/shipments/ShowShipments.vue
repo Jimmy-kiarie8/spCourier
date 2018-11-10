@@ -4,8 +4,8 @@
         <v-card id="shipment_det">
             <v-card-title>
                 <v-toolbar dark color="indigo">
-                    <v-btn icon dark @click.native="close">
-                        <v-icon color="white">close</v-icon>
+                    <v-btn icon dark @click="close">
+                        <v-icon color="black">close</v-icon>
                     </v-btn>
                     <v-spacer></v-spacer>
                 </v-toolbar>

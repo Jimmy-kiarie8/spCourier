@@ -3,56 +3,54 @@
     <v-content>
         <v-container fluid fill-height v-show="!loader">
             <v-layout justify-center align-center>
-                <div class="container">
+                <div v-show="loader" style="text-align: center; width: 100%;">
+                    <v-progress-circular :width="3" indeterminate color="red" style="margin: 1rem"></v-progress-circular>
+                </div>
+                <v-card>
                     <v-card-title>
-                        Users
-                        <v-btn slot="activator" color="primary" dark @click="openAdd">Add Role</v-btn>
+                        Charges
+                        <v-btn @click="openAdd" flat color="primary">Add Charges</v-btn>
+                        <!-- <v-spacer></v-spacer> -->
                         <v-tooltip right>
                             <v-btn icon slot="activator" class="mx-0" @click="getRoles">
                                 <v-icon color="blue darken-2" small>refresh</v-icon>
                             </v-btn>
                             <span>Refresh</span>
                         </v-tooltip>
-                        <v-spacer></v-spacer>
-                        <v-text-field v-model="search" append-icon="search" label="Search" single-line></v-text-field>
+                        <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
-                </div>
+                    <v-data-table :headers="headers" :items="AllRoles" class="elevation-1" :search="search" :loading="loading">
+                        <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
+                        <template slot="items" slot-scope="props">
+                            <td>{{ props.item.name }}</td>
+                            <td class="text-xs-right">{{ props.item.description }}</td>
+                            <td class="text-xs-right">{{ props.item.created_at }}</td>
+                            <td class="justify-center layout px-0">
+                                <v-tooltip bottom>
+                                    <v-btn slot="activator" icon class="mx-0" @click="openEdit(props.item)">
+                                        <v-icon small color="blue darken-2">edit</v-icon>
+                                    </v-btn>
+                                    <span>Edit</span>
+                                </v-tooltip>
+                                <v-tooltip bottom>
+                                    <v-btn slot="activator" icon class="mx-0" @click="deleteItem(props.item)">
+                                        <v-icon small color="blue darken-2">delete</v-icon>
+                                    </v-btn>
+                                    <span>Edit</span>
+                                </v-tooltip>
+                            </td>
+                        </template>
+                        <v-alert slot="no-results" :value="true" color="error" icon="warning">
+                            Your search for "{{ search }}" found no results.
+                        </v-alert>
+                    </v-data-table>
+                </v-card>
+                <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left='left' v-model="snackbar">
+                    {{ message }}
+                    <v-icon dark right>check_circle</v-icon>
+                </v-snackbar>
             </v-layout>
         </v-container>
-        <div v-show="loader" style="text-align: center; width: 100%;">
-            <v-progress-circular :width="3" indeterminate color="red" style="margin: 1rem"></v-progress-circular>
-        </div>
-        <div class="container col-md-8">
-            <table class="table table-hover table-striped" style="margin-top: -70px !important;">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Role Name</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="role, key in AllRoles" :key="role.id">
-                        <th scope="row">{{ key+1 }}</th>
-                        <td>{{ role.name }}</td>
-                        <td>{{ role.description }}</td>
-                        <td>
-                            <v-btn icon class="mx-0" @click="openEdit(role)">
-                                <v-icon small color="blue darken-2">edit</v-icon>
-                            </v-btn>
-                            <v-btn icon class="mx-0" @click="deleteItem(role.id)">
-                                <v-icon small color="pink darken-2">delete</v-icon>
-                            </v-btn>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left='left' v-model="snackbar">
-            {{ message }}
-            <v-icon dark right>check_circle</v-icon>
-        </v-snackbar>
     </v-content>
     <AddRole @closeRequest="close" :openAddRequest="dispAdd" @alertRequest="showAlert"></AddRole>
     <!--  <ShowRole @closeRequest="close" :openShowRequest="dispShow"></ShowRole> -->
@@ -78,28 +76,12 @@ export default {
                     value: "name"
                 },
                 {
-                    text: "Email",
-                    value: "email"
+                    text: "Description",
+                    value: "description"
                 },
                 {
-                    text: "Address",
-                    value: "address"
-                },
-                {
-                    text: "Phone Number",
-                    value: "phone"
-                },
-                {
-                    text: "City",
-                    value: "city"
-                },
-                {
-                    text: "Branch",
-                    value: "branch"
-                },
-                {
-                    text: "Status",
-                    value: "status"
+                    text: "Created At",
+                    value: "created_at"
                 },
                 {
                     text: 'Actions',
@@ -144,12 +126,12 @@ export default {
             //     this.errors = error.response.data.errors
             // })
             axios.post(`getRolesPerm/${item.id}`, item)
-            .then((response) => {
-                eventBus.$emit('RolepermEvent', response.data);
-            })
-            .catch((error) => {
-                this.errors = error.response.data.errors
-            })
+                .then((response) => {
+                    eventBus.$emit('RolepermEvent', response.data);
+                })
+                .catch((error) => {
+                    this.errors = error.response.data.errors
+                })
             this.dispEdit = true
         },
         showAlert() {

@@ -182,7 +182,7 @@ class UserController extends Controller
 
 	public function getUserPro(Request $request, $id)
 	{
-		return Shipment::where('client_id', $id)->get();
+		return Shipment::where('client_id', $id)->paginate(10);
 	}
 
 	public function getUserPerm(Request $request, $id)
@@ -207,4 +207,9 @@ class UserController extends Controller
 		$user->save();
 		return $user;
 	}
+
+    public function UserShip()
+    {
+        return Shipment::where('client_id', $id)->orWhere('driver', $id)->paginate(10);
+    }
 }

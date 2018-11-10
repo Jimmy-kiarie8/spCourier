@@ -63,7 +63,7 @@ let myHeader = require('./components/include/Header.vue');
 let myUser = require('./components/users/User.vue');
 let myShipment = require('./components/shipments/Shipment.vue');
 let myScanner = require('./components/scanner/Scanner.vue');
-let myContainer = require('./components/containers/Container.vue');
+// let myContainer = require('./components/containers/Container.vue');
 let myMap = require('./components/reports/Map.vue');
 let myBranch = require('./components/branches/Branch.vue');
 let myProfile = require('./components/users/Profile.vue');
@@ -100,7 +100,7 @@ const routes = [
     {path: '/users', component: myUser },
     {path: '/shipments', component: myShipment },
     {path: '/scanner', component: myScanner },
-    {path: '/containers', component: myContainer },
+    // {path: '/containers', component: myContainer },
     {path: '/branches', component: myBranch },
     {path: '/profile', component: myProfile },
     {path: '/companies', component: myCompany },
@@ -141,11 +141,12 @@ const app = new Vue({
     el: '#app',
     router,
     components: {
-    	myHeader, myUser, myShipment, myScanner, myContainer, myMap,
+    	myHeader, myUser, myShipment, myScanner, myMap,
         myBranch, myProfile, myCompany, myCustomer, mysubsicriber, myInvice, myReceipt,
         myReports, mybranchShip, myRoles, myscheduled, myTasks, myUploadFile, myCharges,
         myTown, myPrintPdf, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash, 
-        myunauth, myDash, myFilter, myChatty
+        myunauth, myDash, myFilter, myChatty,
+        // myContainer
     },
     data: {
     shipments: [],
