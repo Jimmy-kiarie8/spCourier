@@ -76,6 +76,11 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('betweenShipments', 'ShipmentController@betweenShipments')->name('betweenShipments');
 	Route::post('getShipSingle/{id}', 'ShipmentController@getShipSingle')->name('getShipSingle');
 	Route::any('updateCancelled', 'ShipmentController@updateCancelled')->name('updateCancelled');
+	
+	Route::post('filterShipment', 'FilterController@filterShipment')->name('filterShipment');
+	Route::post('getDeriveredS', 'FilterController@getDeriveredS')->name('getDeriveredS');
+	Route::post('getOrdersS', 'FilterController@getOrdersS')->name('getOrdersS');
+	Route::post('getPendingS', 'FilterController@getPendingS')->name('getPendingS');
 
 	Route::post('AddShipments/{id}', 'ContainerController@AddShipments')->name('AddShipments');
 	Route::post('conupdateStatus/{id}', 'ContainerController@conupdateStatus')->name('conupdateStatus');
@@ -96,7 +101,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('password', 'UserController@password')->name('password');
 	Route::patch('AuthUserUp/{id}', 'UserController@AuthUserUp')->name('AuthUserUp');
 	Route::post('UserShip', 'UserController@UserShip')->name('UserShip');
-	
+
 
 	Route::get('getUsersRole', 'RoleController@getUsersRole')->name('getUsersRole');
 	Route::get('getRoles', 'RoleController@getRoles')->name('getRoles');
@@ -148,17 +153,6 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('getCanceledCount', 'PermissionController@getCanceledCount')->name('getCanceledCount');
 	Route::get('deriveredShipmentCount', 'PermissionController@deriveredShipmentCount')->name('deriveredShipmentCount');
 	Route::get('getUsersCount', 'PermissionController@getUsersCount')->name('getUsersCount');
-	Route::get('scheduled', 'ShipmentController@scheduled')->name('scheduled');
-	Route::post('getScheduled', 'ShipmentController@getScheduled')->name('getScheduled');
-
-	Route::post('getDeriveredS', 'ShipmentController@getDeriveredS')->name('getDeriveredS');
-	Route::post('getOrdersS', 'ShipmentController@getOrdersS')->name('getOrdersS');
-	Route::post('getPendingS', 'ShipmentController@getPendingS')->name('getPendingS');
-	Route::get('getDeriveredA', 'ShipmentController@getDeriveredA')->name('getDeriveredA');
-
-	
-	// Chart
-
 
 	// E-MAILS
 	Route::post('/sendmail', 'EmailController@sendmail')->name('sendmail');
@@ -195,10 +189,11 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('/displayReport', 'ReportController@displayReport')->name('displayReport');
 
 	// Notifications
-	Route::get('/notifications', 'NotificationController@notifications')->name('notifications');
 	Route::post('/Notyshpments/{id}', 'NotificationController@Notyshpments')->name('Notyshpments');
 	Route::post('/read', 'NotificationController@read')->name('read');
-
+	Route::get('/Chattynoty', 'NotificationController@Chattynoty')->name('Chattynoty');
+	Route::get('/notifications', 'NotificationController@notifications')->name('notifications');
+	
 	Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 	// Tasks
@@ -301,11 +296,28 @@ Route::group(['middleware' => ['auth']], function () {
 
 	Route::get('getStatuses', 'StatusController@getStatuses')->name('getStatuses');
 	Route::get('getStat', 'StatusController@getStat')->name('getStat');
-
+	Route::get('scheduled', 'StatusController@scheduled')->name('scheduled');
+	Route::post('getScheduled', 'StatusController@getScheduled')->name('getScheduled');
+	Route::get('getDeriveredA', 'StatusController@getDeriveredA')->name('getDeriveredA');
 
 	// chatty
 	Route::post('getUserConvById/{id}', 'ChattyController@getUserConvById')->name('getUserConvById');
 	Route::post('saveUserChat/{id}', 'ChattyController@saveUserChat')->name('saveUserChat');
+
+	Route::get('send_sms', 'ShipmentController@send_sms')->name('send_sms');
+
+	// Route::post('/chat','ChattyController@sendMessage');
+	// Route::get('/chat','ChattyController@chatPage');
+
+	
+    Route::get('chat','ChatController@chat');
+    Route::post('/send','ChatController@send')->name('send');
+    Route::post('saveToSession','ChatController@saveToSession');
+    Route::post('deleteSession','ChatController@deleteSession');
+    Route::post('getOldMessage','ChatController@getOldMessage');
+    Route::get('check',function(){
+        return session('chat');
+    });
 
 });
 

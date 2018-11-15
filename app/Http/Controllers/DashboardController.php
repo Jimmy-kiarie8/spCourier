@@ -248,7 +248,7 @@ class DashboardController extends Controller
     public function countPending()
     {
         // return Shipment::count();
-        return Shipment::where('status', '!=', 'Delivered')->count();
+        return Shipment::where('status', '!=', 'Delivered')->where('status', '!=', 'Cancelled')->count();
     }
 
     public function countOrders()

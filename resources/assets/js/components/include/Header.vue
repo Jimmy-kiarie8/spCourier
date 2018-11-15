@@ -208,44 +208,116 @@
                 <img src="storage/logo1.jpg" alt="" style="width: 60px; height: 60px; border-radius: 25%;">
             </v-toolbar-title>
                 <v-spacer></v-spacer>
+                <v-tooltip bottom style="margin-right: 10px;">
+                    <v-btn icon class="mx-0" @click="openShipment" slot="activator">
+                        <v-icon color="white darken-2" large>add</v-icon>
+                    </v-btn>
+                    <span>Add Shipment</span>
+                </v-tooltip>
+                <v-divider vertical></v-divider>
                 <Notifications :user="user"></Notifications>
+                <v-divider vertical></v-divider>
+                <!-- <chattyNoty :user="user"></chattyNoty> -->
                 <!-- <v-icon @click.stop="right = !right" style="cursor: pointer">apps</v-icon> -->
                 <form action="/logout" method="post">
                     <v-btn flat color="white" type="submit">Logout</v-btn>
                 </form>
         </v-toolbar>
     </v-app>
+
+    <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
+        {{ message }}
+        <v-icon dark right>check_circle</v-icon>
+    </v-snackbar>
+    <AddShipment :addShipment="dialog" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers"></AddShipment>
 </div>
 </template>
 
 <script>
 import Notifications from '../notification/Notification'
+let AddShipment = require("../shipments/AddShipment");
+// import chattyNoty from '../notification/chattyNoty'
 export default {
     components: {
-        Notifications
+        Notifications,
+        AddShipment,
+        //  chattyNoty
     },
-    props: ['user', 'role', 'logo'],
+    props: ['user'],
     data() {
         return {
-            sheet: false,
+            role: '',
             color: '#132f51',
-            panel: false,
             dialog: false,
-            changeColor: 'item.color',
             drawer: true,
             drawerRight: false,
             right: null,
-            menu: false,
             mode: '',
             notifications: [],
             company: {},
-            cruds: [
-                ['Create', 'add'],
-                ['Read', 'insert_drive_file'],
-                ['Update', 'update'],
-                ['Delete', 'delete']
-            ]
+            AllBranches: [],
+            Allcustomers: [],
+            AllDrivers: [],
+            snackbar: false,
+            timeout: 5000,
+            message: "Success",
+            // cruds: [
+            //     ['Create', 'add'],
+            //     ['Read', 'insert_drive_file'],
+            //     ['Update', 'update'],
+            //     ['Delete', 'delete']
+            // ]
         }
+    },
+    methods: {
+        openShipment() {
+            this.dialog = true;
+            this.getBranch();
+            this.getCustomer();
+            this.getDrivers();
+        },
+
+        getCustomer() {
+            axios
+                .get("getCustomer")
+                .then(response => {
+                    this.Allcustomers = response.data;
+                })
+                .catch(error => {
+                    this.errors = error.response.data.errors;
+                });
+        },
+        getDrivers() {
+            axios
+                .get("/getDrivers")
+                .then(response => {
+                    this.AllDrivers = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.errors = error.response.data.errors;
+                });
+        },
+        getBranch() {
+            axios
+                .get("/getBranchEger")
+                .then(response => {
+                    this.AllBranches = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.errors = error.response.data.errors;
+                });
+        },
+        close() {
+            this.dialog = false
+        },
+
+        showalert() {
+            this.message = "success";
+            // this.color = "indigo";
+            this.snackbar = true;
+        },
     },
     mounted() {
         // axios.post('getLogo')

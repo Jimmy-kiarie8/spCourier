@@ -18,3 +18,8 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
 // Broadcast::channel('chatty', function ($user) {
 //     return $user;
 // });
+
+
+Broadcast::channel('chat',function($user){
+	return ['name'=>$user->name];
+});

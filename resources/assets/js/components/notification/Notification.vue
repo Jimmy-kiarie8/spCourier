@@ -124,7 +124,7 @@ export default {
     created() {
         this.timer = window.setInterval(() => {
             this.getnotifications()
-        }, 10000)
+        }, 60000)
     },
     beforeDestroy() {
         clearInterval(this.timer)

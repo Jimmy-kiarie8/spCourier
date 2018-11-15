@@ -143,127 +143,129 @@
 
 <script>
 export default {
-    props: ['user'],
-    components: {},
-    data() {
-        return {
-            loader: false,
-            Customerdialog: false,
-            dispAdd: false,
-            dispShow: false,
-            dispEdit: false,
-            snackbar: false,
-            timeout: 5000,
-            color: 'black',
-            message: 'Success',
-            Allcustomers: [],
-            form: {
-                search: ''
-            },
-            AllShip: [],
-            nextPage: false,
-        }
+  props: ["user"],
+  components: {},
+  data() {
+    return {
+      loader: false,
+      Customerdialog: false,
+      dispAdd: false,
+      dispShow: false,
+      dispEdit: false,
+      snackbar: false,
+      timeout: 5000,
+      color: "black",
+      message: "Success",
+      Allcustomers: [],
+      form: {
+        search: ""
+      },
+      AllShip: [],
+      nextPage: false
+    };
+  },
+  methods: {
+    next(page) {
+      this.nextPage = true;
+      axios
+        .post(`/customerShip?page=` + this.AllShip.current_page, this.form)
+        .then(response => {
+          this.nextPage = false;
+          this.AllShip = response.data;
+        });
     },
-    methods: {
-        next(page) {
-            this.nextPage = true
-            axios.post(`/customerShip?page=` + this.AllShip.current_page, this.form)
-                .then((response) => {
-                    this.nextPage = false
-                    this.AllShip = response.data
-                })
-        },
-        searchRe() {
-            this.nextPage = true
-            // alert('success')
-            axios.post('getsearchRe', this.form)
-                .then((response) => {
-                    this.nextPage = false
-                    this.AllShip = response.data
-                })
-        },
-        refresh() {
-            this.nextPage = true
-            this.form.search = ''
-            axios.post('customerShip')
-                .then((response) => {
-                    this.nextPage = false
-                    this.AllShip = response.data
-                })
-                .catch((error) => {
-                    this.errors = error.response.data.errors
-                    this.nextPage = false
-                })
-        },
-        close() {
-            this.dispAdd = this.dispShow = this.dispEdit = false
-        },
-        showAlert() {
-            this.snackbar = true
-            this.color = 'indigo'
-            this.message = 'success'
-        }
+    searchRe() {
+      this.nextPage = true;
+      // alert('success')
+      axios.post("getsearchRe", this.form).then(response => {
+        this.nextPage = false;
+        this.AllShip = response.data;
+      });
     },
-    mounted() {
-        this.loader = true
-        this.refresh()
+    refresh() {
+      this.nextPage = true;
+      this.form.search = "";
+      axios
+        .post("customerShip")
+        .then(response => {
+          this.nextPage = false;
+          this.AllShip = response.data;
+        })
+        .catch(error => {
+          this.errors = error.response.data.errors;
+          this.nextPage = false;
+        });
+    },
+    close() {
+      this.dispAdd = this.dispShow = this.dispEdit = false;
+    },
+    showAlert() {
+      this.snackbar = true;
+      this.color = "indigo";
+      this.message = "success";
+    }
+  },
+  mounted() {
+    this.loader = true;
+    this.refresh();
 
-        axios.get('getCustomer')
-            .then((response) => {
-                this.Allcustomers = response.data
-                this.loader = false
-            })
-            .catch((error) => {
-                this.errors = error.response.data.errors
-                this.loader = false
-            })
-    },
-    // beforeRouteEnter(to, from, next) {
-    //     next(vm => {
-    //         if (vm.role === 'Admin' || vm.role === 'companyAdmin') {
-    //             next();
-    //         } else {
-    //             next('/unauthorized');
-    //         }
-    //     })
-    // }
-}
+    axios
+      .get("getCustomer")
+      .then(response => {
+        this.Allcustomers = response.data;
+        this.loader = false;
+      })
+      .catch(error => {
+        this.errors = error.response.data.errors;
+        this.loader = false;
+      });
+  }
+  // beforeRouteEnter(to, from, next) {
+  //     next(vm => {
+  //         if (vm.role === 'Admin' || vm.role === 'companyAdmin') {
+  //             next();
+  //         } else {
+  //             next('/unauthorized');
+  //         }
+  //     })
+  // }
+};
 </script>
 
 <style scoped>
 .content--wrap {
-    margin-top: -100px
+  margin-top: -100px;
 }
 
 #profile {
-    width: 70px;
-    height: 60px;
-    border-radius: 50%;
-    margin-left: 80px;
-    margin-top: -30px;
+  width: 70px;
+  height: 60px;
+  border-radius: 50%;
+  margin-left: 80px;
+  margin-top: -30px;
 }
 
 i {
-    padding: 7px;
-    background: #f0f0f0;
-    border-radius: 50%;
+  padding: 7px;
+  background: #f0f0f0;
+  border-radius: 50%;
 }
 
 .list-group-item:hover,
 .list-group-item:focus {
-    z-index: 1;
-    background: #f9f9f9;
-    text-decoration: none;
+  z-index: 1;
+  background: #f9f9f9;
+  text-decoration: none;
 }
 
 .v-pagination .v-pagination__item--active {
-    background: #1867c0 !important;
+  background: #1867c0 !important;
 }
 
 .active,
 .list-group-item:focus {
-    z-index: 1;
-    background: #3490dc !important;
-    text-decoration: none;
+  z-index: 1;
+  background: #3490dc !important;
+  text-decoration: none;
 }
 </style>

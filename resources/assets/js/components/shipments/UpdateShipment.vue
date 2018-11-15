@@ -6,7 +6,9 @@
             <v-card-title>
                 Update Shipment
                 <v-spacer></v-spacer>
-                <v-btn icon dark @click="close">                         <v-icon color="black">close</v-icon>                     </v-btn>
+                <v-btn icon dark @click="close">
+                    <v-icon color="black">close</v-icon>
+                </v-btn>
             </v-card-title>
             <v-container grid-list-md>
                 <v-card style="width: 100%;">
@@ -39,35 +41,19 @@
                         <v-flex sm4 style="border-left: 1px solid #c1c1c1;">
                             <div class="form-group col-md-12">
                                 <label for="">Status</label>
-                                <!-- <select class="custom-select custom-select-md col-md-12" v-model="updateitedItem.status">
-                                    <option value="Awaiting Approval">Awaiting Approval</option>
-                                    <option value="Approved">Approved</option>
-                                    <option value="Arrived">Arrived</option>
-                                    <option value="Awaiting Confirmation">Awaiting Confirmation</option>
-                                    <option value="Cancelled ">Call Back</option>
-                                    <option value="Cancelled">Cancelled</option>
-                                    <option value="Cleared">Cleared</option>
-                                    <option value="Delivered">Delivered</option>
-                                    <option value="Dispatched">Dispatched</option>
-                                    <option value="Hold">Hold</option>
-                                    <option value="Not Available">Not Available</option>
-                                    <option value="Not Picking">Not Picking</option>
-                                    <option value="Out For Destination">Out For Destination</option>
-                                    <option value="Offline">Offline</option>
-                                    <option value="Out For Delivery">Out For Delivery</option>
-                                    <option value="Returned">Returned</option>
-                                    <option value="Ready For Depart">Ready For Depart</option>
-                                    <option value="Scheduled">Scheduled</option>
-                                    <option value="Shipment Collected">Shipment Collected</option>
-                                    <option value="Transit">Transit</option>
-                                    <option value="Waiting for Scan">Waiting for scan</option>
-                                    <option value="Wrong Number">Wrong Number</option>
-                                </select> -->
                                 <select class="custom-select custom-select-md col-md-12" v-model="updateitedItem.status">
                                     <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
                                 </select>
                             </div>
-                            <div v-if="updateitedItem.status === 'Scheduled'">
+                                <div v-if="updateitedItem.status === 'Delivered'">
+                                    <v-flex xs12 sm12>
+                                        <v-text-field v-model="updateitedItem.receiver_name" color="blue darken-2" label="Received By"></v-text-field>
+                                    </v-flex>
+                                    <v-flex xs12 sm12>
+                                        <v-text-field v-model="updateitedItem.receiver_id" color="blue darken-2" label="Receiver id/phone number"></v-text-field>
+                                    </v-flex>
+                                </div>
+                                <div v-if="updateitedItem.status === 'Scheduled' || updateitedItem.status === 'Delivered'">
                                 <v-flex xs12 sm12>
                                     <v-text-field v-model="updateitedItem.derivery_date" color="blue darken-2" label="Schedule Date" type="date"></v-text-field>
                                 </v-flex>
@@ -89,7 +75,7 @@
                             <v-flex xs12 sm12>
                                 <v-textarea v-model="updateitedItem.remark" color="blue">
                                     <div slot="label">
-                                        Remark
+                                        Special Instructions <small>(optional)</small>
                                     </div>
                                 </v-textarea>
                             </v-flex>
@@ -160,7 +146,6 @@ export default {
         },
         UpdateStatus() {
             // alert(this.updateitedItem.id);
-            this.updateitedItem.derivery_date = ''
             this.loading = true
             axios
                 .post(`/updateStatus/${this.updateitedItem.id}`, {
@@ -170,7 +155,8 @@ export default {
                 .then(response => {
                     this.loading = false
                     this.alert()
-                    this.close()
+                    // this.updateitedItem.derivery_date = ''
+                    // this.close()
                     // Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.updateitedItem)
                 })
                 .catch(error => {
@@ -241,18 +227,18 @@ export default {
 
             directionsService.route(request, function (response, status, dista) {
                 // if (status == google.maps.DirectionsStatus.OK) {
-                    this.$refs["distanceGet"]
-                    console.log(response.routes[0].legs[0].distance.value)
-                    alert(response.routes[0].legs[0].distance.value);
-                    dista = response.routes[0].legs[0].distance.value // the distance in metres
-                    this.dist = dista
-                    alert(dista)
-                    alert(this.dist)
+                this.$refs["distanceGet"]
+                console.log(response.routes[0].legs[0].distance.value)
+                alert(response.routes[0].legs[0].distance.value);
+                dista = response.routes[0].legs[0].distance.value // the distance in metres
+                this.dist = dista
+                alert(dista)
+                alert(this.dist)
                 // } else {
                 //     alert('wrong');
-                    // oops, there's no route between these two locations
-                    // every time this happens, a kitten dies
-                    // so please, ensure your address is formatted properly
+                // oops, there's no route between these two locations
+                // every time this happens, a kitten dies
+                // so please, ensure your address is formatted properly
                 // }
             });
             // alert(this.dista)

@@ -48,7 +48,7 @@ class ShipmentNoty extends Notification
 	{
 		return [
 			'shipment' => $this->shipment,
-			'type' => $this->type,
+			// 'type' => $this->type,
 			// 'type' => 'shipment',
 		];
 	}
