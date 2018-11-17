@@ -174,7 +174,7 @@
                             </router-link>
                         </v-list-group>
 
-                        <v-list-group prepend-icon="insert_drive_file" v-for="roleQ in user.roles" :key="roleQ.id" v-if="roleQ.name === 'Admin'">
+                        <v-list-group prepend-icon="settings" v-for="roleQ in user.roles" :key="roleQ.id" v-if="roleQ.name === 'Admin'">
                             <v-list-tile slot="activator">
                                 <v-list-tile-title>App Settings</v-list-tile-title>
                             </v-list-tile>
@@ -184,17 +184,29 @@
                                 </v-list-tile-action>
                                 <v-list-tile-title>Towns</v-list-tile-title>
                             </router-link>
-                            <router-link to="/charges" class="v-list__tile theme--light" style="text-decoration: none">
-                                <v-list-tile-action>
-                                    <v-icon>attach_money</v-icon>
-                                </v-list-tile-action>
-                                <v-list-tile-title>Charges</v-list-tile-title>
-                            </router-link>
                             <router-link to="/statuses" class="v-list__tile theme--light" style="text-decoration: none">
                                 <v-list-tile-action>
                                     <v-icon>dialpad</v-icon>
                                 </v-list-tile-action>
                                 <v-list-tile-title>Status</v-list-tile-title>
+                            </router-link>
+                        </v-list-group>
+
+                        <v-list-group prepend-icon="attach_money" v-for="roleQR in user.roles" :key="roleQR.id" v-if="roleQR.name === 'Finance' || roleQR.name === 'Admin'">
+                            <v-list-tile slot="activator">
+                                <v-list-tile-title>Finance</v-list-tile-title>
+                            </v-list-tile>
+                            <router-link to="/finance" class="v-list__tile theme--light" style="text-decoration: none">
+                                <v-list-tile-action>
+                                    <v-icon>business</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title>Finace</v-list-tile-title>
+                            </router-link>
+                            <router-link to="/charges" class="v-list__tile theme--light" style="text-decoration: none">
+                                <v-list-tile-action>
+                                    <v-icon>attach_money</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title>Charges</v-list-tile-title>
                             </router-link>
                         </v-list-group>
                     </v-card>
@@ -234,115 +246,115 @@
 </template>
 
 <script>
-import Notifications from '../notification/Notification'
+import Notifications from "../notification/Notification";
 let AddShipment = require("../shipments/AddShipment");
 // import chattyNoty from '../notification/chattyNoty'
 export default {
-    components: {
-        Notifications,
-        AddShipment,
-        //  chattyNoty
+  components: {
+    Notifications,
+    AddShipment
+    //  chattyNoty
+  },
+  props: ["user"],
+  data() {
+    return {
+      role: "",
+      color: "#132f51",
+      dialog: false,
+      drawer: true,
+      drawerRight: false,
+      right: null,
+      mode: "",
+      notifications: [],
+      company: {},
+      AllBranches: [],
+      Allcustomers: [],
+      AllDrivers: [],
+      snackbar: false,
+      timeout: 5000,
+      message: "Success"
+      // cruds: [
+      //     ['Create', 'add'],
+      //     ['Read', 'insert_drive_file'],
+      //     ['Update', 'update'],
+      //     ['Delete', 'delete']
+      // ]
+    };
+  },
+  methods: {
+    openShipment() {
+      this.dialog = true;
+      this.getBranch();
+      this.getCustomer();
+      this.getDrivers();
     },
-    props: ['user'],
-    data() {
-        return {
-            role: '',
-            color: '#132f51',
-            dialog: false,
-            drawer: true,
-            drawerRight: false,
-            right: null,
-            mode: '',
-            notifications: [],
-            company: {},
-            AllBranches: [],
-            Allcustomers: [],
-            AllDrivers: [],
-            snackbar: false,
-            timeout: 5000,
-            message: "Success",
-            // cruds: [
-            //     ['Create', 'add'],
-            //     ['Read', 'insert_drive_file'],
-            //     ['Update', 'update'],
-            //     ['Delete', 'delete']
-            // ]
-        }
-    },
-    methods: {
-        openShipment() {
-            this.dialog = true;
-            this.getBranch();
-            this.getCustomer();
-            this.getDrivers();
-        },
 
-        getCustomer() {
-            axios
-                .get("getCustomer")
-                .then(response => {
-                    this.Allcustomers = response.data;
-                })
-                .catch(error => {
-                    this.errors = error.response.data.errors;
-                });
-        },
-        getDrivers() {
-            axios
-                .get("/getDrivers")
-                .then(response => {
-                    this.AllDrivers = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.errors = error.response.data.errors;
-                });
-        },
-        getBranch() {
-            axios
-                .get("/getBranchEger")
-                .then(response => {
-                    this.AllBranches = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.errors = error.response.data.errors;
-                });
-        },
-        close() {
-            this.dialog = false
-        },
+    getCustomer() {
+      axios
+        .get("getCustomer")
+        .then(response => {
+          this.Allcustomers = response.data;
+        })
+        .catch(error => {
+          this.errors = error.response.data.errors;
+        });
+    },
+    getDrivers() {
+      axios
+        .get("/getDrivers")
+        .then(response => {
+          this.AllDrivers = response.data;
+        })
+        .catch(error => {
+          console.log(error);
+          this.errors = error.response.data.errors;
+        });
+    },
+    getBranch() {
+      axios
+        .get("/getBranchEger")
+        .then(response => {
+          this.AllBranches = response.data;
+        })
+        .catch(error => {
+          console.log(error);
+          this.errors = error.response.data.errors;
+        });
+    },
+    close() {
+      this.dialog = false;
+    },
 
-        showalert() {
-            this.message = "success";
-            // this.color = "indigo";
-            this.snackbar = true;
-        },
-    },
-    mounted() {
-        // axios.post('getLogo')
-        //     .then((response) => {
-        //         this.company = response.data
-        //     })
-        //     .catch((error) => {
-        //         this.errors = error.response.data.errors
-        //     })
-    },
-}
+    showalert() {
+      this.message = "success";
+      // this.color = "indigo";
+      this.snackbar = true;
+    }
+  },
+  mounted() {
+    // axios.post('getLogo')
+    //     .then((response) => {
+    //         this.company = response.data
+    //     })
+    //     .catch((error) => {
+    //         this.errors = error.response.data.errors
+    //     })
+  }
+};
 </script>
 
 <style scoped>
 .v-expansion-panel__container:hover {
-    border-radius: 10px !important;
-    width: 90% !important;
-    margin-left: 15px !important;
-    background: #e3edfe !important;
-    color: #1a73e8 !important;
+  border-radius: 10px !important;
+  width: 90% !important;
+  margin-left: 15px !important;
+  background: #e3edfe !important;
+  color: #1a73e8 !important;
 }
 
 .theme--light {
-    background-color: #212120 !important;
-    /* background: url('storage/logo1.jpg') !important; */
-    color: #fff !important;
+  background-color: #212120 !important;
+  /* background: url('storage/logo1.jpg') !important; */
+  color: #fff !important;
 }
 </style>

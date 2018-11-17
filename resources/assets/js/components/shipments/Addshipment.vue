@@ -195,12 +195,22 @@
                                                     </tbody>
                                                 </table>
                                                 <v-divider></v-divider>
+                                                <v-layout wrap>
+                                                    <v-flex xs12 sm6>
+                                                        <v-text-field v-model="subTotal" color="blue darken-2" label="Price" disabled></v-text-field>
+                                                    </v-flex>
 
-                                                <v-flex xs12 sm12>
-                                                    <v-text-field v-model="subTotal" color="blue darken-2" label="Price" disabled></v-text-field>
-                                                </v-flex>
-                                                <v-btn color="primary" flat @click="add_product">Add product</v-btn>
+                                                    <v-flex xs12 sm6 class="form-group">
+                                                        <label for="insurance" class="col-md-4 col-form-label text-md-right">Payment Type</label>
+                                                        <select class="custom-select" v-model="form.payment">
+                                                            <option value="cash">Cash</option>
+                                                            <option value="invoice">Invoice</option>
+                                                        </select>
+                                                    </v-flex>
+                                                    <v-btn color="primary" flat @click="add_product">Add product</v-btn>
+                                                </v-layout>
                                             </v-layout>
+                                            <v-divider></v-divider>
                                         </v-flex>
                                     </v-layout>
                                     <!-- Details -->
@@ -226,6 +236,7 @@
                                                             <option value="no">No</option>
                                                         </select>
                                                     </div>
+
                                                     <!-- </div>  -->
                                                     <div class="form-group col-md-4">
                                                         <label for="payment" class="col-md-4 col-form-label text-md-right">Paid</label>
@@ -352,6 +363,7 @@ export default {
             payment: "",
             total_freight: "",
             insuarance_status: "",
+            payment: "",
             booking_date: null,
             derivery_date: null,
             derivery_time: null,

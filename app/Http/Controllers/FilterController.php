@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Shipment;
+use App\User;
 
 class FilterController extends Controller
 {
-    
 	public function filterShipment(Request $request)
 	{
 		if (Auth::user()->hasRole('User')) {
@@ -133,8 +133,8 @@ class FilterController extends Controller
 			}
 
 		}
-    }
-    
+	}
+
 	public function getDeriveredS(Request $request)
 	{
 		if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
@@ -260,6 +260,31 @@ class FilterController extends Controller
 				// 				->count();
 			}
 		}
+	}
+
+	public function filterPayment(Request $request)
+	{
+		if ($request->abbr == 'All') {
+			$usersAll = User::latest()->take(200)->get();
+			$userArr = [];
+			foreach ($usersAll as $userAll) {
+				if ($userAll->hasRole('Client')) {
+					$userArr[] = $userAll;
+				}
+			}
+			return $userArr;
+		} else {
+			$users = User::latest()->take(200)->where('payment_status', $request->abbr)->get();
+			// return $user->hasRole('Client');
+			$userArr = [];
+			foreach ($users as $user) {
+				if ($user->hasRole('Client')) {
+					$userArr[] = $user;
+				}
+			}
+			return $userArr;
+		}
+
 	}
 
 }

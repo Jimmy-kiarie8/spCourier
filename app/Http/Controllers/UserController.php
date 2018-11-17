@@ -77,11 +77,11 @@ class UserController extends Controller
 			'form.name' => 'required',
 			'form.email' => 'required|email',
 			'form.phone' => 'required|numeric',
-			'form.branch_id' => 'required',
-			'form.address' => 'required',
-			'form.city' => 'required',
-			'form.country' => 'required',
-			'form.role_id' => 'required'
+			// 'form.branch_id' => 'required',
+			// 'form.address' => 'required',
+			// 'form.city' => 'required',
+			// 'form.country' => 'required',
+			// 'form.role_id' => 'required'
 		]);
 		$user = User::find($request->form['id']);
 		$user->name = $request->form['name'];

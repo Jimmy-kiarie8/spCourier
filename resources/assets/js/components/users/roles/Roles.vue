@@ -1,15 +1,15 @@
 <template>
 <div>
     <v-content>
-        <v-container fluid fill-height v-show="!loader">
+        <v-container fluid fill-height>
             <v-layout justify-center align-center>
                 <div v-show="loader" style="text-align: center; width: 100%;">
                     <v-progress-circular :width="3" indeterminate color="red" style="margin: 1rem"></v-progress-circular>
                 </div>
-                <v-card>
+                <v-card v-show="!loader">
                     <v-card-title>
-                        Charges
-                        <v-btn @click="openAdd" flat color="primary">Add Charges</v-btn>
+                        Roles
+                        <v-btn @click="openAdd" flat color="primary">Add Roles</v-btn>
                         <!-- <v-spacer></v-spacer> -->
                         <v-tooltip right>
                             <v-btn icon slot="activator" class="mx-0" @click="getRoles">
@@ -34,9 +34,9 @@
                                 </v-tooltip>
                                 <v-tooltip bottom>
                                     <v-btn slot="activator" icon class="mx-0" @click="deleteItem(props.item)">
-                                        <v-icon small color="blue darken-2">delete</v-icon>
+                                        <v-icon small color="red darken-2">delete</v-icon>
                                     </v-btn>
-                                    <span>Edit</span>
+                                    <span>delete</span>
                                 </v-tooltip>
                             </td>
                         </template>
@@ -139,18 +139,6 @@ export default {
             this.snackbar = true;
             this.color = 'black';
         },
-        sort() {
-            this.loading = true
-            axios.post('getSorted', this.select)
-                .then((response) => {
-                    this.loading = false
-                    this.AllRoles = response.data
-                })
-                .catch((error) => {
-                    this.loading = false
-                    this.errors = error.response.data.errors
-                })
-        },
 
         deleteItem(item) {
             if (confirm('Are you sure you want to delete this item?')) {
@@ -180,12 +168,15 @@ export default {
             this.dispAdd = this.dispShow = this.dispEdit = false
         },
         getRoles() {
+            this.loading = true
             axios.get('getRoles')
                 .then((response) => {
+                    this.loading = false
                     this.loader = false
                     this.AllRoles = response.data
                 })
                 .catch((error) => {
+                    this.loading = false
                     this.loader = false
                     this.errors = error.response.data.errors
                 })
@@ -195,20 +186,20 @@ export default {
         this.loader = true
         this.getRoles()
     },
-    // beforeRouteEnter(to, from, next) {
-    //     next(vm => {
-    //         if (vm.role === 'Admin' || vm.role === 'companyAdmin') {
-    //             next();
-    //         } else {
-    //             next('/unauthorized');
-    //         }
-    //     })
-    // }
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (vm.user.can["view roles"]) {
+        next();
+      } else {
+        next("/unauthorized");
+      }
+    });
+  }
 }
 </script>
 
 <style>
 .container {
-    margin-top: -30px;
+    /* margin-top: -30px; */
 }
 </style>

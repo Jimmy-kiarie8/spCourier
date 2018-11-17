@@ -107,6 +107,8 @@ let myDash = require('./components/App.vue');
 
 let myFilter = require('./components/scanner/Filter.vue');
 let myChatty = require('./components/chat/Chatty.vue');
+let myFinance = require('./components/finance/Finance.vue');
+let myFinClient = require('./components/finance/Clients.vue');
 
 
 const routes = [
@@ -144,6 +146,8 @@ const routes = [
 
     { path: '/filter', component: myFilter },
     { path: '/chatty', component: myChatty },
+    { path: '/finance', component: myFinance },
+    { path: '/clients', component: myFinClient },
 
 ]
 const router = new VueRouter({
@@ -159,7 +163,7 @@ const app = new Vue({
         myBranch, myProfile, myCompany, myCustomer, mysubsicriber, myInvice, myReceipt,
         myReports, mybranchShip, myRoles, myscheduled, myTasks, myUploadFile, myCharges,
         myTown, myPrintPdf, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash,
-        myunauth, myDash, myFilter, myChatty,
+        myunauth, myDash, myFilter, myChatty,myFinance, myFinClient
         // myContainer
     },
     data: {

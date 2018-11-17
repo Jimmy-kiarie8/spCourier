@@ -20,32 +20,32 @@
                                 </select>
                             </div>
                             <!-- <v-layout wrap> -->
-                                <div v-if="form.status === 'Delivered'">
-                                    <v-flex xs12 sm12>
-                                        <v-text-field v-model="form.receiver_name" color="blue darken-2" label="Received By"></v-text-field>
-                                    </v-flex>
-                                    <v-flex xs12 sm12>
-                                        <v-text-field v-model="form.receiver_id" color="blue darken-2" label="Receiver id/phone number"></v-text-field>
-                                    </v-flex>
-                                </div>
-                                <div v-if="form.status === 'Scheduled' || form.status === 'Delivered'">
-                                    <v-flex xs12 sm12>
-                                        <v-text-field v-model="form.delivery_date" color="blue darken-2" label="Delivery Date" type="date"></v-text-field>
-                                    </v-flex>
-                                    <v-flex xs12 sm12>
-                                        <v-text-field v-model="form.derivery_time" color="blue darken-2" label="Delivery Time" type="time"></v-text-field>
-                                    </v-flex>
-                                    <v-flex xs4 sm12>
-                                        <v-text-field v-model="form.location" color="blue darken-2" label="Location" required></v-text-field>
-                                    </v-flex>
-                                </div>
+                            <div v-if="form.status === 'Delivered'">
                                 <v-flex xs12 sm12>
-                                    <v-textarea v-model="form.remark" color="blue">
-                                        <div slot="label">
-                                            Special Instructions <small>(optional)</small>
-                                        </div>
-                                    </v-textarea>
+                                    <v-text-field v-model="form.receiver_name" color="blue darken-2" label="Received By"></v-text-field>
                                 </v-flex>
+                                <v-flex xs12 sm12>
+                                    <v-text-field v-model="form.receiver_id" color="blue darken-2" label="Receiver id/phone number"></v-text-field>
+                                </v-flex>
+                            </div>
+                            <div v-if="form.status === 'Scheduled' || form.status === 'Delivered'">
+                                <v-flex xs12 sm12>
+                                    <v-text-field v-model="form.delivery_date" color="blue darken-2" label="Delivery Date" type="date"></v-text-field>
+                                </v-flex>
+                                <v-flex xs12 sm12>
+                                    <v-text-field v-model="form.derivery_time" color="blue darken-2" label="Delivery Time" type="time"></v-text-field>
+                                </v-flex>
+                                <v-flex xs4 sm12>
+                                    <v-text-field v-model="form.location" color="blue darken-2" label="Location" required></v-text-field>
+                                </v-flex>
+                            </div>
+                            <v-flex xs12 sm12>
+                                <v-textarea v-model="form.remark" color="blue">
+                                    <div slot="label">
+                                        Special Instructions <small>(optional)</small>
+                                    </div>
+                                </v-textarea>
+                            </v-flex>
                             <!-- </v-layout> -->
                         </v-card>
                     </v-flex>
@@ -95,12 +95,14 @@ export default {
                 .then(response => {
                     this.loading = false;
                     this.$emit("alertRequest");
-                    // this.close();
-                    // this.form.delivery_date = ''
-                    // this.form.derivery_time = ''
-                    // this.form.location = ''
-                    // this.form.remark = ''
-                    // eventBus.$emit('selectClear');
+                    this.close();
+                    this.form.delivery_date = ''
+                    this.form.derivery_time = ''
+                    this.form.location = ''
+                    this.form.remark = ''
+                    this.receiver_name = ''
+                    this.receiver_id = ''
+                    eventBus.$emit('selectClear');
                 })
                 .catch(error => {
                     this.loading = false;

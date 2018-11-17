@@ -81,6 +81,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('getDeriveredS', 'FilterController@getDeriveredS')->name('getDeriveredS');
 	Route::post('getOrdersS', 'FilterController@getOrdersS')->name('getOrdersS');
 	Route::post('getPendingS', 'FilterController@getPendingS')->name('getPendingS');
+	Route::post('filterPayment', 'FilterController@filterPayment')->name('filterPayment');
 
 	Route::post('AddShipments/{id}', 'ContainerController@AddShipments')->name('AddShipments');
 	Route::post('conupdateStatus/{id}', 'ContainerController@conupdateStatus')->name('conupdateStatus');
@@ -308,7 +309,9 @@ Route::group(['middleware' => ['auth']], function () {
 
 	// Route::post('/chat','ChattyController@sendMessage');
 	// Route::get('/chat','ChattyController@chatPage');
-
+	Route::post('filterFin', 'FinanceController@filterFin')->name('filterFin');
+	Route::post('payment/{id}', 'FinanceController@payment')->name('payment');
+	
 	
     Route::get('chat','ChatController@chat');
     Route::post('/send','ChatController@send')->name('send');

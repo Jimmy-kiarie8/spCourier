@@ -5,7 +5,9 @@
             <v-card-title fixed>
                 <span class="headline">Add Role</span>
                 <v-spacer></v-spacer>
-                <v-btn icon dark @click="close">                         <v-icon color="black">close</v-icon>                     </v-btn>
+                <v-btn icon dark @click="close">
+                    <v-icon color="black">close</v-icon>
+                </v-btn>
             </v-card-title>
             <v-card-text>
                 <v-container grid-list-md>
@@ -19,9 +21,10 @@
                                     </v-flex>
                                     <v-layout wrap>
                                         <div v-for="perm in permissions" :key="perm.id">
-                                        <v-flex xs6 sm6>
-                                            <v-checkbox v-model="selected" :label="perm.name" :value="perm.name"></v-checkbox>
-                                        </v-flex></div>
+                                            <v-flex xs6 sm6>
+                                                <v-checkbox v-model="selected" :label="perm.name" :value="perm.name"></v-checkbox>
+                                            </v-flex>
+                                        </div>
                                     </v-layout>
                                 </v-layout>
                             </v-container>

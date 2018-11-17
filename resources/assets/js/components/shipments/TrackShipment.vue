@@ -1,78 +1,94 @@
 <template>
 <div class="text-xs-center">
     <v-dialog v-model="OpenTrackBranch" hide-overlay persistent width="1500">
-        <v-card v-if="OpenTrackBranch" id="printMe">
+        <v-card v-if="OpenTrackBranch">
             <!-- <v-card> -->
-            <v-card-text>
+            <v-card-text id="printMe">
                 <ul class="list-group">
                     <li class="list-group-item active text-center">
-                        <h2>Shipment {{ shipments.airway_bill_no }}</h2>
+                        <barcode v-bind:value="shipments.bar_code" style="margin-top: 5px !important;"></barcode>
                     </li>
+                    <span>
+                        <v-btn icon dark @click="close">
+                            <v-icon color="black">close</v-icon>
+                        </v-btn>
+                    </span>
                 </ul>
-                <v-layout wrap>
-                    <v-flex xs12 sm6>
-                        <ul class="list-group">
-                            <li class="list-group-item"><label for=""><b>Waybill Number: </b></label>{{ shipments.airway_bill_no }}</li>
-                            <li class="list-group-item"><label for=""><b>From: </b></label>{{ shipments.sender_city }}</li>
-                            <li class="list-group-item"><label for=""><b>Status: </b></label>{{ shipments.status }}</li>
-                        </ul>
-                    </v-flex>
-
-                    <v-flex xs12 sm6>
-                        <ul class="list-group">
-                            <li class="list-group-item"><label for=""><b>Derivery Date: </b></label> {{ shipments.derivery_date }}</li>
-                            <li class="list-group-item"><label for=""><b>To: </b></label> {{ shipments.client_city }}</li>
-                        </ul>
-                    </v-flex>
-                    <!-- </div> -->
-                </v-layout>
+                <table class="table table-hover">
+                    <thead>
+                        <th>Waybill</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Status</th>
+                        <th>Delivery Date</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ shipments.bar_code }}</td>
+                            <td>{{ shipments.sender_city }}</td>
+                            <td>{{ shipments.client_city }}</td>
+                            <td>{{ shipments.status }}</td>
+                            <td>{{ shipments.derivery_date }}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <v-toolbar card style="background: #122e4f; color: #fff;" darken-1>
                     <v-toolbar-title class="body-2">Product Details</v-toolbar-title>
                 </v-toolbar>
-                <v-layout wrap>
-                    <v-flex xs12 sm6>
-                        <ul class="list-group">
-                            <li class="list-group-item"><label for=""><b>Waybill Status:</b></label>{{ shipments.status }}</li>
-                            <li class="list-group-item" v-if="shipments.status === 'Delivered'"><label for="">Receiver Name: </label>{{ shipments.receiver_name }}</li>
-                            <li class="list-group-item"><label for=""><b>Delivery Date: </b></label>{{ shipments.derivery_date }}</li>
-                        </ul>
-                    </v-flex>
-
-                    <v-flex xs12 sm6>
-                        <ul class="list-group">
-                            <li class="list-group-item"><label for=""><b>COD amount: </b></label> {{ shipments.cod_amount }}</li>
-                            <li class="list-group-item"><label for=""><b>product Description: </b></label> {{ shipments.bar_code }}</li>
-                            <li class="list-group-item"><label for=""><b>Quantity: </b></label> {{ shipments.amount_ordered }}</li>
-                        </ul>
-                    </v-flex>
-                </v-layout>
+                <table class="table table-hover">
+                    <thead>
+                        <th>Waybill Status</th>
+                        <th>Receiver Name</th>
+                        <th>Delivery Date</th>
+                        <th>COD Amount</th>
+                        <th>Quantity</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ shipments.status }}</td>
+                            <td>{{ shipments.receiver_name }}</td>
+                            <td>{{ shipments.derivery_date }}</td>
+                            <td>{{ shipments.cod_amount }}</td>
+                            <td>{{ shipments.amount_ordered }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <v-toolbar card style="background: #122e4f; color: #fff;" darken-1>
+                    <v-toolbar-title class="body-2">Client Details</v-toolbar-title>
+                </v-toolbar>
+                <table class="table table-hover">
+                    <thead>
+                        <th>Client Name</th>
+                        <th>Client Email</th>
+                        <th>Client Phone</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ shipments.client_name }}</td>
+                            <td>{{ shipments.client_email }}</td>
+                            <td>{{ shipments.client_phone }}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <v-toolbar card style="background: #122e4f; color: #fff;" darken-1>
-                    <v-toolbar-title class="body-2">
-                        <v-layout wrap>
-                            <v-flex sm6>Client Details</v-flex>
-                            <v-flex sm6 style="margin-left: 750px;margin-top: -20px;"><b>Sender Details</b></v-flex>
-                        </v-layout>
-                    </v-toolbar-title>
+                    <v-toolbar-title class="body-2">Sender Details</v-toolbar-title>
                 </v-toolbar>
-                <v-layout wrap>
-                    <v-flex xs12 sm6>
-                        <ul class="list-group">
-                            <li class="list-group-item"><label for=""><b>Client Name:</b> </label>{{ shipments.client_name }}</li>
-                            <li class="list-group-item"><label for=""><b>Client Email:</b> </label>{{ shipments.client_email }}</li>
-                            <li class="list-group-item"><label for=""><b>Client Phone:</b> </label>{{ shipments.client_phone }}</li>
-                        </ul>
-                    </v-flex>
-                    <v-flex xs12 sm6>
-                        <ul class="list-group">
-                            <li class="list-group-item"><label for=""><b>Sender Name:</b> </label>SpeedBall Courier Services</li>
-                            <li class="list-group-item"><label for=""><b>Sender Email:</b> </label>info@speedballcourier.com</li>
-                            <li class="list-group-item"><label for=""><b>Sender Phone:</b> </label>+254728492446</li>
-                        </ul>
-                    </v-flex>
-
-                </v-layout>
+                <table class="table table-hover">
+                    <thead>
+                        <th>Sender Name</th>
+                        <th>Sender Email</th>
+                        <th>Sender Phone</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ shipments.sender_name }}</td>
+                            <td>{{ shipments.sender_email }}</td>
+                            <td>{{ shipments.sender_phone }}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <v-toolbar card style="background: #122e4f; color: #fff;" darken-1>
                     <v-toolbar-title class="body-2">Waybill Event Tracking</v-toolbar-title>
@@ -103,15 +119,10 @@
 
             <v-card-actions>
                 <v-btn color="blue darken-1" flat @click="close">Close</v-btn>
+                <v-btn color="blue darken-1" flat @click="TrackEvent">Update status</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn v-print="'#printMe'" flat color="primary">Print</v-btn>
             </v-card-actions>
-            <!-- <div v-show="nextPage" style="text-align: center; width: 100%;">
-                <v-progress-circular :width="3" indeterminate color="red" style="margin: 1rem"></v-progress-circular>
-            </div> -->
-            <!-- <div class="text-xs-center">
-                <v-pagination v-model="AllShip.current_page" :length="AllShip.last_page" total-visible="7" @input="next" circle></v-pagination>
-            </div> -->
             <v-divider></v-divider>
             <v-divider></v-divider>
         </v-card>
@@ -120,25 +131,39 @@
 </template>
 
 <script>
+import VueBarcode from "vue-barcode";
 export default {
-  props: ["shipments", "OpenTrackBranch"],
-  data() {
-    return {
-      dialog: false
-    };
-  },
-  methods: {
-    refresh() {
-      this.$emit("refreshRequest");
+    props: ["shipments", "OpenTrackBranch"],
+    components: {
+        barcode: VueBarcode
     },
-    close() {
-      this.$emit("closeRequest");
+    data() {
+        return {
+            dialog: false
+        };
+    },
+    methods: {
+        refresh() {
+            this.$emit("refreshRequest");
+        },
+        TrackEvent() {
+            eventBus.$emit('TrackEvent', this.shipments);
+
+        },
+        close() {
+            this.$emit("closeRequest");
+        }
+    },
+    computed: {
+        getUrl() {
+            return "pod/" + this.shipments.id;
+        }
     }
-  },
-  computed: {
-    getUrl() {
-      return "pod/" + this.shipments.id;
-    }
-  }
 };
 </script>
+
+<style scoped>
+.vue-barcode-element {
+    margin-top: 5px !important;
+}
+</style>

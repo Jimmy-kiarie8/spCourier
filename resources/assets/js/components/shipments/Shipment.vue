@@ -181,7 +181,7 @@
     <UpdateShipmentStatus :UpdateShipmentStatus="UpdateShipmentModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></UpdateShipmentStatus>
     <AssignDriver :AllDrivers="AllDrivers" :OpenAssignDriver="AssignDriverModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></AssignDriver>
     <AssignBranch :AllBranches="AllBranches" :OpenAssignBranch="AssignBranchModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></AssignBranch>
-    <TrackShipment @refreshRequest="getShipments" :shipments="shipment" :OpenTrackBranch="trackModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></TrackShipment>
+    <TrackShipment @refreshRequest="getShipments" :shipments="updateitedItem" :OpenTrackBranch="trackModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></TrackShipment>
     <myCsvFile :OpenCsv="csvModel" @closeRequest="close"></myCsvFile>
     <mySCharges :mySCharges="chargeModal" @closeRequest="close" :updateCharges="shipment" @alertRequest="showalert"></mySCharges>
     <myRows :myRows="RowModal" @closeRequest="close" :updateCharges="shipment"></myRows>
@@ -310,7 +310,7 @@ export default {
       headers: [
         {
           text: "Waybill Number",
-          value: "airway_bill_no"
+          value: "bar_code"
         },
         // {
         //   text: "Barcode",
@@ -472,7 +472,7 @@ export default {
       eventBus.$emit("printEvent", item);
     },
     ShipmentTrack(item) {
-      this.shipment = Object.assign({}, item);
+      this.updateitedItem = Object.assign({}, item);
       this.editedIndex = this.AllShipments.indexOf(item);
       this.trackModel = true;
     },
@@ -756,6 +756,10 @@ export default {
   created() {
     eventBus.$on("selectClear", data => {
       this.selected = [];
+    });
+
+    eventBus.$on("TrackEvent", data => {
+      this.updateModal = true;
     });
 
     // eventBus.$on("reload", data => {

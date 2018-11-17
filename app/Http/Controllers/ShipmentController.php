@@ -168,7 +168,7 @@ class ShipmentController extends Controller
 	 */
 	public function store(Request $request)
 	{
-		// return $request->all();
+		return $request->all();
 		// $this->Validate($request, [
 		// 	'form.payment' =>'required',
 		// 	'form.insuarance_status' =>'required',
@@ -198,25 +198,19 @@ class ShipmentController extends Controller
 		$shipment = new Shipment;
 		if ($request->selectCl == []) {
 			$shipment->client_id = null;
-			// dd('nn');
 		} else {
 			$shipment->client_id = $request->selectCl['id'];
-			// dd( $request->selectCl['id']);
 		}
 		if ($request->selectD == []) {
 			$shipment->driver = '';
-			// dd('renn');
 		} else {
 			$shipment->driver = $request->selectD['id'];
-			// dd( $request->selectD['id']);
 		}
 
 		if ($request->selectB == []) {
 			$shipment->branch_id = Auth::user()->branch_id;
-			// dd(Auth::user()->branch_id);
 		} else {
 			$shipment->branch_id = $request->selectB['id'];
-			// dd( $request->selectB['id']);
 		}
 
 		$shipment->sub_total = $products->sum('total');
@@ -225,12 +219,9 @@ class ShipmentController extends Controller
 		$shipment->client_email = $request->form['client_email'];
 		$shipment->client_address = $request->form['client_address'];
 		$shipment->client_city = $request->form['client_city'];
-		// $shipment->assign_staff = $request->form['assign_staff'];
 		$shipment->airway_bill_no = $request->form['bar_code'];
 		$shipment->shipment_type = $request->form['shipment_type'];
 		$shipment->payment = $request->form['payment'];
-		// $shipment->total_freight = $request->form['total_freight'];
-		// $shipment->total = $request->form['total'];
 		$shipment->insuarance_status = $request->form['insuarance_status'];
 		$shipment->status = $request->form['status'];
 		$shipment->booking_date = $request->form['booking_date'];
@@ -241,41 +232,19 @@ class ShipmentController extends Controller
 		$shipment->cod_amount = $request->form['cod_amount'];
 		// $shipment->receiver_name = $request->form['receiver_name'];
 		$shipment->from_city = $request->form['from_city'];
-
-		// if ($request->model) {
-		// 	$shipment->client_id = $request->model;
-		// 	$sender = User::find($request->model);
-		// 	$shipment->sender_name = $sender->name;
-		// 	$shipment->sender_email = 'info@speedballcourier.com';
-		// 	$shipment->sender_phone = '+254728492446';
-		// 	$shipment->sender_address = '17254 00100';
-		// 	$shipment->sender_city = $sender->city;
-		// } else {
-		// 	$shipment->sender_name = 'Speedball Courier';
-		// 	$shipment->sender_email = 'info@speedballcourier.com';
-		// 	$shipment->sender_phone = '+254728492446';
-		// 	$shipment->sender_address = '17254 00100';
-		// 	$shipment->sender_city = 'Nairobi';
-		// }
-
 		$shipment->sender_name = $request->form['sender_name'];
 		$shipment->sender_email = $request->form['sender_email'];
 		$shipment->sender_phone = $request->form['sender_phone'];
 		$shipment->sender_address = $request->form['sender_address'];
 		$shipment->sender_city = $request->form['sender_city'];
-		
-		// return $request->form['customer_id'];
 		$shipment->user_id = Auth::id();
 		$shipment->shipment_id = random_int(1000000, 9999999);
-		// $shipment->branch_id = Auth::user()->branch_id;
-
 		$users = $this->getAdmin();
 		if ($shipment->save()) {
 			$shipment->products()->saveMany($products);
 		}
 		$type = 'shipment';
 		Notification::send($users, new ShipmentNoty($shipment, $type));
-		// $users->notify(new ShipmentNoty($shipment));
 		return $shipment;
 	}
 
@@ -408,7 +377,7 @@ class ShipmentController extends Controller
 			$shipment->derivery_time = $request->formobg['derivery_time'];
 			$shipment->receiver_id = $request->formobg['receiver_id'];
 			$shipment->receiver_name = $request->formobg['receiver_name'];
-		}		
+		}
 		if ($shipment->save()) {
 			$shipStatus = Shipment::find($id);
 			$statusUpdate = new ShipmentStatus;
@@ -424,9 +393,9 @@ class ShipmentController extends Controller
 		}
 
 		if ($request->formobg['status'] == 'Scheduled') {
-			$this->send_sms($request->formobg['client_phone'], 'Dear ' . $request->formobg['client_name'] . ', Your shipment has been scheduled to be delivered on ' . $request->formobg['derivery_date']);
+			$this->send_sms($request->formobg['client_phone'], 'Dear ' . $request->formobg['client_name'] . ', Your shipment (waybill number: ' . $request->formobg['bar_code'] . ')  has been scheduled to be delivered on ' . $request->formobg['derivery_date']);
 		} elseif ($request->formobg['status'] == 'Delivered') {
-			$this->send_sms($request->formobg['client_phone'], 'Dear ' . $request->formobg['client_name'] . ', Your shipment has been delivered');
+			$this->send_sms($request->formobg['client_phone'], 'Dear ' . $request->formobg['client_name'] . ', Your shipment (waybill number: ' . $request->formobg['bar_code'] . ') has been delivered');
 		}
 		return $shipment;
 	}
@@ -444,7 +413,7 @@ class ShipmentController extends Controller
 		// $location = $request->form['location'];
 		$derivery_date = $request->form['delivery_date'];
 		$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark]);
-		$phones = Shipment::setEagerLoads([])->select('id', 'client_phone', 'client_name')->whereIn('id', $id)->get();
+		$phones = Shipment::setEagerLoads([])->select('id', 'client_phone', 'client_name', 'bar_code')->whereIn('id', $id)->get();
 		$shipStatus = Shipment::setEagerLoads([])->whereIn('id', $id)->get();
 		foreach ($phones as $statuses) {
 			$statusUpdate = new ShipmentStatus;
@@ -459,11 +428,11 @@ class ShipmentController extends Controller
 		}
 		if ($status == 'Scheduled') {
 			foreach ($phones as $phone) {
-				$this->send_sms($phone->client_phone, 'Dear ' . $phone->client_name . ', Your shipment has been scheduled to be delivered on ' . $derivery_date);
+				$this->send_sms($phone->client_phone, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ')  has been scheduled to be delivered on ' . $derivery_date);
 			}
 		} elseif ($status == 'Delivered') {
 			foreach ($phones as $phone) {
-				$this->send_sms($phone->client_phone, 'Dear ' . $phone->client_name . ', Your has been delivered');
+				$this->send_sms($phone->client_phone, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ') has been delivered');
 			}
 		}
 		// $shipStatus->statuses()->saveMany($shipStatus);
