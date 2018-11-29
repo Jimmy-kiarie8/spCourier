@@ -27,23 +27,23 @@ class UserController extends Controller
 	 */
 	public function store(Request $request)
 	{
+		// return $this->generateRandomString();
 		// return $request->all();
 		$this->Validate($request, [
 			'form.name' => 'required',
-			'form.password' => 'required|min:6',
+			// 'form.password' => 'required|min:6',
 			'form.email' => 'required|email',
 			'form.phone' => 'required|numeric',
 			'form.branch_id' => 'required',
-			'form.address' => 'required',
-			'form.city' => 'required',
-			'form.country' => 'required',
+			// 'form.address' => 'required',
+			// 'form.city' => 'required',
+			// 'form.country' => 'required',
 			'form.role_id' => 'required'
 		]);
 		// return $request->all();
 		$user = new User;
-		$password = $request->form['password'];
-		// $password = Str::random(10);
-		// return $request->form['name'];
+		// $password = $request->form['password'];
+		$password = $this->generateRandomString();
 		$password_hash = Hash::make($password);
 		// $user->name = $request->name;
 		$user->password = $password_hash;
@@ -53,7 +53,7 @@ class UserController extends Controller
 		$user->branch_id = $request->form['branch_id'];
 		$user->address = $request->form['address'];
 		$user->city = $request->form['city'];
-		$user->country = $request->form['country'];
+		// $user->country = $request->form['country'];
 		$user->country_id = $request->form['countryList'];
 		$user->activation_token = str_random(60);
 		$user->save();
@@ -61,6 +61,16 @@ class UserController extends Controller
 		$user->givePermissionTo($request->selected);
 		$user->notify(new SignupActivate($user, $password));
 		return $user;
+	}
+	public function generateRandomString($length = 10)
+	{
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$charactersLength = strlen($characters);
+		$randomString = '';
+		for ($i = 0; $i < $length; $i++) {
+			$randomString .= $characters[rand(0, $charactersLength - 1)];
+		}
+		return $randomString;
 	}
 
 	/**
@@ -208,8 +218,37 @@ class UserController extends Controller
 		return $user;
 	}
 
-    public function UserShip()
-    {
-        return Shipment::where('client_id', $id)->orWhere('driver', $id)->paginate(10);
-    }
+	public function UserShip()
+	{
+		return Shipment::where('client_id', $id)->orWhere('driver', $id)->paginate(10);
+	}
+	public function send_sms($phone, $message)
+	{
+		// dd($phone . '   ' . $message);
+		$phone = '254731090832';
+		$sms = 'Test messange';
+		$senderID = 'SPEEDBALL';
+
+		$login = 'SPEEDBALL';
+		$password = 's12345';
+
+		$clientsmsID = rand(1000, 9999);
+
+		$xml_data = '<?xml version="1.0"?><smslist><sms><user>' . $login . '</user><password>' . $password . '</password><message>' . $sms . '</message><mobiles>' . $phone . '</mobiles><senderid>' . $senderID . '</senderid><clientsmsid>' . $clientsmsID . '</clientsmsid></sms></smslist>';
+
+		$URL = "http://messaging.advantasms.com/bulksms/sendsms.jsp?";
+
+		$ch = curl_init($URL);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/xml'));
+		curl_setopt($ch, CURLOPT_POSTFIELDS, "$xml_data");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$output = curl_exec($ch);
+		curl_close($ch);
+
+		// return $output;
+	}
 }

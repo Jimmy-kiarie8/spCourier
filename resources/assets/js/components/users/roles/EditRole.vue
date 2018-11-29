@@ -14,16 +14,14 @@
                             <v-container grid-list-xl fluid>
                                 <v-layout wrap>
                                     <v-flex xs12 sm12>
-                                        <v-text-field v-model="form.name" :rules="rules.name" color="blue darken-2" label="Full name" required></v-text-field>
+                                        <v-text-field v-model="form.name" :rules="rules.name" color="blue darken-2" label="Role" required></v-text-field>
                                         <!-- <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small> -->
                                     </v-flex>
                                 </v-layout>
                                 <v-layout wrap>
-                                    <!-- <div> -->
                                     <v-flex v-for="perm in permissions" :key="perm.id" xs6 sm6>
                                         <v-checkbox v-model="selected" :label="perm.name" :value="perm.name"></v-checkbox>
                                     </v-flex>
-                                    <!-- </div> -->
                                 </v-layout>
                             </v-container>
                             <v-card-actions>
@@ -43,60 +41,63 @@
 
 <script>
 export default {
-    props: ['openEditRequest', 'form', 'userPerm'],
-    data() {
-        return {
-            loading: false,
-            loader: false,
-            selected: [],
-            permissions: [],
-            rules: {
-                name: [val => (val || '').length > 0 || 'This field is required']
-            },
-        }
-    },
-    methods: {
-        save() {
-            this.loading = true
-            axios.patch(`/roles/${this.form.id}`, {
-                form: this.form,
-                selected: this.selected
-                }).
-            then((response) => {
-                    this.loading = false
-                    console.log(response);
-                    this.$emit('alertRequest');
-                    Object.assign(this.$parent.AllRoles[this.$parent.editedIndex], this.$parent.editedItem)
-                    this.$emit('closeRequest');
-
-                })
-                .catch((error) => {
-                    this.loading = false
-                    this.errors = error.response.data.errors
-                })
-        },
-        resetForm() {
-            this.form = Object.assign({}, this.defaultForm)
-            this.$refs.form.reset()
-        },
-        close() {
-            this.$emit('closeRequest')
-        },
-    },
-    created() {
-        eventBus.$on('RolepermEvent', data => {
-            this.selected = data;
+  props: ["openEditRequest", "form", "userPerm"],
+  data() {
+    return {
+      loading: false,
+      loader: false,
+      selected: [],
+      permissions: [],
+      rules: {
+        name: [val => (val || "").length > 0 || "This field is required"]
+      }
+    };
+  },
+  methods: {
+    save() {
+      this.loading = true;
+      axios
+        .patch(`/roles/${this.form.id}`, {
+          form: this.form,
+          selected: this.selected
+        })
+        .then(response => {
+          this.loading = false;
+          console.log(response);
+          this.$emit("alertRequest");
+          Object.assign(
+            this.$parent.AllRoles[this.$parent.editedIndex],
+            this.$parent.editedItem
+          );
+          this.$emit("closeRequest");
+        })
+        .catch(error => {
+          this.loading = false;
+          this.errors = error.response.data.errors;
         });
     },
-    mounted() {
-
-        axios.get('getPermissions')
-            .then((response) => {
-                this.permissions = response.data
-            })
-            .catch((errors) => {
-                this.errors = error.response.data.errors
-            })
+    resetForm() {
+      this.form = Object.assign({}, this.defaultForm);
+      this.$refs.form.reset();
+    },
+    close() {
+      this.$emit("closeRequest");
     }
-}
+  },
+  created() {
+    eventBus.$on("RolepermEvent", data => {
+      this.selected = data;
+    });
+  },
+  mounted() {
+    axios
+      .get("getPermissions")
+      .then(response => {
+        this.permissions = response.data;
+      })
+      .catch(errors => {
+        this.errors = error.response.data.errors;
+      });
+  }
+};
 </script>

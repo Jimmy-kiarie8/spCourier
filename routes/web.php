@@ -76,7 +76,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('betweenShipments', 'ShipmentController@betweenShipments')->name('betweenShipments');
 	Route::post('getShipSingle/{id}', 'ShipmentController@getShipSingle')->name('getShipSingle');
 	Route::any('updateCancelled', 'ShipmentController@updateCancelled')->name('updateCancelled');
-	
+
 	Route::post('filterShipment', 'FilterController@filterShipment')->name('filterShipment');
 	Route::post('getDeriveredS', 'FilterController@getDeriveredS')->name('getDeriveredS');
 	Route::post('getOrdersS', 'FilterController@getOrdersS')->name('getOrdersS');
@@ -194,7 +194,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('/read', 'NotificationController@read')->name('read');
 	Route::get('/Chattynoty', 'NotificationController@Chattynoty')->name('Chattynoty');
 	Route::get('/notifications', 'NotificationController@notifications')->name('notifications');
-	
+
 	Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 	// Tasks
@@ -311,16 +311,16 @@ Route::group(['middleware' => ['auth']], function () {
 	// Route::get('/chat','ChattyController@chatPage');
 	Route::post('filterFin', 'FinanceController@filterFin')->name('filterFin');
 	Route::post('payment/{id}', 'FinanceController@payment')->name('payment');
-	
-	
-    Route::get('chat','ChatController@chat');
-    Route::post('/send','ChatController@send')->name('send');
-    Route::post('saveToSession','ChatController@saveToSession');
-    Route::post('deleteSession','ChatController@deleteSession');
-    Route::post('getOldMessage','ChatController@getOldMessage');
-    Route::get('check',function(){
-        return session('chat');
-    });
+
+
+	Route::get('chat', 'ChatController@chat');
+	Route::post('/send', 'ChatController@send')->name('send');
+	Route::post('saveToSession', 'ChatController@saveToSession');
+	Route::post('deleteSession', 'ChatController@deleteSession');
+	Route::post('getOldMessage', 'ChatController@getOldMessage');
+	Route::get('check', function () {
+		return session('chat');
+	});
 
 });
 

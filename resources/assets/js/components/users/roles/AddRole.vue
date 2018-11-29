@@ -9,6 +9,7 @@
                     <v-icon color="black">close</v-icon>
                 </v-btn>
             </v-card-title>
+
             <v-card-text>
                 <v-container grid-list-md>
                     <v-layout wrap>
@@ -16,16 +17,16 @@
                             <v-container grid-list-xl fluid>
                                 <v-layout wrap>
                                     <v-flex xs12 sm12>
-                                        <v-text-field v-model="form.name" :rules="rules.name" color="purple darken-2" label="Role Name" required></v-text-field>
-                                        <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small>
+                                        <v-text-field v-model="form.name" :rules="rules.name" color="blue darken-2" label="Role" required></v-text-field>
+                                        <!-- <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small> -->
                                     </v-flex>
-                                    <v-layout wrap>
-                                        <div v-for="perm in permissions" :key="perm.id">
-                                            <v-flex xs6 sm6>
-                                                <v-checkbox v-model="selected" :label="perm.name" :value="perm.name"></v-checkbox>
-                                            </v-flex>
-                                        </div>
-                                    </v-layout>
+                                    <v-checkbox v-model="selectAll" label="Select All" value="all" @change="selectRoles"></v-checkbox>
+                                    <!-- <v-checkbox v-model="selectAll" label="Unselect All" value="all" @change="unselectRoles" v-else></v-checkbox> -->
+                                </v-layout>
+                                <v-layout wrap>
+                                    <v-flex v-for="perm in permissions" :key="perm.id" xs6 sm6>
+                                        <v-checkbox v-model="selected" :label="perm.name" :value="perm.name"></v-checkbox>
+                                    </v-flex>
                                 </v-layout>
                             </v-container>
                             <v-card-actions>
@@ -53,6 +54,7 @@ export default {
         })
         return {
             errors: [],
+            selectAll: [],
             loading: false,
             selected: [],
             defaultForm,
@@ -92,6 +94,19 @@ export default {
         close() {
             this.$emit('closeRequest')
         },
+        selectRoles() {
+            this.selected = []
+            // console.log(sel)
+            this.selectAll.forEach(sel => {
+                this.permissions.forEach(perm => {
+                    this.selected.push(perm.name)
+                });
+            });
+            // console.log(this.selectAll)
+        },
+        // unselectRoles() {
+        //     this.selected = []
+        // }
     },
     computed: {
         formIsValid() {
@@ -99,6 +114,7 @@ export default {
                 this.form.name
             )
         },
+
     },
     mounted() {
         axios.get('getPermissions')

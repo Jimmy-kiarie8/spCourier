@@ -42,14 +42,14 @@
                             <v-flex xs12 sm2>
                                 <v-text-field label="End Date" v-model="form.end_date" color="blue darken-2" type="date" required></v-text-field>
                             </v-flex>
+                            <v-flex xs4 sm2>
+                                <v-select :items="Allpayment" v-model="selectPay" label="Filter By Payment" single-line item-text="status" item-value="status" return-object persistent-hint></v-select>
+                            </v-flex>
                             <v-flex xs4 sm1>
                                 <v-btn raised color="info" @click="sort">Filter</v-btn>
                             </v-flex>
                             <v-flex xs4 sm1>
                                 <v-btn raised color="info" @click="filReset">Reset</v-btn>
-                            </v-flex>
-                            <v-flex xs4 sm2>
-                                <v-select :items="Allpayment" v-model="selectPay" label="Filter By Payment" single-line item-text="status" item-value="status" return-object persistent-hint></v-select>
                             </v-flex>
                         </v-layout>
                     </v-card>

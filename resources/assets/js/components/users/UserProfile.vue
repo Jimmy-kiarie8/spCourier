@@ -86,6 +86,7 @@ props: ['user', 'openShowRequest'],
             AllShip: {
                 data: []
             },
+            pagin: [],
             permissions: [],
             // nextPage: false,
             loader: false,
@@ -95,7 +96,7 @@ props: ['user', 'openShowRequest'],
     methods: {
         next(page) {
             this.loader = true
-            axios.get(`/customerShip?page=` + this.AllShip.current_page)
+            axios.post(`/getUserPro/${this.pagin.id}?page=` + this.AllShip.current_page)
                 .then((response) => {
                     this.loader = false
                     this.AllShip = response.data
@@ -120,6 +121,7 @@ props: ['user', 'openShowRequest'],
     created() {
         eventBus.$on('getShipEvent', data => {
             this.getShipmentsCl(data)
+            this.pagin = data
         });
     },
     mounted() {

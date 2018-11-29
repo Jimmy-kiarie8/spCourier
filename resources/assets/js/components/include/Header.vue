@@ -28,14 +28,14 @@
                             </div>
                         </router-link>
 
-                        <router-link to="/customers" class="v-list__tile v-list__tile--link" v-for="roleC in user.roles" :key="roleC.id" v-if="roleC.name === 'Client'">
+                        <!-- <router-link to="/customers" class="v-list__tile v-list__tile--link" v-for="roleC in user.roles" :key="roleC.id" v-if="roleC.name === 'Client'">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">local_shipping</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
                                     My Shipments
                                 </div>
                             </div>
-                        </router-link>
+                        </router-link> -->
                         <router-link to="/rinders" class="v-list__tile v-list__tile--link" v-for="roleR in user.roles" :key="roleR.id" v-if="roleR.name === 'Rider'">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">local_shipping</i></div>
                             <div class="v-list__tile__content">
@@ -192,7 +192,7 @@
                             </router-link>
                         </v-list-group>
 
-                        <v-list-group prepend-icon="attach_money" v-for="roleQR in user.roles" :key="roleQR.id" v-if="roleQR.name === 'Finance' || roleQR.name === 'Admin'">
+                        <v-list-group prepend-icon="attach_money" v-if="user.can['view finance']">
                             <v-list-tile slot="activator">
                                 <v-list-tile-title>Finance</v-list-tile-title>
                             </v-list-tile>

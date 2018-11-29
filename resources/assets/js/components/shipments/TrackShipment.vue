@@ -119,7 +119,7 @@
 
             <v-card-actions>
                 <v-btn color="blue darken-1" flat @click="close">Close</v-btn>
-                <v-btn color="blue darken-1" flat @click="TrackEvent">Update status</v-btn>
+                <v-btn color="blue darken-1" flat @click="TrackEvent" v-if="user.can['update status']">Update status</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn v-print="'#printMe'" flat color="primary">Print</v-btn>
             </v-card-actions>
@@ -133,7 +133,7 @@
 <script>
 import VueBarcode from "vue-barcode";
 export default {
-    props: ["shipments", "OpenTrackBranch"],
+    props: ["shipments", "OpenTrackBranch", 'user'],
     components: {
         barcode: VueBarcode
     },

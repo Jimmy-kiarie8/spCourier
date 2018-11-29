@@ -144,7 +144,7 @@
                                     <v-btn icon class="mx-0" @click="showDetails(props.item)" slot="activator">
                                         <v-icon color="info darken-2" small>visibility</v-icon>
                                     </v-btn>
-                                    <span>View</span>
+                                    <span>Print</span>
                                 </v-tooltip>
                                 <v-tooltip bottom v-if="user.can['shipment status']">
                                     <v-btn icon class="mx-0" @click="ShipmentTrack(props.item)" slot="activator">
@@ -181,7 +181,7 @@
     <UpdateShipmentStatus :UpdateShipmentStatus="UpdateShipmentModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></UpdateShipmentStatus>
     <AssignDriver :AllDrivers="AllDrivers" :OpenAssignDriver="AssignDriverModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></AssignDriver>
     <AssignBranch :AllBranches="AllBranches" :OpenAssignBranch="AssignBranchModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></AssignBranch>
-    <TrackShipment @refreshRequest="getShipments" :shipments="updateitedItem" :OpenTrackBranch="trackModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></TrackShipment>
+    <TrackShipment @refreshRequest="getShipments" :shipments="updateitedItem" :OpenTrackBranch="trackModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected" :user="user"></TrackShipment>
     <myCsvFile :OpenCsv="csvModel" @closeRequest="close"></myCsvFile>
     <mySCharges :mySCharges="chargeModal" @closeRequest="close" :updateCharges="shipment" @alertRequest="showalert"></mySCharges>
     <myRows :myRows="RowModal" @closeRequest="close" :updateCharges="shipment"></myRows>

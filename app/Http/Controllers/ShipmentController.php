@@ -22,9 +22,9 @@ class ShipmentController extends Controller
 	public function getShipments()
 	{
 		if (Auth::user()->hasRole('Client')) {
-			return Shipment::latest()->where('client_id', Auth::id())->take(500)->get();
+			return Shipment::where('client_id', Auth::id())->take(500)->orderBy('id', 'desc')->get();
 		} else {
-			return Shipment::latest()->take(500)->where('country_id', Auth::user()->country_id)->get();
+			return Shipment::take(500)->where('country_id', Auth::user()->country_id)->orderBy('id', 'desc')->get();
 		}
 	}
 
@@ -168,7 +168,7 @@ class ShipmentController extends Controller
 	 */
 	public function store(Request $request)
 	{
-		return $request->all();
+		// return $request->all();
 		// $this->Validate($request, [
 		// 	'form.payment' =>'required',
 		// 	'form.insuarance_status' =>'required',
@@ -237,6 +237,7 @@ class ShipmentController extends Controller
 		$shipment->sender_phone = $request->form['sender_phone'];
 		$shipment->sender_address = $request->form['sender_address'];
 		$shipment->sender_city = $request->form['sender_city'];
+		$shipment->country_id =  Auth::user()->country_id;
 		$shipment->user_id = Auth::id();
 		$shipment->shipment_id = random_int(1000000, 9999999);
 		$users = $this->getAdmin();

@@ -23,10 +23,10 @@
                                         <v-text-field v-model="form.email" :rules="emailRules" color="blue darken-2" label="Email" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.email">{{ errors.email[0] }}</small>
                                     </v-flex>
-                                    <v-flex xs12 sm6>
+                                    <!-- <v-flex xs12 sm6>
                                         <v-text-field :append-icon="e1 ? 'visibility_off' : 'visibility'" :type="e1 ? 'password' : 'text'" v-model="form.password" name="input-10-2" label="Enter your password" hint="At least 6 characters" min="8" value="" class="input-group--focused"></v-text-field>
                                         <small class="has-text-danger" v-if="errors.password">{{ errors.password[0] }}</small>
-                                    </v-flex>
+                                    </v-flex> -->
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.address" :rules="rules.name" color="blue darken-2" label="Address" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.address">{{ errors.address[0] }}</small>
@@ -35,10 +35,10 @@
                                         <v-text-field v-model="form.city" :rules="rules.name" color="blue darken-2" label="City" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.city">{{ errors.city[0] }}</small>
                                     </v-flex>
-                                    <v-flex xs12 sm6>
+                                    <!-- <v-flex xs12 sm6>
                                         <v-text-field v-model="form.country" :rules="rules.name" color="blue darken-2" label="Country" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.country">{{ errors.country[0] }}</small>
-                                    </v-flex>
+                                    </v-flex> -->
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.phone" :rules="rules.name" color="blue darken-2" label="Phone" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.phone">{{ errors.phone[0] }}</small>
@@ -97,13 +97,13 @@ export default {
     data() {
         const defaultForm = Object.freeze({
             name: '',
-            password: '',
+            // password: '',
             email: '',
             phone: null,
             branch: '',
             address: '',
             city: '',
-            country: '',
+            // country: '',
         })
         return {
             loading: false,
@@ -176,12 +176,10 @@ export default {
                 this.form.name &&
                 this.form.email &&
                 this.form.phone &&
-                this.form.password &&
                 // this.form.zipcode &&
                 this.form.branch &&
                 this.form.address &&
-                this.form.city &&
-                this.form.country
+                this.form.city 
             )
         },
     },

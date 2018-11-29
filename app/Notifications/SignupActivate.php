@@ -43,14 +43,14 @@ class SignupActivate extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         // var_dump($password); die;
-        $url = url('/signup/activate/'.$notifiable->activation_token);
+        $url = url('/signup/activate/' . $notifiable->activation_token);
         // $url = url('/api/auth/signup/activate/'.$notifiable->activation_token);
 
         return (new MailMessage)
-                    ->subject('Confirm your account')
-                    ->line('You have been added to the speedBall courier app! Before you begin, you must confirm your account. Login with your email and this password:'.$this->password)
-                    ->action('Confirm Account', url($url))
-                    ->line('Thank you for using our application!');
+            ->subject('Confirm your account')
+            ->line('You have been added to the speedBall courier app! Before you begin, you must confirm your account. Login with your email and this password:' . $this->password)
+            ->action('Confirm Account', url($url))
+            ->line('Thank you for using our application!');
     }
 
     /**

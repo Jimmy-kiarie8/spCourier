@@ -73,74 +73,76 @@
 
 <script>
 let NotyShipment = require("./NotyShipment");
-import Avatar from 'vue-avatar'
+import Avatar from "vue-avatar";
 export default {
-    props: ["user"],
-    components: {
-        NotyShipment, Avatar
+  props: ["user"],
+  components: {
+    NotyShipment,
+    Avatar
+  },
+  data: () => ({
+    fav: true,
+    menu: false,
+    message: false,
+    notyShow: false,
+    hints: true,
+    notifications: [],
+    seeShipment: []
+  }),
+  methods: {
+    noty(item) {
+      // console.log(item)
+      // this.editedIndex = this.notifications.indexOf(item)
+      // this.seeShipment = item
+      axios.post(`/Notyshpments/${item}`).then(response => {
+        console.log(response.data);
+        this.seeShipment = response.data;
+      });
+      this.notyShow = true;
     },
-    data: () => ({
-        fav: true,
-        menu: false,
-        message: false,
-        notyShow: false,
-        hints: true,
-        notifications: [],
-        seeShipment: []
-    }),
-    methods: {
-        noty(item) {
-            // console.log(item)
-            // this.editedIndex = this.notifications.indexOf(item)
-            // this.seeShipment = item
-            axios.post(`/Notyshpments/${item}`).then(response => {
-                console.log(response.data);
-                this.seeShipment = response.data;
-            });
-            this.notyShow = true;
-        },
-        read() {
-            axios.post("/read").then(response => {
-                this.fav = false;
-                this.notifications = response.data;
-                // this.Allusers.splice(index, 1)
-                // this.notifications.splice(index, 1)
-            });
-        },
+    read() {
+      axios.post("/read").then(response => {
+        this.fav = false;
+        this.notifications = response.data;
+        // this.Allusers.splice(index, 1)
+        // this.notifications.splice(index, 1)
+      });
+    },
 
-        getnotifications() {
-            axios.get('notifications')
-                .then((response) => {
-                    this.notifications = response.data
-                })
-                .catch((error) => {
-                    this.errors = error.response.data.errors
-                })
-        },
-        close() {
-            this.notyShow = false;
-        }
+    getnotifications() {
+      axios
+        .get("notifications")
+        .then(response => {
+          this.notifications = response.data;
+        })
+        .catch(error => {
+          this.errors = error.response.data.errors;
+        });
     },
-    created() {
-        this.timer = window.setInterval(() => {
-            this.getnotifications()
-        }, 60000)
-    },
-    beforeDestroy() {
-        clearInterval(this.timer)
-    },
-    mounted() {
-        axios
-            .get("notifications")
-            .then(response => {
-                this.loader = false;
-                this.notifications = response.data;
-            })
-            .catch(error => {
-                this.loader = false;
-                this.errors = error.response.data.errors;
-            });
+    close() {
+      this.notyShow = false;
     }
+  },
+  created() {
+    this.timer = window.setInterval(() => {
+      this.getnotifications();
+    }, 60000);
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
+  },
+  mounted() {
+    axios
+      .get("notifications")
+      .then(response => {
+        this.loader = false;
+        this.notifications = response.data;
+      })
+      .catch(error => {
+        this.loader = false;
+        this.errors = error.response.data.errors;
+      });
+  }
 };
 </script>
 
