@@ -74,6 +74,7 @@
                             <td>
                                 <v-checkbox v-model="props.selected" primary></v-checkbox>
                             </td>
+                            <td class="text-xs-right">{{ props.item.created_at }}</td>
                             <td>
                                 {{ props.item.bar_code }}
                             </td>
@@ -96,18 +97,17 @@
                             <td class="text-xs-right">{{ props.item.status }}</td>
                             <td class="text-xs-right">{{ props.item.derivery_date }}</td>
                             <!-- <td class="text-xs-right">{{ props.item.charges }}</td> -->
-                            <td class="text-xs-right">{{ props.item.created_at }}</td>
                             <!-- <td class="text-xs-right" v-if="props.item.printed === 1" style="background: Green;">
                                 <p style="color: #fff;">Printed</p>
                             </td>
                             <td class="text-xs-right" v-else>
                                 <p style="color: #000;">Not Printed</p>
                             </td> -->
-                            <td class="text-xs-right" v-if="props.item.printReceipt === 1" style="background: rgb(33, 33, 32);">
+                            <td class="text-xs-right" v-if="props.item.printReceipt === '1' || props.item.printReceipt === 1" style="background: rgba(23, 193, 60, 0.76);">
                                 <!-- <v-btn color="white" flat @click="notPrinted(props.item)" :loading="nloading" :disabled="nloading">Mark Not Printed</v-btn> -->
                                 <v-tooltip bottom v-if="user.can['edit shipments']">
                                     <v-btn icon class="mx-0" @click="notPrinted(props.item)" slot="activator">
-                                        <v-icon color="white darken-2" >block</v-icon>
+                                        <v-icon color="white darken-2" >check_circle</v-icon>
                                     </v-btn>
                                     <span>Mark Not Printed</span>
                                 </v-tooltip>
@@ -116,7 +116,7 @@
                                 <!-- <v-btn color="info" flat @click="printed(props.item)" :loading="ploading" :disabled="ploading">Mark Printed </v-btn> -->
                                 <v-tooltip bottom v-if="user.can['edit shipments']">
                                     <v-btn icon class="mx-0" @click="printed(props.item)" slot="activator">
-                                        <v-icon color="blue darken-2" >check_circle</v-icon>
+                                        <v-icon color="blue darken-2" >block</v-icon>
                                     </v-btn>
                                     <span>Mark Printed</span>
                                 </v-tooltip>
@@ -197,7 +197,7 @@
 import VueBarcode from "vue-barcode";
 let AddShipment = require("./AddShipment");
 let EditShipment = require("./EditShipment");
-let ShowShipment = require("./PrintSPdf");
+let ShowShipment = require("./print/PdoDownload");
 let UpdateShipment = require("./UpdateShipment");
 let UpdateShipmentStatus = require("./UpdateShipmentStatus");
 let AssignDriver = require("./AssignDriver");
@@ -309,6 +309,10 @@ export default {
       },
       headers: [
         {
+          text: "Waybill Date",
+          value: "created_at"
+        },
+        {
           text: "Waybill Number",
           value: "bar_code"
         },
@@ -365,17 +369,13 @@ export default {
           value: "status"
         },
         {
-          text: "Derivery Date",
+          text: "Delivery Date",
           value: "derivery_date"
         },
         // {
         //   text: "Charges",
         //   value: "charges"
         // },
-        {
-          text: "Created on",
-          value: "created_at"
-        },
         // {
         //   text: "Waybill Printed",
         //   value: "created_at"
@@ -609,7 +609,7 @@ export default {
     sort() {
       this.loading = true;
       axios
-        .post("filterShipment", {
+        .post("/filterShipment", {
           select: this.select,
           selectStatus: this.selectItem,
           form: this.form,
@@ -629,7 +629,7 @@ export default {
       this.between.start = parseInt(this.between.start) + 500;
       this.between.end = parseInt(this.between.end) + 500;
       axios
-        .post("betweenShipments", this.$data.between)
+        .post("/betweenShipments", this.$data.between)
         .then(response => {
           this.loading = false;
           this.AllShipments = response.data;
@@ -645,7 +645,7 @@ export default {
         this.between.start = parseInt(this.between.start) - 500;
         this.between.end = parseInt(this.between.end) - 500;
         axios
-          .post("betweenShipments", this.$data.between)
+          .post("/betweenShipments", this.$data.between)
           .then(response => {
             this.loading = false;
             this.AllShipments = response.data;
@@ -684,7 +684,7 @@ export default {
 
     getCustomer() {
       axios
-        .get("getCustomer")
+        .get("/getCustomer")
         .then(response => {
           this.Allcustomers = response.data;
         })
@@ -758,6 +758,9 @@ export default {
       this.selected = [];
     });
 
+    eventBus.$on("refreshShipEvent", data => {
+      this.getShipments()
+    });
     eventBus.$on("TrackEvent", data => {
       this.updateModal = true;
     });
@@ -790,7 +793,7 @@ export default {
       });
 
     axios
-      .get("getShipmentsCount")
+      .get("/getShipmentsCount")
       .then(response => {
         this.shipmentsCount = response.data;
       })
@@ -798,7 +801,7 @@ export default {
         this.errors = error.response.data.errors;
       });
     axios
-      .get("getStatuses")
+      .get("/getStatuses")
       .then(response => {
         this.AllStatus = response.data;
       })
@@ -807,7 +810,7 @@ export default {
       });
 
     axios
-      .get("updateCancelled")
+      .get("/updateCancelled")
       .then(response => {
         // this.AllStatus = response.data;
         console.log(response.data);

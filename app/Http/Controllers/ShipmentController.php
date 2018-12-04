@@ -121,7 +121,7 @@ class ShipmentController extends Controller
 							'updated_at' => new DateTime(),
 							'shipment_id' => random_int(1000000, 9999999),
 							'paid' => 0,
-							// 'printReceipt' => 0,
+							'printReceipt' => 0,
 							'printed' => 0,
 							'sender_name' => $user->name,
 							'sender_email' => $user->email,
@@ -333,7 +333,7 @@ class ShipmentController extends Controller
 		// if ($shipment->save()) {
 		// 	$shipment->products()->saveMany($products);
 		// }
-		Notification::send($users, new ShipmentNoty($shipment));
+		// Notification::send($users, new ShipmentNoty($shipment));
 		// $users->notify(new ShipmentNoty($shipment));
 		return $shipment;
 	}
@@ -484,8 +484,8 @@ class ShipmentController extends Controller
 	public function send_sms($phone, $message)
 	{
 		// dd($phone . '   ' . $message);
-		$phone = '254731090832';
-		$sms = 'Test messange';
+		$phone = '254743649696';
+		$sms = $message;
 		$senderID = 'SPEEDBALL';
 
 		$login = 'SPEEDBALL';

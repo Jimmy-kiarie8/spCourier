@@ -65,7 +65,7 @@ export default {
     mounted() {
 
         axios
-            .get("getCustomer")
+            .get("/getCustomer")
             .then(response => {
                 this.Allcustomers = response.data;
                 this.loader = false;
@@ -75,7 +75,7 @@ export default {
                 this.loader = false;
             });
         axios
-            .get("getCountry")
+            .get("/getCountry")
             .then(response => {
                 this.AllCountries = response.data;
                 this.loader = false;

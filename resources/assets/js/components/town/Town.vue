@@ -193,7 +193,7 @@ export default {
     },
     mounted() {
         this.loader = true
-        axios.get('getTowns')
+        axiosget('/getTowns')
             .then((response) => {
                 this.AllTowns = response.data
                 this.loader = false

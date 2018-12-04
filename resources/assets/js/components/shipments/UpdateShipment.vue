@@ -55,10 +55,10 @@
                             </div>
                             <div v-if="updateitedItem.status === 'Scheduled' || updateitedItem.status === 'Delivered'">
                                 <v-flex xs12 sm12>
-                                    <v-text-field v-model="updateitedItem.derivery_date" color="blue darken-2" label="Schedule Date" type="date"></v-text-field>
+                                    <v-text-field v-model="updateitedItem.derivery_date" color="blue darken-2" label="Delivery Date" type="date"></v-text-field>
                                 </v-flex>
                                 <v-flex xs12 sm12>
-                                    <v-text-field v-model="updateitedItem.derivery_time" color="blue darken-2" label="Schedule Time" type="time"></v-text-field>
+                                    <v-text-field v-model="updateitedItem.derivery_time" color="blue darken-2" label="Delivery Time" type="time"></v-text-field>
                                 </v-flex>
                                 <v-flex xs4 sm12>
                                     <v-text-field v-model="updateitedItem.location" color="blue darken-2" label="Location" required></v-text-field>
@@ -157,7 +157,8 @@ export default {
                     this.alert();
                     this.updateitedItem.derivery_date = "";
                     this.close();
-                    Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.$parent.updateitedItem)
+                    // Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.$parent.updateitedItem)
+                    eventBus.$emit("refreshShipEvent")
                     //   Object.assign(
                     //     this.$parent.AllShipments[this.$parent.editedIndex],
                     //     this.updateitedItem
@@ -285,7 +286,7 @@ export default {
 
     mounted() {
         axios
-            .get("getStatuses")
+            .get("/getStatuses")
             .then(response => {
                 this.statuses = response.data;
             })

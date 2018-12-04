@@ -9,7 +9,7 @@
                 <v-layout row wrap>
                     <v-flex xs12 sm4>
                         <v-card>
-                            <img :src="avatar" style="width: 100px; height: 100px; border-radius: 50%; text-align:center; margin-top 70px;margin-left-100px">
+                            <img :src="'/'+avatar" style="width: 100px; height: 100px; border-radius: 50%; text-align:center; margin-top 70px;margin-left-100px">
                             <v-divider></v-divider>
                             <h5 class="text-center">{{ user.name }}</h5>
                             <h6 class="text-center" v-for="role in user.roles" :key="role.id">{{ role.name }}</h6>
@@ -215,7 +215,7 @@ export default {
   mounted() {
     this.loader = true;
     axios
-      .get("getLogedinUsers")
+      .get("/getLogedinUsers")
       .then(response => {
         this.LogedUser = response.data;
         this.avatar = response.data.profile;

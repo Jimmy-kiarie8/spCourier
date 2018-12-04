@@ -131,7 +131,7 @@ export default {
     },
     mounted() {
         axios
-            .get("Chattynoty")
+            .get("/Chattynoty")
             .then(response => {
                 this.loader = false;
                 this.notifications = response.data;

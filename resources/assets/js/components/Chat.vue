@@ -180,7 +180,7 @@ export default {
     },
     methods: {
         getCountCount() {
-            axios.get('getCountCount')
+            axiosget('/getCountCount')
                 .then((response) => {
                     this.countryC = response.data
                 })
@@ -189,7 +189,7 @@ export default {
                 })
         },
         getBranchCount() {
-            axios.get('getBranchCount')
+            axiosget('/getBranchCount')
                 .then((response) => {
                     this.branchC = response.data
                 })
@@ -199,7 +199,7 @@ export default {
         },
 
         ref() {
-            axios.get('getChartData')
+            axiosget('/getChartData')
                 .then((response) => {
                     // console.log(response);
                     eventBus.$emit('chartEvent', response.data);
@@ -215,7 +215,7 @@ export default {
         this.getCountCount()
         this.getBranchCount()
         this.loader = true
-        axios.get('getUsersCount')
+        axiosget('/getUsersCount')
             .then((response) => {
                 this.Allusers = response.data
             })
@@ -223,7 +223,7 @@ export default {
                 this.errors = error.response.data.errors
             })
 
-        axios.get('getShipmentsCount')
+        axiosget('/getShipmentsCount')
             .then((response) => {
                 this.Allshipments = response.data
             })
@@ -248,7 +248,7 @@ export default {
                 this.errors = error.response.data.errors
             })
 
-        axios.get('getCanceledCount')
+        axiosget('/getCanceledCount')
             .then((response) => {
                 this.AllCanceled = response.data
             })

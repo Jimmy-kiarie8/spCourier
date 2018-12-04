@@ -160,7 +160,7 @@ export default {
     },
     mounted() {
 
-        axios.get('getPermissions')
+        axiosget('/getPermissions')
             .then((response) => {
                 this.permissions = response.data
             })

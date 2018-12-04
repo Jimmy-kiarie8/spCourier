@@ -113,7 +113,7 @@ export default {
     mounted() {
         this.loader = true;
         axios
-            .get("scheduled")
+            .get("/scheduled")
             .then(response => {
                 this.AllShipments = response.data;
                 this.loader = false;

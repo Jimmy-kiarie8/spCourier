@@ -82,7 +82,7 @@
                             <!-- <td class="text-xs-right">{{ props.item.derivery_date }}</td> -->
                             <td class="text-xs-right">{{ props.item.charges }}</td>
                             <td class="text-xs-right">{{ props.item.created_at }}</td>
-                            <td class="justify-center layout px-0">
+                            <td class="justify-center layout px-0" v-if="user.can['update charges']">
                                 <v-tooltip bottom v-if="props.item.paid">
                                     <v-btn icon class="mx-0" @click="paidOrNot(props.item)" slot="activator">
                                         <v-icon color="blue darken-2" small>check_circle</v-icon>
@@ -95,7 +95,7 @@
                                     </v-btn>
                                     <span>Mark not paid</span>
                                 </v-tooltip>
-                                <v-tooltip bottom v-if="user.can['update charges']">
+                                <v-tooltip bottom>
                                     <v-btn icon class="mx-0" @click="Shipcharges(props.item)" slot="activator">
                                         <v-icon color="indigo darken-2" small>attach_money</v-icon>
                                     </v-btn>
@@ -286,8 +286,7 @@ export default {
             }
             axios
                 .post(`/paid/${item.id}`, item)
-                .then(response => {
-                })
+                .then(response => {})
                 .catch(error => {
                     this.errors = error.response.data.errors;
                 });
@@ -333,7 +332,7 @@ export default {
         sort() {
             this.loading = true;
             axios
-                .post("filterFin", {
+                .post("/filterFin", {
                     select: this.select,
                     selectStatus: this.selectItem,
                     form: this.form,
@@ -354,7 +353,7 @@ export default {
             this.between.start = parseInt(this.between.start) + 500;
             this.between.end = parseInt(this.between.end) + 500;
             axios
-                .post("betweenShipments", this.$data.between)
+                .post("/betweenShipments", this.$data.between)
                 .then(response => {
                     this.loading = false;
                     this.AllShipments = response.data;
@@ -370,7 +369,7 @@ export default {
                 this.between.start = parseInt(this.between.start) - 500;
                 this.between.end = parseInt(this.between.end) - 500;
                 axios
-                    .post("betweenShipments", this.$data.between)
+                    .post("/betweenShipments", this.$data.between)
                     .then(response => {
                         this.loading = false;
                         this.AllShipments = response.data;
@@ -409,7 +408,7 @@ export default {
 
         getCustomer() {
             axios
-                .get("getCustomer")
+                .get("/getCustomer")
                 .then(response => {
                     this.Allcustomers = response.data;
                 })
@@ -499,7 +498,7 @@ export default {
             });
 
         axios
-            .get("getShipmentsCount")
+            .get("/getShipmentsCount")
             .then(response => {
                 this.shipmentsCount = response.data;
             })
@@ -507,7 +506,7 @@ export default {
                 this.errors = error.response.data.errors;
             });
         axios
-            .get("getStatuses")
+            .get("/getStatuses")
             .then(response => {
                 this.AllStatus = response.data;
             })
@@ -516,7 +515,7 @@ export default {
             });
 
         axios
-            .get("updateCancelled")
+            .get("/updateCancelled")
             .then(response => {
                 // this.AllStatus = response.data;
                 console.log(response.data);

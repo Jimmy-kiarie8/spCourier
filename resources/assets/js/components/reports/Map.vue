@@ -256,7 +256,7 @@ export default {
     mounted() {
         this.loader = true;
 
-        axios.get("getCustomer")
+        axios.get("/getCustomer")
             .then(response => {
                 this.Allcustomers = response.data;
             })
@@ -264,7 +264,7 @@ export default {
                 this.errors = error.response.data.errors;
             });
 
-        axios.get("getDrivers")
+        axios.get("/getDrivers")
             .then(response => {
                 this.AllDrivers = response.data;
                 this.loader = false;

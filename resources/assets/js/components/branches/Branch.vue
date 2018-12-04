@@ -232,7 +232,7 @@ export default {
     },
     mounted() {
         this.loader = true
-        axios.get('getBranch')
+        axios.get('/getBranch')
             .then((response) => {
                 this.AllBranches = response.data
                 this.loader = false

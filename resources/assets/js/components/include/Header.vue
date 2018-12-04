@@ -202,7 +202,7 @@
                                 </v-list-tile-action>
                                 <v-list-tile-title>Finace</v-list-tile-title>
                             </router-link>
-                            <router-link to="/charges" class="v-list__tile theme--light" style="text-decoration: none">
+                            <router-link to="/charges" class="v-list__tile theme--light" style="text-decoration: none" v-if="user.can['update charges']">
                                 <v-list-tile-action>
                                     <v-icon>attach_money</v-icon>
                                 </v-list-tile-action>
@@ -217,7 +217,7 @@
             <v-toolbar-title style="width: 600px" class="ml-0 pl-3">
                 <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
                 SpeedBall Courier
-                <img src="storage/logo1.jpg" alt="" style="width: 60px; height: 60px; border-radius: 25%;">
+                <img src="/storage/logo1.jpg" alt="" style="width: 60px; height: 60px; border-radius: 25%;">
             </v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-tooltip bottom style="margin-right: 10px;">
@@ -291,7 +291,7 @@ export default {
 
     getCustomer() {
       axios
-        .get("getCustomer")
+        .get("/getCustomer")
         .then(response => {
           this.Allcustomers = response.data;
         })

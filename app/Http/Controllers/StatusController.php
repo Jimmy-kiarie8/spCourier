@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Status;
 use Illuminate\Http\Request;
+use App\Shipment;
+use Illuminate\Support\Facades\Auth;
 
 class StatusController extends Controller
 {
@@ -57,6 +59,9 @@ class StatusController extends Controller
     public function getStat()
     {
         return Status::orderBy('name', 'ASC')->get();
+        // return response()->json(Status::orderBy('name', 'ASC')->get(), 200);
+        // return response()->json(array(Status::orderBy('name', 'ASC')->get())), 200);
+        // return response()->json(array('success' => 'Log In Successful'), 200);
     }
 
 	public function scheduled()

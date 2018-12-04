@@ -145,7 +145,7 @@ export default {
     // },
     mounted() {
         axios
-            .get("getUsers")
+            .get("/getUsers")
             .then(response => {
                 // this.loader = false
                 this.AllUsers = response.data;

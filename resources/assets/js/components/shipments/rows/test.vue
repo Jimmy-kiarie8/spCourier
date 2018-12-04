@@ -681,7 +681,7 @@ export default {
         //     });
         this.getShipments()
         axios
-            .get("getCustomer")
+            .get("/getCustomer")
             .then(response => {
                 this.Allcustomers = response.data;
             })

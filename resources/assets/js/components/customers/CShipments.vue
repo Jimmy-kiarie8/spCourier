@@ -652,7 +652,7 @@ export default {
     sort() {
       this.loading = true;
       axios
-        .post("filterShipment", {
+        .post("/filterShipment", {
           select: this.select,
           selectStatus: this.selectItem,
           form: this.form,
@@ -672,7 +672,7 @@ export default {
       this.between.start = parseInt(this.between.start) + 500;
       this.between.end = parseInt(this.between.end) + 500;
       axios
-        .post("betweenShipments", this.$data.between)
+        .post("/betweenShipments", this.$data.between)
         .then(response => {
           this.loading = false;
           this.AllShipments = response.data;
@@ -688,7 +688,7 @@ export default {
         this.between.start = parseInt(this.between.start) - 500;
         this.between.end = parseInt(this.between.end) - 500;
         axios
-          .post("betweenShipments", this.$data.between)
+          .post("/betweenShipments", this.$data.between)
           .then(response => {
             this.loading = false;
             this.AllShipments = response.data;
@@ -727,7 +727,7 @@ export default {
 
     getCustomer() {
       axios
-        .get("getCustomer")
+        .get("/getCustomer")
         .then(response => {
           this.Allcustomers = response.data;
         })
@@ -797,7 +797,7 @@ export default {
       });
 
     axios
-      .get("getShipmentsCount")
+      .get("/getShipmentsCount")
       .then(response => {
         this.shipmentsCount = response.data;
       })

@@ -231,7 +231,7 @@ export default {
             this.$refs.form.reset()
         },
         getunsubscribed() {
-            axios.get('getunsubscribed')
+            axios.get('/getunsubscribed')
                 .then((response) => {
                     this.AllUnSubscribed = response.data
                     this.loader = false
@@ -242,7 +242,7 @@ export default {
                 })
         },
         getsubscribers() {
-            axios.get('getsubscribers')
+            axios.get('/getsubscribers')
                 .then((response) => {
                     this.AllSubscribers = response.data
                     this.loader = false

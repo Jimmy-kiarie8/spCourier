@@ -175,7 +175,7 @@ export default {
     },
     mounted() {
         this.loader = true
-        axios.get('getCountry')
+        axios.get('/getCountry')
             .then((response) => {
                 this.AllCountries = response.data
                 this.loader = false

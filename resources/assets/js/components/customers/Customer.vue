@@ -177,7 +177,7 @@ export default {
     searchRe() {
       this.nextPage = true;
       // alert('success')
-      axios.post("getsearchRe", this.form).then(response => {
+      axios.post("/getsearchRe", this.form).then(response => {
         this.nextPage = false;
         this.AllShip = response.data;
       });
@@ -186,7 +186,7 @@ export default {
       this.nextPage = true;
       this.form.search = "";
       axios
-        .post("customerShip")
+        .post("/customerShip")
         .then(response => {
           this.nextPage = false;
           this.AllShip = response.data;
@@ -210,7 +210,7 @@ export default {
     this.refresh();
 
     axios
-      .get("getCustomer")
+      .get("/getCustomer")
       .then(response => {
         this.Allcustomers = response.data;
         this.loader = false;

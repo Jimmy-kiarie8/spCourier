@@ -379,11 +379,17 @@ export default {
                 quantity: 1,
                 price: 0,
             }],
-            sender_name: 'SpeedBall courier services',
-            sender_email: 'info@speedballcourier.com',
-            sender_phone: '+254728492446',
-            sender_address: '17254 00100',
-            sender_city: 'Embakasi, Nairobi',
+            // sender_name: 'SpeedBall courier services',
+            // sender_email: 'info@speedballcourier.com',
+            // sender_phone: '+254728492446',
+            // sender_address: '17254 00100',
+            // sender_city: 'Embakasi, Nairobi',
+            
+            sender_name: '',
+            sender_email: '',
+            sender_phone: '',
+            sender_address: '',
+            sender_city: '',
         });
         return {
             selectCl: [],
@@ -494,7 +500,7 @@ export default {
             this.isLoading = true
 
             // Lazily load input customerArr
-            // axios.get('getCustomer')
+            // axiosget('/getCustomer')
             //     .then(res => {
             this.customerArr = this.Allcustomer
             this.isLoading = false

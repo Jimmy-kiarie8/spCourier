@@ -15,6 +15,12 @@ use Illuminate\Support\Carbon;
 // Route::get('scheduler', function (){
 // 	\Illuminate\Support\Facades\Artisan::call('notifications:SchedueledShipment');
 //  });
+
+	// M-pesa
+Route::any('confirmation', 'SafaricomController@confirmation')->name('confirmation');
+Route::any('register_url', 'SafaricomController@register_url')->name('register_url');
+Route::any('validation', 'SafaricomController@validation')->name('validation');
+
 Route::get('scheduler', function () {
 	\Illuminate\Support\Facades\Artisan::call('schedule:run');
 });
@@ -240,9 +246,6 @@ Route::group(['middleware' => ['auth']], function () {
 		return Shipment::take(4)->get();
 	});
 
-	// M-pesa
-	Route::any('confirmation', 'SafaricomController@confirmation')->name('confirmation');
-	Route::any('register_url', 'SafaricomController@register_url')->name('register_url');
 	
 	// Drivers
 	Route::get('DriverShip', 'DriverController@DriverShip')->name('DriverShip');
@@ -311,7 +314,6 @@ Route::group(['middleware' => ['auth']], function () {
 	// Route::get('/chat','ChattyController@chatPage');
 	Route::post('filterFin', 'FinanceController@filterFin')->name('filterFin');
 	Route::post('payment/{id}', 'FinanceController@payment')->name('payment');
-
 
 	Route::get('chat', 'ChatController@chat');
 	Route::post('/send', 'ChatController@send')->name('send');

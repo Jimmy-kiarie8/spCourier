@@ -53,7 +53,7 @@ export default {
         }
     },
     mounted() {
-        axios.get('getCustomer')
+        axiosget('/getCustomer')
             .then((response) => {
                 this.AllClients = response.data
             })

@@ -111,7 +111,7 @@ export default {
 
     getnotifications() {
       axios
-        .get("notifications")
+        .get("/notifications")
         .then(response => {
           this.notifications = response.data;
         })
@@ -133,7 +133,7 @@ export default {
   },
   mounted() {
     axios
-      .get("notifications")
+      .get("/notifications")
       .then(response => {
         this.loader = false;
         this.notifications = response.data;

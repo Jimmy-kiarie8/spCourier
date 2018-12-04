@@ -204,7 +204,7 @@ export default {
         ClientReport() {
             this.Cload = true
             this.AllClientR = []
-            axios.post("userDateExpo", this.$data.Client)
+            axios.post("/userDateExpo", this.$data.Client)
                 .then(response => {
                     this.Cload = false
                     this.AllClientR = response.data
@@ -229,7 +229,7 @@ export default {
         AllStatusR() {
             this.Sload = true
             this.AllStatus = []
-            axios.post("displayReport", this.$data.statusR)
+            axios.post("/displayReport", this.$data.statusR)
                 .then(response => {
                     this.Sload = false
                     this.AllStatus = response.data
@@ -255,7 +255,7 @@ export default {
         AllRinderR() {
             this.Rload = true
             this.AllRinder = []
-            axios.post("DriverReport", this.$data.Rinder)
+            axios.post("/DriverReport", this.$data.Rinder)
                 .then(response => {
                     this.Rload = false
                     this.AllRinder = response.data
@@ -279,7 +279,7 @@ export default {
         AllbranchR() {
             this.Bload = true
             this.AllBranchD = []
-            axios.post("branchesExpo", this.$data.branchR)
+            axios.post("/branchesExpo", this.$data.branchR)
                 .then(response => {
                     this.Bload = false
                     this.AllBranchD = response.data;
@@ -305,7 +305,7 @@ export default {
     mounted() {
         this.loader = true;
 
-        axios.get("getCustomer")
+        axios.get("/getCustomer")
             .then(response => {
                 this.Allcustomers = response.data;
             })
@@ -313,7 +313,7 @@ export default {
                 this.errors = error.response.data.errors;
             });
 
-        axios.get("getDrivers")
+        axios.get("/getDrivers")
             .then(response => {
                 this.AllDrivers = response.data;
                 this.loader = false;
@@ -324,7 +324,7 @@ export default {
                 this.errors = error.response.data.errors;
             });
 
-        axios.get("getBranch")
+        axios.get("/getBranch")
             .then(response => {
                 this.AllBranches = response.data;
                 this.loader = false;
@@ -335,7 +335,7 @@ export default {
                 this.errors = error.response.data.errors;
             })
 
-        axios.get('getStatuses')
+        axiosget('/getStatuses')
             .then((response) => {
                 this.statuses = response.data
             })

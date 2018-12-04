@@ -207,7 +207,7 @@ export default {
         },
         getCustomer() {
             this.loading = true
-            axios.get('getCustomer')
+            axiosget('/getCustomer')
                 .then((response) => {
                     this.loader = false
                     this.loading = false
@@ -221,7 +221,7 @@ export default {
         },
         getCountry() {
             this.loading = true
-            axios.get('getCountry')
+            axiosget('/getCountry')
                 .then((response) => {
                     this.loading = false
                     this.Allcountries = response.data

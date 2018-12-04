@@ -130,7 +130,7 @@ export default {
     getCharges() {
       this.loader = true;
       axios
-        .get("getCharges")
+        .get("/getCharges")
         .then(response => {
           this.loader = false;
           this.AllCharges = response.data;

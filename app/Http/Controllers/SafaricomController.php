@@ -4,25 +4,45 @@ namespace App\Http\Controllers;
 
 use App\Safaricom;
 use Illuminate\Http\Request;
+use GuzzleHttp\Client;
 
 class SafaricomController extends Controller
 {
+
     public function confirmation(Request $request)
     {
-        // $array = json_decode($request, true);
-        $TransID = $request->TransID;
-        $TransactionType = $request->TransactionType;
-        $TransTime = $request->TransTime;
-        $TransAmount = $request->TransAmount;
-        $BusinessShortCode = $request->BusinessShortCode;
-        $BillRefNumber = $request->BillRefNumber;
-        $InvoiceNumber = $request->InvoiceNumber;
-        $MSISDN = $request->MSISDN;
-        $First_Name = $request->First_Name;
-        $Middle_Name = $request->Middle_Name;
-        $Last_Name = $request->Last_Name;
-        $OrgAccountBalance = $request->OrgAccountBalance;
-        $Request = $request->Request;
+        $key = 'hzMJS6i9OCuAc6AlRyKz7JUuMIvYIQqV';
+        $secret = 'hgGlK8nSLa2DDAjA';
+        // $res = $request('POST', 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl', [
+        //     'form_params' => [
+        //         'consumer_key' => 'test_id',
+        //         'consumer_secret' => 'test_secret',
+        //     ]
+        // ]);
+
+        $client = new Client(); //GuzzleHttp\Client
+        $array = $client->get('https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl', [
+            'form_params' => [
+                'consumer_key' => $key,
+                'consumer_secret' => $secret
+            ]
+        ]);
+        return $array;
+        $array = json_decode($request, true);
+        $TransID = $array['TransID'];
+        $TransactionType = $array['TransactionType'];
+        $TransTime = $array['TransTime'];
+        $TransAmount = $array['TransAmount'];
+        $BusinessShortCode = $array['BusinessShortCode'];
+        $BillRefNumber = $array['BillRefNumber'];
+        $InvoiceNumber = $array['InvoiceNumber'];
+        $MSISDN = $array['MSISDN'];
+        $First_Name = $array['First_Name'];
+        $Middle_Name = $array['Middle_Name'];
+        $Last_Name = $array['Last_Name'];
+        $OrgAccountBalance = $array['OrgAccountBalance'];
+        // $Request = $array['Request'];
+        // $Request = $request->Request;
 
         $safaricom = new Safaricom;
         $safaricom->TransID = $TransID;
@@ -43,26 +63,26 @@ class SafaricomController extends Controller
     }
     public function register_url()
     {
-        $url = 'https://api.safaricom.co.ke/mpesa/c2b/v1/registerurl';
-
-        $shortcode = '877838';
-        $confirmation_url = 'https://speedball-215310.appspot.com/confirmation';
-        $validation_url = 'https://speedball-215310.appspot.com/validation';
+        // $url = 'https://api.safaricom.co.ke/mpesa/c2b/v1/registerurl';
+        $url = 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl';
+        $shortcode = '600000';
+        $confirmation_url = 'http://web.speedballcourier.com/confirmation?token=' . $this->token();
+        $validation_url = 'http://web.speedballcourier.com/validation?token=' . $this->token();
 
         $token = $this->token();
-        
+
         $data = array(
             'ShortCode' => $shortcode,
             'ResponseType' => 'Cancelled',
             'ConfirmationURL' => $confirmation_url,
             'ValidationURL' => $validation_url,
         );
-        
+
         $data_string = json_encode($data);
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json','Authorization:Bearer '.$token)); 
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization:Bearer ' . $token));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
 
@@ -70,20 +90,19 @@ class SafaricomController extends Controller
 
         return $curl_response;
     }
-    
+
     public function base_64()
     {
         $key = 'hzMJS6i9OCuAc6AlRyKz7JUuMIvYIQqV';
         $secret = 'hgGlK8nSLa2DDAjA';
-        
-        $base64 = base64_encode($key.':'.$secret);
-
+        $base64 = base64_encode($key . ':' . $secret);
         return $base64;
     }
 
     public function token()
     {
-        $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
+        // $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
+        $url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
 
         $base64 = $this->base_64();
 
@@ -97,16 +116,46 @@ class SafaricomController extends Controller
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $data = curl_exec($ch);
 
-        if (curl_errno($ch))
-        {
+        if (curl_errno($ch)) {
             $token = '';
+        } else {
+            $transaction = json_decode($data, true);
+            $token = $transaction['access_token'];
         }
-        else
-        {
-            $transaction = json_decode($data, TRUE);
-            $token = $transaction['access_token'];            
-        }
-        
+
         return $token;
+    }
+
+    public function validation(Request $request)
+    {
+        return $request->token;
+        $token = $this->token();
+
+        if (!$token) {
+            echo "Technical error";
+            exit();
+        }
+        if (!$request->token != $this->token()) {
+            echo "Invalid authorization";
+            exit();
+        }
+        /* 
+            here you need to parse the json format 
+            and do your business logic e.g. 
+            you can use the Bill Reference number 
+            or mobile phone of a customer 
+            to search for a matching record on your database. 
+         */ 
+        /* 
+            Reject an Mpesa transaction 
+            by replying with the below code 
+         */
+        // echo '{"ResultCode":1, "ResultDesc":"Failed", "ThirdPartyTransID": 0}'; 
+        /* 
+            Accept an Mpesa transaction 
+            by replying with the below code 
+         */
+        echo '{"ResultCode":0, "ResultDesc":"Success", "ThirdPartyTransID": 0}';
+
     }
 }

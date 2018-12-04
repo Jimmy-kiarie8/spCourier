@@ -30,6 +30,8 @@ class VerifyCsrfToken extends Middleware
         'pod/*',
         'displayReport',
         'logout',
-        'generate_pdf'
+        'confirmation',
+        'validation',
+        'register_url',
     ];
 }

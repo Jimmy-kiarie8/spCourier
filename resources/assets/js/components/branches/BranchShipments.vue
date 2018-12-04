@@ -100,7 +100,7 @@ export default {
     },
     created() {
         // this.loader = true
-        axios.post(`getBranchShip/${this.$route.params.id}`)
+        axios.post(`/getBranchShip/${this.$route.params.id}`)
             .then((response) => {
                 this.AllBranches = response.data
                 // this.loader = false

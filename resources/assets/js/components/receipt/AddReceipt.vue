@@ -419,7 +419,7 @@
   
   
   
-      axios.get('getInvoice')
+      axiosget('/getInvoice')
   
         .then((response) => {
   

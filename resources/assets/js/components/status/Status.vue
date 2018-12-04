@@ -176,7 +176,7 @@ export default {
     },
     mounted() {
         this.loader = true
-        axios.get('getStat')
+        axiosget('/getStat')
             .then((response) => {
                 this.AllStatus = response.data
                 this.loader = false

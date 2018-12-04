@@ -5,7 +5,9 @@
             <v-card-title>
                 <span class="headline">{{ user.name }} Profile</span>
                 <v-spacer></v-spacer>
-                <v-btn icon dark @click="close">                         <v-icon color="black">close</v-icon>                     </v-btn>
+                <v-btn icon dark @click="close">
+                    <v-icon color="black">close</v-icon>
+                </v-btn>
             </v-card-title>
             <v-card-text>
                 <avatar :username="user.name" style="font-size: 40px;margin: auto;padding: 50px;"></avatar>
@@ -77,10 +79,10 @@
 <script>
 import Avatar from 'vue-avatar'
 export default {
-props: ['user', 'openShowRequest'],
- components: {
-  Avatar
-},
+    props: ['user', 'openShowRequest'],
+    components: {
+        Avatar
+    },
     data() {
         return {
             AllShip: {
@@ -125,7 +127,7 @@ props: ['user', 'openShowRequest'],
         });
     },
     mounted() {
-        axios.get('getPermissions')
+        axiosget('/getPermissions')
             .then((response) => {
                 this.permissions = response.data
             })

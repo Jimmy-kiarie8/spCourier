@@ -19,7 +19,7 @@
                                     <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
                                 </select>
                             </div>
-                            <!-- <v-layout wrap> -->
+                            <!-- <v-layout wrap> -->    
                             <div v-if="form.status === 'Delivered'">
                                 <v-flex xs12 sm12>
                                     <v-text-field v-model="form.receiver_name" color="blue darken-2" label="Received By"></v-text-field>
@@ -103,6 +103,7 @@ export default {
                     this.receiver_name = ''
                     this.receiver_id = ''
                     eventBus.$emit('selectClear');
+                    eventBus.$emit("refreshShipEvent");
                     // Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.$parent.editedItem)
                 })
                 .catch(error => {
@@ -116,7 +117,7 @@ export default {
     },
     mounted() {
         axios
-            .get("getStatuses")
+            .get("/getStatuses")
             .then(response => {
                 this.statuses = response.data;
             })

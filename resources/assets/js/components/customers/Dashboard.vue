@@ -145,7 +145,7 @@ export default {
     },
     methods: {
         getCountCount() {
-            axios.get('getCountryhipments')
+            axiosget('/getCountryhipments')
                 .then((response) => {
                     this.countryC = response.data
                 })
@@ -155,7 +155,7 @@ export default {
         },
 
         ref() {
-            axios.get('getChartData')
+            axiosget('/getChartData')
                 .then((response) => {
                     // console.log(response);
                     eventBus.$emit('chartEvent', response.data);
@@ -174,7 +174,7 @@ export default {
     },
     mounted() {
         this.loader = true
-        axios.get('customerDelivered')
+        axios.get('/customerDelivered')
             .then((response) => {
                 this.AllDelivered = response.data
             })

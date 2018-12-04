@@ -126,7 +126,7 @@ export default {
     },
     mounted() {
         this.loader = true
-        axios.get('getTasks')
+        axiosget('/getTasks')
             .then((response) => {
                 this.loader = false
                 this.AllTasks = response.data
