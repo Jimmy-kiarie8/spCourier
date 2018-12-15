@@ -461,7 +461,7 @@
 	
 			this.loader = true
 	
-			axiosget('/getUsers')
+			axios.get('/getUsers')
 	
 				.then((response) => {
 	

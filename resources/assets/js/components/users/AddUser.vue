@@ -161,7 +161,7 @@ export default {
                 this.errors = error.response.data.errors
             })
 
-        axiosget('/getPermissions')
+        axios.get('/getPermissions')
             .then((response) => {
                 console.log(response.data)
                 this.permissions = response.data

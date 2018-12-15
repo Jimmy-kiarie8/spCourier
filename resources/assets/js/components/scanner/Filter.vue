@@ -269,7 +269,7 @@ export default {
   },
     mounted() {
         this.loader = true
-        axiosget('/getDrivers')
+        axios.get('/getDrivers')
             .then((response) => {
                 this.loader = false
                 this.AllRiders = response.data

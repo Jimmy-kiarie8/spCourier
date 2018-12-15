@@ -12,7 +12,7 @@
     },
     
     mounted () {
-      axiosget('/getRinderScheduled')
+      axios.get('/getRinderScheduled')
               .then((response) => {
                   // console.log(response);
                   this.label = response.data.data.lables
@@ -38,7 +38,7 @@
       }, {responsive: true, maintainAspectRatio: false})
     },
       ref() {
-          axiosget('/getRinderScheduled')
+          axios.get('/getRinderScheduled')
               .then((response) => {
                   // console.log(response);
                   this.label = response.data.lables

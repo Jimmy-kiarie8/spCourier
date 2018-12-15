@@ -37,12 +37,12 @@ class NotificationController extends Controller
         $notification_data = [];
         // select * from `notifications` where `notifications`.`notifiable_id` = '1' and `notifications`.`notifiable_id` is not null and `notifications`.`notifiable_type` = 'App\User' and `read_at` is null order by `created_at` desc
         $unreadNotifications = DB::table('notifications')
-                                    ->where('notifiable_id', Auth::id())
-                                ->whereNotNull('notifiable_id')
-                                ->where('type', 'App\Notifications\ChattyNoty')
-                                ->where('notifiable_type', 'App\User')
-                                ->whereNull('read_at')
-                                ->get();
+            ->where('notifiable_id', Auth::id())
+            ->whereNotNull('notifiable_id')
+            ->where('type', 'App\Notifications\ChattyNoty')
+            ->where('notifiable_type', 'App\User')
+            ->whereNull('read_at')
+            ->get();
         foreach ($unreadNotifications as $notification) {
             // return $notification->chatty;
             // if ($notification->data['shipment']) {
@@ -51,7 +51,7 @@ class NotificationController extends Controller
         }
         return $notification_data;
     }
-    
+
 
     public function Notyshpments(Request $request, $id)
     {

@@ -500,7 +500,7 @@ export default {
             this.isLoading = true
 
             // Lazily load input customerArr
-            // axiosget('/getCustomer')
+            // axios.get('/getCustomer')
             //     .then(res => {
             this.customerArr = this.Allcustomer
             this.isLoading = false

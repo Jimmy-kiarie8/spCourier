@@ -50,7 +50,8 @@ Vue.use(VueChatScroll)
 Vue.use(VueGoogleMaps, {
     load: {
         key: 'AIzaSyBNzKeF6ZwxlAOUCyeH8UxvvYRHP_w_Guk',
-        libraries: 'places',
+        libraries: ['geometry', 'places'],
+        // libraries: 'places',
     },
 })
 // Vue.use(VueResource);

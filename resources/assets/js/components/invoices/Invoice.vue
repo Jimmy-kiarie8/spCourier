@@ -254,7 +254,7 @@ export default {
             this.dispAdd = this.dispShow = this.dispEdit = this.dispMail = false
         },
         getInvoices() {
-            axiosget('/getInvoice')
+            axios.get('/getInvoice')
                 .then((response) => {
                     this.invoices = response.data
                 })
@@ -275,14 +275,14 @@ export default {
     mounted() {
         this.loader = true
         this.getInvoices()
-        axiosget('/getUsers')
+        axios.get('/getUsers')
             .then((response) => {
                 this.Allusers = response.data
             })
             .catch((error) => {
                 this.errors = error.response.data.errors
             })
-        axiosget('/getCustomer')
+        axios.get('/getCustomer')
             .then((response) => {
                 this.loader = false
                 this.AllClients = response.data

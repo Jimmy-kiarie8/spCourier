@@ -298,7 +298,7 @@ export default {
         },
         getUsers() {
             this.loading = true
-            axiosget('/getUsers')
+            axios.get('/getUsers')
                 .then((response) => {
                     this.loading = false
                     this.Allusers = response.data
@@ -310,7 +310,7 @@ export default {
         },
         getCountry() {
             this.loading = true
-            axiosget('/getCountry')
+            axios.get('/getCountry')
                 .then((response) => {
                     this.loading = false
                     this.Allcountries = response.data
@@ -324,7 +324,7 @@ export default {
     mounted() {
         this.loader = true
         this.getUsers()
-        axiosget('/getBranch')
+        axios.get('/getBranch')
             .then((response) => {
                 this.loader = false
                 this.AllBranches = response.data
@@ -334,7 +334,7 @@ export default {
                 this.errors = error.response.data.errors
             })
 
-        axiosget('/getRoles')
+        axios.get('/getRoles')
             .then((response) => {
                 this.AllRoles = response.data
             })

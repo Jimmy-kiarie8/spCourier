@@ -191,13 +191,13 @@
         <v-icon dark right>check_circle</v-icon>
     </v-snackbar>
 </div>
-</template>
+</template> 
 
 <script>
 import VueBarcode from "vue-barcode";
 let AddShipment = require("./AddShipment");
 let EditShipment = require("./EditShipment");
-let ShowShipment = require("./print/PdoDownload");
+let ShowShipment = require("./print/PrintSpdf");
 let UpdateShipment = require("./UpdateShipment");
 let UpdateShipmentStatus = require("./UpdateShipmentStatus");
 let AssignDriver = require("./AssignDriver");

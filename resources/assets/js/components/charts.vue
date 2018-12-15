@@ -180,7 +180,7 @@ export default {
     },
     methods: {
         getCountCount() {
-            axiosget('/getCountCount')
+            axios.get('/getCountCount')
                 .then((response) => {
                     this.countryC = response.data
                 })
@@ -189,7 +189,7 @@ export default {
                 })
         },
         getBranchCount() {
-            axiosget('/getBranchCount')
+            axios.get('/getBranchCount')
                 .then((response) => {
                     this.branchC = response.data
                 })
@@ -199,7 +199,7 @@ export default {
         },
 
         ref() {
-            axiosget('/getChartData')
+            axios.get('/getChartData')
                 .then((response) => {
                     // console.log(response);
                     eventBus.$emit('chartEvent', response.data);

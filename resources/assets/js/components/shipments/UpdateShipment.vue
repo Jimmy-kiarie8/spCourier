@@ -217,35 +217,62 @@ export default {
             }
         },
         mapUpsd() {
-            this.markers = [];
+            this.markers = []; 
             this.showMap = true;
         },
         getDistance() {
-            var directionsService = new google.maps.DirectionsService();
+            // var p1 = new google.maps.LatLng(45.463688, 9.18814);
+            // var p2 = new google.maps.LatLng(46.0438317, 9.75936230000002);
+            // if (this.place) {
+            //     this.markers.push({
+            //         position: {
+            //             lat: this.place.geometry.location.lat(),
+            //             lng: this.place.geometry.location.lng()
+            //         }
+            //     });
+            //     this.place = null;
+            // }
+            for (let i = 0; i < this.markers.length; i++) {
+                const element = this.markers[i];
+                console.log(element)
+                // alert(element['position']['lat'])
+                var p1 = new google.maps.LatLng(element['position']['lat'], element['position']['lng']);
+                var p2 = new google.maps.LatLng(element['position']['lat'], element['position']['lng']);
+                alert(p1)
+                // var p2 = new google.maps.LatLng(-4.05052, 39.667169);
+            }
+            // alert(calcDistance(p1, p2));
+            console.log(calcDistance(p1, p2))
 
-            var request = {
-                origin: "Mombasa, Kenya", // a city, full address, landmark etc
-                destination: "Nairobi, Kenya",
-                travelMode: google.maps.DirectionsTravelMode.DRIVING
-            };
-            // var dista = this.dist
+            //calculates distance between two points in km's
+            function calcDistance(p1, p2) {
+                return (google.maps.geometry.spherical.computeDistanceBetween(p1, p2) / 1000).toFixed(2);
+            }
+            // var directionsService = new google.maps.DirectionsService();
 
-            directionsService.route(request, function (response, status, dista) {
-                // if (status == google.maps.DirectionsStatus.OK) {
-                this.$refs["distanceGet"];
-                console.log(response.routes[0].legs[0].distance.value);
-                alert(response.routes[0].legs[0].distance.value);
-                dista = response.routes[0].legs[0].distance.value; // the distance in metres
-                this.dist = dista;
-                alert(dista);
-                alert(this.dist);
-                // } else {
-                //     alert('wrong');
-                // oops, there's no route between these two locations
-                // every time this happens, a kitten dies
-                // so please, ensure your address is formatted properly
-                // }
-            });
+            // var request = {
+            //     origin: "Mombasa, Kenya", // a city, full address, landmark etc
+            //     destination: "Nairobi, Kenya",
+            //     travelMode: google.maps.DirectionsTravelMode.DRIVING
+            // };
+            // // var dista = this.dist
+
+            // directionsService.route(request, function (response, status, dista) {
+            //     // if (status == google.maps.DirectionsStatus.OK) {
+            //     this.$refs["distanceGet"];
+            //     console.log(response.routes[0].legs[0].distance.value);
+            //     alert(response.routes[0].legs[0].distance.value);
+            //     dista = response.routes[0].legs[0].distance.value; // the distance in metres
+            //     this.dist = dista;
+            //     alert(dista);
+            //     alert(this.dist);
+            //     // } else {
+            //     //     alert('wrong');
+            //     // oops, there's no route between these two locations
+            //     // every time this happens, a kitten dies
+            //     // so please, ensure your address is formatted properly
+            //     // }
+            // });
             // alert(this.dista)
             // this.dist = dista
             // return dist

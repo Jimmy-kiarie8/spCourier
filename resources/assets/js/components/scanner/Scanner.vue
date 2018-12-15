@@ -345,7 +345,7 @@ export default {
         //         this.errors = error.response.data.errors
         //         this.loader = false
         //     })
-        axiosget('/getStatuses')
+        axios.get('/getStatuses')
             .then((response) => {
                 this.statuses = response.data
                 this.loader = false
@@ -355,7 +355,7 @@ export default {
                 this.loader = false
             })
 
-        axiosget('/getDrivers')
+        axios.get('/getDrivers')
             .then((response) => {
                 this.AllRiders = response.data
             })

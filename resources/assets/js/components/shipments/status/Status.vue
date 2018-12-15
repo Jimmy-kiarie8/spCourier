@@ -470,7 +470,7 @@ export default {
                 this.errors = error.response.data.errors;
             })
             
-        axiosget('/getStatuses')
+        axios.get('/getStatuses')
             .then((response) => {
                 this.statuses = response.data
             })

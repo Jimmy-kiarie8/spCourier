@@ -169,7 +169,7 @@ export default {
         },
         getRoles() {
             this.loading = true
-            axiosget('/getRoles')
+            axios.get('/getRoles')
                 .then((response) => {
                     this.loading = false
                     this.loader = false

@@ -11,7 +11,7 @@
       }
     },
     mounted () {
-      axiosget('/getRinderShip')
+      axios.get('/getRinderShip')
               .then((response) => {
                   // console.log(response);
                   this.label = response.data.data.lables
@@ -37,7 +37,7 @@
       }, {responsive: true, maintainAspectRatio: false})
     },
       ref() {
-          axiosget('/getRinderShip')
+          axios.get('/getRinderShip')
               .then((response) => {
                   // console.log(response);
                   this.label = response.data.lables

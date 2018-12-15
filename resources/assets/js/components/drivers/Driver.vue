@@ -202,7 +202,7 @@ export default {
         this.loader = true
         this.refresh()
 
-        axiosget('/getCustomer')
+        axios.get('/getCustomer')
             .then((response) => {
                 this.Allcustomers = response.data
                 this.loader = false

@@ -186,14 +186,14 @@ export default {
         },
     },
     mounted() {
-        axiosget('/getClientsDocs')
+        axios.get('/getClientsDocs')
             .then((response) => {
                 this.AllClients = response.data
             })
             .catch((error) => {
                 this.errors = error.response.data.errors
             })
-        axiosget('/getDocs')
+        axios.get('/getDocs')
             .then((response) => {
                 this.AllDocs = response.data
             })
