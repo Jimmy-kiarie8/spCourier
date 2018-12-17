@@ -228,17 +228,19 @@ export default {
             //         position: {
             //             lat: this.place.geometry.location.lat(),
             //             lng: this.place.geometry.location.lng()
-            //         }
+            //         } 
             //     });
             //     this.place = null;
             // }
+            var dist = []
             for (let i = 0; i < this.markers.length; i++) {
                 const element = this.markers[i];
                 console.log(element)
                 // alert(element['position']['lat'])
                 var p1 = new google.maps.LatLng(element['position']['lat'], element['position']['lng']);
                 var p2 = new google.maps.LatLng(element['position']['lat'], element['position']['lng']);
-                alert(p1)
+                dist.push(p1, p2)
+                // alert(p1)
                 // var p2 = new google.maps.LatLng(-4.05052, 39.667169);
             }
             // alert(calcDistance(p1, p2));
