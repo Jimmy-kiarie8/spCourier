@@ -196,7 +196,7 @@ export default {
     methods: {
         filterR() {
             this.loading = true
-            axios.post('filterR', {
+            axios.post('/filterR', {
                     selectRider: this.$data.selectRider,
                     form: this.$data.form
                 }).then((response) => {

@@ -171,7 +171,7 @@ export default {
         searchRe() {
             this.nextPage = true
             // alert('success')
-            axios.post('getsearchRe', this.form)
+            axios.post('/getsearchRe', this.form)
                 .then((response) => {
                     this.nextPage = false
                     this.AllShip = response.data
@@ -179,7 +179,7 @@ export default {
         },
         refresh() {
             this.loader = true
-            axios.get('DriverShip')
+            axios.get('/DriverShip')
                 .then((response) => {
                     this.AllShip = response.data
                     this.loader = false

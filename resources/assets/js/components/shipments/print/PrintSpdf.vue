@@ -31,7 +31,7 @@ export default {
     },
     methods: {
         getShipSingle() {
-            axios.post(`getShipSingle/${this.data_id}`)
+            axios.post(`/getShipSingle/${this.data_id}`)
                 .then((response) => {
                     this.element = response.data
                     this.download()

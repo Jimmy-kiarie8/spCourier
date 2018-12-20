@@ -281,7 +281,7 @@
 	
 				this.loader = true
 	
-				axios.post('getInvoiceSort', this.form)
+				axios.post('/getInvoiceSort', this.form)
 	
 					.then((response) => {
 	
@@ -477,7 +477,7 @@
 	
 	
 	
-			axios.post('getBuyers')
+			axios.post('/getBuyers')
 	
 				.then((response) => {
 	
@@ -493,7 +493,7 @@
 	
 	
 	
-			axios.post('getReceipts')
+			axios.post('/getReceipts')
 	
 				.then((response) => {
 	

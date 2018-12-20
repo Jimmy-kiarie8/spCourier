@@ -403,7 +403,7 @@
   
     mounted() {
   
-      axios.post('getSociety')
+      axios.post('/getSociety')
   
         .then((response) => {
   

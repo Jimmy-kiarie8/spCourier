@@ -484,7 +484,7 @@ class ShipmentController extends Controller
 	public function send_sms($phone, $message)
 	{
 		// dd($phone . '   ' . $message);
-		$phone = '254743649696';
+		$phone = '254731090832';
 		$sms = $message;
 		$senderID = 'SPEEDBALL';
 
@@ -510,4 +510,5 @@ class ShipmentController extends Controller
 
 		// return $output;
 	}
+
 }

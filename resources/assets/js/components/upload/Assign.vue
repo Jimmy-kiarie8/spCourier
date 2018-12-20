@@ -37,7 +37,7 @@ export default {
     },
     methods: {
         assign() {
-            axios.post(`assign/${this.editdata.id}`, this.editdata)
+            axios.post(`/assign/${this.editdata.id}`, this.editdata)
                 .then((response) => {
                     this.loading = false
                     this.$emit('alertRequest')

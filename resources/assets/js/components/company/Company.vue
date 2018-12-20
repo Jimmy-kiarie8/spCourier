@@ -176,7 +176,7 @@ export default {
 
         getCompany() {
 
-            axios.post('getCompanies')
+            axios.post('/getCompanies')
                 .then((response) => {
                     this.AllCompanies = response.data
                     this.loader = false
@@ -192,14 +192,14 @@ export default {
     mounted() {
         this.loader = true
         this.getCompany()
-        axios.post('getCompanyAdmin')
+        axios.post('/getCompanyAdmin')
             .then((response) => {
                 this.Allusers = response.data
             })
             .catch((error) => {
                 this.errors = error.response.data.errors
             })
-        axios.post('getLogo')
+        axios.post('/getLogo')
             .then((response) => {
                 this.companyLogo = response.data
                 /*if (this.companyLogo.logo.length > 0) {
@@ -211,7 +211,7 @@ export default {
                 this.errors = error.response.data.errors
             })
 
-        axios.post('getLogoOnly')
+        axios.post('/getLogoOnly')
             .then((response) => {
                 if (response.data.length > 0) {
                     this.imagePlaced = true

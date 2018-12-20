@@ -70,7 +70,7 @@ class ScanController extends Controller
 	{
 		$bar_code = str_replace("-", "", $request->bar_code_in);
 		// dd($barcode);
-		$barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code_in}%")->first();
+		$barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->first();
 		if ($barcode) {
 			return $barcode;
 		} else {

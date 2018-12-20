@@ -91,7 +91,7 @@ export default {
         getChatty(id) {
             this.chat_id = id;
             axios
-                .post(`getUserConvById/${id}`)
+                .post(`/getUserConvById/${id}`)
                 .then(response => {
                     console.log(response);
                     // this.loader = false
@@ -104,7 +104,7 @@ export default {
         },
         sendMsg() {
             axios
-                .post(`saveUserChat/${this.chat_id}`, this.$data.chatty_sms)
+                .post(`/saveUserChat/${this.chat_id}`, this.$data.chatty_sms)
                 .then(response => {
                     console.log(response);
                     this.chatty_sms.chat = ''

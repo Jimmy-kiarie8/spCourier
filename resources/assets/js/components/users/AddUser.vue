@@ -153,7 +153,7 @@ export default {
         },
     },
     mounted() {
-        axios.post('getCompanyAdmin')
+        axios.post('/getCompanyAdmin')
             .then((response) => {
                 this.Allusers = response.data
             })

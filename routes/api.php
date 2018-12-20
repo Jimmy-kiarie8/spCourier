@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 Route::group([
 	'prefix' => 'auth',
 ], function () {
@@ -53,8 +53,8 @@ Auth::routes();
 Route::group([
 
     // 'middleware' => 'auth:api',
-    'middleware' => 'api',
-    'prefix' => 'getData',
+	'middleware' => 'api',
+	'prefix' => 'getData',
 
 ], function () {
     // Route::group(['middleware' => ['auth']], function () {
@@ -96,7 +96,7 @@ Route::group([
 	Route::post('getcoordinatesArray/{id}', 'ShipmentController@getcoordinatesArray')->name('getcoordinatesArray');
 	Route::patch('UpdateShipment', 'ShipmentController@UpdateShipment')->name('UpdateShipment');
 	Route::post('filterShipment', 'ShipmentController@filterShipment')->name('filterShipment');
-	
+
 	Route::post('AddShipments/{id}', 'ContainerController@AddShipments')->name('AddShipments');
 	Route::post('conupdateStatus/{id}', 'ContainerController@conupdateStatus')->name('conupdateStatus');
 	Route::post('getShipmentArray/{id}', 'ContainerController@getShipmentArray')->name('getShipmentArray');
@@ -173,3 +173,13 @@ Route::group([
 	Route::get('mpesa', 'MpesaController@mpesa')->name('mpesa');
 
 });
+
+
+
+//API Routes
+Route::post('shipment', 'Api\ShipmentController@store');
+Route::post('deleteShipment', 'Api\ShipmentController@delete');
+Route::post('trackShipment', 'Api\ShipmentController@track');
+Route::post('pincode', 'Api\ShipmentController@pincode');
+Route::post('pickup', 'Api\ShipmentController@createPickup');
+Route::post('deletePickup', 'Api\ShipmentController@deletePickup');

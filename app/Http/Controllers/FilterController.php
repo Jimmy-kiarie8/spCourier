@@ -11,7 +11,7 @@ class FilterController extends Controller
 {
 	public function filterShipment(Request $request)
 	{
-		if (Auth::user()->hasRole('User')) {
+		if (Auth::user()->hasRole('Customer Service')) {
 		// return $request->all();
 			if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
 				if ($request->select['id'] == 'all') {

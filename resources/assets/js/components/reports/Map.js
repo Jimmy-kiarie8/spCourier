@@ -16,7 +16,7 @@ export default {
     }
   },
   mounted () {
-    axios.post('getChartData')
+    axios.post('/getChartData')
     .then((response) => {
       console.log(response);
       this.datacollection = response.data

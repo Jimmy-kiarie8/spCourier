@@ -109,7 +109,7 @@ export default {
         },
 
         getnotifications() {
-            axios.get('Chattynoty')
+            axios.get('/Chattynoty')
                 .then((response) => {
                     this.notifications = response.data
                 })

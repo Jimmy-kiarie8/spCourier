@@ -181,7 +181,7 @@ export default {
     methods: {
         sort() {
             this.loading = true
-            axios.post('getInvoiceSort', {
+            axios.post('/getInvoiceSort', {
                     form: this.form,
                     select: this.select
                 })

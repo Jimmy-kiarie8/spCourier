@@ -53,7 +53,7 @@ export default {
     },
 
     mounted() {
-        axios.get('upload')
+        axios.get('/upload')
             .then((response) => {
                 this.props = response.data
             })

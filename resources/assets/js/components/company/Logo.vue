@@ -99,7 +99,7 @@ export default {
     },
     mounted(){
         
-        axios.post('getLogoOnly')
+        axios.post('/getLogoOnly')
             .then((response) => {
                 if (response.data.length > 0) {
                     this.imagePlaced = true

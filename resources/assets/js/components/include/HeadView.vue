@@ -172,7 +172,7 @@ export default {
         ]
     }),
     mounted() {
-        // axios.post('getLogo')
+        // axios.post('/getLogo')
         //     .then((response) => {
         //         this.company = response.data
         //     })

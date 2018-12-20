@@ -181,7 +181,7 @@ export default {
             .catch((error) => {
                 this.errors = error.response.data.errors
             })
-        // axios.get('countPending')
+        // axios.get('/countPending')
         //     .then((response) => {
         //         this.AllPending = response.data
         //     })
@@ -189,7 +189,7 @@ export default {
         //         this.errors = error.response.data.errors
         //     })
 
-        axios.get('customerCount')
+        axios.get('/customerCount')
             .then((response) => {
                 this.Allshipments = response.data
             })
@@ -197,7 +197,7 @@ export default {
                 this.errors = error.response.data.errors
             })
 
-        axios.get('customerScheduled')
+        axios.get('/customerScheduled')
             .then((response) => {
                 this.AllScheduled = response.data
             })
@@ -206,7 +206,7 @@ export default {
             })
 
         // Dashboard
-        // axios.get('delayedCount')
+        // axios.get('/delayedCount')
         //     .then((response) => {
         //         this.AlldelayedShipment = response.data
         //     })
@@ -214,7 +214,7 @@ export default {
         //         this.errors = error.response.data.errors
         //     })
 
-        axios.get('customerCanceled')
+        axios.get('/customerCanceled')
             .then((response) => {
                 this.AllCanceled = response.data
             })
@@ -222,7 +222,7 @@ export default {
                 this.errors = error.response.data.errors
             })
 
-        axios.get('customerDelivered')
+        axios.get('/customerDelivered')
             .then((response) => {
                 this.loader = false
                 this.AllderiveredShipment = response.data

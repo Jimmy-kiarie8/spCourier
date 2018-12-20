@@ -192,7 +192,7 @@ export default {
         },
         sort() {
             this.loading = true
-            axios.post('filterPayment', this.select)
+            axios.post('/filterPayment', this.select)
                 .then((response) => {
                     this.loading = false
                     this.AllClients = response.data

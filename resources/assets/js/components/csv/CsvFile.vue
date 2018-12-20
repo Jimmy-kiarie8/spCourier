@@ -7,7 +7,7 @@
         <v-container grid-list-md>
             <v-card-text>
                 <v-layout wrap>
-                    <form action="csv/import" method="post" enctype="multipart/form-data">
+                    <form action="/csv/import" method="post" enctype="multipart/form-data">
                         <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">Client</label>
                             <select class="custom-select custom-select-md col-md-8" name="client">

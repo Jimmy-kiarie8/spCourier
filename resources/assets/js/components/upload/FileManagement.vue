@@ -253,7 +253,7 @@ export default {
     },
 
     mounted() {
-        axios.get('categories')
+        axios.get('/categories')
         .then((response) => {
             this.categories = response.data
         })

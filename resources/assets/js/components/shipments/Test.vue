@@ -41,7 +41,7 @@ export default {
     methods: {
         getScheduled() {
             this.loading = true
-            axios.post('getScheduled', this.$data.form)
+            axios.post('/getScheduled', this.$data.form)
                 .then((response) => {
                     this.loading = false
                     this.Scheduled = response.data

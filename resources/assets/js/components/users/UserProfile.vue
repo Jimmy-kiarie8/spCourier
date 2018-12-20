@@ -106,7 +106,7 @@ export default {
         },
         getShipmentsCl(data) {
             this.loader = true
-            axios.post(`getUserPro/${data.id}`)
+            axios.post(`/getUserPro/${data.id}`)
                 .then((response) => {
                     this.loader = false
                     this.AllShip = response.data

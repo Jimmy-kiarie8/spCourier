@@ -231,7 +231,7 @@ export default {
                 this.errors = error.response.data.errors
             })
 
-        axios.get('scheduledShipmentCount')
+        axios.get('/scheduledShipmentCount')
             .then((response) => {
                 this.AllScheduled = response.data
             })
@@ -240,7 +240,7 @@ export default {
             })
 
         // Dashboard
-        axios.get('delayedShipmentCount')
+        axios.get('/delayedShipmentCount')
             .then((response) => {
                 this.AlldelayedShipment = response.data
             })
@@ -256,7 +256,7 @@ export default {
                 this.errors = error.response.data.errors
             })
 
-        axios.get('deriveredShipmentCount')
+        axios.get('/deriveredShipmentCount')
             .then((response) => {
                 this.AllderiveredShipment = response.data
             })
@@ -264,7 +264,7 @@ export default {
                 this.errors = error.response.data.errors
             })
 
-        axios.get('deriveredShipmentCount')
+        axios.get('/deriveredShipmentCount')
             .then((response) => {
                 this.loader = false
                 this.AllderiveredShipment = response.data

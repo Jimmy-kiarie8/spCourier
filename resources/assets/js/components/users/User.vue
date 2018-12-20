@@ -231,7 +231,7 @@ export default {
             this.getCountry()
             this.editedIndex = this.Allusers.indexOf(item)
             this.editedItem = Object.assign({}, item)
-            axios.post(`getUserPerm/${item.id}`)
+            axios.post(`/getUserPerm/${item.id}`)
                 .then((response) => {
                     eventBus.$emit('permEvent', response.data);
                 })
@@ -244,7 +244,7 @@ export default {
             this.editedIndex = this.Allusers.indexOf(item)
             this.editedItem = Object.assign({}, item)
             eventBus.$emit('getShipEvent', this.editedItem)
-            // axios.post(`getUserPro/${this.editedItem.id}`)
+            // axios.post(`/getUserPro/${this.editedItem.id}`)
             //     .then((response) => {
             //         this.loader = false
             //         this.AllShips = response.data
@@ -263,7 +263,7 @@ export default {
         },
         sort() {
             this.loading = true
-            axios.post('getSorted', this.select)
+            axios.post('/getSorted', this.select)
                 .then((response) => {
                     this.loading = false
                     this.Allusers = response.data

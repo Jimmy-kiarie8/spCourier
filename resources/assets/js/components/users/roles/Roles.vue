@@ -118,14 +118,14 @@ export default {
             console.log(item)
             this.editedIndex = this.AllRoles.indexOf(item)
             this.editedItem = Object.assign({}, item)
-            // axios.post('getPerms')
+            // axios.post('/getPerms')
             // .then((response) => {
             //     this.userPerm = response.data
             // })
             // .catch((error) => {
             //     this.errors = error.response.data.errors
             // })
-            axios.post(`getRolesPerm/${item.id}`, item)
+            axios.post(`/getRolesPerm/${item.id}`, item)
                 .then((response) => {
                     eventBus.$emit('RolepermEvent', response.data);
                 })

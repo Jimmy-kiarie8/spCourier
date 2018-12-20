@@ -144,7 +144,7 @@ export default {
 
             this.loading = true
 
-            axios.post('getDocsSort', {
+            axios.post('/getDocsSort', {
                     form: this.form,
                     select: this.select
                 })
@@ -200,7 +200,7 @@ export default {
             .catch((error) => {
                 this.errors = error.response.data.errors
             })
-        axios.get('categories')
+        axios.get('/categories')
             .then((response) => {
                 this.AllCats = response.data
             })

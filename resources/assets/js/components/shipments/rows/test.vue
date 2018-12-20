@@ -605,7 +605,7 @@ export default {
         },
         sort() {
             this.loading = true
-            axios.post('filterShipment', {
+            axios.post('/filterShipment', {
                     select: this.select,
                     selectStatus: this.selectItem,
                     form: this.form
@@ -623,7 +623,7 @@ export default {
             this.loading = true
             this.between.start = parseInt(this.between.start) + 500;
             this.between.end = parseInt(this.between.end) + 500;
-            axios.post('betweenShipments', this.$data.between)
+            axios.post('/betweenShipments', this.$data.between)
                 .then((response) => {
                     this.loading = false
                     this.AllShipments = response.data
