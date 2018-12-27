@@ -237,7 +237,7 @@ class ShipmentController extends Controller
 		$shipment->sender_phone = $request->form['sender_phone'];
 		$shipment->sender_address = $request->form['sender_address'];
 		$shipment->sender_city = $request->form['sender_city'];
-		$shipment->country_id =  Auth::user()->country_id;
+		$shipment->country_id = Auth::user()->country_id;
 		$shipment->user_id = Auth::id();
 		$shipment->shipment_id = random_int(1000000, 9999999);
 		$users = $this->getAdmin();
@@ -378,6 +378,8 @@ class ShipmentController extends Controller
 			$shipment->derivery_time = $request->formobg['derivery_time'];
 			$shipment->receiver_id = $request->formobg['receiver_id'];
 			$shipment->receiver_name = $request->formobg['receiver_name'];
+		} elseif ($request->formobg['status'] == 'Returned') {
+			$shipment->driver = null;
 		}
 		if ($shipment->save()) {
 			$shipStatus = Shipment::find($id);
@@ -413,6 +415,9 @@ class ShipmentController extends Controller
 		$remark = $request->form['remark'];
 		// $location = $request->form['location'];
 		$derivery_date = $request->form['delivery_date'];
+		if ($status == 'Returned') {
+			$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'driver' => null]);
+		}
 		$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark]);
 		$phones = Shipment::setEagerLoads([])->select('id', 'client_phone', 'client_name', 'bar_code')->whereIn('id', $id)->get();
 		$shipStatus = Shipment::setEagerLoads([])->whereIn('id', $id)->get();
@@ -435,7 +440,7 @@ class ShipmentController extends Controller
 			foreach ($phones as $phone) {
 				$this->send_sms($phone->client_phone, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ') has been delivered');
 			}
-		}
+		} 
 		// $shipStatus->statuses()->saveMany($shipStatus);
 		return $shipment;
 	}
@@ -483,7 +488,7 @@ class ShipmentController extends Controller
 
 	public function send_sms($phone, $message)
 	{
-		// dd($phone . '   ' . $message);
+		dd($phone . '   ' . $message);
 		$phone = '254731090832';
 		$sms = $message;
 		$senderID = 'SPEEDBALL';

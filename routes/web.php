@@ -86,6 +86,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('filterShipment', 'FilterController@filterShipment')->name('filterShipment');
 	Route::post('getDeriveredS', 'FilterController@getDeriveredS')->name('getDeriveredS');
 	Route::post('getOrdersS', 'FilterController@getOrdersS')->name('getOrdersS');
+	Route::post('getreturned', 'FilterController@getreturned')->name('getreturned');
 	Route::post('getPendingS', 'FilterController@getPendingS')->name('getPendingS');
 	Route::post('filterPayment', 'FilterController@filterPayment')->name('filterPayment');
 

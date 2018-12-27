@@ -11,7 +11,7 @@ class FilterController extends Controller
 {
 	public function filterShipment(Request $request)
 	{
-		if (Auth::user()->hasRole('Customer Service')) {
+		if (Auth::user()->hasRole('Customer Service') || Auth::user()->hasRole('Finance') || Auth::user()->hasRole('Operation')) {
 		// return $request->all();
 			if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
 				if ($request->select['id'] == 'all') {
@@ -211,7 +211,6 @@ class FilterController extends Controller
 				// return 'st2';
 					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->count();
 				}
-				// return 'st3';
 				// return Shipment::where('branch_id', $request->select['id'])
 				// 				// 
 				// 				->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])
@@ -285,6 +284,48 @@ class FilterController extends Controller
 			return $userArr;
 		}
 
+	}
+
+	public function getreturned(Request $request)
+	{
+		if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
+			if ($request->select['id'] == 'all') {
+				if ($request->selectStatus['name'] == 'All') {
+				// return 'st6';
+					return Shipment::where('status', 'Returned')->count();
+				} else {
+				// return 'st5';
+					return Shipment::where('status', 'Returned')->count();
+				}
+
+			} else {
+				// return 'st4';
+				return Shipment::where('status', 'Returned')->where('branch_id', $request->select['id'])->count();
+			}
+		} else {
+			if ($request->select['id'] == 'all') {
+				if ($request->selectStatus['name'] == 'All') {
+				// return 'st1';
+					return Shipment::where('status', 'Returned')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->count();
+				} else {
+				// return 'st2';
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('status', 'Returned')->count();
+				}
+			} else {
+				if ($request->selectStatus['name'] == 'All') {
+				// return 'st1';
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->where('status', 'Returned')->count();
+				} else {
+				// return 'st2';
+					return Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->where('status', 'Returned')->count();
+				}
+				// return 'st3';
+				// return Shipment::where('branch_id', $request->select['id'])
+				// 				// ->where('status', 'Returned')
+				// 				->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])
+				// 				->count();
+			}
+		}
 	}
 
 }

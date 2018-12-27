@@ -36,6 +36,12 @@
                             </v-btn>
                             <span>Pending</span>
                         </v-tooltip>
+                        <v-tooltip bottom>
+                            <v-btn slot="activator" color="red darken-2" class="mx-0">{{ returned }}
+                                <v-icon color="white darken-2" small>arrow_back</v-icon>
+                            </v-btn>
+                            <span>Returned</span>
+                        </v-tooltip>
                     </v-toolbar>
                     <!-- <v-btn color="primary" flat @click="openRow">Filter Rows</v-btn> -->
                     <!-- <v-spacer></v-spacer> -->
@@ -59,6 +65,9 @@
                             <v-flex xs4 sm2 offset-sm1>
                                 <v-select :items="items" v-model="selectAss" label="Filter By Assigned" single-line item-text="Assigned" item-value="Assigned" return-object persistent-hint></v-select>
                             </v-flex>
+                            <!-- <v-flex xs4 sm2 offset-sm1>
+                                <v-select :items="clients" v-model="selectCl" label="Filter By Client" single-line item-text="name" item-value="id" return-object persistent-hint></v-select>
+                            </v-flex> -->
                             <!-- <v-spacer></v-spacer> -->
                             <v-flex xs12 sm2 offset-sm1>
                                 <v-text-field v-model="form.start_date" color="blue darken-2" type="date" label="Start Date" required></v-text-field>
@@ -146,9 +155,11 @@ export default {
     data() {
         return {
             AllBranches: [],
+            // clients: [],
             selectAss: {
                 Assigned: 'All',
             },
+            // selectCl: [],
             select: {
                 branch_name: 'All',
                 id: 'all'
@@ -289,6 +300,7 @@ export default {
             AllDelShip: [],
             AllShip: [],
             AllPe: [],
+            returned: '',
         };
     },
     methods: {
@@ -301,6 +313,7 @@ export default {
             this.loading = true
             axios.post('/getShipBranch', {
                     select: this.select,
+                    // selectCl: this.selectCl,
                     selectStatus: this.selectItem,
                     form: this.form,
                     selectAss: this.selectAss
@@ -311,6 +324,7 @@ export default {
                     this.getDeriveredS()
                     this.getOrdersS()
                     this.getPendingS()
+                    this.getreturned()
                 })
                 .catch((error) => {
                     this.loading = false
@@ -393,6 +407,22 @@ export default {
                     this.errors = error.response.data.errors;
                 });
         },
+        getreturned() {
+            axios
+                .post("/getreturned", {
+                    select: this.select,
+                    selectStatus: this.selectItem,
+                    form: this.form,
+                    selectAss: this.selectAss
+                })
+                .then(response => {
+                    this.returned = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.errors = error.response.data.errors;
+                });
+        },
         close() {
             this.dialog1 = false;
         },
@@ -407,6 +437,7 @@ export default {
             this.selectItem = {
                 state: 'All',
             }
+            // this.selectCl = []
             this.form.start_date = this.form.end_date = ''
         },
         countOrders() {
@@ -447,6 +478,7 @@ export default {
         this.countPending()
         this.countDelivered()
         this.countOrders()
+        this.getreturned()
         this.loader = true;
         axios
             .get("/getDeriveredA")
@@ -469,6 +501,17 @@ export default {
                 console.log(error);
                 this.errors = error.response.data.errors;
             })
+
+            
+        // axios.get('/getCustomer')
+        //     .then((response) => {
+        //         this.clients = response.data
+        //     })
+        //     .catch((error) => {
+        //         this.errors = error.response.data.errors
+        //         this.loader = false
+        //     })
+
             
         axios.get('/getStatuses')
             .then((response) => {

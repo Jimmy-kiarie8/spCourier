@@ -95,6 +95,7 @@ let myTasks = require('./components/tasks/Task.vue');
 let myUploadFile = require('./components/upload/UploadFile.vue');
 let myCharges = require('./components/charge/Charge.vue');
 let myTown = require('./components/town/Town.vue');
+let mySticker = require('./components/shipments/print/Sticker.vue');
 let myPrintPdf = require('./components/shipments/print/PrintPdf.vue');
 let myStatus = require('./components/shipments/status/Status.vue');
 let myCountry = require('./components/country/Country.vue');
@@ -134,6 +135,8 @@ const routes = [
     { path: '/charges', component: myCharges },
     { path: '/towns', component: myTown },
     { path: '/print', component: myPrintPdf },
+    { path: '/sticker', component: mySticker },
+    
     { path: '/status', component: myStatus },
     { path: '/country', component: myCountry },
     { path: '/rinders', component: myRinder },
@@ -164,7 +167,7 @@ const app = new Vue({
         myBranch, myProfile, myCompany, myCustomer, mysubsicriber, myInvice, myReceipt,
         myReports, mybranchShip, myRoles, myscheduled, myTasks, myUploadFile, myCharges,
         myTown, myPrintPdf, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash,
-        myunauth, myDash, myFilter, myChatty,myFinance, myFinClient
+        myunauth, myDash, myFilter, myChatty,myFinance, myFinClient, mySticker
         // myContainer
     },
     data: {

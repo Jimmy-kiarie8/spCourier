@@ -93,6 +93,10 @@ class BranchController extends Controller
 	public function getShipBranch(Request $request)
 	{
 		// return $request->all();
+		if($request->selectCl) {
+			// return 'test';
+			return Shipment::where('client_id', $request->selectCl['id'])->take(500)->latest()->get();
+		}
 		if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
 			if ($request->select['id'] == 'all') {
 				if ($request->selectStatus['state'] == 'All') {

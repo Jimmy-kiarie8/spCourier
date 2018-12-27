@@ -28,13 +28,13 @@
                     <v-card style="background: rgba(5, 117, 230, 0.16);">
                         <v-layout wrap>
                             <v-flex xs4 sm2>
-                                <v-select :items="AllBranches" v-model="select" :hint="`${select.branch_name}, ${select.id}`" label="Filter By Branch" single-line item-text="branch_name" item-value="id" return-object persistent-hint></v-select>
+                                <v-select :items="AllBranches" v-model="select" hint="BRANCHES" label="Filter By Branch" single-line item-text="branch_name" item-value="id" return-object persistent-hint></v-select>
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>
-                                <v-select :items="AllStatus" v-model="selectItem" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint></v-select>
+                                <v-select :items="AllStatus" v-model="selectItem"  hint="STATUS" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint></v-select>
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1 v-for="role in user.roles" v-if="role.name === 'Admin'" :key="role.id">
-                                <v-select :items="AllCountries" v-model="selectCountry" :hint="`${selectCountry.country_name}, ${selectCountry.id}`" label="Filter By country" single-line item-text="country_name" item-value="id" return-object persistent-hint></v-select>
+                                <v-select :items="AllCountries" v-model="selectCountry" hint="COUNTRY" label="Filter By country" single-line item-text="country_name" item-value="id" return-object persistent-hint></v-select>
                             </v-flex>
                             <!-- <v-spacer></v-spacer> -->
                             <v-flex xs12 sm2 offset-sm1>
@@ -381,7 +381,8 @@ export default {
                 // },
                 {
                     text: "Receipt",
-                    sortable: false
+                    value: "printReceipt"
+                    // sortable: false
                 },
                 {
                     text: "Actions",

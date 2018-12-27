@@ -6,7 +6,7 @@ use App\Notifications\verifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-// use Laravel\Passport\HasApiTokens;
+use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -15,7 +15,7 @@ use Auth;
 class User extends Authenticatable
 {
 	use Notifiable, SoftDeletes;
-	use HasRoles;
+	use HasRoles, HasApiTokens;
 	public $with = ['roles'];
 	protected $guard_name = 'web';
 	/**

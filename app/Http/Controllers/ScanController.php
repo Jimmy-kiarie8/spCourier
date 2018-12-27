@@ -83,7 +83,7 @@ class ScanController extends Controller
 		// return $request->all();
 		$this->validate($request, [
 			'form.status_in' => 'required',
-			'form.rider_in' => 'required',
+			'form.client_id' => 'required',
 
 		]);
 		$id = [];
@@ -94,10 +94,10 @@ class ScanController extends Controller
 		$status = $request->form['status_in'];
 		// $derivery_time = $request->derivery_time;
 		$remark = $request->form['remarks_in'];
-		$rider_in = $request->form['rider_in'];
+		$client_id = $request->form['client_id'];
 		$location = $request->form['location_in'];
 		// $derivery_date = $request->scheduled_date;
-		$shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'driver' => $rider_in]);
+		$shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'driver' => $client_id]);
 		$shipStatus = Shipment::whereIn('id', $id)->get();
 		foreach ($shipStatus as $statuses) {
 			$statusUpdate = new ShipmentStatus;

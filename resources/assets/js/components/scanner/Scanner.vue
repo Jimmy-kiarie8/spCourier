@@ -8,14 +8,14 @@
             </v-snackbar>
             <v-card>
                 <!-- <small class="has-text-danger" v-if="errors.form.status_in">{{ errors.status_in[0] }}</small><br>
-                <small class="has-text-danger" v-if="errors.form.rider_in">{{ errors.rider_in[0] }}</small><br>
+                <small class="has-text-danger" v-if="errors.form.client_id">{{ errors.client_id[0] }}</small><br>
                 <small class="has-text-danger" v-if="errors.form.status_out">{{ errors.status_out[0] }}</small><br>
                 <small class="has-text-danger" v-if="errors.form.rider_out">{{ errors.rider_out[0] }}</small> -->
                 <v-layout row wrap>
                     <v-flex sm6>
                         <v-form ref="form" @submit.prevent style="width: 100%;">
                             <v-container grid-list-md text-xs-center>
-                                <h2>In Scan</h2>
+                                <h2>Client </h2>
                                 <v-layout row wrap>
                                     <!-- <v-flex xs6 sm6>
                                         <v-text-field v-model="form_in.scan_date" :type="'date'" color="blue darken-2" label="Date" required></v-text-field>
@@ -27,9 +27,9 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label for="">Rider</label>
-                                        <select v-model="form_in.rider_in" class="custom-select custom-select-md col-md-12">
-                                            <option v-for="rider in AllRiders" :key="rider.id" :value="rider.id">{{ rider.name }}</option>
+                                        <label for="">Clients</label>
+                                        <select v-model="form_in.client_id" class="custom-select custom-select-md col-md-12">
+                                            <option v-for="client in clients" :key="client.id" :value="client.id">{{ client.name }}</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-4">
@@ -51,7 +51,7 @@
                                                 <barcode :value="form_in.bar_code_in" style="height: 30px;"></barcode>
                                             </v-flex>
                                             <v-divider></v-divider>
-                                            <v-btn color="primary" flat @click="Inscansub" :disabled="loading_in" :loading="loading_in">Inscan
+                                            <v-btn color="primary" flat @click="Inscansub" :disabled="loading_in" :loading="loading_in">Outscan
                                             </v-btn>
                                     </v-flex>
                                 </v-layout>
@@ -109,7 +109,7 @@
                 </v-layout>
                 <v-card v-if="AllScanned.length > 0">
                     <v-card-title>
-                        Charges
+                        Shipments
                         <!-- <v-spacer></v-spacer> -->
                         <v-tooltip bottom>
                             <v-btn slot="activator" icon class="mx-0" @click="resetForm">
@@ -178,13 +178,14 @@ export default {
                 location_out: ''
             },
             form_in: {
-                rider_in: '',
+                client_id: '',
                 bar_code_in: '',
                 status_in: '',
                 // scan_date: '',
                 remarks_in: '',
                 location_in: ''
             },
+            clients: [],
             snackbar: false,
             errors: {},
             icon: 'check_circle',
@@ -321,7 +322,7 @@ export default {
                     this.icon = 'check_circle'
                     this.color = 'indigo'
                     this.resetForm()
-                    this.form_in.rider_in = ''
+                    this.form_in.client_id = ''
                     this.form_in.bar_code_in = ''
                     this.form_in.status_in = ''
                     // this.form_in.scan_date_in = ''
@@ -349,6 +350,14 @@ export default {
             .then((response) => {
                 this.statuses = response.data
                 this.loader = false
+            })
+            .catch((error) => {
+                this.errors = error.response.data.errors
+            })
+            
+        axios.get('/getCustomer')
+            .then((response) => {
+                this.clients = response.data
             })
             .catch((error) => {
                 this.errors = error.response.data.errors
