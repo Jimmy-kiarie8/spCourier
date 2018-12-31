@@ -73,12 +73,13 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('updateStatus/{id}', 'ShipmentController@updateStatus')->name('updateStatus');
 	Route::get('csv', 'ShipmentController@csv')->name('csv');
 	Route::post('csv/import', 'ShipmentController@import')->name('import');
+	Route::post('getShipmentsBtw', 'ShipmentController@getShipmentsBtw')->name('getShipmentsBtw');
 	Route::get('getShipments', 'ShipmentController@getShipments')->name('getShipments');
 	Route::post('csv/export', 'ShipmentController@export')->name('export');
 	Route::patch('UpdateShipment', 'ShipmentController@UpdateShipment')->name('UpdateShipment');
 	Route::post('assignBranch', 'ShipmentController@assignBranch')->name('assignBranch');
 	Route::post('assignDriver', 'ShipmentController@assignDriver')->name('assignDriver');
-	Route::post('filterShipment', 'ShipmentController@filterShipment')->name('filterShipment');
+	// Route::post('filterShipment', 'ShipmentController@filterShipment')->name('filterShipment');
 	Route::post('betweenShipments', 'ShipmentController@betweenShipments')->name('betweenShipments');
 	Route::post('getShipSingle/{id}', 'ShipmentController@getShipSingle')->name('getShipSingle');
 	Route::any('updateCancelled', 'ShipmentController@updateCancelled')->name('updateCancelled');
@@ -303,8 +304,9 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('getStat', 'StatusController@getStat')->name('getStat');
 	Route::get('scheduled', 'StatusController@scheduled')->name('scheduled');
 	Route::post('getScheduled', 'StatusController@getScheduled')->name('getScheduled');
+	Route::post('getStickers', 'StatusController@getStickers')->name('getStickers');
 	Route::get('getDeriveredA', 'StatusController@getDeriveredA')->name('getDeriveredA');
-
+	
 	// chatty
 	Route::post('getUserConvById/{id}', 'ChattyController@getUserConvById')->name('getUserConvById');
 	Route::post('saveUserChat/{id}', 'ChattyController@saveUserChat')->name('saveUserChat');
@@ -324,6 +326,9 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('check', function () {
 		return session('chat');
 	});
+
+	Route::post('btwRefShipments', 'ShipmentController@btwRefShipments')->name('btwRefShipments');
+	Route::post('btwSTdate', 'FilterController@btwSTdate')->name('btwSTdate');
 
 });
 

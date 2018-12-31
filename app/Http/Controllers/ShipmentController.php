@@ -395,11 +395,11 @@ class ShipmentController extends Controller
 			$statusUpdate->save();
 		}
 
-		if ($request->formobg['status'] == 'Scheduled') {
-			$this->send_sms($request->formobg['client_phone'], 'Dear ' . $request->formobg['client_name'] . ', Your shipment (waybill number: ' . $request->formobg['bar_code'] . ')  has been scheduled to be delivered on ' . $request->formobg['derivery_date']);
-		} elseif ($request->formobg['status'] == 'Delivered') {
-			$this->send_sms($request->formobg['client_phone'], 'Dear ' . $request->formobg['client_name'] . ', Your shipment (waybill number: ' . $request->formobg['bar_code'] . ') has been delivered');
-		}
+		// if ($request->formobg['status'] == 'Scheduled') {
+		// 	$this->send_sms($request->formobg['client_phone'], 'Dear ' . $request->formobg['client_name'] . ', Your shipment (waybill number: ' . $request->formobg['bar_code'] . ')  has been scheduled to be delivered on ' . $request->formobg['derivery_date']);
+		// } elseif ($request->formobg['status'] == 'Delivered') {
+		// 	$this->send_sms($request->formobg['client_phone'], 'Dear ' . $request->formobg['client_name'] . ', Your shipment (waybill number: ' . $request->formobg['bar_code'] . ') has been delivered');
+		// }
 		return $shipment;
 	}
 
@@ -432,15 +432,15 @@ class ShipmentController extends Controller
 			$statusUpdate->shipment_id = $statuses->id;
 			$statusUpdate->save();
 		}
-		if ($status == 'Scheduled') {
-			foreach ($phones as $phone) {
-				$this->send_sms($phone->client_phone, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ')  has been scheduled to be delivered on ' . $derivery_date);
-			}
-		} elseif ($status == 'Delivered') {
-			foreach ($phones as $phone) {
-				$this->send_sms($phone->client_phone, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ') has been delivered');
-			}
-		} 
+		// if ($status == 'Scheduled') {
+		// 	foreach ($phones as $phone) {
+		// 		$this->send_sms($phone->client_phone, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ')  has been scheduled to be delivered on ' . $derivery_date);
+		// 	}
+		// } elseif ($status == 'Delivered') {
+		// 	foreach ($phones as $phone) {
+		// 		$this->send_sms($phone->client_phone, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ') has been delivered');
+		// 	}
+		// } 
 		// $shipStatus->statuses()->saveMany($shipStatus);
 		return $shipment;
 	}
@@ -473,10 +473,12 @@ class ShipmentController extends Controller
 	}
 	public function betweenShipments(Request $request)
 	{
+		// return $request->all();
+		$start = $request->end-500;
 		if (Auth::user()->hasRole('Client')) {
 			return Shipment::latest()->where('client_id', Auth::id())->take(500)->skip($request->end)->get();
 		} else {
-			return Shipment::latest()->take(500)->where('country_id', Auth::user()->country_id)->skip($request->end)->get();
+			return Shipment::latest()->take(500)->where('country_id', Auth::user()->country_id)->skip($start)->get();
 		}
 		// return Shipment::where('country_id', Auth::user()->country_id)->latest()->skip($request->end)->take(500)->get();
 	}
@@ -514,6 +516,17 @@ class ShipmentController extends Controller
 		curl_close($ch);
 
 		// return $output;
+	}
+
+	public function btwRefShipments(Request $request)
+	{
+		// return $request->all();
+		$start = $request->start;
+		if (Auth::user()->hasRole('Client')) {
+			return Shipment::latest()->where('client_id', Auth::id())->take(500)->skip($request->end)->get();
+		} else {
+			return Shipment::latest()->take(500)->where('country_id', Auth::user()->country_id)->skip($start)->get();
+		}
 	}
 
 }

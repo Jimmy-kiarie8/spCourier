@@ -123,11 +123,11 @@ export default {
       this.notyShow = false;
     }
   },
-  created() {
-    this.timer = window.setInterval(() => {
-      this.getnotifications();
-    }, 60000);
-  },
+//   created() {
+//     this.timer = window.setInterval(() => {
+//       this.getnotifications();
+//     }, 60000);
+//   },
   beforeDestroy() {
     clearInterval(this.timer);
   },

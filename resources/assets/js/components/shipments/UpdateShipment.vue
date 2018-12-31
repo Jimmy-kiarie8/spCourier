@@ -155,10 +155,10 @@ export default {
                 .then(response => {
                     this.loading = false;
                     this.alert();
-                    this.updateitedItem.derivery_date = "";
                     this.close();
                     // Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.$parent.updateitedItem)
                     eventBus.$emit("refreshShipEvent")
+                    this.updateitedItem.derivery_date = "";
                     //   Object.assign(
                     //     this.$parent.AllShipments[this.$parent.editedIndex],
                     //     this.updateitedItem

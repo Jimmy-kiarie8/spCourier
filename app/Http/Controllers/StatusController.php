@@ -21,7 +21,7 @@ class StatusController extends Controller
         $status = new Status;
         $status->name = $request->name;
         $status->save();
-        return $status; 
+        return $status;
     }
 
     /**
@@ -37,9 +37,9 @@ class StatusController extends Controller
         $status = Status::find($request->id);
         $status->name = $request->name;
         $status->save();
-        return $status; 
+        return $status;
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
@@ -51,7 +51,7 @@ class StatusController extends Controller
         //
     }
 
-    
+
     public function getStatuses()
     {
         return Status::select('name')->orderBy('name', 'ASC')->get();
@@ -64,32 +64,43 @@ class StatusController extends Controller
         // return response()->json(array('success' => 'Log In Successful'), 200);
     }
 
-	public function scheduled()
-	{
-		$date1 = Carbon::today();
-		$date2 = new Carbon('tomorrow');
-		$shipment = Shipment::setEagerLoads([])->where('status', 'Scheduled')->whereBetween('derivery_date', [$date1, $date2])->take(300)->get();
-		return $shipment;
-	}
-
-	public function getScheduled(Request $request)
-	{
-		// return $request->all();
-		$print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->where('country_id', Auth::user()->country_id)->take(500)->latest()->get();
-		$id = [];
-		foreach ($print_shipment as $selectedItems) {
-			$id[] = $selectedItems['id'];
-		}
-		$status = $request->form['status'];
-		$derivery_time = $request->form['derivery_time'];
-		$remark = $request->form['remark'];
-		$derivery_date = $request->form['scheduled_date'];
-		// $shipment = Shipment::whereIn('id', $id)->update(['printed' => 1]);
-		return $print_shipment;
+    public function scheduled()
+    {
+        $date1 = Carbon::today();
+        $date2 = new Carbon('tomorrow');
+        $shipment = Shipment::setEagerLoads([])->where('status', 'Scheduled')->whereBetween('derivery_date', [$date1, $date2])->take(500)->get();
+        return $shipment;
     }
-    
-	public function getDeriveredA()
-	{
-		return Shipment::where('status', 'Delivered')->latest()->take(500)->get();
-	}
+
+    public function getScheduled(Request $request)
+    {
+		// return $request->all();
+        $print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->where('country_id', Auth::user()->country_id)->take(500)->latest()->get();
+        $id = [];
+        foreach ($print_shipment as $selectedItems) {
+            $id[] = $selectedItems['id'];
+        }
+        // $status = $request->form['status'];
+        // $derivery_time = $request->form['derivery_time'];
+        // $remark = $request->form['remark'];
+        // $derivery_date = $request->form['scheduled_date'];
+		$shipment = Shipment::whereIn('id', $id)->update(['printed' => 1, 'printReceipt' => 1]);
+        return $print_shipment;
+    }
+    public function getStickers(Request $request)
+    {
+		// return $request->all();
+        $sticker_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('sticker', 0)->where('country_id', Auth::user()->country_id)->take(500)->latest()->get();
+        $id = [];
+        foreach ($sticker_shipment as $selectedItems) {
+            $id[] = $selectedItems['id'];
+        }
+		// $shipment = Shipment::whereIn('id', $id)->update(['sticker' => 1]);
+        return $sticker_shipment;
+    }
+
+    public function getDeriveredA()
+    {
+        return Shipment::where('status', 'Delivered')->latest()->take(500)->get();
+    }
 }

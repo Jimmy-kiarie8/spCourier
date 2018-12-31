@@ -31,7 +31,7 @@
                                 <v-select :items="AllBranches" v-model="select" hint="BRANCHES" label="Filter By Branch" single-line item-text="branch_name" item-value="id" return-object persistent-hint></v-select>
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>
-                                <v-select :items="AllStatus" v-model="selectItem"  hint="STATUS" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint></v-select>
+                                <v-select :items="AllStatus" v-model="selectItem" hint="STATUS" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint></v-select>
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1 v-for="role in user.roles" v-if="role.name === 'Admin'" :key="role.id">
                                 <v-select :items="AllCountries" v-model="selectCountry" hint="COUNTRY" label="Filter By country" single-line item-text="country_name" item-value="id" return-object persistent-hint></v-select>
@@ -60,7 +60,7 @@
                             <v-btn color="primary" flat @click="openShipment" v-if="user.can['create shipments']">Add Shipment</v-btn>
                             <v-btn color="primary" flat @click="ShipmentCsv" v-if="user.can['upload excel']">Upload Excel</v-btn>
                             <v-tooltip right>
-                                <v-btn icon slot="activator" class="mx-0" @click="getShipments">
+                                <v-btn icon slot="activator" class="mx-0" @click="sortItem">
                                     <v-icon color="blue darken-2" small>refresh</v-icon>
                                 </v-btn>
                                 <span>Refresh</span>
@@ -181,7 +181,7 @@
     <UpdateShipmentStatus :UpdateShipmentStatus="UpdateShipmentModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></UpdateShipmentStatus>
     <AssignDriver :AllDrivers="AllDrivers" :OpenAssignDriver="AssignDriverModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></AssignDriver>
     <AssignBranch :AllBranches="AllBranches" :OpenAssignBranch="AssignBranchModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></AssignBranch>
-    <TrackShipment @refreshRequest="getShipments" :shipments="updateitedItem" :OpenTrackBranch="trackModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected" :user="user"></TrackShipment>
+    <TrackShipment @refreshRequest="sortItem" :shipments="updateitedItem" :OpenTrackBranch="trackModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected" :user="user"></TrackShipment>
     <myCsvFile :OpenCsv="csvModel" @closeRequest="close"></myCsvFile>
     <mySCharges :mySCharges="chargeModal" @closeRequest="close" :updateCharges="shipment" @alertRequest="showalert"></mySCharges>
     <myRows :myRows="RowModal" @closeRequest="close" :updateCharges="shipment"></myRows>
@@ -512,7 +512,7 @@ export default {
                 .then(response => {
                     // this.printColor = 'red'
                     // this.loading = false,
-                    this.getShipments();
+                    this.sortItem();
                     this.message = "Not Printed";
                     this.color = "black";
                     this.snackbar = true;
@@ -529,7 +529,7 @@ export default {
                 .post(`/printed/${item.id}`)
                 .then(response => {
                     // this.printColor = 'green'
-                    this.getShipments();
+                    this.sortItem();
                     // this.loading = false,
                     this.message = "Printed";
                     this.color = "black";
@@ -611,6 +611,7 @@ export default {
             axios
                 .post("/filterShipment", {
                     select: this.select,
+                    no_btw: this.between,
                     selectStatus: this.selectItem,
                     form: this.form,
                     selectCountry: this.selectCountry
@@ -628,8 +629,43 @@ export default {
             this.loading = true;
             this.between.start = parseInt(this.between.start) + 500;
             this.between.end = parseInt(this.between.end) + 500;
-            axios
-                .post("/betweenShipments", this.$data.between)
+            this.sortItem()
+            // axios
+            //     .post("/betweenShipments", this.$data.between)
+            //     .then(response => {
+            //         this.loading = false;
+            //         this.AllShipments = response.data;
+            //     })
+            //     .catch(error => {
+            //         this.loading = false;
+            //         this.errors = error.response.data.errors;
+            //     });
+        },
+        previous() {
+            this.loading = true;
+            if (this.between.start >= 500) {
+                this.between.start = parseInt(this.between.start) - 500;
+                this.between.end = parseInt(this.between.end) - 500;
+                this.sortItem()
+
+                // axios
+                //     .post("/betweenShipments", this.$data.between)
+                //     .then(response => {
+                //         this.loading = false;
+                //         this.AllShipments = response.data;
+                //     })
+                //     .catch(error => {
+                //         this.loading = false;
+                //         this.errors = error.response.data.errors;
+                //     });
+            } else {
+                return;
+                this.loading = false;
+            }
+        },
+        currentPage() {
+            this.loading = true;
+            axios.post("/btwRefShipments", this.$data.between)
                 .then(response => {
                     this.loading = false;
                     this.AllShipments = response.data;
@@ -638,26 +674,6 @@ export default {
                     this.loading = false;
                     this.errors = error.response.data.errors;
                 });
-        },
-        previous() {
-            this.loading = true;
-            if (this.between.start >= 500) {
-                this.between.start = parseInt(this.between.start) - 500;
-                this.between.end = parseInt(this.between.end) - 500;
-                axios
-                    .post("/betweenShipments", this.$data.between)
-                    .then(response => {
-                        this.loading = false;
-                        this.AllShipments = response.data;
-                    })
-                    .catch(error => {
-                        this.loading = false;
-                        this.errors = error.response.data.errors;
-                    });
-            } else {
-                return;
-                this.loading = false;
-            }
         },
 
         close() {
@@ -679,7 +695,7 @@ export default {
                 id: "all"
             };
             this.form.start_date = this.form.end_date = "";
-            this.getShipments();
+            this.sortItem();
         },
 
         getCustomer() {
@@ -714,19 +730,34 @@ export default {
                     this.errors = error.response.data.errors;
                 });
         },
-        getShipments() {
+        // sortItem() {
+        //     this.loading = true;
+        //     this.between.start = 1;
+        //     this.between.end = 500;
+        //     axios.post("/filterShipment")
+        //         .then(response => {
+        //             this.loading = false;
+        //             this.loader = false;
+        //             this.AllShipments = response.data;
+        //         })
+        //         .catch(error => {
+        //             this.loading = false;
+        //             this.loader = false;
+        //             this.errors = error.response.data.errors;
+        //         });
+        // },
+        currentSTPage() {
             this.loading = true;
-            this.between.start = 1;
-            this.between.end = 500;
-            axios.get("/getShipments")
+            axios.post("/btwSTdate", {
+                    date_btw: this.$data.between,
+                    filter_btw: this.form
+                })
                 .then(response => {
                     this.loading = false;
-                    this.loader = false;
                     this.AllShipments = response.data;
                 })
                 .catch(error => {
                     this.loading = false;
-                    this.loader = false;
                     this.errors = error.response.data.errors;
                 });
         },
@@ -738,7 +769,7 @@ export default {
         getShipmentsComp() {
             // this.loading = true;
             // axios
-            //     .get("/getShipments")
+            //     .get("/sortItem")
             //     .then(response => {
             //         this.loading = false;
             //         this.loader = false;
@@ -749,7 +780,7 @@ export default {
             //         this.loader = false;
             //         this.errors = error.response.data.errors;
             //     });
-            // this.getShipments()
+            // this.sortItem()
         }
     },
     created() {
@@ -758,12 +789,16 @@ export default {
         });
 
         eventBus.$on("refreshShipEvent", data => {
-            if (this.form.start_date != "" && this.end_date != "") {
-                this.sortItem()
-
-            } else {
-                this.getShipments()
-            }
+            this.sortItem()
+            // if (this.between.start >= 500 && this.form.start_date != "" && this.end_date != "") {
+            //     this.currentSTPage()
+            // } else if (this.between.start >= 500) {
+            //     this.currentPage()
+            // } else if (this.form.start_date != "" && this.end_date != "") {
+            //     this.sortItem()
+            // } else {
+            //     this.sortItem()
+            // }
 
         });
         eventBus.$on("TrackEvent", data => {
@@ -774,9 +809,9 @@ export default {
         //     this.selected = [];
         // });
 
-        // this.getShipments()
+        // this.sortItem()
         // this.timer = window.setInterval(() => {
-        //     this.getShipments()
+        //     this.sortItem()
         // }, 1000)
     },
     beforeDestroy() {
@@ -824,7 +859,7 @@ export default {
                 this.errors = error.response.data.errors;
             });
 
-        this.getShipments();
+        this.sortItem();
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {

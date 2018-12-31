@@ -7,7 +7,7 @@
         <!-- temporary -->
         <v-navigation-drawer fixed :color="color" :clipped="$vuetify.breakpoint.lgAndUp" app v-model="drawer">
             <v-list dense id="navigation">
-                <v-img :aspect-ratio="16/9" src="storage/ps/landS.jpg">
+                <v-img :aspect-ratio="16/9" src="/storage/ps/landS.jpg">
                     <v-layout pa-2 column fill-height class="lightbox white--text">
                         <v-spacer></v-spacer>
                         <v-flex shrink>
@@ -82,21 +82,13 @@
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">account_circle</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
-                                    Your Profile
+                                    My Profile
                                 </div>
                             </div>
                         </router-link>
                         <!--  -->
                         <!--  -->
                         <!--  -->
-                        <router-link to="/print" class="v-list__tile v-list__tile--link" v-if="user.can['prin']">
-                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">print</i></div>
-                            <div class="v-list__tile__content">
-                                <div class="v-list__tile__title">
-                                    print
-                                </div>
-                            </div>
-                        </router-link>
                         <router-link to="/reports" class="v-list__tile v-list__tile--link" v-if="user.can['view reports']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
                             <div class="v-list__tile__content">
@@ -105,6 +97,38 @@
                                 </div>
                             </div>
                         </router-link>
+
+                        <!-- <router-link to="/print" class="v-list__tile v-list__tile--link" v-if="user.can['prin']">
+                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">print</i></div>
+                            <div class="v-list__tile__content">
+                                <div class="v-list__tile__title">
+                                    print
+                                </div>
+                            </div>
+                        </router-link> -->
+
+                        <v-list-group prepend-icon="book" v-if="user.can['outscan', 'inscan']">
+                            <v-list-tile slot="activator">
+                                <v-list-tile-title>Print</v-list-tile-title>
+                            </v-list-tile>
+
+                            <router-link to="/print" class="v-list__tile v-list__tile--link" v-if="user.can['prin']">
+                                <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">print</i></div>
+                                <div class="v-list__tile__content">
+                                    <div class="v-list__tile__title">
+                                        Print Waybills
+                                    </div>
+                                </div>
+                            </router-link>
+                            <router-link to="/sticker" class="v-list__tile v-list__tile--link" v-if="user.can['prin']">
+                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">print</i></div>
+                            <div class="v-list__tile__content">
+                                <div class="v-list__tile__title">
+                                    Print Stickers
+                                </div>
+                            </div>
+                        </router-link>
+                        </v-list-group>
                         <!--  -->
                         <!--  -->
                         <!--  -->
@@ -250,111 +274,111 @@ import Notifications from "../notification/Notification";
 let AddShipment = require("../shipments/AddShipment");
 // import chattyNoty from '../notification/chattyNoty'
 export default {
-  components: {
-    Notifications,
-    AddShipment
-    //  chattyNoty
-  },
-  props: ["user"],
-  data() {
-    return {
-      role: "",
-      color: "#132f51",
-      dialog: false,
-      drawer: true,
-      drawerRight: false,
-      right: null,
-      mode: "",
-      notifications: [],
-      company: {},
-      AllBranches: [],
-      Allcustomers: [],
-      AllDrivers: [],
-      snackbar: false,
-      timeout: 5000,
-      message: "Success"
-      // cruds: [
-      //     ['Create', 'add'],
-      //     ['Read', 'insert_drive_file'],
-      //     ['Update', 'update'],
-      //     ['Delete', 'delete']
-      // ]
-    };
-  },
-  methods: {
-    openShipment() {
-      this.dialog = true;
-      this.getBranch();
-      this.getCustomer();
-      this.getDrivers();
+    components: {
+        Notifications,
+        AddShipment
+        //  chattyNoty
     },
+    props: ["user"],
+    data() {
+        return {
+            role: "",
+            color: "#132f51",
+            dialog: false,
+            drawer: true,
+            drawerRight: false,
+            right: null,
+            mode: "",
+            notifications: [],
+            company: {},
+            AllBranches: [],
+            Allcustomers: [],
+            AllDrivers: [],
+            snackbar: false,
+            timeout: 5000,
+            message: "Success"
+            // cruds: [
+            //     ['Create', 'add'],
+            //     ['Read', 'insert_drive_file'],
+            //     ['Update', 'update'],
+            //     ['Delete', 'delete']
+            // ]
+        };
+    },
+    methods: {
+        openShipment() {
+            this.dialog = true;
+            this.getBranch();
+            this.getCustomer();
+            this.getDrivers();
+        },
 
-    getCustomer() {
-      axios
-        .get("/getCustomer")
-        .then(response => {
-          this.Allcustomers = response.data;
-        })
-        .catch(error => {
-          this.errors = error.response.data.errors;
-        });
-    },
-    getDrivers() {
-      axios
-        .get("/getDrivers")
-        .then(response => {
-          this.AllDrivers = response.data;
-        })
-        .catch(error => {
-          console.log(error);
-          this.errors = error.response.data.errors;
-        });
-    },
-    getBranch() {
-      axios
-        .get("/getBranchEger")
-        .then(response => {
-          this.AllBranches = response.data;
-        })
-        .catch(error => {
-          console.log(error);
-          this.errors = error.response.data.errors;
-        });
-    },
-    close() {
-      this.dialog = false;
-    },
+        getCustomer() {
+            axios
+                .get("/getCustomer")
+                .then(response => {
+                    this.Allcustomers = response.data;
+                })
+                .catch(error => {
+                    this.errors = error.response.data.errors;
+                });
+        },
+        getDrivers() {
+            axios
+                .get("/getDrivers")
+                .then(response => {
+                    this.AllDrivers = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.errors = error.response.data.errors;
+                });
+        },
+        getBranch() {
+            axios
+                .get("/getBranchEger")
+                .then(response => {
+                    this.AllBranches = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.errors = error.response.data.errors;
+                });
+        },
+        close() {
+            this.dialog = false;
+        },
 
-    showalert() {
-      this.message = "success";
-      // this.color = "indigo";
-      this.snackbar = true;
+        showalert() {
+            this.message = "success";
+            // this.color = "indigo";
+            this.snackbar = true;
+        }
+    },
+    mounted() {
+        // axios.post('/getLogo')
+        //     .then((response) => {
+        //         this.company = response.data
+        //     })
+        //     .catch((error) => {
+        //         this.errors = error.response.data.errors
+        //     })
     }
-  },
-  mounted() {
-    // axios.post('/getLogo')
-    //     .then((response) => {
-    //         this.company = response.data
-    //     })
-    //     .catch((error) => {
-    //         this.errors = error.response.data.errors
-    //     })
-  }
 };
 </script>
 
 <style scoped>
 .v-expansion-panel__container:hover {
-  border-radius: 10px !important;
-  width: 90% !important;
-  margin-left: 15px !important;
-  background: #e3edfe !important;
-  color: #1a73e8 !important;
+    border-radius: 10px !important;
+    width: 90% !important;
+    margin-left: 15px !important;
+    background: #e3edfe !important;
+    color: #1a73e8 !important;
 }
 
 .theme--light {
-  background-color: #212120 !important;
-  /* background: url('storage/logo1.jpg') !important; */
-  color: #fff !important;
+    background-color: #212120 !important;
+    /* background: url('storage/logo1.jpg') !important; */
+    color: #fff !important;
 }
 </style>

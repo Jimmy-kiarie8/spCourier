@@ -103,9 +103,9 @@ export default {
                     this.receiver_name = ''
                     this.receiver_id = ''
                     eventBus.$emit('selectClear');
-                    // eventBus.$emit("refreshShipEvent");
+                    eventBus.$emit("refreshShipEvent");
                     console.log(response.data)
-                    Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.$parent.editedItem)
+                    // Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.$parent.editedItem)
                 })
                 .catch(error => {
                     this.loading = false;
