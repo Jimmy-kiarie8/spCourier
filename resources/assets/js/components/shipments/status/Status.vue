@@ -60,7 +60,7 @@
                                 <v-select :items="AllBranches" v-model="select" :hint="`${select.branch_name}, ${select.id}`" label="Filter By Branch" single-line item-text="branch_name" item-value="id" return-object persistent-hint></v-select>
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>
-                                <v-select :items="statuses" v-model="selectItem" :hint="`${selectItem.name}, ${selectItem.name}`" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint></v-select>
+                                <v-select :items="statuses" v-model="selectItem" hint="Select Status" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint></v-select>
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>
                                 <v-select :items="items" v-model="selectAss" label="Filter By Assigned" single-line item-text="Assigned" item-value="Assigned" return-object persistent-hint></v-select>
@@ -133,6 +133,7 @@
                             Your search for "{{ search }}" found no results.
                         </v-alert>
                     </v-data-table>
+                    <v-btn color="primary" raised style="float: right;" @click="UpdateShipmentStatus" v-if="user.can['assign']">Update Status</v-btn>
                 </div>
             </div>
             <!-- Data table -->
@@ -142,19 +143,22 @@
         {{ message }}
         <v-icon dark right>check_circle</v-icon>
     </v-snackbar>
+    <UpdateShipmentStatus :UpdateShipmentStatus="UpdateShipmentModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></UpdateShipmentStatus>
 </div>
 </template>
 
 <script>
+let UpdateShipmentStatus = require("../UpdateShipmentStatus");
 import VueBarcode from "vue-barcode";
 export default {
     props: ["user", "role"],
     components: {
-        barcode: VueBarcode,
+        barcode: VueBarcode, UpdateShipmentStatus
     },
     data() {
         return {
             AllBranches: [],
+            UpdateShipmentModel: false,
             // clients: [],
             selectAss: {
                 Assigned: 'All',
@@ -165,7 +169,7 @@ export default {
                 id: 'all'
             },
             selectItem: {
-                state: 'All',
+                name: "All"
             },
             statuses: [],
             items: [{
@@ -293,6 +297,10 @@ export default {
                     value: "created_at"
                 },
             ],
+            between: {
+                start: 1,
+                end: 500
+            },
             selected: [],
             AllRows: [],
             selectStatus: [],
@@ -424,7 +432,13 @@ export default {
                 });
         },
         close() {
-            this.dialog1 = false;
+            this.UpdateShipmentModel = false;
+        },
+        
+        showalert() {
+            this.message = "success";
+            this.color = "indigo";
+            this.snackbar = true;
         },
         filReset() {
             this.selectAss = {
@@ -473,6 +487,56 @@ export default {
                     this.errors = error.response.data.errors;
                 });
         },
+        
+        sortItem() {
+            this.loading = true;
+            axios
+                .post("/filterShipment", {
+                    select: this.select,
+                    no_btw: this.between,
+                    selectStatus: this.selectItem,
+                    form: this.form,
+                    selectCountry: this.selectCountry
+                })
+                .then(response => {
+                    this.loading = false;
+                    this.AllShipments = response.data;
+                })
+                .catch(error => {
+                    this.loading = false;
+                    this.errors = error.response.data.errors;
+                });
+        },
+        
+        UpdateShipmentStatus(item) {
+            if (this.selected.length < 1) {
+                this.message = "please select a shipment";
+                this.color = "red";
+                this.snackbar = true;
+            } else {
+                this.UpdateShipmentModel = true;
+            }
+        },
+    },
+    
+    created() {
+        eventBus.$on("selectClear", data => {
+            this.selected = [];
+        });
+
+        eventBus.$on("refreshShipEvent", data => {
+            this.getShipBranch()
+            // if (this.between.start >= 500 && this.form.start_date != "" && this.end_date != "") {
+            //     this.currentSTPage()
+            // } else if (this.between.start >= 500) {
+            //     this.currentPage()
+            // } else if (this.form.start_date != "" && this.end_date != "") {
+            //     this.sortItem()
+            // } else {
+            //     this.sortItem()
+            // }
+
+        });
     },
     mounted() {
         this.countPending()

@@ -6,6 +6,7 @@ use App\Status;
 use Illuminate\Http\Request;
 use App\Shipment;
 use Illuminate\Support\Facades\Auth;
+use App\Branch;
 
 class StatusController extends Controller
 {
@@ -89,7 +90,9 @@ class StatusController extends Controller
     }
     public function getStickers(Request $request)
     {
-		// return $request->all();
+        // return $request->all();
+        $branch = Branch::select('id')->where('branch_name', 'Client')->first();
+        // return $branch;
         $sticker_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('sticker', 0)->where('country_id', Auth::user()->country_id)->take(500)->latest()->get();
         $id = [];
         foreach ($sticker_shipment as $selectedItems) {
