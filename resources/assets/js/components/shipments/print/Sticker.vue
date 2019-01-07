@@ -37,8 +37,8 @@ export default {
             name: '',
             Scheduled: [],
             form: {
-                end_date: '2018-12-25',
-                start_date: '2018-11-26'
+                start_date: '2019-01-01',
+                end_date: '2019-01-03'
             },
             disp_name: 'Kevin Matoka',  
             errors: [],
@@ -68,14 +68,16 @@ export default {
 
             for (let i = 0; i < this.Scheduled.length; i++) {
                 // console.log(i)
+            let date = new Date().toISOString().slice(0,10);
+
                 if (i % 2 == 0) {
 
-                    doc.addImage(imgData, 20, 13, 25, 40);
+                    doc.addImage(imgData, 20, 20, 28, 30);
                     doc.setFontSize(10)
                     const element = this.Scheduled[i];
                     doc.setFont("times");
                     doc.setFontType("normal");
-                    doc.setTextColor('blue')
+                    doc.setTextColor('black')
                     doc.text(50, 20, 'Our Services');
                     doc.text(50, 30, 'Express Daily Service');
                     doc.text(50, 35, 'Overnight/');
@@ -106,11 +108,13 @@ export default {
                     doc.text(150, 65, 'Info.tz@speedballcourier.com');
 
                     doc.setFontSize(11)
-                    doc.setTextColor('teal')
+                    doc.setTextColor('black')
                     doc.setDrawColor('black')
                     doc.rect(18, 75, 95, 70);
                     doc.text(20, 80, 'Head Office');
                     doc.text(20, 90, 'Dispatched By: ' + this.disp_name);
+                    doc.text(20, 95, 'Phone: 0777220035');
+                    doc.text(60, 95, 'Date: ' + date);
                     doc.text(20, 100, 'Item Description:');
                     doc.rect(56, 97, 3, 3)
                     doc.text(60, 100, 'Small Parcel');
@@ -127,12 +131,16 @@ export default {
                     doc.text(120, 100, 'Phone Number: ' + element['client_phone']);
                     doc.text(120, 110, 'Client To Pay: ' + element['cod_amount']);
                     doc.text(120, 120, 'Till No.: 877838');
+                    doc.text(120, 124, 'Destination:' + element['client_city']);
+                    doc.text(120, 130, 'Client to pay the stated amount before picking up');
+                    doc.text(120, 135, 'the parcel. The prices may change without prior');
+                    doc.text(120, 140, 'notice to the consumer');
                 } else {
-                    doc.addImage(imgData, 20, 155, 25, 40);
+                    doc.addImage(imgData, 20, 155, 28, 30);
                     const element = this.Scheduled[i];
                     doc.setFont("times");
                     doc.setFontType("normal");
-                    doc.setTextColor('blue')
+                    doc.setTextColor('black')
                     doc.text(50, 160, 'Our Services');
                     doc.text(50, 170, 'Express Daily Service');
                     doc.text(50, 175, 'Overnight/');
@@ -163,7 +171,7 @@ export default {
                     doc.text(150, 205, 'Info.tz@speedballcourier.com');
 
                     doc.setFontSize(11)
-                    doc.setTextColor('teal')
+                    doc.setTextColor('black')
                     doc.setDrawColor('black')
                     doc.rect(18, 215, 95, 70);
                     doc.text(20, 220, 'Head Office');
@@ -183,6 +191,10 @@ export default {
                     doc.text(120, 240, 'Phone Number: ' + element['client_phone']);
                     doc.text(120, 250, 'Client To Pay: ' + element['cod_amount']);
                     doc.text(120, 260, 'Till No.: 877838');
+                    doc.text(120, 270, 'Destination:' + element['client_city']);
+                    doc.text(120, 275, 'Client to pay the stated amount before picking up');
+                    doc.text(120, 280, 'the parcel. The prices may change without prior');
+                    doc.text(120, 284, 'notice to the consumer');
                     doc.addPage()
                 }
                 // doc.addPage()

@@ -66,6 +66,7 @@ Vue.use(VueRouter)
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 let myStatuses = require('./components/status/Status.vue');
+let myDStatus = require('./components/status/DStatus.vue');
 // axios.defaults.baseURL = 'http://courier.dev/api/getData';
 Vue.component('downloadExcel', JsonExcel)
 // Vue.component('file-management', require('./components/upload/FileManagement.vue'));
@@ -147,6 +148,7 @@ const routes = [
 
     { path: '/', component: myDash },
     { path: '/statuses', component: myStatuses },
+    { path: '/deliverystatus', component: myDStatus },
 
     { path: '/filter', component: myFilter },
     { path: '/chatty', component: myChatty },
@@ -167,7 +169,7 @@ const app = new Vue({
         myBranch, myProfile, myCompany, myCustomer, mysubsicriber, myInvice, myReceipt,
         myReports, mybranchShip, myRoles, myscheduled, myTasks, myUploadFile, myCharges,
         myTown, myPrintPdf, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash,
-        myunauth, myDash, myFilter, myChatty,myFinance, myFinClient, mySticker
+        myunauth, myDash, myFilter, myChatty,myFinance, myFinClient, mySticker, myDStatus
         // myContainer
     },
     data: {
@@ -238,9 +240,9 @@ const app = new Vue({
         }
     },
     mounted() {
-        axios.post('/getRole')
-            .then((response) => this.role = response.data)
-            .catch((error) => this.errors = error.response.data.errors)
+        // axios.post('/getRole')
+        //     .then((response) => this.role = response.data)
+        //     .catch((error) => this.errors = error.response.data.errors)
 
 
         this.getOldMessages();

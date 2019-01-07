@@ -18,7 +18,7 @@ class CreateBranchesTable extends Migration {
 			$table->string('email');
 			$table->string('phone');
 			$table->string('address');
-			$table->integer('branch_id')->nullable();
+			$table->integer('country_id')->nullable();
 			$table->softDeletes();
 			$table->timestamps();
 		});

@@ -5,7 +5,9 @@
             <v-card-title fixed>
                 <span class="headline">Add User</span>
                 <v-spacer></v-spacer>
-                <v-btn icon dark @click="close">                         <v-icon color="black">close</v-icon>                     </v-btn>
+                <v-btn icon dark @click="close">
+                    <v-icon color="black">close</v-icon>
+                </v-btn>
             </v-card-title>
             <v-card-text>
                 <v-container grid-list-md>
@@ -34,7 +36,7 @@
 
                                     <div class="form-group col-md-6">
                                         <label class="col-md-6 col-form-label text-md-right" for="">Role</label>
-                                        <select class="custom-select custom-select-md col-md-12" v-model="form.role_id">
+                                        <select class="custom-select custom-select-md col-md-12" v-for="role in form.roles" :key="role.id" v-model="role.name">
                                             <option v-for="roles in AllRoles" :key="roles.id" :value="roles.name">{{ roles.name }}</option>
                                     </select>
                                     </div>
@@ -46,7 +48,7 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="col-md-6 col-form-label text-md-right" for="">Country</label>
-                                        <select class="custom-select custom-select-md col-md-12" v-model="form.countryList">
+                                        <select class="custom-select custom-select-md col-md-12" v-model="form.country_id">
                                             <option v-for="country in countryList" :key="country.id" :value="country.id">{{ country.country_name }}</option>
                                     </select>
                                         <!-- <small class="has-text-danger" v-if="errors.branch_id">{{ errors.branch_id[0] }}</small> -->

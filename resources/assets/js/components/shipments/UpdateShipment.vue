@@ -73,7 +73,7 @@
                                 </v-flex>
                             </div>
                             <v-flex xs12 sm12>
-                                <v-textarea v-model="updateitedItem.remark" color="blue">
+                                <v-textarea v-model="updateitedItem.speciial_instruction" color="blue">
                                     <div slot="label">
                                         Special Instructions <small>(optional)</small>
                                     </div>

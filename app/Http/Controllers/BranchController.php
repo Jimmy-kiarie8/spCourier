@@ -20,14 +20,15 @@ class BranchController extends Controller
 	{
 		// return $request->all();
 		$this->Validate($request, [
-			'email' => 'required|email',
-			'phone' => 'required|numeric',
-			'address' => 'required',
+			// 'email' => 'required|email',
+			// 'phone' => 'required|numeric',
+			// 'address' => 'required',
 			'branch_name' => 'required',
 		]);
 		$branch = new Branch;
 		$branch->branch_name = $request->branch_name;
 		$branch->phone = $request->phone;
+		$branch->country_id = $request->country_id;
 		$branch->address = $request->address;
 		$branch->email = $request->email;
 		$branch->user_id = Auth::id();
@@ -82,7 +83,7 @@ class BranchController extends Controller
 
 	public function getBranchEger()
 	{
-		return Branch::setEagerLoads([])->get();
+		return Branch::setEagerLoads([])->orderBy('branch_name')->get();
 	}
 
 	public function getBranchC()
@@ -99,7 +100,7 @@ class BranchController extends Controller
 		}
 		if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
 			if ($request->select['id'] == 'all') {
-				if ($request->selectStatus['state'] == 'All') {
+				if ($request->selectStatus['name'] == 'All') {
 					if ($request->selectAss['Assigned'] == 'All') {
 						return Shipment::whereNotNull('branch_id')->take(500)->latest()->get();
 					} else {
@@ -111,18 +112,18 @@ class BranchController extends Controller
 					}
 				} else {
 					if ($request->selectAss['Assigned'] == 'All') {
-						return Shipment::whereNotNull('branch_id')->where('status', $request->selectStatus['state'])->take(500)->latest()->get();
+						return Shipment::whereNotNull('branch_id')->where('status', $request->selectStatus['name'])->take(500)->latest()->get();
 					} else {
 						if ($request->selectAss['Assigned'] == 'Assigned') {
-							return Shipment::whereNotNull('branch_id')->where('status', $request->selectStatus['state'])->take(500)->latest()->get();
+							return Shipment::whereNotNull('branch_id')->where('status', $request->selectStatus['name'])->take(500)->latest()->get();
 						} else {
-							return Shipment::whereNull('branch_id')->where('status', $request->selectStatus['state'])->take(500)->latest()->get();
+							return Shipment::whereNull('branch_id')->where('status', $request->selectStatus['name'])->take(500)->latest()->get();
 						}
 					}
 				}
 
 			} else {
-				if ($request->selectStatus['state'] == 'All') {
+				if ($request->selectStatus['name'] == 'All') {
 					if ($request->selectAss['Assigned'] == 'All') {
 						return Shipment::whereNotNull('branch_id')->where('branch_id', $request->select['id'])->take(500)->latest()->get();
 					} else {
@@ -134,19 +135,19 @@ class BranchController extends Controller
 					}
 				} else {
 					if ($request->selectAss['Assigned'] == 'All') {
-						return Shipment::whereNotNull('branch_id')->where('branch_id', $request->select['id'])->where('status', $request->selectStatus['state'])->take(500)->latest()->get();
+						return Shipment::whereNotNull('branch_id')->where('branch_id', $request->select['id'])->where('status', $request->selectStatus['name'])->take(500)->latest()->get();
 					} else {
 						if ($request->selectAss['Assigned'] == 'Assigned') {
-							return Shipment::whereNotNull('branch_id')->where('branch_id', $request->select['id'])->where('status', $request->selectStatus['state'])->take(500)->latest()->get();
+							return Shipment::whereNotNull('branch_id')->where('branch_id', $request->select['id'])->where('status', $request->selectStatus['name'])->take(500)->latest()->get();
 						} else {
-							return Shipment::whereNull('branch_id')->where('branch_id', $request->select['id'])->where('status', $request->selectStatus['state'])->take(500)->latest()->get();
+							return Shipment::whereNull('branch_id')->where('branch_id', $request->select['id'])->where('status', $request->selectStatus['name'])->take(500)->latest()->get();
 						}
 					}
 				}
 			}
 		} else {
 			if ($request->select['id'] == 'all') {
-				if ($request->selectStatus['state'] == 'All') {
+				if ($request->selectStatus['name'] == 'All') {
 					if ($request->selectAss['Assigned'] == 'All') {
 						return Shipment::whereNotNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->take(500)->latest()->get();
 					} else {
@@ -158,18 +159,18 @@ class BranchController extends Controller
 					}
 				} else {
 					if ($request->selectAss['Assigned'] == 'All') {
-						return Shipment::whereNotNull('branch_id')->take(500)->where('status', $request->selectStatus['state'])->latest()->get();
+						return Shipment::whereNotNull('branch_id')->take(500)->where('status', $request->selectStatus['name'])->latest()->get();
 					} else {
 						if ($request->selectAss['Assigned'] == 'Assigned') {
-							return Shipment::whereNotNull('branch_id')->where('status', $request->selectStatus['state'])->take(500)->latest()->get();
+							return Shipment::whereNotNull('branch_id')->where('status', $request->selectStatus['name'])->take(500)->latest()->get();
 						} else {
-							return Shipment::whereNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->take(500)->where('status', $request->selectStatus['state'])->latest()->get();
+							return Shipment::whereNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->take(500)->where('status', $request->selectStatus['name'])->latest()->get();
 						}
 					}
 				}
 			} else {
 
-				if ($request->selectStatus['state'] == 'All') {
+				if ($request->selectStatus['name'] == 'All') {
 					if ($request->selectAss['Assigned'] == 'All') {
 						return Shipment::whereNotNull('branch_id')->where('branch_id', $request->select['id'])->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->take(500)->latest()->get();
 					// return Shipment::whereNotNull('branch_id')->latest()->take(500)->get();	
@@ -182,12 +183,12 @@ class BranchController extends Controller
 					}
 				} else {
 					if ($request->selectAss['Assigned'] == 'All') {
-						return Shipment::whereNotNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->take(500)->where('status', $request->selectStatus['state'])->where('branch_id', $request->select['id'])->latest()->get();
+						return Shipment::whereNotNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->take(500)->where('status', $request->selectStatus['name'])->where('branch_id', $request->select['id'])->latest()->get();
 					} else {
 						if ($request->selectAss['Assigned'] == 'Assigned') {
-							return Shipment::whereNotNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('status', $request->selectStatus['state'])->take(500)->where('branch_id', $request->select['id'])->latest()->get();
+							return Shipment::whereNotNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('status', $request->selectStatus['name'])->take(500)->where('branch_id', $request->select['id'])->latest()->get();
 						} else {
-							return Shipment::whereNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->take(500)->where('status', $request->selectStatus['state'])->where('branch_id', $request->select['id'])->latest()->get();
+							return Shipment::whereNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->take(500)->where('status', $request->selectStatus['name'])->where('branch_id', $request->select['id'])->latest()->get();
 						}
 					}
 				}

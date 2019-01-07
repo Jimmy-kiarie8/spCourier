@@ -3,6 +3,9 @@
     <v-container fluid fill-height>
         <v-layout justify-center align-center>
             <v-flex sm12>
+                <div v-for="role in user.roles" :key="role.id" v-if="role.name === 'Admin'" style="width: 100%; margin-top: 70px;">
+                    <v-select :items="AllCount" v-model="select" hint="COUNTRY" label="Filter By Country" single-line item-text="country_name" item-value="id" return-object persistent-hint @change="countryDash()"></v-select>
+                </div>
                 <v-layout wrap>
                     <div class="panel-header panel-header-lg row" style="width: 120% !important">
                         <div class="column">
@@ -22,7 +25,7 @@
                                             <div class="icon icon-primary">
                                                 <v-icon color="green">local_shipping</v-icon>
                                             </div>
-                                            <h3 class="info-title"><span><b>{{ Allshipments }}</b></span></h3>
+                                            <h3 class="info-title"><span><b>{{ country_count }}</b></span></h3>
                                             <h6 class="stats-title"><strong>Shipments</strong></h6>
                                         </div>
                                     </div>
@@ -226,6 +229,7 @@ export default {
         'my-cancled': Cancled,
         'my-country': Country,
     },
+    props: ["user"],
     data() {
         return {
             label: [],
@@ -243,13 +247,50 @@ export default {
             countryC: {},
             branchC: {},
             colorCache: {},
+            AllCount: [],
+            select: [],
             AllPending: null,
-            AllDelivered: null
+            AllDelivered: null,
+            country_count: '',
+            countryFilter: {
+                id: null
+            },
         }
     },
     methods: {
+        countryDash() {
+            this.countryFilter = this.select
+            eventBus.$emit('DashchartEvent', this.countryFilter);
+
+            // this.getCountCount()
+            this.getBranchCount()
+            this.loader = true
+            this.getCountShip()
+            this.getUsersCount()
+            this.countDelivered()
+            this.countPending()
+            // this.getShipmentsCount()
+            this.scheduledShipmentCount()
+            //         // Dashboard
+            this.delayedShipmentCount()
+            this.getCanceledCount()
+            this.deriveredShipmentCount()
+            this.deriveredShipmentCount()
+            this.getCountryhipments()
+            this.getCountry()
+        },
+
+        getCountShip() {
+            axios.post('/countCountShipments', this.countryFilter)
+                .then((response) => {
+                    this.country_count = response.data
+                })
+                .catch((error) => {
+                    this.errors = error.response.data.errors
+                })
+        },
         getCountCount() {
-            axios.get('/getCountryhipments')
+            axios.post('/getCountryhipments', this.countryFilter)
                 .then((response) => {
                     this.countryC = response.data
                 })
@@ -258,7 +299,7 @@ export default {
                 })
         },
         getBranchCount() {
-            axios.get('/getBranchCount')
+            axios.post('/getBranchCount', this.countryFilter)
                 .then((response) => {
                     this.branchC = response.data
                 })
@@ -268,7 +309,7 @@ export default {
         },
 
         ref() {
-            axios.get('/getChartData')
+            axios.post('/getChartData', this.countryFilter)
                 .then((response) => {
                     // console.log(response);
                     eventBus.$emit('chartEvent', response.data);
@@ -279,92 +320,135 @@ export default {
                     this.errors = error.response.data.errors
                 })
         },
-    },
-    mounted() {
-        this.getCountCount()
-        this.getBranchCount()
-        this.loader = true
-        axios.get('/getUsersCount')
-            .then((response) => {
-                this.Allusers = response.data
-            })
-            .catch((error) => {
-                this.errors = error.response.data.errors
-            })
-        axios.get('/countDelivered')
-            .then((response) => {
-                this.AllDelivered = response.data
-            })
-            .catch((error) => {
-                this.errors = error.response.data.errors
-            })
-        axios.get('/countPending')
-            .then((response) => {
-                this.AllPending = response.data
-            })
-            .catch((error) => {
-                this.errors = error.response.data.errors
-            })
 
-        axios.get('/getShipmentsCount')
-            .then((response) => {
-                this.Allshipments = response.data
-            })
-            .catch((error) => {
-                this.errors = error.response.data.errors
-            })
+        getUsersCount() {
+            axios.post('/getUsersCount', this.countryFilter)
+                .then((response) => {
+                    this.Allusers = response.data
+                })
+                .catch((error) => {
+                    this.errors = error.response.data.errors
+                })
+        },
+        countDelivered() {
+            axios.post('/countDelivered', this.countryFilter)
+                .then((response) => {
+                    this.AllDelivered = response.data
+                })
+                .catch((error) => {
+                    this.errors = error.response.data.errors
+                })
+        },
+        countPending() {
+            axios.post('/countPending', this.countryFilter)
+                .then((response) => {
+                    this.AllPending = response.data
+                })
+                .catch((error) => {
+                    this.errors = error.response.data.errors
+                })
+        },
 
-        axios.get('/scheduledShipmentCount')
-            .then((response) => {
-                this.AllScheduled = response.data
-            })
-            .catch((error) => {
-                this.errors = error.response.data.errors
-            })
+        getShipmentsCount() {
+            axios.post('/getDashCount', this.countryFilter)
+                .then((response) => {
+                    this.Allshipments = response.data
+                })
+                .catch((error) => {
+                    this.errors = error.response.data.errors
+                })
+        },
+
+        scheduledShipmentCount() {
+            axios.post('/scheduledShipmentCount', this.countryFilter)
+                .then((response) => {
+                    this.AllScheduled = response.data
+                })
+                .catch((error) => {
+                    this.errors = error.response.data.errors
+                })
+        },
 
         // Dashboard
-        axios.get('/delayedShipmentCount')
-            .then((response) => {
-                this.AlldelayedShipment = response.data
-            })
-            .catch((error) => {
-                this.errors = error.response.data.errors
-            })
+        delayedShipmentCount() {
+            axios.post('/delayedShipmentCount', this.countryFilter)
+                .then((response) => {
+                    this.AlldelayedShipment = response.data
+                })
+                .catch((error) => {
+                    this.errors = error.response.data.errors
+                })
+        },
 
-        axios.get('/getCanceledCount')
-            .then((response) => {
-                this.AllCanceled = response.data
-            })
-            .catch((error) => {
-                this.errors = error.response.data.errors
-            })
+        getCanceledCount() {
+            axios.post('/getCanceledCount', this.countryFilter)
+                .then((response) => {
+                    this.AllCanceled = response.data
+                })
+                .catch((error) => {
+                    this.errors = error.response.data.errors
+                })
+        },
 
-        axios.get('/deriveredShipmentCount')
-            .then((response) => {
-                this.AllderiveredShipment = response.data
-            })
-            .catch((error) => {
-                this.errors = error.response.data.errors
-            })
+        deriveredShipmentCount() {
+            axios.post('/deriveredShipmentCount', this.countryFilter)
+                .then((response) => {
+                    this.AllderiveredShipment = response.data
+                })
+                .catch((error) => {
+                    this.errors = error.response.data.errors
+                })
+        },
 
-        axios.get('/deriveredShipmentCount')
-            .then((response) => {
-                this.loader = false
-                this.AllderiveredShipment = response.data
-            })
-            .catch((error) => {
-                this.loader = false
-                this.errors = error.response.data.errors
-            })
+        deriveredShipmentCount() {
+            axios.post('/deriveredShipmentCount', this.countryFilter)
+                .then((response) => {
+                    this.loader = false
+                    this.AllderiveredShipment = response.data
+                })
+                .catch((error) => {
+                    this.loader = false
+                    this.errors = error.response.data.errors
+                })
+        },
 
-        // axios.get('/getCountryhipments')
-        //     .then((response) => {
-        //         this.countryC = response.data
-        //     })
-        //     .catch((error) => {
-        //         this.errors = error.response.data.errors
-        //     })
+        getCountryhipments() {
+            axios.post('/getCountryhipments', this.countryFilter)
+                .then((response) => {
+                    this.countryC = response.data
+                })
+                .catch((error) => {
+                    this.errors = error.response.data.errors
+                })
+        },
 
+        getCountry() {
+            axios.post('/getCountry', this.countryFilter)
+                .then((response) => {
+                    this.AllCount = response.data
+                })
+                .catch((error) => {
+                    this.errors = error.response.data.errors
+                })
+        },
+    },
+    mounted() {
+        this.loader = true
+        this.getCountShip()
+        this.getCountCount()
+        this.getBranchCount()
+        this.getUsersCount()
+        this.countDelivered()
+        this.countPending()
+        this.getShipmentsCount()
+        this.scheduledShipmentCount()
+        // Dashboard
+        this.delayedShipmentCount()
+        this.getCanceledCount()
+        this.deriveredShipmentCount()
+        this.deriveredShipmentCount()
+        this.getCountryhipments()
+        this.getCountry()
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
@@ -405,7 +489,8 @@ export default {
     padding: 5px;
     border-radius: 50%;
 }
-.info-title{
+
+.info-title {
     margin-top: 20px;
 }
 </style>

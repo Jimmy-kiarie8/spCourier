@@ -83,6 +83,7 @@ class RowsController extends Controller
 	{
 		$shipment = Shipment::find($id);
 		$shipment->printReceipt = 0;
+		$shipment->printed = 0;
 		$shipment->save();
 		return $shipment;
 	}
@@ -90,6 +91,7 @@ class RowsController extends Controller
 	{
 		$shipment = Shipment::find($id);
 		$shipment->printReceipt = 1;
+		$shipment->printed = 1;
 		$shipment->save();
 		return $shipment;
 	}

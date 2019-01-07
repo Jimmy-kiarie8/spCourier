@@ -121,14 +121,15 @@
                                 </div>
                             </router-link>
                             <router-link to="/sticker" class="v-list__tile v-list__tile--link" v-if="user.can['prin']">
-                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">print</i></div>
-                            <div class="v-list__tile__content">
-                                <div class="v-list__tile__title">
-                                    Print Stickers
+                                <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">print</i></div>
+                                <div class="v-list__tile__content">
+                                    <div class="v-list__tile__title">
+                                        Print Stickers
+                                    </div>
                                 </div>
-                            </div>
-                        </router-link>
+                            </router-link>
                         </v-list-group>
+                        
                         <!--  -->
                         <!--  -->
                         <!--  -->
@@ -194,8 +195,9 @@
                                 <v-list-tile-action>
                                     <v-icon>question_answer</v-icon>
                                 </v-list-tile-action>
-                                <v-list-tile-title> Shipment status</v-list-tile-title>
+                                <v-list-tile-title> Shipment Followups</v-list-tile-title>
                             </router-link>
+
                         </v-list-group>
 
                         <v-list-group prepend-icon="settings" v-for="roleQ in user.roles" :key="roleQ.id" v-if="roleQ.name === 'Admin'">
@@ -213,6 +215,12 @@
                                     <v-icon>dialpad</v-icon>
                                 </v-list-tile-action>
                                 <v-list-tile-title>Status</v-list-tile-title>
+                            </router-link>
+                            <router-link to="/deliverystatus" class="v-list__tile theme--light" style="text-decoration: none">
+                                <v-list-tile-action>
+                                    <v-icon>dialpad</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title> Delivery status</v-list-tile-title>
                             </router-link>
                         </v-list-group>
 

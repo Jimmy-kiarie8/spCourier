@@ -10,8 +10,8 @@
                 <v-flex xs6 sm6>
                 </v-flex>
             </v-layout> -->
-            <v-layout row>
-                <v-flex xs6 sm6>
+            <v-layout wrap>
+                <v-flex xs4 sm4 style="margin-top: 40px;">
                     <v-card>
                         <h1>Clients Reports</h1>
                         <hr>
@@ -37,32 +37,12 @@
                     </v-card>
                 </v-flex>
 
-                <v-divider vertical></v-divider>
-                <v-flex xs6 sm6>
+                <!-- <v-divider vertical></v-divider> -->
+                <v-flex xs4 sm4 style="margin-top: 40px;">
                     <v-card>
                         <h1>Status Reports</h1>
                         <hr>
                         <form action="displayReport" method="post">
-                            <!-- <select class="custom-select custom-select-md col-md-12" v-model="statusR.status">
-                                            <option value="Awaiting Approval">Awaiting Approval</option>
-                                            <option value="Approved">Approved</option>
-                                            <option value="Arrived">Arrived</option>
-                                            <option value="Awaiting Confirmation">Awaiting Confirmation</option>
-                                            <option value="Cancelled ">cancelled</option>
-                                            <option value="Cleared">Cleared</option>
-                                            <option value="Delivered">Delivered</option>
-                                            <option value="Dispatched">Dispatched</option>
-                                            <option value="Hold">Hold</option>
-                                            <option value="Not Picking">Not Picking</option>
-                                            <option value="Out For Destination">Out For Destination</option>
-                                            <option value="Out For Delivery">Out For Delivery</option>
-                                            <option value="Returned">Returned</option>
-                                            <option value="Ready For Depart">Ready For Depart</option>
-                                            <option value="Scheduled">Scheduled</option>
-                                            <option value="Shipment Collected">Shipment Collected</option>
-                                            <option value="Transit">Transit</option>
-                                            <option value="Waiting for Scan">Waiting for scan</option>
-                                        </select> Between -->
                             <div>
                                 <label for="">Status</label>
                                 <select v-model="statusR.status" class="custom-select custom-select-md col-md-12">
@@ -85,7 +65,7 @@
                     </v-card>
                 </v-flex>
 
-                <v-flex xs6 sm6>
+                <v-flex xs4 sm4 style="margin-top: 40px;">
                     <v-card>
                         <h1>Branch Reports</h1>
                         <hr>
@@ -109,8 +89,8 @@
                             <!-- </form> -->
                     </v-card>
                 </v-flex>
-                <v-divider vertical></v-divider>
-                <v-flex xs6 sm6>
+                <!-- <v-divider vertical></v-divider> -->
+                <v-flex xs4 sm4 style="margin-top: 40px;">
                     <v-card>
                         <h1>Rider Reports</h1>
                         <hr>
@@ -128,6 +108,31 @@
                         </v-flex>
                         <v-btn flat @click="AllRinderR" :loading="Rload" :disabled="Rload" success color="black">Get Data</v-btn>
                         <download-excel :data="AllRinder" :fields="json_fields" v-show="Rdown">
+                            Export
+                            <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
+                        </download-excel>
+                            <!-- </form> -->
+                    </v-card>
+                </v-flex>
+                <v-flex xs4 sm4 style="margin-top: 40px;">
+                    <v-card>
+                        <h1>Delivery Reports</h1>
+                        <hr>
+                        <!-- <form action="DriverReport" method="post"> -->
+                        <label for="">Status</label>
+                        <select v-model="DeliveryR.status" class="custom-select custom-select-md col-md-12">
+                    <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
+                </select>
+                        Delivery Date Between:
+                        <hr>
+                        <v-flex xs12 sm12>
+                            <v-text-field v-model="DeliveryR.start_date" label="start date" type="date" color="blue darken-2" required></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 sm12>
+                            <v-text-field v-model="DeliveryR.end_date" label="End Date" type="date" color="blue darken-2" required></v-text-field>
+                        </v-flex>
+                        <v-btn flat @click="AllDeliveryRR" :loading="Dload" :disabled="Dload" success color="black">Get Data</v-btn>
+                        <download-excel :data="AllDeliveryR" :fields="json_fields" v-show="Ddown">
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
@@ -153,7 +158,9 @@ export default {
             Allcustomers: [],
             AllDrivers: [],
             statusR: {},
+            statusD: {},
             Client: {},
+            DeliveryR: {},
             Rinder: {},
             AllBranches: [],
             AllStatus: [],
@@ -161,15 +168,18 @@ export default {
             AllRinder: [],
             branchR: {},
             AllBranchD: [],
+            AllDeliveryR: [],
             statuses: [],
             loader: false,
             Sload: false,
             Cload: false,
             Bload: false,
+            Dload: false,
             Rload: false,
             Cdown: false,
             Bdown: false,
             Sdown: false,
+            Ddown: false,
             Rdown: false,
             snackbar: false,
             timeout: 5000,
@@ -266,6 +276,31 @@ export default {
                         this.Rdown = false
                     } else {
                         this.Rdown = true
+                        this.message = 'success'
+                        this.color = 'black'
+                        this.snackbar = true
+                    }
+                })
+                .catch(error => {
+                    this.Rload = false
+                    this.errors = error.response.data.errors;
+                });
+        },
+
+        AllDeliveryRR() {
+            this.Dload = true
+            this.AllDeliveryR = []
+            axios.post("/DelivReport", this.$data.DeliveryR)
+                .then(response => {
+                    this.Dload = false
+                    this.AllDeliveryR = response.data
+                    if (this.AllDeliveryR.length < 1) {
+                        this.message = 'no data'
+                        this.color = 'red'
+                        this.snackbar = true
+                        this.Ddown = false
+                    } else {
+                        this.Ddown = true
                         this.message = 'success'
                         this.color = 'black'
                         this.snackbar = true

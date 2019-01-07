@@ -11,15 +11,24 @@ use App\Country;
 
 class DashboardController extends Controller
 {
-    public function getChartData()
+    public function getChartData(Request $request)
     {
 		// return Shipment::take(100)->get();
-        $shipments = DB::table('shipments')
-            ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
-            ->orderBy('id', 'asc')
-            ->groupBy('date')
-            // ->where('branch_id', Auth::user()->branch_id)
-            ->get();
+        if (empty($request->id)) {
+            $shipments = DB::table('shipments')
+                ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
+                ->orderBy('id', 'asc')
+                ->groupBy('date')
+                ->where('country_id', Auth::user()->country_id)
+                ->get();
+        } else {
+            $shipments = DB::table('shipments')
+                ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
+                ->orderBy('id', 'asc')
+                ->groupBy('date')
+                ->where('country_id', $request->id)
+                ->get();
+        }
         $lables = [];
         $rows = [];
         foreach ($shipments as $key => $shipment) {
@@ -33,61 +42,26 @@ class DashboardController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    public function getChartScheduled()
+    public function getChartScheduled(Request $request)
     {
 		// return Shipment::take(100)->get();
-        $shipments = DB::table('shipments')
-            ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
-            ->orderBy('id', 'asc')
-            ->groupBy('date')
-            ->where('status', 'Scheduled')
-            ->get();
-
-        $lables = [];
-        $rows = [];
-        foreach ($shipments as $key => $shipment) {
-            $lables[] = $shipment->date;
-            $rows[] = $shipment->count;
+        if (empty($request->id)) {
+            $shipments = DB::table('shipments')
+                ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
+                ->orderBy('id', 'asc')
+                ->groupBy('date')
+                ->where('country_id', Auth::user()->country_id)
+                ->where('status', 'Scheduled')
+                ->get();
+        } else {
+            $shipments = DB::table('shipments')
+                ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
+                ->orderBy('id', 'asc')
+                ->groupBy('date')
+                ->where('country_id', $request->id)
+                ->where('status', 'Scheduled')
+                ->get();
         }
-        $data = array(
-            'lables' => $lables,
-            'rows' => $rows
-        );
-        return response()->json(['data' => $data]);
-    }
-
-    public function getChartDelivered()
-    {
-		// return Shipment::take(100)->get();
-        $shipments = DB::table('shipments')
-            ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
-            ->orderBy('id', 'asc')
-            ->groupBy('date')
-            ->where('status', 'Delivered')
-            ->get();
-
-        $lables = [];
-        $rows = [];
-        foreach ($shipments as $key => $shipment) {
-            $lables[] = $shipment->date;
-            $rows[] = $shipment->count;
-        }
-        $data = array(
-            'lables' => $lables,
-            'rows' => $rows
-        );
-        return response()->json(['data' => $data]);
-    }
-
-    public function getChartCancled()
-    {
-		// return Shipment::take(100)->get();
-        $shipments = DB::table('shipments')
-            ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
-            ->orderBy('id', 'asc')
-            ->groupBy('date')
-            ->where('status', 'Cancelled')
-            ->get();
 
         $lables = [];
         $rows = [];
@@ -102,7 +76,75 @@ class DashboardController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    public function getCountCount()
+    public function getChartDelivered(Request $request)
+    {
+		// return Shipment::take(100)->get();
+        if (empty($request->id)) {
+            $shipments = DB::table('shipments')
+                ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
+                ->orderBy('id', 'asc')
+                ->groupBy('date')
+                ->where('country_id', Auth::user()->country_id)
+                ->where('status', 'Delivered')
+                ->get();
+        } else {
+            $shipments = DB::table('shipments')
+                ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
+                ->orderBy('id', 'asc')
+                ->groupBy('date')
+                ->where('country_id', $request->id)
+                ->where('status', 'Delivered')
+                ->get();
+        }
+
+        $lables = [];
+        $rows = [];
+        foreach ($shipments as $key => $shipment) {
+            $lables[] = $shipment->date;
+            $rows[] = $shipment->count;
+        }
+        $data = array(
+            'lables' => $lables,
+            'rows' => $rows
+        );
+        return response()->json(['data' => $data]);
+    }
+
+    public function getChartCancled(Request $request)
+    {
+		// return Shipment::take(100)->get();
+        if (empty($request->id)) {
+            $shipments = DB::table('shipments')
+                ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
+                ->orderBy('id', 'asc')
+                ->groupBy('date')
+                ->where('country_id', Auth::user()->country_id)
+                ->where('status', 'Cancelled')
+                ->get();
+        } else {
+            $shipments = DB::table('shipments')
+                ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
+                ->orderBy('id', 'asc')
+                ->groupBy('date')
+                ->where('country_id', $request->id)
+                ->where('status', 'Cancelled')
+                ->get();
+        }
+
+        $lables = [];
+        $rows = [];
+        foreach ($shipments as $key => $shipment) {
+            $lables[] = $shipment->date;
+            $rows[] = $shipment->count;
+        }
+        $data = array(
+            'lables' => $lables,
+            'rows' => $rows
+        );
+        return response()->json(['data' => $data]);
+    }
+
+    public function getCountCount(Request $request)
     {
         $countries = ['name' => 'Kenya', 'name' => 'Uganda', 'name' => 'Tanzania'];
         foreach ($countries as $country) {
@@ -119,31 +161,56 @@ class DashboardController extends Controller
     }
 
 
-    public function getBranchCount()
+    public function getBranchCount(Request $request)
     {
-        $branches = Branch::setEagerLoads([])->get();
+        if (empty($request->id)) {
+            $branches = Branch::setEagerLoads([])->where('country_id', Auth::user()->country_id)->get();
+        } else {
+            $branches = Branch::setEagerLoads([])->where('country_id', $request->id)->get();
+        }        
         $branch_count = [];
-        foreach ($branches as $key => $branch) {
+        if (empty($request->id)) {
+            foreach ($branches as $key => $branch) {
             // return $branch->id;
             // $branch_count[] = Shipment::where('branch_id', $branch->id)->count();
-            $branch_count[] = array(
-                'name' => $branch->branch_name,
-                'id' => $key,
-                'count' => Shipment::where('branch_id', $branch->id)->count(),
-            );
+                $branch_count[] = array(
+                    'name' => $branch->branch_name,
+                    'id' => $key,
+                    'count' => Shipment::where('branch_id', $branch->id)->where('country_id', Auth::user()->country_id)->count(),
+                );
+            }
+        } else {
+            foreach ($branches as $key => $branch) {
+                $branch_count[] = array(
+                    'name' => $branch->branch_name,
+                    'id' => $key,
+                    'count' => Shipment::where('branch_id', $branch->id)->where('country_id', $request->id)->count(),
+                );
+            }
         }
         return $branch_count;
     }
 
-    public function getChartBranch()
+    public function getChartBranch(Request $request)
     {
 		// return Shipment::take(100)->get();
-        $shipments = DB::table('shipments')
-            ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
-            ->orderBy('id', 'asc')
-            ->groupBy('date')
+        if (empty($request->id)) {
+            $shipments = DB::table('shipments')
+                ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
+                ->orderBy('id', 'asc')
+                ->groupBy('date')
+                ->where('country_id', Auth::user()->country_id)
             // ->where('branch_id', Auth::id())
-            ->get();
+                ->get();
+        } else {
+            $shipments = DB::table('shipments')
+                ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
+                ->orderBy('id', 'asc')
+                ->groupBy('date')
+                ->where('country_id', $request->id)
+            // ->where('branch_id', Auth::id())
+                ->get();
+        }
 
         $lables = [];
         $rows = [];
@@ -158,15 +225,27 @@ class DashboardController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    public function getChartCount()
+    public function getChartCount(Request $request)
     {
 		// return Shipment::take(100)->get();
-        $shipments = DB::table('shipments')
-            ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
-            ->orderBy('id', 'asc')
-            ->groupBy('date')
+        if (empty($request->id)) {
+            $shipments = DB::table('shipments')
+                ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
+                ->orderBy('id', 'asc')
+                ->groupBy('date')
+                ->where('country_id', Auth::user()->country_id)
             // ->where('branch_id', Auth::id())
-            ->get();
+                ->get();
+        } else {
+            $shipments = DB::table('shipments')
+                ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
+                ->orderBy('id', 'asc')
+                ->groupBy('date')
+                ->where('country_id', $request->id)
+            // ->where('branch_id', Auth::id())
+                ->get();
+
+        }
 
         $lables = [];
         $rows = [];
@@ -181,17 +260,28 @@ class DashboardController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    public function getBranchShipments()
+    public function getBranchShipments(Request $request)
     {
         $branches = Branch::all();
         $A_branch = [];
         foreach ($branches as $branch) {
-            $shipmen_ts = DB::table('shipments')
-                ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date, branch_id'))
-                ->orderBy('id', 'asc')
-                ->groupBy('date')
-                ->where('branch_id', $branch->id)
-                ->get();
+            if (empty($request->id)) {
+                $shipmen_ts = DB::table('shipments')
+                    ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date, branch_id'))
+                    ->orderBy('id', 'asc')
+                    ->groupBy('date')
+                    ->where('country_id', Auth::user()->country_id)
+            // ->where('branch_id', $branch->id)
+                    ->get();
+            } else {
+                $shipmen_ts = DB::table('shipments')
+                    ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date, branch_id'))
+                    ->orderBy('id', 'asc')
+                    ->groupBy('date')
+                    ->where('country_id', $request->id)
+        // ->where('branch_id', $branch->id)
+                    ->get();
+            }
             
             // $shipments = Shipment::where('branch_id', $branch->id)->count();
             // json_decode(json_encode($branch), true);
@@ -201,7 +291,7 @@ class DashboardController extends Controller
     }
 
 
-    public function getCountryhipments()
+    public function getCountryhipments(Request $request)
     {
         $countries = Country::setEagerLoads([])->get();
         $country_count = [];
@@ -217,15 +307,27 @@ class DashboardController extends Controller
         return $country_count;
     }
 
-    public function getChartCountry()
+    public function getChartCountry(Request $request)
     {
 		// return Shipment::take(100)->get();
-        $shipments = DB::table('shipments')
-            ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
-            ->orderBy('id', 'asc')
-            ->groupBy('date')
+        if (empty($request->id)) {
+            $shipments = DB::table('shipments')
+                ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
+                ->orderBy('id', 'asc')
+                ->groupBy('date')
+                ->where('country_id', Auth::user()->country_id)
             // ->where('country_id', )
-            ->get();
+                ->get();
+        } else {
+
+            $shipments = DB::table('shipments')
+                ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
+                ->orderBy('id', 'asc')
+                ->groupBy('date')
+                ->where('country_id', $request->id)
+            // ->where('country_id', )
+                ->get();
+        }
 
         $lables = [];
         $rows = [];
@@ -240,18 +342,39 @@ class DashboardController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    public function countDelivered()
+    public function countDelivered(Request $request)
     {
-        return Shipment::where('status', 'Delivered')->count();
+        // return $request->all();
+        if (empty($request->id)) {
+            return Shipment::where('country_id', Auth::user()->country_id)->where('status', 'Delivered')->count();
+        } else {
+            return Shipment::where('country_id', $request->id)->where('status', 'Delivered')->count();
+        }
     }
 
-    public function countPending()
+    public function countPending(Request $request)
     {
         // return Shipment::count();
-        return Shipment::where('status', '!=', 'Delivered')->where('status', '!=', 'Cancelled')->count();
+        if (empty($request->id)) {
+            return Shipment::where('country_id', Auth::user()->country_id)->where('status', '!=', 'Delivered')->where('status', '!=', 'Cancelled')->count();
+        } else {
+            return Shipment::where('country_id', $request->id)->where('status', '!=', 'Delivered')->where('status', '!=', 'Cancelled')->count();
+        }
     }
 
-    public function countOrders()
+
+
+    public function countCountShipments(Request $request)
+    {
+        // return Shipment::count();
+        if (empty($request->id)) {
+            return Shipment::where('country_id', Auth::user()->country_id)->count();
+        } else {
+            return Shipment::where('country_id', $request->id)->count();
+        }
+    }
+
+    public function countOrders(Request $request)
     {
         return Shipment::count();
     }

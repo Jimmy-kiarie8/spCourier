@@ -18,7 +18,13 @@ class Branch extends Model
 	public function users() {
 		return $this->hasMany('App\User','branch_id');
 	}
+
 	public function shipments() {
 		return $this->hasMany('App\Shipment','branch_id');
+	}
+	
+	public function country()
+	{
+		return $this->belongsTo('App\Country', 'country_id');
 	}
 }

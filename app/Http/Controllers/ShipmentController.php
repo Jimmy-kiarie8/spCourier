@@ -16,6 +16,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Notifications\ShipmentNoty;
 use App\Notifications\NotyExcel;
 use Notification;
+use App\Branch;
 
 class ShipmentController extends Controller
 {
@@ -365,11 +366,17 @@ class ShipmentController extends Controller
 	public function updateStatus(Request $request, Shipment $shipment, $id)
 	{
 		// return $request->all();
+		$no = $request->formobg['client_phone'];
+		$no_A = explode(' ', $no);
+		$phone_no = $no_A[0];
+		// return $request->all();
 		$shipment = Shipment::find($request->id);
+		$City = $shipment->client_city;
+		$shipment->derivery_status = $request->formobg['status'];
 		$shipment->status = $request->formobg['status'];
-		// var_dump($request->formobg['status']); die;
+			// var_dump($request->formobg['status']); die;
 		// $shipment->remark = $request->formobg['remark'];
-		$shipment->speciial_instruction = $request->formobg['remark'];
+		$shipment->speciial_instruction = $request->formobg['speciial_instruction'];
 		if ($request->formobg['status'] == 'Scheduled') {
 			$shipment->derivery_date = $request->formobg['derivery_date'];
 			$shipment->derivery_time = $request->formobg['derivery_time'];
@@ -384,7 +391,7 @@ class ShipmentController extends Controller
 		if ($shipment->save()) {
 			$shipStatus = Shipment::find($id);
 			$statusUpdate = new ShipmentStatus;
-			$statusUpdate->remark = $request->formobg['remark'];
+			$statusUpdate->remark = $request->formobg['speciial_instruction'];
 			$statusUpdate->status = $request->formobg['status'];
 			$statusUpdate->location = $request->formobg['location'];
 			// $statusUpdate->derivery_time = $request->formobg['derivery_time'];
@@ -395,11 +402,13 @@ class ShipmentController extends Controller
 			$statusUpdate->save();
 		}
 
-		// if ($request->formobg['status'] == 'Scheduled') {
-		// 	$this->send_sms($request->formobg['client_phone'], 'Dear ' . $request->formobg['client_name'] . ', Your shipment (waybill number: ' . $request->formobg['bar_code'] . ')  has been scheduled to be delivered on ' . $request->formobg['derivery_date']);
-		// } elseif ($request->formobg['status'] == 'Delivered') {
-		// 	$this->send_sms($request->formobg['client_phone'], 'Dear ' . $request->formobg['client_name'] . ', Your shipment (waybill number: ' . $request->formobg['bar_code'] . ') has been delivered');
-		// }
+		if ($request->formobg['status'] == 'Scheduled') {
+			$this->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your shipment (waybill number: ' . $request->formobg['bar_code'] . ')  has been scheduled to be delivered on ' . $request->formobg['derivery_date'] . '  Incase of queries call +254207608777, +254207608778, +254207608779   ');
+		} elseif ($request->formobg['status'] == 'Delivered') {
+			$this->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your shipment (waybill number: ' . $request->formobg['bar_code'] . ') has been delivered. Incase of queries call +254207608777, +254207608778, +254207608779    ');
+		} elseif ($request->formobg['status'] == 'Dispatched') {
+			$this->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your shipment (waybill number: ' . $request->formobg['bar_code'] . ') has been dispatched to ' . $City . '  Incase of queries call +254207608777, +254207608778, +254207608779  ');
+		}
 		return $shipment;
 	}
 
@@ -413,17 +422,35 @@ class ShipmentController extends Controller
 		$status = $request->form['status'];
 		$derivery_time = $request->form['derivery_time'];
 		$remark = $request->form['remark'];
+		// return 'iio';
 		// $location = $request->form['location'];
 		$derivery_date = $request->form['delivery_date'];
 		if ($status == 'Returned') {
-			$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'driver' => null]);
+		if(empty($remark)) {
+				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'driver' => null, 'derivery_status' => $status]);
+			} else{
+			    $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'driver' => null, 'derivery_status' => $status]);
+			}
+		} elseif ($status == 'Delivered' || $status == 'Cancelled') {
+		if(empty($remark)) {
+				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'derivery_status' => $status]);
+			} else{
+				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'derivery_status' => $status]);
+			}
+		} else {
+		if(empty($remark)) {
+				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'derivery_status' => $status]);
+			} else {
+				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'derivery_status' => $status]);
+			}
 		}
-		$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark]);
-		$phones = Shipment::setEagerLoads([])->select('id', 'client_phone', 'client_name', 'bar_code')->whereIn('id', $id)->get();
+		$phones = Shipment::setEagerLoads([])->select('id', 'client_phone', 'client_name', 'bar_code', 'client_city')->whereIn('id', $id)->get();
 		$shipStatus = Shipment::setEagerLoads([])->whereIn('id', $id)->get();
 		foreach ($phones as $statuses) {
 			$statusUpdate = new ShipmentStatus;
-			$statusUpdate->remark = $request->form['remark'];
+		    if(!empty($remark)) {
+			   $statusUpdate->remark = $request->form['remark'];
+		    }
 			$statusUpdate->status = $request->form['status'];
 			$statusUpdate->location = $request->form['location'];
 			// $statusUpdate->derivery_time = $request->form['derivery_time'];
@@ -432,15 +459,29 @@ class ShipmentController extends Controller
 			$statusUpdate->shipment_id = $statuses->id;
 			$statusUpdate->save();
 		}
-		// if ($status == 'Scheduled') {
-		// 	foreach ($phones as $phone) {
-		// 		$this->send_sms($phone->client_phone, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ')  has been scheduled to be delivered on ' . $derivery_date);
-		// 	}
-		// } elseif ($status == 'Delivered') {
-		// 	foreach ($phones as $phone) {
-		// 		$this->send_sms($phone->client_phone, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ') has been delivered');
-		// 	}
-		// } 
+
+		if ($status == 'Scheduled') {
+			foreach ($phones as $phone) {
+				$no = $phone->client_phone;
+				$no_A = explode(' ', $no);
+				$phone_no = $no_A[0];
+				$this->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ')  has been scheduled to be delivered on ' . $derivery_date . '  Incase of queries call +254207608777, +254207608778, +254207608779  ');
+			}
+		} elseif ($status == 'Delivered') {
+			foreach ($phones as $phone) {
+				$no = $phone->client_phone;
+				$no_A = explode(' ', $no);
+				$phone_no = $no_A[0];
+				$this->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ') has been delivered  Incase of queries call +254207608777, +254207608778, +254207608779    ');
+			}
+		} elseif ($status == 'Dispatched') {
+			foreach ($phones as $phone) {
+				$no = $phone->client_phone;
+				$no_A = explode(' ', $no);
+				$phone_no = $no_A[0];
+				$this->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ') has been dispatched to the ' . $phone->client_city . '  Incase of queries call +254207608777, +254207608778, +254207608779    ');
+			}
+		} 
 		// $shipStatus->statuses()->saveMany($shipStatus);
 		return $shipment;
 	}
@@ -474,7 +515,7 @@ class ShipmentController extends Controller
 	public function betweenShipments(Request $request)
 	{
 		// return $request->all();
-		$start = $request->end-500;
+		$start = $request->end - 500;
 		if (Auth::user()->hasRole('Client')) {
 			return Shipment::latest()->where('client_id', Auth::id())->take(500)->skip($request->end)->get();
 		} else {
@@ -490,8 +531,10 @@ class ShipmentController extends Controller
 
 	public function send_sms($phone, $message)
 	{
-		dd($phone . '   ' . $message);
-		$phone = '254731090832';
+		return $phone;
+		// dd($phone . '   ' . $message);
+		// $phone = '254778301465';
+		// $phone = '254731090832';
 		$sms = $message;
 		$senderID = 'SPEEDBALL';
 
@@ -515,7 +558,7 @@ class ShipmentController extends Controller
 		$output = curl_exec($ch);
 		curl_close($ch);
 
-		// return $output;
+		return $phone;
 	}
 
 	public function btwRefShipments(Request $request)
@@ -527,6 +570,31 @@ class ShipmentController extends Controller
 		} else {
 			return Shipment::latest()->take(500)->where('country_id', Auth::user()->country_id)->skip($start)->get();
 		}
+	}
+
+	public function getshipD(Request $request, $id)
+	{
+		// return $request->all();
+		$shipments = Shipment::setEagerLoads([])->select('driver', 'branch_id')->where('id', $id)->get();
+		$shipments->transform(function ($shipment, $key) {
+			// return $shipment->driver;
+			if(!empty($shipment->branch_id)) {
+				$branch = Branch::find($shipment->branch_id);
+				$shipment->branch_id = $branch->branch_name;
+			}
+			if(!empty($shipment->driver)) {
+				$driver = User::find($shipment->driver);
+				$shipment->driver = $driver->name;
+			}
+			// } else {
+			// 	return 'not empty';
+
+			// }
+            // $user = User::find($order->buyer_id);
+            // $order->buyer_id = $user->name;
+			return $shipment;
+		});
+		return $shipments;
 	}
 
 }

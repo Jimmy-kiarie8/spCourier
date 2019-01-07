@@ -101,10 +101,13 @@ class UserController extends Controller
 		$user->address = $request->form['address'];
 		$user->city = $request->form['city'];
 		$user->country = $request->form['country'];
-		$user->country_id = $request->form['countryList'];
+		$user->country_id = $request->form['country_id'];
 		$user->save();
+		foreach ($request->form['roles'] as $role) {
+			$role_name = $role['name'];
+		}
 		// $user->givePermissionTo($request->selected);
-		$user->syncRoles($request->form['role_id']);
+		$user->syncRoles($role_name);
 		return $user;
 	}
 

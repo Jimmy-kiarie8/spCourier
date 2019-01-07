@@ -99,7 +99,7 @@ export default {
             name: '',
             // password: '',
             email: '',
-            phone: null,
+            phone: '',
             branch: '',
             address: '',
             city: '',
@@ -136,12 +136,13 @@ export default {
                     // console.log(response);
                     this.$parent.Allusers.push(response.data)
                     this.close();
-                    this.resetForm();
+                    // this.resetForm();
                     this.$emit('alertRequest');
                 })
                 .catch((error) => {
                     this.loading = false
-                    this.errors = error.response.data.errors
+                    // this.errors = error.response.data.errors
+                    // console.log()
                 })
         },
         resetForm() {

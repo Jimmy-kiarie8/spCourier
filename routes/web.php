@@ -69,6 +69,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::resource('charges', 'ChargeController');
 	Route::resource('towns', 'TownController');
 	Route::resource('country', 'CountryController');
+	Route::resource('delStatus', 'DelStatusController');
 
 	Route::post('updateStatus/{id}', 'ShipmentController@updateStatus')->name('updateStatus');
 	Route::get('csv', 'ShipmentController@csv')->name('csv');
@@ -82,14 +83,17 @@ Route::group(['middleware' => ['auth']], function () {
 	// Route::post('filterShipment', 'ShipmentController@filterShipment')->name('filterShipment');
 	Route::post('betweenShipments', 'ShipmentController@betweenShipments')->name('betweenShipments');
 	Route::post('getShipSingle/{id}', 'ShipmentController@getShipSingle')->name('getShipSingle');
-	Route::any('updateCancelled', 'ShipmentController@updateCancelled')->name('updateCancelled');
+	Route::post('getshipD/{id}', 'ShipmentController@getshipD')->name('getshipD');
+	// Route::any('updateCancelled', 'ShipmentController@updateCancelled')->name('updateCancelled');
 
 	Route::post('filterShipment', 'FilterController@filterShipment')->name('filterShipment');
+	Route::post('filterCount', 'FilterController@filterCount')->name('filterCount');
 	Route::post('getDeriveredS', 'FilterController@getDeriveredS')->name('getDeriveredS');
 	Route::post('getOrdersS', 'FilterController@getOrdersS')->name('getOrdersS');
 	Route::post('getreturned', 'FilterController@getreturned')->name('getreturned');
 	Route::post('getPendingS', 'FilterController@getPendingS')->name('getPendingS');
 	Route::post('filterPayment', 'FilterController@filterPayment')->name('filterPayment');
+	Route::post('glSearch', 'FilterController@glSearch')->name('glSearch');
 
 	Route::post('AddShipments/{id}', 'ContainerController@AddShipments')->name('AddShipments');
 	Route::post('conupdateStatus/{id}', 'ContainerController@conupdateStatus')->name('conupdateStatus');
@@ -124,7 +128,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('getBranchEger', 'BranchController@getBranchEger')->name('getBranchEger');
 	Route::get('getBranchC', 'BranchController@getBranchC')->name('getBranchC');
 
-	Route::get('getCountry', 'CountryController@getCountry')->name('getCountry');
+	Route::any('getCountry', 'CountryController@getCountry')->name('getCountry');
 
 	Route::post('getCompanies', 'CompanyController@getCompanies')->name('getCompanies');
 	Route::post('getCompanyAdmin', 'CompanyController@getCompanyAdmin')->name('getCompanyAdmin');
@@ -149,20 +153,20 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('DriverReport', 'ReportController@DriverReport')->name('DriverReport');
 
 	Route::post('generate_pdf', 'ReportController@generate_pdf')->name('generate_pdf');
-
-
+	Route::post('DelivReport', 'ReportController@DelivReport')->name('DelivReport');
 
 	Route::post('pod/{id}', 'ReportController@pod')->name('pod');
 	
 	// Dashboard
-	Route::get('delayedShipmentCount', 'PermissionController@delayedShipmentCount')->name('delayedShipmentCount');
-	Route::get('scheduledShipmentCount', 'PermissionController@scheduledShipmentCount')->name('scheduledShipmentCount');
-	Route::get('getShipmentsCount', 'PermissionController@getShipmentsCount')->name('getShipmentsCount');
-	Route::get('dispatchedShipmentCount', 'PermissionController@dispatchedShipmentCount')->name('dispatchedShipmentCount');
-	Route::get('getCanceledCount', 'PermissionController@getCanceledCount')->name('getCanceledCount');
-	Route::get('deriveredShipmentCount', 'PermissionController@deriveredShipmentCount')->name('deriveredShipmentCount');
-	Route::get('getUsersCount', 'PermissionController@getUsersCount')->name('getUsersCount');
-
+	Route::any('delayedShipmentCount', 'PermissionController@delayedShipmentCount')->name('delayedShipmentCount');
+	Route::any('scheduledShipmentCount', 'PermissionController@scheduledShipmentCount')->name('scheduledShipmentCount');
+	Route::any('getShipmentsCount', 'PermissionController@getShipmentsCount')->name('getShipmentsCount');
+	Route::any('dispatchedShipmentCount', 'PermissionController@dispatchedShipmentCount')->name('dispatchedShipmentCount');
+	Route::any('getCanceledCount', 'PermissionController@getCanceledCount')->name('getCanceledCount');
+	Route::any('deriveredShipmentCount', 'PermissionController@deriveredShipmentCount')->name('deriveredShipmentCount');
+	Route::any('getUsersCount', 'PermissionController@getUsersCount')->name('getUsersCount');
+	Route::any('getDashCount', 'PermissionController@getDashCount')->name('getDashCount');
+	
 	// E-MAILS
 	Route::post('/sendmail', 'EmailController@sendmail')->name('sendmail');
 	Route::get('/getsubscribers', 'EmailController@getsubscribers')->name('getsubscribers');
@@ -274,7 +278,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('getClientShip', 'CustomerController@getClientShip')->name('getClientShip');
 	Route::get('getClientScheduled', 'CustomerController@getClientScheduled')->name('getClientScheduled');
 	Route::get('getClientDelivered', 'CustomerController@getClientDelivered')->name('getClientDelivered');
-	Route::get('getClientCancled', 'CustomerController@getClientCancled')->name('getClientCancled');
+	Route::get('getCliegetBranchEgerntCancled', 'CustomerController@getClientCancled')->name('getClientCancled');
 
 	// Chart
 	Route::get('getRinderShip', 'DriverController@getRinderShip')->name('getRinderShip');
@@ -283,24 +287,26 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('getRinderCancled', 'DriverController@getRinderCancled')->name('getRinderCancled');
 
 
-	Route::get('getBranchShipments', 'DashboardController@getBranchShipments')->name('getBranchShipments');
-	Route::get('getChartScheduled', 'DashboardController@getChartScheduled')->name('getChartScheduled');
-	Route::get('getChartDelivered', 'DashboardController@getChartDelivered')->name('getChartDelivered');
-	Route::get('getChartData', 'DashboardController@getChartData')->name('getChartData');
-	Route::get('getChartCancled', 'DashboardController@getChartCancled')->name('getChartCancled');
-	Route::get('getChartBranch', 'DashboardController@getChartBranch')->name('getChartBranch');
+	Route::any('getBranchShipments', 'DashboardController@getBranchShipments')->name('getBranchShipments');
+	Route::any('getChartScheduled', 'DashboardController@getChartScheduled')->name('getChartScheduled');
+	Route::any('getChartDelivered', 'DashboardController@getChartDelivered')->name('getChartDelivered');
+	Route::any('getChartData', 'DashboardController@getChartData')->name('getChartData');
+	Route::any('getChartCancled', 'DashboardController@getChartCancled')->name('getChartCancled');
+	Route::any('getChartBranch', 'DashboardController@getChartBranch')->name('getChartBranch');
 
-	Route::get('getCountCount', 'DashboardController@getCountCount')->name('getCountCount');
-	Route::get('getBranchCount', 'DashboardController@getBranchCount')->name('getBranchCount');
-	Route::get('getChartCount', 'DashboardController@getChartCount')->name('getChartCount');
-	Route::get('getCountryhipments', 'DashboardController@getCountryhipments')->name('getCountryhipments');
-	Route::get('getChartCountry', 'DashboardController@getChartCountry')->name('getChartCountry');
+	Route::any('getCountCount', 'DashboardController@getCountCount')->name('getCountCount');
+	Route::any('getBranchCount', 'DashboardController@getBranchCount')->name('getBranchCount');
+	Route::any('getChartCount', 'DashboardController@getChartCount')->name('getChartCount');
+	Route::any('getCountryhipments', 'DashboardController@getCountryhipments')->name('getCountryhipments');
+	Route::any('getChartCountry', 'DashboardController@getChartCountry')->name('getChartCountry');
+	Route::any('countCountShipments', 'DashboardController@countCountShipments')->name('countCountShipments');
 
-	Route::get('countDelivered', 'DashboardController@countDelivered')->name('countDelivered');
-	Route::get('countPending', 'DashboardController@countPending')->name('countPending');
-	Route::get('countOrders', 'DashboardController@countOrders')->name('countOrders');
+	Route::any('countDelivered', 'DashboardController@countDelivered')->name('countDelivered');
+	Route::any('countPending', 'DashboardController@countPending')->name('countPending');
+	Route::any('countOrders', 'DashboardController@countOrders')->name('countOrders');
 
 	Route::get('getStatuses', 'StatusController@getStatuses')->name('getStatuses');
+	// Route::get('getDelStatuses', 'DelStatusController@getDelStatuses')->name('getDelStatuses');
 	Route::get('getStat', 'StatusController@getStat')->name('getStat');
 	Route::get('scheduled', 'StatusController@scheduled')->name('scheduled');
 	Route::post('getScheduled', 'StatusController@getScheduled')->name('getScheduled');
@@ -329,6 +335,13 @@ Route::group(['middleware' => ['auth']], function () {
 
 	Route::post('btwRefShipments', 'ShipmentController@btwRefShipments')->name('btwRefShipments');
 	Route::post('btwSTdate', 'FilterController@btwSTdate')->name('btwSTdate');
+
+
+	Route::patch('UpdateFollowUp', 'FollowController@UpdateFollowUp')->name('UpdateFollowUp');
+	Route::patch('UpdateFollowSUp/{id}', 'FollowController@UpdateFollowSUp')->name('UpdateFollowSUp');
+
+	// Route::post('test', 'FilterController@test')->name('test');
+
 
 });
 

@@ -36,16 +36,17 @@
         ]
       }, {responsive: true, maintainAspectRatio: false})
     },
-      ref() {
-          axios.get('/getChartDelivered')
-              .then((response) => {
-                  // console.log(response);
-                  this.label = response.data.lables
-                  this.data = response.data.rows
-              })
-              .catch((error) => {
-                  this.errors = error.response.data.errors
-              })
+      ref(data) {
+        axios.post('/getChartDelivered', data)
+        .then((response) => {
+            // console.log(response);
+            this.label = response.data.data.lables
+            this.rows = response.data.data.rows
+            this.setGraph()
+        })
+        .catch((error) => {
+            this.errors = error.response.data.errors
+        })
       }
   },
   created() {
@@ -53,5 +54,8 @@
         this.label = data.lables
         this.data = data.rows
     });
+    eventBus.$on('DashchartEvent', data => {
+      this.ref(data)
+  });
 },
   }

@@ -15,7 +15,7 @@
                             </select>
                         </div>
                         <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">Client</label>
+                            <label for="password" class="col-md-4 col-form-label text-md-right">Country</label>
                             <select class="custom-select custom-select-md col-md-8" name="country_id">
                                     <option v-for="country in AllCountries" :key="country.id" :value="country.id">{{ country.country_name }}</option>
                             </select>

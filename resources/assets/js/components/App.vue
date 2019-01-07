@@ -7,8 +7,8 @@
         <div v-else-if="role.name === 'Client'">
             <ClDashboard></ClDashboard>
         </div>
-        <div v-else="role.name === 'User' || role.name === 'Admin'">
-            <Dashboard></Dashboard>
+        <div v-else>
+            <Dashboard :user="user"></Dashboard>
         </div>
     </div>
 </div>

@@ -73,6 +73,21 @@
                 </table>
 
                 <v-toolbar card style="background: #122e4f; color: #fff;" darken-1>
+                    <v-toolbar-title class="body-2">Branch&Rider</v-toolbar-title>
+                </v-toolbar>
+                <table class="table table-hover">
+                    <thead>
+                        <th>Rider Name</th>
+                        <th>Branch Name</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="shipment in shipD" :key="shipment.id">
+                            <td>{{ shipment.driver }}</td>
+                            <td>{{ shipment.branch_id }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <v-toolbar card style="background: #122e4f; color: #fff;" darken-1>
                     <v-toolbar-title class="body-2">Sender Details</v-toolbar-title>
                 </v-toolbar>
                 <table class="table table-hover">
@@ -139,6 +154,7 @@ export default {
     },
     data() {
         return {
+            shipD: [],
             dialog: false
         };
     },
@@ -148,11 +164,25 @@ export default {
         },
         TrackEvent() {
             eventBus.$emit('TrackEvent', this.shipments);
-
         },
         close() {
             this.$emit("closeRequest");
-        }
+        },
+        trackShip(data) {
+            axios.post(`/getshipD/${data.id}`)
+                .then((response) => {
+                    this.shipD = response.data
+                })
+                .catch((error) => {
+                    this.errors = error.response.data.errors
+                })
+        },
+    },
+
+    created() {
+        eventBus.$on("TrackShipEvent", data => {
+            this.trackShip(data)
+        });
     },
     computed: {
         getUrl() {

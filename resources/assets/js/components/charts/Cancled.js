@@ -36,22 +36,27 @@
         ]
       }, {responsive: true, maintainAspectRatio: false})
     },
-      ref() {
-          axios.get('/getChartCancled')
-              .then((response) => {
-                  // console.log(response);
-                  this.label = response.data.lables
-                  this.data = response.data.rows
-              })
-              .catch((error) => {
-                  this.errors = error.response.data.errors
-              })
-      }
+      ref(data) {
+        axios.post('/getChartCancled', data)
+        .then((response) => {
+            // console.log(response);
+            this.label = response.data.data.lables
+            this.rows = response.data.data.rows
+            this.setGraph()
+        })
+        .catch((error) => {
+            this.errors = error.response.data.errors
+        })
   },
+},
   created() {
     eventBus.$on('chartEvent', data => {
         this.label = data.lables
         this.data = data.rows
     });
+    
+    eventBus.$on('DashchartEvent', data => {
+      this.ref(data)
+  });
 },
   }

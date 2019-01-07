@@ -10,21 +10,26 @@
                 <div v-show="!loader">
                     <!-- <v-btn color="primary" flat @click="openRow">Filter Rows</v-btn> -->
                     <v-spacer></v-spacer>
-                    <v-flex sm6>
-                        <v-tooltip bottom v-if="between.start >= 500">
-                            <v-btn icon class="mx-0" @click="previous" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
-                                <v-icon color="blue darken-2">chevron_left</v-icon>
-                            </v-btn>
-                            <span>Previous results</span>
-                        </v-tooltip>
-                        <v-tooltip bottom v-if="shipmentsCount > between.end">
-                            <v-btn icon class="mx-0" @click="next" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
-                                <v-icon color="blue darken-2">chevron_right</v-icon>
-                            </v-btn>
-                            <span>Next results</span>
-                        </v-tooltip>
-                        From {{ between.start }} to {{ between.end }}
-                    </v-flex>
+                    <v-layout wrap>
+                        <v-flex sm6>
+                            <v-tooltip bottom v-if="between.start >= 500">
+                                <v-btn icon class="mx-0" @click="previous" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
+                                    <v-icon color="blue darken-2">chevron_left</v-icon>
+                                </v-btn>
+                                <span>Previous results</span>
+                            </v-tooltip>
+                            <v-tooltip bottom v-if="shipmentsCount > between.end">
+                                <v-btn icon class="mx-0" @click="next" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
+                                    <v-icon color="blue darken-2">chevron_right</v-icon>
+                                </v-btn>
+                                <span>Next results</span>
+                            </v-tooltip>
+                            From {{ between.start }} to {{ between.end }}
+                        </v-flex>
+                        <v-flex sm6 id="input-cont">
+                            <v-text-field v-model="glsearch.search" append-icon="search" label="Global Search" single-line hide-details @keyup.enter="itemSearch"></v-text-field>
+                        </v-flex>
+                    </v-layout>
                     <v-card style="background: rgba(5, 117, 230, 0.16);">
                         <v-layout wrap>
                             <v-flex xs4 sm2>
@@ -33,7 +38,7 @@
                             <v-flex xs4 sm2 offset-sm1>
                                 <v-select :items="AllStatus" v-model="selectItem" hint="STATUS" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint></v-select>
                             </v-flex>
-                            <v-flex xs4 sm2 offset-sm1 v-for="role in user.roles" v-if="role.name === 'Admin'" :key="role.id">
+                            <v-flex xs4 sm2 offset-sm1 v-for="role in user.roles" :key="role.id" v-if="role.name === 'Admin'">
                                 <v-select :items="AllCountries" v-model="selectCountry" hint="COUNTRY" label="Filter By country" single-line item-text="country_name" item-value="id" return-object persistent-hint></v-select>
                             </v-flex>
                             <!-- <v-spacer></v-spacer> -->
@@ -84,25 +89,13 @@
                                 </barcode>
                             </td> -->
                             <td class="text-xs-right">{{ props.item.client_name }}</td>
-                            <!-- <td class="text-xs-right">{{ props.item.sender_name }}</td> -->
                             <td class="text-xs-right">{{ props.item.client_phone }}</td>
                             <td class="text-xs-right">{{ props.item.client_email }}</td>
                             <td class="text-xs-right">{{ props.item.client_address }}</td>
                             <td class="text-xs-right">{{ props.item.client_city }}</td>
-                            <!--<td class="text-xs-right">{{ props.item.sender_name }}</td>
-                            <td class="text-xs-right">{{ props.item.sender_city }}</td>
-                            <td class="text-xs-right">{{ props.item.booking_date }}</td>
-                            <td class="text-xs-right">{{ props.item.cod_amount }}</td> -->
                             <td class="text-xs-right">{{ props.item.amount_ordered }} | {{ props.item.cod_amount }}</td>
                             <td class="text-xs-right">{{ props.item.status }}</td>
                             <td class="text-xs-right">{{ props.item.derivery_date }}</td>
-                            <!-- <td class="text-xs-right">{{ props.item.charges }}</td> -->
-                            <!-- <td class="text-xs-right" v-if="props.item.printed === 1" style="background: Green;">
-                                <p style="color: #fff;">Printed</p>
-                            </td>
-                            <td class="text-xs-right" v-else>
-                                <p style="color: #000;">Not Printed</p>
-                            </td> -->
                             <td class="text-xs-right" v-if="props.item.printReceipt === '1' || props.item.printReceipt === 1" style="background: rgba(23, 193, 60, 0.76);">
                                 <!-- <v-btn color="white" flat @click="notPrinted(props.item)" :loading="nloading" :disabled="nloading">Mark Not Printed</v-btn> -->
                                 <v-tooltip bottom v-if="user.can['edit shipments']">
@@ -175,7 +168,6 @@
     </v-content>
     <AddShipment :addShipment="dialog" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers"></AddShipment>
     <EditShipment :EditShipment="dialog1" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers" :form="editedItem"></EditShipment>
-    <!-- <EditShipment :EditShipment="dialog1" @closeRequest="close" :customers="Allcustomers" :form="editedItem" @alertRequest="showalert" :role="role"></EditShipment> -->
     <ShowShipment :element="element" @closeRequest="close" :customers="Allcustomers" :showItems="showItem"></ShowShipment>
     <UpdateShipment :UpdateShipment="updateModal" @closeRequest="close" :markers="markers" :updateitedItem="updateitedItem" @alertRequest="showalert"></UpdateShipment>
     <UpdateShipmentStatus :UpdateShipmentStatus="UpdateShipmentModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></UpdateShipmentStatus>
@@ -242,6 +234,9 @@ export default {
             AllCountries: [],
             AllDrivers: [],
             element: [],
+            glsearch: {
+                search: ''
+            },
             selectCountry: {
                 country_id: "All",
                 id: "all"
@@ -315,18 +310,10 @@ export default {
                     text: "Waybill Number",
                     value: "bar_code"
                 },
-                // {
-                //   text: "Barcode",
-                //   value: "bar_code"
-                // },
                 {
                     text: "Client",
                     value: "client_name"
                 },
-                // {
-                //   text: "From",
-                //   value: "sender_name"
-                // },
                 {
                     text: "Client Phone",
                     value: "client_phone"
@@ -343,22 +330,6 @@ export default {
                     text: "Client City",
                     value: "client_city"
                 },
-                // {
-                //   text: "Sender Name",
-                //   value: "sender_name"
-                // },
-                // {
-                //   text: "Sender City",
-                //   value: "sender_city"
-                // },
-                // {
-                //   text: "Order Date",
-                //   value: "booking_date"
-                // },
-                // {
-                //   text: "Cod Amount",
-                //   value: "cod_amount"
-                // },
                 {
                     text: "Qty&COD",
                     value: "amount_ordered"
@@ -371,18 +342,9 @@ export default {
                     text: "Delivery Date",
                     value: "derivery_date"
                 },
-                // {
-                //   text: "Charges",
-                //   value: "charges"
-                // },
-                // {
-                //   text: "Waybill Printed",
-                //   value: "created_at"
-                // },
                 {
                     text: "Receipt",
                     value: "printReceipt"
-                    // sortable: false
                 },
                 {
                     text: "Actions",
@@ -475,6 +437,7 @@ export default {
             this.updateitedItem = Object.assign({}, item);
             this.editedIndex = this.AllShipments.indexOf(item);
             this.trackModel = true;
+            eventBus.$emit('TrackShipEvent', item);
         },
         Shipcharges(item) {
             this.shipment = Object.assign({}, item);
@@ -619,6 +582,8 @@ export default {
                 .then(response => {
                     this.loading = false;
                     this.AllShipments = response.data;
+                    this.filterCount()
+
                 })
                 .catch(error => {
                     this.loading = false;
@@ -630,16 +595,6 @@ export default {
             this.between.start = parseInt(this.between.start) + 500;
             this.between.end = parseInt(this.between.end) + 500;
             this.sortItem()
-            // axios
-            //     .post("/betweenShipments", this.$data.between)
-            //     .then(response => {
-            //         this.loading = false;
-            //         this.AllShipments = response.data;
-            //     })
-            //     .catch(error => {
-            //         this.loading = false;
-            //         this.errors = error.response.data.errors;
-            //     });
         },
         previous() {
             this.loading = true;
@@ -648,16 +603,6 @@ export default {
                 this.between.end = parseInt(this.between.end) - 500;
                 this.sortItem()
 
-                // axios
-                //     .post("/betweenShipments", this.$data.between)
-                //     .then(response => {
-                //         this.loading = false;
-                //         this.AllShipments = response.data;
-                //     })
-                //     .catch(error => {
-                //         this.loading = false;
-                //         this.errors = error.response.data.errors;
-                //     });
             } else {
                 return;
                 this.loading = false;
@@ -730,22 +675,6 @@ export default {
                     this.errors = error.response.data.errors;
                 });
         },
-        // sortItem() {
-        //     this.loading = true;
-        //     this.between.start = 1;
-        //     this.between.end = 500;
-        //     axios.post("/filterShipment")
-        //         .then(response => {
-        //             this.loading = false;
-        //             this.loader = false;
-        //             this.AllShipments = response.data;
-        //         })
-        //         .catch(error => {
-        //             this.loading = false;
-        //             this.loader = false;
-        //             this.errors = error.response.data.errors;
-        //         });
-        // },
         currentSTPage() {
             this.loading = true;
             axios.post("/btwSTdate", {
@@ -763,24 +692,34 @@ export default {
         },
         cancelAutoUpdate() {
             clearInterval(this.timer);
-        }
-    },
-    computed: {
-        getShipmentsComp() {
-            // this.loading = true;
-            // axios
-            //     .get("/sortItem")
-            //     .then(response => {
-            //         this.loading = false;
-            //         this.loader = false;
-            //         this.AllShipments = response.data;
-            //     })
-            //     .catch(error => {
-            //         this.loading = false;
-            //         this.loader = false;
-            //         this.errors = error.response.data.errors;
-            //     });
-            // this.sortItem()
+        },
+        itemSearch() {
+            this.loading = true;
+            axios.post("/glSearch", this.glsearch)
+                .then(response => {
+                    this.loading = false;
+                    this.AllShipments = response.data;
+                })
+                .catch(error => {
+                    this.loading = false;
+                    this.errors = error.response.data.errors;
+                });
+        },
+        filterCount() {
+            axios
+                .post("/filterCount", {
+                    select: this.select,
+                    no_btw: this.between,
+                    selectStatus: this.selectItem,
+                    form: this.form,
+                    selectCountry: this.selectCountry
+                })
+                .then(response => {
+                    this.shipmentsCount = response.data;
+                })
+                .catch(error => {
+                    this.errors = error.response.data.errors;
+                });
         }
     },
     created() {
@@ -790,15 +729,6 @@ export default {
 
         eventBus.$on("refreshShipEvent", data => {
             this.sortItem()
-            // if (this.between.start >= 500 && this.form.start_date != "" && this.end_date != "") {
-            //     this.currentSTPage()
-            // } else if (this.between.start >= 500) {
-            //     this.currentPage()
-            // } else if (this.form.start_date != "" && this.end_date != "") {
-            //     this.sortItem()
-            // } else {
-            //     this.sortItem()
-            // }
 
         });
         eventBus.$on("TrackEvent", data => {
@@ -820,6 +750,7 @@ export default {
     mounted() {
         this.loader = true;
         this.getBranch();
+        this.filterCount()
         axios
             .get("/getCountry")
             .then(response => {
@@ -849,18 +780,41 @@ export default {
                 this.errors = error.response.data.errors;
             });
 
-        axios
-            .get("/updateCancelled")
-            .then(response => {
-                // this.AllStatus = response.data;
-                console.log(response.data);
-            })
-            .catch(error => {
-                this.errors = error.response.data.errors;
-            });
+        // axios
+        //     .get("/updateCancelled")
+        //     .then(response => {
+        //         console.log(response.data);
+        //     })
+        //     .catch(error => {
+        //         this.errors = error.response.data.errors;
+        //     });
 
         this.sortItem();
     },
+    // computed: {
+    //     resetFilter() {
+    //         if(this.between.start < this.shipmentsCount) { 
+    //             this.between.start = 1
+    //             this.between.end = 500
+    //             this.sortItem()
+    //         }
+    //     }
+    // },
+    // watch: {
+    //     checked() {
+    //         let period = this.between.start
+    //         let countS = this.shipmentsCount
+
+    //         if ((period > countS)) {
+    //             // this.sortItem()
+    //             alert('oppps')
+    //         } else {
+    //             alert('oqqqs')
+    //             // this.filterCount()
+    //         }
+
+    //     }
+    // },
     beforeRouteEnter(to, from, next) {
         next(vm => {
             if (vm.user.can["view shipments"]) {
@@ -901,5 +855,9 @@ table.v-table thead th:first-child,
 table.v-table thead th:not(:first-child) {
     padding: 0 6px;
     font-size: 14px !important;
+}
+
+#input-cont .v-input__control {
+    margin-top: -20px !important;
 }
 </style>

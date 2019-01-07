@@ -23,7 +23,7 @@ class ReportController extends Controller {
 			'start_date' => $request->start_date,
 			'end_date' => $request->end_date,
 		);
-		$status = $request->status;
+		// $status = $request->status;
 		return  Shipment::latest()->setEagerLoads([])->whereBetween('created_at', [$date_array])->take(5000)->where('branch_id',$request->branch_id)->get();
 	}
 
@@ -44,7 +44,6 @@ class ReportController extends Controller {
 			'start_date' => $request->start_date,
 			'end_date' => $request->end_date,
 		);
-		$status = $request->status;
 		return Shipment::latest()->setEagerLoads([])->whereBetween('created_at', [$date_array])->take(5000)->where('driver',$request->rinder_id)->get();
 	}
 
@@ -54,5 +53,16 @@ class ReportController extends Controller {
 			'end_date' => $request->end_date,
 		);
 		return Shipment::latest()->where('client_id', $request->client_id)->setEagerLoads([])->whereBetween('created_at', [$date_array])->take(5000)->get();
+	}
+
+	public function DelivReport(Request $request)
+	{
+		// return $request->all();
+		$date_array = array(
+			'start_date' => $request->start_date,
+			'end_date' => $request->end_date,
+		);
+		$status = $request->status;
+		return  Shipment::latest()->setEagerLoads([])->whereBetween('derivery_date', [$date_array])->take(5000)->where('status',$status)->get();
 	}
 }
