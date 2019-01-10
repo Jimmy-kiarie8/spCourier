@@ -21,21 +21,22 @@
                                     </v-flex>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.address" :rules="rules.name" color="blue darken-2" label="Branch Address" required></v-text-field>
-                                        <small class="has-text-danger" v-if="errors.address">{{ errors.address[0] }}</small>
+                                        <!-- <small class="has-text-danger" v-if="errors.address">{{ errors.address[0] }}</small> -->
                                     </v-flex>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.phone" :rules="rules.name" color="blue darken-2" label="Telephone Number" required></v-text-field>
-                                        <small class="has-text-danger" v-if="errors.phone">{{ errors.phone[0] }}</small>
+                                        <!-- <small class="has-text-danger" v-if="errors.phone">{{ errors.phone[0] }}</small> -->
                                     </v-flex>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.email" :rules="rules.name" color="blue darken-2" label="Branch Email" required></v-text-field>
-                                        <small class="has-text-danger" v-if="errors.email">{{ errors.email[0] }}</small>
+                                        <!-- <small class="has-text-danger" v-if="errors.email">{{ errors.email[0] }}</small> -->
                                     </v-flex>
                                     <div class="form-group row">
-                                        <label for="password" class="col-md-4 col-form-label text-md-right">Country</label>
-                                        <select class="custom-select custom-select-md col-md-8" v-model="form.country_id">
+                                        <label for="password" class="col-md-6 col-form-label text-md-right">Country</label>
+                                        <select class="custom-select custom-select-md col-md-12" v-model="form.country_id">
                                                 <option v-for="country in AllCountries" :key="country.id" :value="country.id">{{ country.country_name }}</option>
                                         </select>
+                                        <small class="has-text-danger" v-if="errors.country_id" >{{ errors.country_id[0] }}</small>
                                     </div>
                                 </v-layout>
                             </v-container>

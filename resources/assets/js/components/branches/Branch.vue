@@ -40,6 +40,13 @@
                                             </v-text-field>
                                             <small class="has-text-danger" v-if="errors.email">{{ errors.email[0] }}</small>
                                         </v-flex>
+                                        <div class="form-group row">
+                                            <label for="password" class="col-md-6 col-form-label text-md-right">Country</label>
+                                            <select class="custom-select custom-select-md col-md-12" v-model="editedItem.country_id">
+                                                <option v-for="country in AllCountries" :key="country.id" :value="country.id">{{ country.country_name }}</option>
+                                        </select>
+                                            <small class="has-text-danger" v-if="errors.country_id" >{{ errors.country_id[0] }}</small>
+                                        </div>
                                     </v-layout>
                                 </v-container>
                                 <v-card-actions>
@@ -55,20 +62,20 @@
             </v-card>
         </v-dialog>
         <!-- Edit dialog -->
-<!-- <router-link :to="test">test</router-link> -->
+        <!-- <router-link :to="test">test</router-link> -->
         <v-container fluid fill-height v-show="!loader">
             <v-layout justify-center align-center>
                 <!-- <v-btn @click="openAdd" color="primary">Add A Branch</v-btn> -->
                 <div v-show="!loader">
                     <v-card-title>
-                        <download-excel :data="AllBranches" :fields = "json_fields">
+                        <download-excel :data="AllBranches" :fields="json_fields">
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
-                        <v-btn color="primary" flat @click="openAdd">Add A Branch</v-btn>
-                        Branchs
-                        <v-spacer></v-spacer>
-                        <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
+                            <v-btn color="primary" flat @click="openAdd">Add A Branch</v-btn>
+                            Branchs
+                            <v-spacer></v-spacer>
+                            <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
                     <v-data-table :headers="headers" :items="AllBranches" :search="search" counter class="elevation-1">
                         <template slot="items" slot-scope="props">
@@ -120,6 +127,7 @@ export default {
             color: 'black',
             y: 'bottom',
             x: 'left',
+            AllCountries: [],
             dialog: false,
             headers: [{
                     text: 'Branch Name',
@@ -145,10 +153,10 @@ export default {
                 }
             ],
             json_fields: {
-                 'Branch Name': 'branch_name',
-                 'Email': 'email',
-                 'Phone': 'phone',
-                 'Address': 'address',
+                'Branch Name': 'branch_name',
+                'Email': 'email',
+                'Phone': 'phone',
+                'Address': 'address',
             },
             Allusers: [],
             editedIndex: -1,
@@ -161,6 +169,7 @@ export default {
                 email: '',
                 phone: '',
                 address: '',
+                country_id: '',
             },
             emailRules: [
                 v => {
@@ -241,8 +250,18 @@ export default {
                 this.errors = error.response.data.errors
                 this.loader = false
             })
-    },
-    computed: {
+
+        axios.get("/getCountry")
+            .then(response => {
+                this.AllCountries = response.data;
+                this.loader = false;
+            })
+            .catch(error => {
+                this.errors = error.response.data.errors;
+                this.loader = false;
+            });
+},
+computed: {
         // test() {
         //     return 'branch/1'
         // },
@@ -255,9 +274,7 @@ export default {
         formIsValid() {
             return (
                 this.editedItem.branch_name &&
-                this.editedItem.email &&
-                this.editedItem.phone &&
-                this.editedItem.address
+                this.editedItem.country_id
             )
         },
     },

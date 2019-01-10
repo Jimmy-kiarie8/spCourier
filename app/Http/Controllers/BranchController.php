@@ -23,6 +23,7 @@ class BranchController extends Controller
 			// 'email' => 'required|email',
 			// 'phone' => 'required|numeric',
 			// 'address' => 'required',
+			'country_id' => 'required',
 			'branch_name' => 'required',
 		]);
 		$branch = new Branch;
@@ -51,6 +52,7 @@ class BranchController extends Controller
 		$branch->branch_name = $request->branch_name;
 		$branch->phone = $request->phone;
 		$branch->address = $request->address;
+		$branch->country_id = $request->country_id;
 		$branch->email = $request->email;
 		$branch->save();
 	}
