@@ -83,8 +83,7 @@ class ScanController extends Controller
 		// return $request->all();
 		$this->validate($request, [
 			'form.status_in' => 'required',
-			'form.client_id' => 'required',
-
+			'form.branch_id' => 'required',
 		]);
 		$id = [];
 		foreach ($request->scan as $selectedItems) {
@@ -94,10 +93,10 @@ class ScanController extends Controller
 		$status = $request->form['status_in'];
 		// $derivery_time = $request->derivery_time;
 		$remark = $request->form['remarks_in'];
-		$client_id = $request->form['client_id'];
+		$branch_id = $request->form['branch_id'];
 		$location = $request->form['location_in'];
 		// $derivery_date = $request->scheduled_date;
-		$shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'driver' => $client_id]);
+		$shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark]);
 		$shipStatus = Shipment::whereIn('id', $id)->get();
 		foreach ($shipStatus as $statuses) {
 			$statusUpdate = new ShipmentStatus;
@@ -111,6 +110,36 @@ class ScanController extends Controller
 			// return $statusUpdate;
 			$statusUpdate->save();
 			// return $statusUpdate;
+		}
+
+		if ($status == 'Not picking') {
+			foreach ($shipStatus as $phone) {
+				$no = $phone->client_phone;
+				$no_A = explode(' ', $no);
+				$phone_no = $no_A[0];
+				$this->send_sms($phone_no, 'Dear ' . $phone->client_name . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
+			}
+		} elseif ($status == 'Not available') {
+			foreach ($shipStatus as $phone) {
+				$no = $phone->client_phone;
+				$no_A = explode(' ', $no);
+				$phone_no = $no_A[0];
+				$this->send_sms($phone_no, 'Dear ' . $phone->client_name . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
+			}
+		} elseif ($status == 'Delivered') {
+			foreach ($shipStatus as $phone) {
+				$no = $phone->client_phone;
+				$no_A = explode(' ', $no);
+				$phone_no = $no_A[0];
+				$this->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ') has been delivered  Incase of queries call +254207608777, +254207608778, +254207608779    ');
+			}
+		} elseif ($status == 'Dispatched') {
+			foreach ($shipStatus as $phone) {
+				$no = $phone->client_phone;
+				$no_A = explode(' ', $no);
+				$phone_no = $no_A[0];
+				$this->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ') has been dispatched to ' . $phone->client_city . '  Incase of queries call +254207608777, +254207608778, +254207608779    ');
+			}
 		}
 		// $shipStatus->statuses()->saveMany($shipStatus);
 		return $shipment;
@@ -138,5 +167,38 @@ class ScanController extends Controller
 		$start_date = $request->form['start_date'];
 		$end_date = $request->form['end_date'];
 		return Shipment::where('driver', $driver)->where('status', '!=', 'Delivered')->whereBetween('assign_date', [$start_date, $end_date])->take(500)->latest()->count();
+	}
+	
+	public function send_sms($phone, $message)
+	{
+		// return $phone;
+		// dd($phone . '   ' . $message);
+		// $phone = '254778301465';
+		$phone = '254731090832';
+		// $phone = '254706920275';
+		$sms = $message;
+		$senderID = 'SPEEDBALL';
+
+		$login = 'SPEEDBALL';
+		$password = 's12345';
+
+		$clientsmsID = rand(1000, 9999);
+
+		$xml_data = '<?xml version="1.0"?><smslist><sms><user>' . $login . '</user><password>' . $password . '</password><message>' . $sms . '</message><mobiles>' . $phone . '</mobiles><senderid>' . $senderID . '</senderid><clientsmsid>' . $clientsmsID . '</clientsmsid></sms></smslist>';
+
+		$URL = "http://messaging.advantasms.com/bulksms/sendsms.jsp?";
+
+		$ch = curl_init($URL);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/xml'));
+		curl_setopt($ch, CURLOPT_POSTFIELDS, "$xml_data");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$output = curl_exec($ch);
+		curl_close($ch);
+
+		return $phone;
 	}
 }

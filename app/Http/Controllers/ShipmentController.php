@@ -17,6 +17,7 @@ use App\Notifications\ShipmentNoty;
 use App\Notifications\NotyExcel;
 use Notification;
 use App\Branch;
+// use App\Observers\BaseObserver;
 
 class ShipmentController extends Controller
 {
@@ -407,9 +408,12 @@ class ShipmentController extends Controller
 			$statusUpdate->save();
 		}
 
-		if ($request->formobg['status'] == 'Scheduled') {
-			$this->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your shipment (waybill number: ' . $request->formobg['bar_code'] . ')  has been scheduled to be delivered on ' . $request->formobg['derivery_date'] . '  Incase of queries call +254207608777, +254207608778, +254207608779   ');
-		} elseif ($request->formobg['status'] == 'Delivered') {
+		if ($request->formobg['status'] == 'Not picking') {
+			$this->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
+		} elseif ($request->formobg['status'] == 'Not available') {
+			$this->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
+		}
+		 elseif ($request->formobg['status'] == 'Delivered') {
 			$this->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your shipment (waybill number: ' . $request->formobg['bar_code'] . ') has been delivered. Incase of queries call +254207608777, +254207608778, +254207608779    ');
 		} elseif ($request->formobg['status'] == 'Dispatched') {
 			$this->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your shipment (waybill number: ' . $request->formobg['bar_code'] . ') has been dispatched to ' . $City . '  Incase of queries call +254207608777, +254207608778, +254207608779  ');
@@ -543,10 +547,11 @@ class ShipmentController extends Controller
 
 	public function send_sms($phone, $message)
 	{
-		// return $phone;
+		return $phone;
 		// dd($phone . '   ' . $message);
 		// $phone = '254778301465';
-		$phone = '254706920275';
+		$phone = '254731090832';
+		// $phone = '254706920275';
 		$sms = $message;
 		$senderID = 'SPEEDBALL';
 

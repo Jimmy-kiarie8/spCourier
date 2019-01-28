@@ -80,7 +80,7 @@ class BranchController extends Controller
 	 */
 	public function getBranch()
 	{
-		return Branch::all();
+		return Branch::where('country_id', Auth::id())->get();
 	}
 
 	public function getBranchShip(Request $request, $id)

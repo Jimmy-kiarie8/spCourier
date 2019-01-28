@@ -165,7 +165,7 @@ return [
         // Maatwebsite\Excel\ExcelServiceProvider::class,
         // niklasravnsborg\LaravelPdf\PdfServiceProvider::class
         // Snowfire\Beautymail\BeautymailServiceProvider::class,
-
+        App\Providers\SpeedballServiceProvider::class,
 
 
 

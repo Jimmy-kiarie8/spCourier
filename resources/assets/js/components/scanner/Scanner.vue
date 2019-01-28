@@ -8,14 +8,15 @@
             </v-snackbar>
             <v-card>
                 <!-- <small class="has-text-danger" v-if="errors.form.status_in">{{ errors.status_in[0] }}</small><br>
-                <small class="has-text-danger" v-if="errors.form.client_id">{{ errors.client_id[0] }}</small><br>
+                <small class="has-text-danger" v-if="errors.form.branch_id">{{ errors.branch_id[0] }}</small><br>
                 <small class="has-text-danger" v-if="errors.form.status_out">{{ errors.status_out[0] }}</small><br>
                 <small class="has-text-danger" v-if="errors.form.rider_out">{{ errors.rider_out[0] }}</small> -->
                 <v-layout row wrap>
                     <v-flex sm6>
                         <v-form ref="form" @submit.prevent style="width: 100%;">
                             <v-container grid-list-md text-xs-center>
-                                <h2>Client </h2>
+                                <h2>Branch </h2>
+                                <v-divider></v-divider>
                                 <v-layout row wrap>
                                     <!-- <v-flex xs6 sm6>
                                         <v-text-field v-model="form_in.scan_date" :type="'date'" color="blue darken-2" label="Date" required></v-text-field>
@@ -27,9 +28,9 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label for="">Clients</label>
-                                        <select v-model="form_in.client_id" class="custom-select custom-select-md col-md-12">
-                                            <option v-for="client in clients" :key="client.id" :value="client.id">{{ client.name }}</option>
+                                        <label for="">Branches</label>
+                                        <select v-model="form_in.branch_id" class="custom-select custom-select-md col-md-12">
+                                            <option v-for="branch in branches" :key="branch.id" :value="branch.id">{{ branch.branch_name }}</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-4">
@@ -63,6 +64,7 @@
                         <v-form ref="form" @submit.prevent style="width: 100%;">
                             <v-container grid-list-md text-xs-center>
                                 <h2>Out Scan</h2>
+                                <v-divider></v-divider>
                                 <v-layout row wrap>
                                     <div class="form-group col-md-4">
                                         <label for="">Status</label>
@@ -178,14 +180,14 @@ export default {
                 location_out: ''
             },
             form_in: {
-                client_id: '',
+                branch_id: '',
                 bar_code_in: '',
                 status_in: '',
                 // scan_date: '',
                 remarks_in: '',
                 location_in: ''
             },
-            clients: [],
+            branches: [],
             snackbar: false,
             errors: {},
             icon: 'check_circle',
@@ -322,7 +324,7 @@ export default {
                     this.icon = 'check_circle'
                     this.color = 'indigo'
                     this.resetForm()
-                    this.form_in.client_id = ''
+                    this.form_in.branch_id = ''
                     this.form_in.bar_code_in = ''
                     this.form_in.status_in = ''
                     // this.form_in.scan_date_in = ''
@@ -355,9 +357,9 @@ export default {
                 this.errors = error.response.data.errors
             })
             
-        axios.get('/getCustomer')
+        axios.get('/getBranch')
             .then((response) => {
-                this.clients = response.data
+                this.branches = response.data
             })
             .catch((error) => {
                 this.errors = error.response.data.errors

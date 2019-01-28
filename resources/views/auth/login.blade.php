@@ -37,7 +37,7 @@
                         <v-form method="POST" action="{{ route('login') }}">
                             <v-card-text>
                                     @csrf
-                                    <v-text-field prepend-icon="person" name="email" label="Login" type="text"></v-text-field>
+                                    <v-text-field prepend-icon="person" name="email" label="Email" type="text"></v-text-field>
                                     @if ($errors->has('email'))
                                     <p style="color: red;">{{ $errors->first('email') }}</p>
                                     {{-- <span class="invalid-feedback">
