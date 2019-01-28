@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
     //This is the line of code added, at the end, we the have class name of ScheduledCommand.php inside app\console\commands
         '\App\Console\Commands\ScheduledCommand',
         '\App\Console\Commands\CanceledCommand',
+        // '\App\Console\Commands\BackupDatabase',
     ];
 
     /**
@@ -31,15 +32,16 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('notifications:SchedueledShipment')
-            ->dailyAt('12:00');;
+            ->everyMinute();
         $schedule->command('Canceled:CanceledShipments')
             ->everyMinute();
 
         $schedule->command('queue:work --force --tries=5')
             ->everyMinute()
             //->withoutOverlapping()
-            ->sendOutputTo(storage_path('queue-work.log'))
-        ;
+            ->sendOutputTo(storage_path('queue-work.log'));
+
+        // $schedule->command('db:backup')->mondays()->at('23:00');
     }
 
     /**
@@ -49,7 +51,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

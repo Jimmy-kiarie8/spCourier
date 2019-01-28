@@ -43,6 +43,7 @@ class CanceledCommand extends Command
         $prev_month = $today->subMonth();
         $shipments = Shipment::where('status', '!=', 'Scheduled')
             ->Where('status', '!=', 'Delivered')
+            ->Where('status', '!=', 'Returned')
             ->Where('status', '!=', 'Cancelled')->get();
         // dd($prev_month);
         $ships = [];

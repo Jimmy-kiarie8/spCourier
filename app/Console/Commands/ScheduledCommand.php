@@ -47,7 +47,7 @@ class ScheduledCommand extends Command
     {
         $date1 = Carbon::today();
         $date2 = new Carbon('tomorrow');
-        $shipment = Shipment::setEagerLoads([])->where('status', 'Scheduled')->whereBetween('derivery_date', [$date1, $date2])->take(500)->latest()->get();
+        $shipment = Shipment::setEagerLoads([])->where('status', 'Scheduled')->whereBetween('derivery_date', [$date1, $date2])->take(10)->latest()->get();
         // dd($shipment);
         $user = User::first();
         // dd($user);

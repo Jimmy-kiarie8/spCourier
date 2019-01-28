@@ -84,7 +84,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('betweenShipments', 'ShipmentController@betweenShipments')->name('betweenShipments');
 	Route::post('getShipSingle/{id}', 'ShipmentController@getShipSingle')->name('getShipSingle');
 	Route::post('getshipD/{id}', 'ShipmentController@getshipD')->name('getshipD');
-	// Route::any('updateCancelled', 'ShipmentController@updateCancelled')->name('updateCancelled');
+	Route::any('updateCancelled', 'ShipmentController@updateCancelled')->name('updateCancelled');
 
 	Route::post('filterShipment', 'FilterController@filterShipment')->name('filterShipment');
 	Route::post('filterCount', 'FilterController@filterCount')->name('filterCount');

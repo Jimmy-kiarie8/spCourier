@@ -45,7 +45,7 @@ class scheduleMail extends Mailable
         return $this->from('jimlaravel@gmail.com')
                     // ->view('emails.InvoiceMail')
             ->markdown('mail/scheduleNotification')
-            ->to('jimlaravel@gmail.com')
+            ->to('jimkiarie8@gmail.com')
                     // ->to($mail)
                     // ->attachData($this->pdf, 'name.csv', [
                     //     'mime' => 'application/csv',

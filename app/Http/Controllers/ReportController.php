@@ -17,42 +17,47 @@ use PDF;
 use App\Mail\ReportMail;
 
 
-class ReportController extends Controller {
-	public function branchesExpo(Request $request) {
+class ReportController extends Controller
+{
+	public function branchesExpo(Request $request)
+	{
 		$date_array = array(
 			'start_date' => $request->start_date,
 			'end_date' => $request->end_date,
 		);
 		// $status = $request->status;
-		return  Shipment::latest()->setEagerLoads([])->whereBetween('created_at', [$date_array])->take(5000)->where('branch_id',$request->branch_id)->get();
+		return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('created_at', [$date_array])->take(5000)->where('branch_id', $request->branch_id)->get();
 	}
 
-	
-	public function displayReport(Request $request) {
+
+	public function displayReport(Request $request)
+	{
 		// dd($request->all());
 		$date_array = array(
 			'start_date' => $request->start_date,
 			'end_date' => $request->end_date,
 		);
 		$status = $request->status;
-		return  Shipment::latest()->setEagerLoads([])->whereBetween('created_at', [$date_array])->take(5000)->where('status',$status)->get();
+		return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('created_at', [$date_array])->take(5000)->where('status', $status)->get();
 
 	}
-	public function DriverReport(Request $request) {
+	public function DriverReport(Request $request)
+	{
 		// dd($request->all());
 		$date_array = array(
 			'start_date' => $request->start_date,
 			'end_date' => $request->end_date,
 		);
-		return Shipment::latest()->setEagerLoads([])->whereBetween('created_at', [$date_array])->take(5000)->where('driver',$request->rinder_id)->get();
+		return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('created_at', [$date_array])->take(5000)->where('driver', $request->rinder_id)->get();
 	}
 
-	public function userDateExpo(Request $request) {
+	public function userDateExpo(Request $request)
+	{
 		$date_array = array(
 			'start_date' => $request->start_date,
 			'end_date' => $request->end_date,
 		);
-		return Shipment::latest()->where('client_id', $request->client_id)->setEagerLoads([])->whereBetween('created_at', [$date_array])->take(5000)->get();
+		return Shipment::where('country_id', Auth::user()->country_id)->latest()->where('client_id', $request->client_id)->setEagerLoads([])->whereBetween('created_at', [$date_array])->take(5000)->get();
 	}
 
 	public function DelivReport(Request $request)
@@ -63,6 +68,11 @@ class ReportController extends Controller {
 			'end_date' => $request->end_date,
 		);
 		$status = $request->status;
-		return  Shipment::latest()->setEagerLoads([])->whereBetween('derivery_date', [$date_array])->take(5000)->where('status',$status)->get();
+
+		if ($status == 'Dispatched') {
+			return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('dispatch_date', [$date_array])->take(5000)->get();
+		} else {
+			return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('derivery_date', [$date_array])->take(5000)->where('status', $status)->get();
+		}
 	}
 }

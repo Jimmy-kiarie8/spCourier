@@ -235,20 +235,21 @@ export default {
             var dist = []
             for (let i = 0; i < this.markers.length; i++) {
                 const element = this.markers[i];
-                console.log(element)
+                // console.log(element)
                 // alert(element['position']['lat'])
                 var p1 = new google.maps.LatLng(element['position']['lat'], element['position']['lng']);
-                var p2 = new google.maps.LatLng(element['position']['lat'], element['position']['lng']);
-                dist.push(p1, p2)
+                // var p2 = new google.maps.LatLng(element['position']['lat'], element['position']['lng']);
+                dist.push(p1)
                 // alert(p1)
                 // var p2 = new google.maps.LatLng(-4.05052, 39.667169);
             }
+            alert(dist)
             // alert(calcDistance(p1, p2));
-            console.log(calcDistance(p1, p2))
+            // console.log(calcDistance(dist))
 
             //calculates distance between two points in km's
-            function calcDistance(p1, p2) {
-                return (google.maps.geometry.spherical.computeDistanceBetween(p1, p2) / 1000).toFixed(2);
+            function calcDistance(dist) {
+                return this.dist = (google.maps.geometry.spherical.computeDistanceBetween(dist) / 1000).toFixed(2);
             }
             // var directionsService = new google.maps.DirectionsService();
 

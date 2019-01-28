@@ -780,14 +780,14 @@ export default {
                 this.errors = error.response.data.errors;
             });
 
-        // axios
-        //     .get("/updateCancelled")
-        //     .then(response => {
-        //         console.log(response.data);
-        //     })
-        //     .catch(error => {
-        //         this.errors = error.response.data.errors;
-        //     });
+        axios
+            .get("/updateCancelled")
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                this.errors = error.response.data.errors;
+            });
 
         this.sortItem();
     },

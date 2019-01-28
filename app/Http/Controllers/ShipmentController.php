@@ -33,8 +33,9 @@ class ShipmentController extends Controller
 	{
 		$today = Carbon::today();
 		$prev_month = $today->subMonth();
-		$shipments = Shipment::where('status', '!=', 'Scheduled')
+		$shipments = Shipment::setEagerLoads([])->where('status', '!=', 'Scheduled')
 			->Where('status', '!=', 'Delivered')
+			->Where('status', '!=', 'Dispatched')
 			->Where('status', '!=', 'Cancelled')->take(10)->get();
         // dd($prev_month);
 		$ships = [];
@@ -42,17 +43,19 @@ class ShipmentController extends Controller
             // dd($shipment->created_at.'::'.$shipment->created_at->addMonth(1));
 			$ships[] = Shipment::setEagerLoads([])->select('id')->where('status', '!=', 'Scheduled')
 				->Where('status', '!=', 'Delivered')
-                // ->where('id', $shipment->id)
+				->Where('status', '!=', 'Dispatched')
+			// ->where('id', $shipment->id)
 				->Where('status', '!=', 'Cancelled')
 				->whereDate('created_at', '<=', $prev_month)
 				->take(10)->get();
 		}
+		// return $ships;
 		$id = [];
 		$arr_R = array_flatten($ships);
 		foreach ($arr_R as $ship) {
 			$id[] = $ship->id;
 		}
-		// return $shipment = Shipment::whereIn('id', $id)->take(10)->get();
+		// return $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->take(10)->get();
 		return Shipment::whereIn('id', $id)->update(['status' => 'Cancelled']);
 	}
 
@@ -387,6 +390,8 @@ class ShipmentController extends Controller
 			$shipment->receiver_name = $request->formobg['receiver_name'];
 		} elseif ($request->formobg['status'] == 'Returned') {
 			$shipment->driver = null;
+		} elseif ($request->formobg['status'] == 'Dispatched') {
+			$shipment->dispatch_date = now();
 		}
 		if ($shipment->save()) {
 			$shipStatus = Shipment::find($id);
@@ -426,19 +431,26 @@ class ShipmentController extends Controller
 		// $location = $request->form['location'];
 		$derivery_date = $request->form['delivery_date'];
 		if ($status == 'Returned') {
-		if(empty($remark)) {
+			if (empty($remark)) {
 				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'driver' => null, 'derivery_status' => $status]);
-			} else{
-			    $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'driver' => null, 'derivery_status' => $status]);
+			} else {
+				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'driver' => null, 'derivery_status' => $status]);
 			}
 		} elseif ($status == 'Delivered' || $status == 'Cancelled') {
-		if(empty($remark)) {
+			if (empty($remark)) {
 				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'derivery_status' => $status]);
-			} else{
+			} else {
 				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'derivery_status' => $status]);
 			}
+		} elseif ($status == 'Dispatched') {
+			if (empty($remark)) {
+				// return 'test';
+				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'dispatch_date' => now(), 'derivery_status' => $status]);
+			} else {
+				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'dispatch_date' => now(), 'speciial_instruction' => $remark, 'derivery_status' => $status]);
+			}
 		} else {
-		if(empty($remark)) {
+			if (empty($remark)) {
 				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'derivery_status' => $status]);
 			} else {
 				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'derivery_status' => $status]);
@@ -448,9 +460,9 @@ class ShipmentController extends Controller
 		$shipStatus = Shipment::setEagerLoads([])->whereIn('id', $id)->get();
 		foreach ($phones as $statuses) {
 			$statusUpdate = new ShipmentStatus;
-		    if(!empty($remark)) {
-			   $statusUpdate->remark = $request->form['remark'];
-		    }
+			if (!empty($remark)) {
+				$statusUpdate->remark = $request->form['remark'];
+			}
 			$statusUpdate->status = $request->form['status'];
 			$statusUpdate->location = $request->form['location'];
 			// $statusUpdate->derivery_time = $request->form['derivery_time'];
@@ -531,10 +543,10 @@ class ShipmentController extends Controller
 
 	public function send_sms($phone, $message)
 	{
-		return $phone;
+		// return $phone;
 		// dd($phone . '   ' . $message);
 		// $phone = '254778301465';
-		// $phone = '254731090832';
+		$phone = '254706920275';
 		$sms = $message;
 		$senderID = 'SPEEDBALL';
 
@@ -578,11 +590,11 @@ class ShipmentController extends Controller
 		$shipments = Shipment::setEagerLoads([])->select('driver', 'branch_id')->where('id', $id)->get();
 		$shipments->transform(function ($shipment, $key) {
 			// return $shipment->driver;
-			if(!empty($shipment->branch_id)) {
+			if (!empty($shipment->branch_id)) {
 				$branch = Branch::find($shipment->branch_id);
 				$shipment->branch_id = $branch->branch_name;
 			}
-			if(!empty($shipment->driver)) {
+			if (!empty($shipment->driver)) {
 				$driver = User::find($shipment->driver);
 				$shipment->driver = $driver->name;
 			}

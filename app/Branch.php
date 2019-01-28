@@ -10,7 +10,7 @@ class Branch extends Model
 	use SoftDeletes;
 	// public $with = ['users'];
     protected $fillable = [
-		'name', 'email', 'phone', 'address'
+		'branch_name', 'email', 'phone', 'address', 'country_id', 'user_id', 'branch_id'
 	];
 	/**
 	 * The users that belong to the role.

@@ -26,15 +26,20 @@ class BranchController extends Controller
 			'country_id' => 'required',
 			'branch_name' => 'required',
 		]);
-		$branch = new Branch;
-		$branch->branch_name = $request->branch_name;
-		$branch->phone = $request->phone;
-		$branch->country_id = $request->country_id;
-		$branch->address = $request->address;
-		$branch->email = $request->email;
-		$branch->user_id = Auth::id();
-		$branch->branch_id = Auth::user()->branch_id;
-		$branch->save();
+		// $branch = new Branch;
+		$branch_name = $request->branch_name;
+		$phone = $request->phone;
+		$country_id = $request->country_id;
+		$address = $request->address;
+		$email = $request->email;
+		$user_id = Auth::id();
+		$branch_id = Auth::user()->branch_id;
+
+		$branch = Branch::updateOrCreate(
+			['branch_name' => $branch_name, 'country_id' => $country_id],
+			['phone' => $phone, 'address' => $address, 'user_id' => $user_id, 'email' => $email, 'branch_id' => $branch_id]
+		);
+		// $branch->save();
 		return $branch;
 	}
 
@@ -65,7 +70,7 @@ class BranchController extends Controller
 	 */
 	public function destroy(Branch $branch)
 	{
-        Branch::find($branch->id)->delete();
+		Branch::find($branch->id)->delete();
 	}
 
 	/**
@@ -96,7 +101,7 @@ class BranchController extends Controller
 	public function getShipBranch(Request $request)
 	{
 		// return $request->all();
-		if($request->selectCl) {
+		if ($request->selectCl) {
 			// return 'test';
 			return Shipment::where('client_id', $request->selectCl['id'])->take(500)->latest()->get();
 		}

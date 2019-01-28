@@ -33,6 +33,12 @@ class FollowController extends Controller
 			} else {
 				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'derivery_status' => $status]);
 			}
+		} elseif ($status == 'Dispatched') {
+			if (empty($remark)) {
+				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'dispatch_date' => now(), 'derivery_status' => $status]);
+			} else {
+				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'derivery_status' => $status]);
+			}
 		} else {
 			if (empty($remark)) {
 				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['derivery_status' => $status]);
@@ -93,6 +99,9 @@ class FollowController extends Controller
 			$shipment->derivery_status = $status;
 			$shipment->status = $status;
 			$shipment->driver = null;
+		} elseif ($status == 'Dispatched') {
+			$shipment->derivery_status = $status;
+			$shipment->dispatch_date = now();
 		} else {
 			$shipment->derivery_status = $status;
 		}
