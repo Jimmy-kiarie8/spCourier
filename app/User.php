@@ -60,15 +60,14 @@ class User extends Authenticatable
 		$this->notify(new verifyEmail($this));
 	}
 
-
 	public function documents()
 	{
 		return $this->hasMany('App\Attachment', 'client_id');
 	}
 
-	public function rows()
+	public function shipStatus()
 	{
-		return $this->hasMany('App\Rows');
+		return $this->hasMany('App\ShipmentStatus', 'user_id');
 	}
 
 	/**

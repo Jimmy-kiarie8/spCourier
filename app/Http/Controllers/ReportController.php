@@ -74,11 +74,20 @@ class ReportController extends Controller
 			'end_date' => $request->end_date,
 		);
 		$status = $request->status;
+		$branch_id = $request->branch_id;
 
-		if ($status == 'Dispatched') {
-			return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('dispatch_date', [$date_array])->take(5000)->get();
+		if (empty($branch_id)) {
+			if ($status == 'Dispatched') {
+				return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('dispatch_date', [$date_array])->take(5000)->get();
+			} else {
+				return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('derivery_date', [$date_array])->where('status', $status)->take(5000)->get();
+			}
 		} else {
-			return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('derivery_date', [$date_array])->where('status', $status)->take(5000)->get();
+			if ($status == 'Dispatched') {
+				return Shipment::where('country_id', Auth::user()->country_id)->where('branch_id', $branch_id)->latest()->setEagerLoads([])->whereBetween('dispatch_date', [$date_array])->take(5000)->get();
+			} else {
+				return Shipment::where('country_id', Auth::user()->country_id)->where('branch_id', $branch_id)->latest()->setEagerLoads([])->whereBetween('derivery_date', [$date_array])->where('status', $status)->take(5000)->get();
+			}
 		}
 	}
 

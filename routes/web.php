@@ -342,12 +342,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 	Route::patch('UpdateFollowUp', 'FollowController@UpdateFollowUp')->name('UpdateFollowUp');
 	Route::patch('UpdateFollowSUp/{id}', 'FollowController@UpdateFollowSUp')->name('UpdateFollowSUp');
-
 	// Route::post('test', 'FilterController@test')->name('test');
 
 	Route::any('schedulepct', 'CslogController@schedulepct')->name('schedulepct');
-	
-
-
 });
-

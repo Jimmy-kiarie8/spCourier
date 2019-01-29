@@ -250,7 +250,7 @@
                                 <v-list-tile-action>
                                     <v-icon>business</v-icon>
                                 </v-list-tile-action>
-                                <v-list-tile-title>Finace</v-list-tile-title>
+                                <v-list-tile-title>Logs</v-list-tile-title>
                             </router-link>
                             <router-link to="/schedulelogs" class="v-list__tile theme--light" style="text-decoration: none">
                                 <v-list-tile-action>

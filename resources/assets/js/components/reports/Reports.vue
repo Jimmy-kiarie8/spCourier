@@ -129,6 +129,12 @@
                         <select v-model="DeliveryR.status" class="custom-select custom-select-md col-md-12">
                     <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
                 </select>
+
+                <label for="">Branch</label>
+                        <select class="custom-select custom-select-md col-md-12" v-model="DeliveryR.branch_id">
+                            <option v-for="branch in AllBranches" :key="branch.id" :value="branch.id">{{ branch.branch_name }}</option>
+                        </select> Between
+                        <hr>
                         Delivery Date Between:
                         <hr>
                         <v-flex xs12 sm12>
@@ -201,13 +207,16 @@ export default {
             statusR: {},
             statusD: {},
             Client: {},
-            DeliveryR: {},
+            DeliveryR: {
+                branch_id: ''
+            },
             Rinder: {},
             branchStatus: {},
             AllBranches: [],
             AllStatus: [],
             AllClientR: [],
             AllRinder: [],
+            branchRD: {},
             branchR: {},
             AllBranchD: [],
             AllDeliveryR: [],

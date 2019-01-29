@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Call;
+use App\User;
 use Illuminate\Http\Request;
 
 class CallController extends Controller
@@ -18,7 +19,7 @@ class CallController extends Controller
         $calls->transform(function ($call, $key) {
             // dd($call->shipment);
             $call->shipment = unserialize($call->shipment);
-            $user = \App\User::find($call->user_id);
+            $user = User::find($call->user_id);
             $call->user_name = $user->name;
 			return $call;
         });

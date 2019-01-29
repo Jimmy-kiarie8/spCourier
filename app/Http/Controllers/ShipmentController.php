@@ -32,6 +32,15 @@ class ShipmentController extends Controller
 
 	public function updateCancelled()
 	{
+		// getting the dispatcher instance (needed to enable again the event observer later on)
+		$dispatcher = Shipment::getEventDispatcher();
+
+		// disabling the events
+		Shipment::unsetEventDispatcher();
+
+		// perform the operation you want
+
+		// enabling the event dispatcher
 		$today = Carbon::today();
 		$prev_month = $today->subMonth();
 		$shipments = Shipment::setEagerLoads([])->where('status', '!=', 'Scheduled')
@@ -56,6 +65,7 @@ class ShipmentController extends Controller
 		foreach ($arr_R as $ship) {
 			$id[] = $ship->id;
 		}
+		Shipment::setEventDispatcher($dispatcher);
 		// return $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->take(10)->get();
 		return Shipment::whereIn('id', $id)->update(['status' => 'Cancelled']);
 	}
