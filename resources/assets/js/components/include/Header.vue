@@ -129,7 +129,7 @@
                                 </div>
                             </router-link>
                         </v-list-group>
-                        
+
                         <!--  -->
                         <!--  -->
                         <!--  -->
@@ -241,6 +241,41 @@
                                 <v-list-tile-title>Charges</v-list-tile-title>
                             </router-link>
                         </v-list-group>
+
+                        <v-list-group prepend-icon="book" v-if="user.can['view logs']">
+                            <v-list-tile slot="activator">
+                                <v-list-tile-title>Logs</v-list-tile-title>
+                            </v-list-tile>
+                            <router-link to="/logs" class="v-list__tile theme--light" style="text-decoration: none">
+                                <v-list-tile-action>
+                                    <v-icon>business</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title>Finace</v-list-tile-title>
+                            </router-link>
+                            <router-link to="/schedulelogs" class="v-list__tile theme--light" style="text-decoration: none">
+                                <v-list-tile-action>
+                                    <v-icon>book</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title>Schedule Logs</v-list-tile-title>
+                            </router-link>
+                        </v-list-group>
+
+                        <!-- <router-link to="/schedulelogs" class="v-list__tile v-list__tile--link" v-if="user.can['view logs']">
+                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
+                            <div class="v-list__tile__content">
+                                <div class="v-list__tile__title">
+                                    User Logs
+                                </div>
+                            </div>
+                        </router-link>
+                        <router-link to="/schedulelogs" class="v-list__tile v-list__tile--link" v-if="user.can['view logs']">
+                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
+                            <div class="v-list__tile__content">
+                                <div class="v-list__tile__title">
+                                    User Logs
+                                </div>
+                            </div>
+                        </router-link> -->
                     </v-card>
                 </template>
             </v-list>

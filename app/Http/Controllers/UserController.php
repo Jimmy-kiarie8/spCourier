@@ -83,6 +83,7 @@ class UserController extends Controller
 	public function update(Request $request, User $user)
 	{
 		// return $request->all();
+		return $request->selected;
 		$this->Validate($request, [
 			'form.name' => 'required',
 			'form.email' => 'required|email',
@@ -102,12 +103,13 @@ class UserController extends Controller
 		$user->city = $request->form['city'];
 		$user->country = $request->form['country'];
 		$user->country_id = $request->form['country_id'];
+		$user->syncPermissions($request->selected);
 		$user->save();
 		foreach ($request->form['roles'] as $role) {
 			$role_name = $role['name'];
 		}
 		// $user->givePermissionTo($request->selected);
-		$user->syncRoles($role_name);
+		// $user->syncRoles($role_name);
 		return $user;
 	}
 

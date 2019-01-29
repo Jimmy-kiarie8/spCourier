@@ -69,6 +69,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::resource('charges', 'ChargeController');
 	Route::resource('towns', 'TownController');
 	Route::resource('country', 'CountryController');
+	Route::resource('calls', 'CallController');
 	Route::resource('delStatus', 'DelStatusController');
 
 	Route::post('updateStatus/{id}', 'ShipmentController@updateStatus')->name('updateStatus');
@@ -156,6 +157,8 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('DelivReport', 'ReportController@DelivReport')->name('DelivReport');
 
 	Route::post('pod/{id}', 'ReportController@pod')->name('pod');
+
+	Route::post('ProdReport', 'ReportController@ProdReport')->name('ProdReport');
 	
 	// Dashboard
 	Route::any('delayedShipmentCount', 'PermissionController@delayedShipmentCount')->name('delayedShipmentCount');
@@ -341,6 +344,9 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::patch('UpdateFollowSUp/{id}', 'FollowController@UpdateFollowSUp')->name('UpdateFollowSUp');
 
 	// Route::post('test', 'FilterController@test')->name('test');
+
+	Route::any('schedulepct', 'CslogController@schedulepct')->name('schedulepct');
+	
 
 
 });

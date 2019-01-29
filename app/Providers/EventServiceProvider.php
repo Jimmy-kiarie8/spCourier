@@ -16,6 +16,16 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Event' => [
             'App\Listeners\EventListener',
         ],
+
+        'shipment.created' => [
+            'App\Handlers\Events\ShipmentEvents@shipmentCreated',
+        ],
+        'shipment.updated' => [
+            'App\Handlers\Events\ShipmentEvents@shipmentUpdated',
+        ],
+        'shipment.deleted' => [
+            'App\Handlers\Events\ShipmentEvents@shipmentDeleted',
+        ],
     ];
 
     /**

@@ -70,6 +70,12 @@
                         <h1>Branch Reports</h1>
                         <hr>
                         <!-- <form action="DriverReport" method="post"> -->
+                        <div>
+                            <label for="">Status</label>
+                            <select v-model="branchStatus.status" class="custom-select custom-select-md col-md-12">
+                                    <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
+                                </select>
+                        </div>
                         <label for="">Branch</label>
                         <select class="custom-select custom-select-md col-md-12" v-model="branchR.branch_id">
                                     <option v-for="branch in AllBranches" :key="branch.id" :value="branch.id">{{ branch.branch_name }}</option>
@@ -143,6 +149,39 @@
                             </v-snackbar>
                     </v-card>
                 </v-flex>
+
+                <v-flex xs4 sm4 style="margin-top: 40px;">
+                    <v-card>
+                        <h1>Product Reports</h1>
+                        <hr>
+                        <!-- <form action="DriverReport" method="post"> -->
+                        <label for="">Status</label>
+                        <v-flex xs12 sm12>
+                            <v-text-field v-model="ProdR.email" color="blue darken-2" label="Product email" required></v-text-field>
+                        </v-flex>
+                        <select v-model="ProdR.status" class="custom-select custom-select-md col-md-12">
+                            <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
+                        </select>
+                        Delivery Date Between:
+                        <hr>
+                        <v-flex xs12 sm12>
+                            <v-text-field v-model="ProdR.start_date" label="start date" type="date" color="blue darken-2" required></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 sm12>
+                            <v-text-field v-model="ProdR.end_date" label="End Date" type="date" color="blue darken-2" required></v-text-field>
+                        </v-flex>
+                        <v-btn flat @click="AllProdR" :loading="Pload" :disabled="Pload" success color="black">Get Data</v-btn>
+                        <download-excel :data="AllProd" :fields="json_fields" v-show="Pdown">
+                            Export
+                            <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
+                        </download-excel>
+                            <!-- </form> -->
+                            <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
+                                {{ message }}
+                                <v-icon dark right>check_circle</v-icon>
+                            </v-snackbar>
+                    </v-card>
+                </v-flex>
             </v-layout>
         </v-layout>
 
@@ -155,6 +194,8 @@
 export default {
     data() {
         return {
+            AllProd: [],
+            ProdR: {},
             Allcustomers: [],
             AllDrivers: [],
             statusR: {},
@@ -162,6 +203,7 @@ export default {
             Client: {},
             DeliveryR: {},
             Rinder: {},
+            branchStatus: {},
             AllBranches: [],
             AllStatus: [],
             AllClientR: [],
@@ -179,7 +221,9 @@ export default {
             Cdown: false,
             Bdown: false,
             Sdown: false,
+            Pdown: false,
             Ddown: false,
+            Pload: false,
             Rdown: false,
             snackbar: false,
             timeout: 5000,
@@ -287,6 +331,30 @@ export default {
                 });
         },
 
+        AllProdR() {
+            this.Pload = true
+            // this.AllProd = []
+            axios.post("/ProdReport", this.$data.ProdR)
+                .then(response => {
+                    this.Pload = false
+                    this.AllProd = response.data
+                    if (this.AllProd.length < 1) {
+                        this.message = 'no data'
+                        this.color = 'red'
+                        this.snackbar = true
+                        this.Pdown = false
+                    } else {
+                        this.Pdown = true
+                        this.message = 'success'
+                        this.color = 'black'
+                        this.snackbar = true
+                    }
+                })
+                .catch(error => {
+                    this.Rload = false
+                    this.errors = error.response.data.errors;
+                });
+        },
         AllDeliveryRR() {
             this.Dload = true
             this.AllDeliveryR = []
@@ -314,7 +382,10 @@ export default {
         AllbranchR() {
             this.Bload = true
             this.AllBranchD = []
-            axios.post("/branchesExpo", this.$data.branchR)
+            axios.post("/branchesExpo", {
+                    branch: this.$data.branchR,
+                    branch_status: this.$data.branchStatus,
+                })
                 .then(response => {
                     this.Bload = false
                     this.AllBranchD = response.data;

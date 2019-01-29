@@ -95,8 +95,13 @@ class ScanController extends Controller
 		$remark = $request->form['remarks_in'];
 		$branch_id = $request->form['branch_id'];
 		$location = $request->form['location_in'];
+		if ($status == 'Dispatched') {
+			$dispatch_date = now();
+		}
+
 		// $derivery_date = $request->scheduled_date;
-		$shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark]);
+		// $shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark]);
+		$shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'dispatch_date' => $dispatch_date, 'branch_id' => $branch_id]);
 		$shipStatus = Shipment::whereIn('id', $id)->get();
 		foreach ($shipStatus as $statuses) {
 			$statusUpdate = new ShipmentStatus;
@@ -171,7 +176,7 @@ class ScanController extends Controller
 	
 	public function send_sms($phone, $message)
 	{
-		// return $phone;
+		return $phone;
 		// dd($phone . '   ' . $message);
 		// $phone = '254778301465';
 		$phone = '254731090832';

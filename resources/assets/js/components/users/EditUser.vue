@@ -53,7 +53,7 @@
                                     </select>
                                         <!-- <small class="has-text-danger" v-if="errors.branch_id">{{ errors.branch_id[0] }}</small> -->
                                     </div>
-                                    <!-- <v-flex xs12>
+                                    <v-flex xs12>
                                         <v-expansion-panel inset>
                                             <v-expansion-panel-content>
                                                 <div slot="header">Permissions</div>
@@ -70,7 +70,7 @@
                                                 </v-card>
                                             </v-expansion-panel-content>
                                         </v-expansion-panel>
-                                    </v-flex> -->
+                                    </v-flex>
 
                                 </v-layout>
                             </v-container>

@@ -5,11 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Support\Facades\Event;
+// use Symfony\Component\EventDispatcher\Event;
 class Shipment extends Model
 {
     use SoftDeletes;
-    public $with = ['products', 'statuses'];
+    // public $with = ['products', 'statuses'];
     // use Searchable;
     /**
      * Get the index name for the model.
@@ -42,6 +43,23 @@ class Shipment extends Model
         'booking_date', 'derivery_date', 'bar_code', 'derivery_time', 'sender_name',
         'sender_phone', 'sender_address', 'sender_city', 'total_freight',
     ];
+
+    public static function boot() {
+
+        parent::boot();
+    
+        static::created(function($shipment) {
+            Event::fire('shipment.created', $shipment);
+        });
+    
+        static::updated(function($shipment) {
+            Event::fire('shipment.updated', $shipment);
+        });
+    
+        static::deleted(function($shipment) {
+            Event::fire('shipment.deleted', $shipment);
+        });
+    }
 
     // public  function scopeLike($query, $field, $value){
     //     return $query->where($field, 'LIKE', "%$value%");

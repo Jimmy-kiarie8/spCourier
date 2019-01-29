@@ -14,7 +14,15 @@ class CallController extends Controller
      */
     public function index()
     {
-        //
+        $calls = Call::all();
+        $calls->transform(function ($call, $key) {
+            // dd($call->shipment);
+            $call->shipment = unserialize($call->shipment);
+            $user = \App\User::find($call->user_id);
+            $call->user_name = $user->name;
+			return $call;
+        });
+        return $calls;
     }
 
     /**

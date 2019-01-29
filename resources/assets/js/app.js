@@ -107,13 +107,15 @@ let myCustDash = require('./components/customers/Dashboard.vue');
 let myDrivDash = require('./components/drivers/Dashboard.vue');
 
 let myDash = require('./components/App.vue');
-
+ 
 let myFilter = require('./components/scanner/Filter.vue');
 let myChatty = require('./components/chat/Chatty.vue');
 let myFinance = require('./components/finance/Finance.vue');
 let myFinClient = require('./components/finance/Clients.vue');
+let myLogs = require('./components/splogs/Log.vue');  
+let mySc = require('./components/splogs/Schedule.vue');  
 
-
+ 
 const routes = [
     // {path: '/', component: dashboard },
     { path: '/users', component: myUser },
@@ -149,11 +151,13 @@ const routes = [
     { path: '/', component: myDash },
     { path: '/statuses', component: myStatuses },
     { path: '/deliverystatus', component: myDStatus },
+    { path: '/deliverystatus', component: myDStatus },
 
     { path: '/filter', component: myFilter },
     { path: '/chatty', component: myChatty },
     { path: '/finance', component: myFinance },
-    { path: '/clients', component: myFinClient },
+    { path: '/logs', component: myLogs },
+    { path: '/schedulelogs', component: mySc },
 
 ]
 const router = new VueRouter({
@@ -169,7 +173,7 @@ const app = new Vue({
         myBranch, myProfile, myCompany, myCustomer, mysubsicriber, myInvice, myReceipt,
         myReports, mybranchShip, myRoles, myscheduled, myTasks, myUploadFile, myCharges,
         myTown, myPrintPdf, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash,
-        myunauth, myDash, myFilter, myChatty,myFinance, myFinClient, mySticker, myDStatus
+        myunauth, myDash, myFilter, myChatty,myFinance, myFinClient, mySticker, myDStatus, myLogs, mySc
         // myContainer
     },
     data: {

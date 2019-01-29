@@ -17,6 +17,8 @@ class CreateCallsTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->integer('shipment_id');
+            $table->string('event');
+            $table->text('shipment');
 			$table->softDeletes();
             $table->timestamps();
         });
