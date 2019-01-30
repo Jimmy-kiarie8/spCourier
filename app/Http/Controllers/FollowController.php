@@ -87,6 +87,7 @@ class FollowController extends Controller
 		if ($status == 'Scheduled') {
 			$shipment->derivery_date = $request->formobg['derivery_date'];
 			$shipment->derivery_time = $request->formobg['derivery_time'];
+			$shipment->derivery_status = $status;
 			$shipment->status = $status;
 		} elseif ($status == 'Delivered') {
 			$shipment->derivery_date = $request->formobg['derivery_date'];

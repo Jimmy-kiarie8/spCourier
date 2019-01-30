@@ -16,6 +16,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Notifications\ShipmentNoty;
 use App\Notifications\NotyExcel;
 use Notification;
+use App\ScheduleLogs;
 use App\Branch;
 // use App\Observers\BaseObserver;
 
@@ -415,8 +416,11 @@ class ShipmentController extends Controller
 			$statusUpdate->branch_id = Auth::user()->branch_id;
 			$statusUpdate->shipment_id = $id;
 			// return $statusUpdate;
+			// $this->shipmentUpdated($shipment);
 			$statusUpdate->save();
-		}
+
+
+			}
 
 		if ($request->formobg['status'] == 'Not picking') {
 			$this->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
@@ -430,6 +434,49 @@ class ShipmentController extends Controller
 		}
 		return $shipment;
 	}
+
+	public function shipmentUpdated($shipment)
+    {
+        // dd($shipment['id']);
+        $today = Carbon::today();
+		$tomorrow = Carbon::tomorrow();
+		$ship_date = $shipment->created_at->toDateString();
+		$today_d = $today->toDateString();
+		$tomorrow_d = $tomorrow->toDateString();
+		// dd($today . '   ' . $tomorrow);
+		// if ($shipment->status == 'Scheduled') {
+		if ($ship_date == $today_d && $shipment->status == 'Scheduled') {
+			// $ship_model = ScheduleLogs::firstOrNew(
+			// 	['user_id' => Auth::id()], ['created_at' => $today]
+			// );
+			$users = Auth::id();
+			$ship_model = ScheduleLogs::where('user_id', $users)->whereBetween('created_at', [$today, $tomorrow])->first();
+			dd($ship_model);
+			// $logs = new ScheduleLogs;
+			if (!empty($ship_model)) {
+				$ship_model = ScheduleLogs::where('user_id', $users)->whereBetween('created_at', [$today, $tomorrow])->increment('count', 1);
+			// $ship_model->increment('count');
+				// $increment = (int)$ship_model->count + 1;
+				// $increment += 1;
+				// dd($increment);
+				// $ship_model->count = $increment;
+			}else {
+				$ship_model = new ScheduleLogs;
+				$ship_model->count = 1;
+				$ship_model->user_id = Auth::id();
+				$ship_model->save();
+			}
+			// dd($increment);
+			// ship_model::where('product_code', $product_code)->increment('count');
+
+			dd($ship_model);
+		}
+    }
+
+
+
+
+
 
 	public function UpdateShipment(Request $request, Shipment $shipment)
 	{

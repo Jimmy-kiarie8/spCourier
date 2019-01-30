@@ -26,6 +26,9 @@ class EventServiceProvider extends ServiceProvider
         'shipment.deleted' => [
             'App\Handlers\Events\ShipmentEvents@shipmentDeleted',
         ],
+        'shipment.updating' => [
+            'App\Handlers\Events\ShipmentEvents@shipmentDeleted',
+        ],
     ];
 
     /**

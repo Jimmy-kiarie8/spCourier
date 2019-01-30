@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Event;
 class Shipment extends Model
 {
     use SoftDeletes;
-    // public $with = ['products', 'statuses'];
+    public $with = ['products', 'statuses'];
     // use Searchable;
     /**
      * Get the index name for the model.
@@ -58,6 +58,10 @@ class Shipment extends Model
     
         static::deleted(function($shipment) {
             Event::fire('shipment.deleted', $shipment);
+        });
+
+        static::creating(function($shipment) {
+            Event::fire('shipment.creating', $shipment);
         });
     }
 
