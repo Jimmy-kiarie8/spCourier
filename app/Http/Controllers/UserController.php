@@ -17,7 +17,8 @@ class UserController extends Controller
 {
 	public function getUsers()
 	{
-		return User::with(['roles'])->get();
+		// return User::with(['roles'])->get();
+		return User::with(['roles'])->orderBy('name')->get();
 	}
 	/**
 	 * Store a newly created resource in storage.
@@ -83,7 +84,7 @@ class UserController extends Controller
 	public function update(Request $request, User $user)
 	{
 		// return $request->all();
-		return $request->selected;
+		// return $request->selected;
 		$this->Validate($request, [
 			'form.name' => 'required',
 			'form.email' => 'required|email',
@@ -103,13 +104,26 @@ class UserController extends Controller
 		$user->city = $request->form['city'];
 		$user->country = $request->form['country'];
 		$user->country_id = $request->form['country_id'];
-		$user->syncPermissions($request->selected);
 		$user->save();
 		foreach ($request->form['roles'] as $role) {
 			$role_name = $role['name'];
 		}
+		$user->syncRoles($role_name);
+
+		
+		// $p_all = Permission::all();//Get all permissions
+
+        // foreach ($p_all as $p) {
+        //     $user->revokePermissionTo($p); //Remove all permissions associated with role
+        // }
+
 		// $user->givePermissionTo($request->selected);
-		// $user->syncRoles($role_name);
+        // foreach ($permissions as $permission) {
+        //     $p = Permission::where('id', '=', $permission)->firstOrFail(); //Get corresponding form //permission in db
+        //     $role->givePermissionTo($p);  //Assign permission to role
+        // }
+
+
 		return $user;
 	}
 

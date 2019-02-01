@@ -133,7 +133,13 @@
                                     </v-btn>
                                     <span>Delete</span>
                                 </v-tooltip>
-                                <v-tooltip bottom v-if="user.can['single print']">
+                                <v-tooltip bottom v-if="user.can['single print'] && user.country_name === 'Tanzania'">
+                                    <v-btn icon class="mx-0" @click="TzshowDetails(props.item)" slot="activator">
+                                        <v-icon color="info darken-2" small>visibility</v-icon>
+                                    </v-btn>
+                                    <span>Print</span>
+                                </v-tooltip>
+                                <v-tooltip bottom v-if="user.can['single print'] && user.country_name != 'Tanzania'">
                                     <v-btn icon class="mx-0" @click="showDetails(props.item)" slot="activator">
                                         <v-icon color="info darken-2" small>visibility</v-icon>
                                     </v-btn>
@@ -169,6 +175,7 @@
     <AddShipment :addShipment="dialog" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers"></AddShipment>
     <EditShipment :EditShipment="dialog1" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers" :form="editedItem"></EditShipment>
     <ShowShipment :element="element" @closeRequest="close" :customers="Allcustomers" :showItems="showItem"></ShowShipment>
+    <TzShipment></TzShipment>
     <UpdateShipment :UpdateShipment="updateModal" @closeRequest="close" :markers="markers" :updateitedItem="updateitedItem" @alertRequest="showalert"></UpdateShipment>
     <UpdateShipmentStatus :UpdateShipmentStatus="UpdateShipmentModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></UpdateShipmentStatus>
     <AssignDriver :AllDrivers="AllDrivers" :OpenAssignDriver="AssignDriverModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></AssignDriver>
@@ -190,6 +197,7 @@ import VueBarcode from "vue-barcode";
 let AddShipment = require("./AddShipment");
 let EditShipment = require("./EditShipment");
 let ShowShipment = require("./print/PrintSpdf");
+let TzShipment = require("./print/TzSprint");
 let UpdateShipment = require("./UpdateShipment");
 let UpdateShipmentStatus = require("./UpdateShipmentStatus");
 let AssignDriver = require("./AssignDriver");
@@ -214,7 +222,8 @@ export default {
         AssignBranch,
         TrackShipment,
         myCsvFile,
-        mySCharges
+        mySCharges,
+        TzShipment
         // myPrintSPdf,
         // myPrintPod
     },
@@ -432,6 +441,9 @@ export default {
         },
         showDetails(item) {
             eventBus.$emit("printEvent", item);
+        },
+        TzshowDetails(item) {
+            eventBus.$emit("TzprintEvent", item);
         },
         ShipmentTrack(item) {
             this.updateitedItem = Object.assign({}, item);

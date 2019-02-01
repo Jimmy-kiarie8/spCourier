@@ -77,7 +77,7 @@ class StatusController extends Controller
     public function getScheduled(Request $request)
     {
 		// return $request->all();
-        $print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->where('country_id', Auth::user()->country_id)->take(500)->latest()->get();
+        $print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->take(500)->latest()->get();
         $id = [];
         foreach ($print_shipment as $selectedItems) {
             $id[] = $selectedItems['id'];
@@ -86,7 +86,7 @@ class StatusController extends Controller
         // $derivery_time = $request->form['derivery_time'];
         // $remark = $request->form['remark'];
         // $derivery_date = $request->form['scheduled_date'];
-		$shipment = Shipment::whereIn('id', $id)->update(['printed' => 1, 'printReceipt' => 1]);
+		// $shipment = Shipment::whereIn('id', $id)->update(['printed' => 1, 'printReceipt' => 1]);
         return $print_shipment;
     }
     public function getStickers(Request $request)
@@ -107,7 +107,11 @@ class StatusController extends Controller
     {
         return Shipment::where('status', 'Delivered')->latest()->take(500)->get();
     }
-
+    
+    public function customerS(Request $request)
+    {
+        
+    }
     // public function getDelStatuses()
     // {
     //     return DelStatus::select('name')->orderBy('name', 'ASC')->get();

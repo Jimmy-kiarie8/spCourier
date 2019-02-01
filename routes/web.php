@@ -315,6 +315,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('getScheduled', 'StatusController@getScheduled')->name('getScheduled');
 	Route::post('getStickers', 'StatusController@getStickers')->name('getStickers');
 	Route::get('getDeriveredA', 'StatusController@getDeriveredA')->name('getDeriveredA');
+	Route::post('customerS', 'StatusController@customerS')->name('customerS');
 	
 	// chatty
 	Route::post('getUserConvById/{id}', 'ChattyController@getUserConvById')->name('getUserConvById');
@@ -345,4 +346,10 @@ Route::group(['middleware' => ['auth']], function () {
 	// Route::post('test', 'FilterController@test')->name('test');
 
 	Route::any('schedulepct', 'CslogController@schedulepct')->name('schedulepct');
+
+
+	Route::post('Filterlogs', 'CallController@Filterlogs')->name('Filterlogs');
+	Route::get('callcount', 'CallController@callcount')->name('callcount');
+
+	 
 });

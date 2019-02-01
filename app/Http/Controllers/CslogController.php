@@ -15,14 +15,43 @@ class CslogController extends Controller
     {
         $today = Carbon::today();
         $tomorrow = Carbon::tomorrow();
-        $shipments = Shipment::setEagerLoads(['statuses'])->select('id')->whereBetween('created_at', [$today, $tomorrow])->get();
+       $shipments = Shipment::select('id')->whereBetween('created_at', [$today, $tomorrow])->get();
 
-
+        $ship_status = [];
         foreach ($shipments as $shipment) {
-            $id[] = $shipment->id;
+            $ship_status[] = $shipment->statuses;
         }
-
-
+        return $ship_arr = array_flatten($ship_status);
+        
+        $users = User::setEagerLoads([])->get();
+        $user_count = [];
+                // if ($user->hasRole('Customer Service')) {
+        foreach ($users as $key => $user) {
+                    $i = 0;
+                    $j = 0;
+            if ($user->hasRole('Customer Service') && Auth::user()->country_id == $user->country_id) {
+                    foreach ($ship_arr as $ship_a) {
+                // return ($key);
+            if ($ship_a->user_id == $user->id) {
+                // return user->id;
+            // $user_count[] = Shipment::where('branch_id', user->id)->count();
+                    $i++;
+                    if($ship_a->status == 'Scheduled') {
+                        $j++;
+                    }
+                }
+                    
+                }
+            $user_count[] = array(
+                'cou' => $j . '  ' . $user->name,
+                'name' => $user->name,
+                'id' => $key,
+                'count' => $i,
+            );
+            }
+        // $ship_count = $ship_a->ship_a;
+        }
+        return $user_count;
 
         // $sh_count = Shipment::whereBetween('created_at', ['2019-01-29 00:00:00', '2019-01-30 00:00:00'])->count();
         // $id = [];
@@ -49,6 +78,5 @@ class CslogController extends Controller
         //         );
         //     }
         // }
-        // return $user_count;
     }
 }

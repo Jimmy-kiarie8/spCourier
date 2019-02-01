@@ -12,7 +12,7 @@ use App\Attachment;
 use App\User;
 use App\Company;
 use Spatie\Permission\Models\Permission;
-
+use App\Country;
 class HomeController extends Controller
 {
     public function courier()
@@ -29,8 +29,17 @@ class HomeController extends Controller
                 $permissions[$permission->name] = false;
             }
         }
+        $user = Auth::user();
+        $country = Country::find($user->country_id);
+        // dd($country);
+        $user->country_name = $country->country_name;
+        // $users->transform(function ($user, $key) {
+        //     $country = Country::find($user->country_id);
+        //     $user->country_name = $country->name;
+		// 	return $user;
+        // });
         // dd(json_decode(json_encode((Auth::user()), false)));
-        $auth_user = array_prepend(Auth::user()->toArray(), $permissions, 'can');
+        $auth_user = array_prepend($user->toArray(), $permissions, 'can');
         return view('welcome', compact('rolename', 'company_logo', 'auth_user'));
     }
     public function courierHome()

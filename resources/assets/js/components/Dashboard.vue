@@ -278,6 +278,7 @@ export default {
             this.deriveredShipmentCount()
             this.getCountryhipments()
             this.getCountry()
+
         },
 
         getCountShip() {
@@ -331,11 +332,14 @@ export default {
                 })
         },
         countDelivered() {
+            eventBus.$emit("progressEvent");
             axios.post('/countDelivered', this.countryFilter)
                 .then((response) => {
+                    eventBus.$emit("StoprogEvent");
                     this.AllDelivered = response.data
                 })
                 .catch((error) => {
+                    eventBus.$emit("StoprogEvent");
                     this.errors = error.response.data.errors
                 })
         },
@@ -343,7 +347,7 @@ export default {
             axios.post('/countPending', this.countryFilter)
                 .then((response) => {
                     this.AllPending = response.data
-                })
+                }) 
                 .catch((error) => {
                     this.errors = error.response.data.errors
                 })

@@ -25,9 +25,18 @@ class ReportController extends Controller
 			'start_date' => $request->branch['start_date'],
 			'end_date' => $request->branch['end_date'],
 		);
+		if ($request->branch_status != [] && $request->branch == []) {
 		$status = $request->branch_status['status'];
-		if ($status = 'Dispatched') {
-			return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('dispatch_date', [$date_array])->take(5000)->where('branch_id', $request->branch['branch_id'])->where('status', $status)->get();
+			return Shipment::where('country_id', Auth::user()->country_id)->setEagerLoads([])->whereBetween('dispatch_date', [$date_array])->where('status', $status)->take(5000)->latest()->get();
+			
+		} elseif($request->branch_status == [] && $request->branch != []) {
+			$branch_id = $request->branch['branch_id'];
+			$branch_id = $request->branch_status['branch_id'];
+			return Shipment::where('country_id', Auth::user()->country_id)->setEagerLoads([])->whereBetween('dispatch_date', [$date_array])->where('branch_id', $branch_id)->take(5000)->latest()->get();
+		} elseif($request->branch_status != [] && $request->branch != []) {
+			$branch_id = $request->branch['branch_id'];
+			$status = $request->branch_status['status'];
+			return Shipment::where('country_id', Auth::user()->country_id)->setEagerLoads([])->whereBetween('dispatch_date', [$date_array])->where('status', $status)->where('branch_id', $branch_id)->take(5000)->latest()->get();
 		} else {
 			return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('created_at', [$date_array])->take(5000)->where('branch_id', $request->branch['branch_id'])->where('status', $status)->get();
 		}
@@ -73,20 +82,24 @@ class ReportController extends Controller
 			'start_date' => $request->start_date,
 			'end_date' => $request->end_date,
 		);
+		$Update_array = array(
+			'Upstart_date' => $request->Upstart_date,
+			'Upend_date' => $request->Upend_date,
+		);
 		$status = $request->status;
 		$branch_id = $request->branch_id;
 
 		if (empty($branch_id)) {
 			if ($status == 'Dispatched') {
-				return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('dispatch_date', [$date_array])->take(5000)->get();
+				return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('dispatch_date', [$date_array])->whereBetween('created_at', [$Update_array])->take(5000)->get();
 			} else {
-				return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('derivery_date', [$date_array])->where('status', $status)->take(5000)->get();
+				return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('derivery_date', [$date_array])->whereBetween('created_at', [$Update_array])->where('status', $status)->take(5000)->get();
 			}
 		} else {
 			if ($status == 'Dispatched') {
-				return Shipment::where('country_id', Auth::user()->country_id)->where('branch_id', $branch_id)->latest()->setEagerLoads([])->whereBetween('dispatch_date', [$date_array])->take(5000)->get();
+				return Shipment::where('country_id', Auth::user()->country_id)->where('branch_id', $branch_id)->latest()->setEagerLoads([])->whereBetween('dispatch_date', [$date_array])->whereBetween('created_at', [$Update_array])->take(5000)->get();
 			} else {
-				return Shipment::where('country_id', Auth::user()->country_id)->where('branch_id', $branch_id)->latest()->setEagerLoads([])->whereBetween('derivery_date', [$date_array])->where('status', $status)->take(5000)->get();
+				return Shipment::where('country_id', Auth::user()->country_id)->where('branch_id', $branch_id)->latest()->setEagerLoads([])->whereBetween('derivery_date', [$date_array])->whereBetween('created_at', [$Update_array])->where('status', $status)->take(5000)->get();
 			}
 		}
 	}

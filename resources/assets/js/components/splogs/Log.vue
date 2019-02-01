@@ -8,6 +8,23 @@
         <v-container fluid fill-height v-show="!loader">
             <v-layout justify-center align-center>
                 <div v-show="!loader">
+                    <v-layout wrap>
+                        <v-flex sm6>
+                            <v-tooltip bottom v-if="between.start >= 500">
+                                <v-btn icon class="mx-0" @click="previous" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
+                                    <v-icon color="blue darken-2">chevron_left</v-icon>
+                                </v-btn>
+                                <span>Previous results</span>
+                            </v-tooltip>
+                            <v-tooltip bottom v-if="callCount > between.end">
+                                <v-btn icon class="mx-0" @click="next" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
+                                    <v-icon color="blue darken-2">chevron_right</v-icon>
+                                </v-btn>
+                                <span>Next results</span>
+                            </v-tooltip>
+                            From {{ between.start }} to {{ between.end }}
+                        </v-flex>
+                    </v-layout>
                     <v-card-title>
                         Logs
                         <v-tooltip right>
@@ -17,6 +34,20 @@
                             <span>Refresh</span>
                         </v-tooltip>
                         <!-- <v-btn color="primary" raised @click="getCalls">Calls</v-btn> -->
+                        <v-flex xs4 sm3>
+                            <v-select :items="Allusers" v-model="select" label="Select User" single-line item-text="name" item-value="name" return-object persistent-hint></v-select>
+                        </v-flex>
+                        <!-- <v-spacer></v-spacer> -->
+                        <v-flex xs12 sm2 offset-sm1>
+                            <v-text-field label="Start Date" v-model="form.start_date" color="blue darken-2" type="date" required></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 sm2>
+                            <v-text-field label="End Date" v-model="form.end_date" color="blue darken-2" type="date" required></v-text-field>
+                        </v-flex>
+                        <v-flex xs4 sm1>
+                            <v-btn raised color="info" @click="filReset">Reset</v-btn>
+                        </v-flex>
+                        <v-btn color="orange" flat @click="filter">Filter</v-btn>
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
@@ -62,6 +93,8 @@ export default {
     data() {
         return {
             search: '',
+            callCount: null,
+            form: {},
             snackbar: false,
             timeout: 5000,
             message: 'Success',
@@ -72,6 +105,12 @@ export default {
             loader: false,
             editedItem: {},
             loading: false,
+            select: [],
+            Allusers: [],
+            between: {
+                start: 1,
+                end: 500
+            },
             headers: [{
                     text: 'User Id',
                     align: 'left',
@@ -101,66 +140,21 @@ export default {
             ],
         }
     },
-    watch: {
-        dialog(val) {
-            val || this.close()
-        }
-    },
     methods: {
+        getUsers() {
+            this.loading = true
+            axios.get('/getUsers')
+                .then((response) => {
+                    this.loading = false
+                    this.Allusers = response.data
+                })
+                .catch((error) => {
+                    this.loading = false
+                    this.errors = error.response.data.errors
+                })
+        },
         details(item) {
             eventBus.$emit('ShowShipEvent', item);
-        },
-        resetForm() {
-            this.form = Object.assign({}, this.defaultForm)
-            this.$refs.form.reset()
-        },
-        openModalAdd() {
-            this.OpenAdd = true
-        },
-        openModalMail() {
-            this.maildialog = true
-        },
-        openModalUns() {
-            this.getunsubscribed()
-            this.OpenUns = true
-        },
-        alert() {
-            this.message = 'Thanks for subscribing'
-            this.color = 'black'
-            this.snackbar = true
-        },
-        close() {
-            this.OpenAdd = this.OpenUns = this.maildialog = false
-        },
-        deleteItem(item) {
-            this.message = 'Loading...'
-            this.color = 'black'
-            this.snackbar = true
-            const index = this.AllCalls.indexOf(item)
-            if (confirm('Are you sure you want to delete this item?')) {
-                axios.delete(`/email/${item.id}`)
-                    .then((response) => {
-                        this.snackbar = false
-                        this.message = 'Success'
-                        this.color = 'black'
-                        this.snackbar = true
-                        this.AllCalls.splice(index, 1)
-                        // this.calls()
-                        // console.log(response);
-
-                    })
-                    .catch((error) => {
-                        this.errors = error.response.data.errors
-                        this.message = 'something went wrong'
-                        this.color = 'red'
-                        this.snackbar = true
-                    })
-            }
-            // confirm('Are you sure you want to delete this item?') && this.AllCalls.splice(index, 1)
-        },
-        resetForm() {
-            this.form = Object.assign({}, this.defaultForm)
-            this.$refs.form.reset()
         },
         getCalls() {
             axios.get('/calls')
@@ -173,18 +167,62 @@ export default {
                     this.errors = error.response.data.errors
                 })
         },
+        filter() {
+            eventBus.$emit("progressEvent");
+            axios
+                .post("/Filterlogs", {
+                    select: this.select,
+                    no_btw: this.between,
+                    form: this.form,
+                })
+                .then(response => {
+                    eventBus.$emit("StoprogEvent");
+                    this.AllCalls = response.data;
+                })
+                .catch(error => {
+                    eventBus.$emit("StoprogEvent");
+                    this.errors = error.response.data.errors;
+                });
+        },
+        filReset() {
+            this.between.start = 1
+            this.between.end = 500
+            this.select = []
+            this.form = []
+            this.getCalls()
+        },
+
+        next() {
+            this.loading = true;
+            this.between.start = parseInt(this.between.start) + 500;
+            this.between.end = parseInt(this.between.end) + 500;
+            this.filter()
+        },
+        previous() {
+            this.loading = true;
+            if (this.between.start >= 500) {
+                this.between.start = parseInt(this.between.start) - 500;
+                this.between.end = parseInt(this.between.end) - 500;
+                this.filter()
+
+            } else {
+                return;
+                this.loading = false;
+            }
+        },
     },
     mounted() {
         this.loader = true
+        this.getUsers()
         this.getCalls()
-    },
-    computed: {
-        formIsValid() {
-            return (
-                this.form.title &&
-                this.form.content
-            )
-        },
+        axios
+            .get("/callcount")
+            .then(response => {
+                this.callCount = response.data;
+            })
+            .catch(error => {
+                this.errors = error.response.data.errors;
+            });
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {

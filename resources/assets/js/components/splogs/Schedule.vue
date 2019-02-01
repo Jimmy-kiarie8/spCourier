@@ -7,7 +7,14 @@
 
         <v-container fluid fill-height v-show="!loader">
             <v-layout justify-center align-center>
-
+                <!-- <v-layout wrap>
+                    <v-flex xs4 sm3 offset-sm4>
+                        <v-select :items="AllUsers" v-model="select" label="Select User" single-line item-text="name" item-value="name" return-object persistent-hint></v-select>
+                    </v-flex>
+                    <v-flex xs4 sm3>
+                        <v-btn raised color="info" @click="sort">Filter</v-btn>
+                    </v-flex>
+                </v-layout> -->
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <v-tooltip right>
                         <v-btn icon slot="activator" class="mx-0" @click="schedulepct">
@@ -41,93 +48,112 @@
 </template>
 
 <script>
-import show from './Show'
+import show from "./Show";
 export default {
-    props: ['user'],
+    props: ["user"],
     components: {
         show
     },
     data() {
         return {
-            search: '',
+            search: "",
             snackbar: false,
             timeout: 5000,
-            message: 'Success',
-            color: 'black',
-            y: 'bottom',
-            x: 'left',
+            message: "Success",
+            color: "black",
+            y: "bottom",
+            x: "left",
             AllSc: [],
             loader: false,
             editedItem: {},
+            select: [],
+            Allusers: [],
             loading: false,
             headers: [{
-                    text: 'User Id',
-                    align: 'left',
-                    value: 'user_id'
+                    text: "User Id",
+                    align: "left",
+                    value: "user_id"
                 },
                 {
-                    text: 'User Name',
-                    align: 'left',
-                    value: 'user_name'
+                    text: "User Name",
+                    align: "left",
+                    value: "user_name"
                 },
                 {
-                    text: 'Event',
-                    value: 'event'
+                    text: "Event",
+                    value: "event"
                 },
                 {
-                    text: 'Waybill Number',
-                    value: 'bar_code'
+                    text: "Waybill Number",
+                    value: "bar_code"
                 },
                 {
-                    text: 'Updated at',
-                    value: 'updated_at'
+                    text: "Updated at",
+                    value: "updated_at"
                 },
                 {
-                    text: 'Action',
+                    text: "Action",
                     sortable: false
-                },
-            ],
-        }
+                }
+            ]
+        };
     },
     watch: {
         dialog(val) {
-            val || this.close()
+            val || this.close();
         }
     },
     methods: {
         schedulepct() {
-            this.loader = true
-            axios.get('/schedulepct')
-                .then((response) => {
-                    this.AllSc = response.data
-                    this.loader = false
+            eventBus.$emit("progressEvent");
+            // this.loader = true;
+            axios
+                .get("/schedulepct")
+                .then(response => {
+                    eventBus.$emit("StoprogEvent");
+                    this.AllSc = response.data;
+                    this.loader = false;
                 })
-                .catch((error) => {
-                    this.loader = false
-                    this.errors = error.response.data.errors
-                })
+                .catch(error => {
+                    eventBus.$emit("StoprogEvent");
+                    this.loader = false;
+                    this.errors = error.response.data.errors;
+                });
         },
+        sort() {
+            eventBus.$emit("progressEvent");
+            // this.loader = true;
+            axios
+                .get("/customerS")
+                .then(response => {
+                    eventBus.$emit("StoprogEvent");
+                    this.Allusers = response.data;
+                    // this.loader = false;
+                })
+                .catch(error => {
+                    eventBus.$emit("StoprogEvent");
+                    // this.loader = false;
+                    this.errors = error.response.data.errors;
+                });
+        }
     },
     mounted() {
-        this.loader = true
-        this.schedulepct()
+        this.loader = true;
+        this.schedulepct();
     },
     computed: {
         formIsValid() {
-            return (
-                this.form.title &&
-                this.form.content
-            )
-        },
+            return this.form.title && this.form.content;
+        }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            if (vm.user.can['view logs']) {
+            if (vm.user.can["view logs"]) {
                 next();
             } else {
-                next('/unauthorized');
+                next("/unauthorized");
             }
-        })
+        });
     }
-}
+};
 </script>

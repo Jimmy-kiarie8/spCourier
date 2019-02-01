@@ -38,7 +38,7 @@
                                                 Phone:
                                             </v-list-tile-action>
                                             <v-list-tile-content>
-                                                <v-list-tile-title>+254728492446</v-list-tile-title>
+                                                <v-list-tile-title>+25420760877</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
                                         <v-list-tile>
@@ -126,7 +126,7 @@
                                                 <b>Phone</b>
                                             </v-list-tile-action>
                                             <v-list-tile-content>
-                                                <v-list-tile-title>+254728492446</v-list-tile-title>
+                                                <v-list-tile-title>+25420760877</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
                                         <v-list-tile>

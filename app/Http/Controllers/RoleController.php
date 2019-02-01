@@ -33,6 +33,7 @@ class RoleController extends Controller {
 
 	public function store(Request $request)
 	{
+		return $request->all();
 		// $this->Validate($request, [
 		// 	'form.name' => 'required',
 		// ]);

@@ -84,10 +84,11 @@
                                     <td class="text-xs-right">{{ props.item.client_name }}</td>
                                     <td class="text-xs-right">{{ props.item.client_address }}</td>
                                     <td class="text-xs-right">{{ props.item.client_phone }}</td>
-                                    <td class="text-xs-right">{{ props.item.status }}</td>
-                            <td class="text-xs-right">{{ props.item.derivery_date }}</td>
+                                    <td class="text-xs-right" style="background: 'blue'" v-if="props.item.status === 'Returned'">{{ props.item.status }}</td>
+                                    <td class="text-xs-right" v-else>{{ props.item.status }}</td>
+                                    <td class="text-xs-right">{{ props.item.derivery_date }}</td>
                                     <td class="text-xs-right">{{ props.item.speciial_instruction }}</td>
-                                </template>
+                                </template> 
                                 <!-- <v-alert slot="no-results" :value="true" color="error" icon="warning">
                                 Your search for "{{ search }}" found no results.
                             </v-alert> -->

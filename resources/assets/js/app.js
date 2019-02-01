@@ -45,6 +45,7 @@ import jsPDF from 'jsPDF'
 //     iconfont: 'mdi' 
 // }) 
 // Vue.use(VueChartkick, {adapter: Chart}) 
+
 Vue.use(abilitiesPlugin)
 Vue.use(VueChatScroll)
 Vue.use(VueGoogleMaps, {
@@ -97,7 +98,7 @@ let myUploadFile = require('./components/upload/UploadFile.vue');
 let myCharges = require('./components/charge/Charge.vue');
 let myTown = require('./components/town/Town.vue');
 let mySticker = require('./components/shipments/print/Sticker.vue');
-let myPrintPdf = require('./components/shipments/print/PrintPdf.vue');
+let myWaybill = require('./components/shipments/print/Waybills.vue');
 let myStatus = require('./components/shipments/status/Status.vue');
 let myCountry = require('./components/country/Country.vue');
 let myRinder = require('./components/drivers/Driver.vue');
@@ -107,15 +108,15 @@ let myCustDash = require('./components/customers/Dashboard.vue');
 let myDrivDash = require('./components/drivers/Dashboard.vue');
 
 let myDash = require('./components/App.vue');
- 
+
 let myFilter = require('./components/scanner/Filter.vue');
 let myChatty = require('./components/chat/Chatty.vue');
 let myFinance = require('./components/finance/Finance.vue');
 let myFinClient = require('./components/finance/Clients.vue');
-let myLogs = require('./components/splogs/Log.vue');  
-let mySc = require('./components/splogs/Schedule.vue');  
+let myLogs = require('./components/splogs/Log.vue');
+let mySc = require('./components/splogs/Schedule.vue');
 
- 
+
 const routes = [
     // {path: '/', component: dashboard },
     { path: '/users', component: myUser },
@@ -137,9 +138,9 @@ const routes = [
     { path: '/uploads', component: myUploadFile },
     { path: '/charges', component: myCharges },
     { path: '/towns', component: myTown },
-    { path: '/print', component: myPrintPdf },
+    { path: '/print', component: myWaybill },
     { path: '/sticker', component: mySticker },
-    
+
     { path: '/status', component: myStatus },
     { path: '/country', component: myCountry },
     { path: '/rinders', component: myRinder },
@@ -172,21 +173,21 @@ const app = new Vue({
         myHeader, myUser, myShipment, myScanner, myMap,
         myBranch, myProfile, myCompany, myCustomer, mysubsicriber, myInvice, myReceipt,
         myReports, mybranchShip, myRoles, myscheduled, myTasks, myUploadFile, myCharges,
-        myTown, myPrintPdf, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash,
-        myunauth, myDash, myFilter, myChatty,myFinance, myFinClient, mySticker, myDStatus, myLogs, mySc
+        myTown, myWaybill, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash,
+        myunauth, myDash, myFilter, myChatty, myFinance, myFinClient, mySticker, myDStatus, myLogs, mySc
         // myContainer
     },
     data: {
         role: '',
-        message:'',
-        chat:{
-            message:[],
-            user:[],
-            color:[],
-            time:[]
+        message: '',
+        chat: {
+            message: [],
+            user: [],
+            color: [],
+            time: []
         },
-        typing:'',
-        numberOfUsers:0,
+        typing: '',
+        numberOfUsers: 0,
         shipments: [],
         loading: false,
         error: false,

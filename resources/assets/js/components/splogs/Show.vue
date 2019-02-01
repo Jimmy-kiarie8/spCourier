@@ -178,22 +178,23 @@ export default {
                     this.errors = error.response.data.errors;
                 });
         },
-        shipmentGet(data) {
-            axios
-                .post(`/getShipSingle/${data.id}`)
-                .then(response => {
-                    this.shipments = response.data;
-                })
-                .catch(error => {
-                    this.errors = error.response.data.errors;
-                });
-        }
+        // shipmentGet(data) {
+        //     axios
+        //         .post(`/getShipSingle/${data.id}`)
+        //         .then(response => {
+        //             this.shipments = response.data;
+        //         })
+        //         .catch(error => {
+        //             this.errors = error.response.data.errors;
+        //         });
+        // }
     },
 
     created() {
         eventBus.$on("ShowShipEvent", data => {
-            this.shipmentGet(data);
-            this.showShip(data);
+            // this.shipmentGet(data);
+            this.showShip(data.shipment);
+            this.shipments = data.shipment
             this.OpenTrackBranch = true;
         });
     },

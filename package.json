@@ -40,6 +40,7 @@
         "vue-pdf": "^3.3.1",
         "vue-print-nb": "^1.0.3",
         "vue-router": "^3.0.1",
+        "vue-top-progress": "^0.7.0",
         "vue2-google-maps": "^0.9.8",
         "vuetify": "^1.1.9"
     }
