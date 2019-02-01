@@ -43,7 +43,17 @@ class ScanController extends Controller
         $assign_date = date("Y-m-d");
         $scan_date_out = $request->form['scan_date_out'];
         // dd($assign_date);
-        $shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'driver' => $rider_out, 'assign_date' => $assign_date, 'derivery_date' => $scan_date_out]);
+		// $shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'driver' => $rider_out, 'assign_date' => $assign_date, 'derivery_date' => $scan_date_out]);
+		foreach ($id as $value) {
+			$shipment = Shipment::find($value);
+			$shipment->status = $status;
+			$shipment->remark = $remark;
+			$shipment->driver = $rider_out;
+			$shipment->assign_date = $assign_date;
+			$shipment->dispatch_date = now();
+			$shipment->save();
+		}
+
         $shipStatus = Shipment::whereIn('id', $id)->get();
         foreach ($shipStatus as $statuses) {
             $statusUpdate = new ShipmentStatus;
@@ -99,7 +109,7 @@ class ScanController extends Controller
 
         // $derivery_date = $request->scheduled_date;
         // $shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark]);
-		$shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'dispatch_date' => $dispatch_date, 'branch_id' => $branch_id]);
+		// $shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'dispatch_date' => $dispatch_date, 'branch_id' => $branch_id]);
 
 		foreach ($id as $value) {
 			$shipment = Shipment::find($value);

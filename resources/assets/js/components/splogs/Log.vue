@@ -45,7 +45,7 @@
                             <v-text-field label="End Date" v-model="form.end_date" color="blue darken-2" type="date" required></v-text-field>
                         </v-flex>
                         <v-flex xs4 sm1>
-                            <v-btn raised color="info" @click="filReset">Reset</v-btn>
+                            <v-btn flat color="info" @click="filReset">Reset</v-btn>
                         </v-flex>
                         <v-btn color="orange" flat @click="filter">Filter</v-btn>
                         <v-spacer></v-spacer>
@@ -157,13 +157,16 @@ export default {
             eventBus.$emit('ShowShipEvent', item);
         },
         getCalls() {
+            eventBus.$emit("progressEvent");
             axios.get('/calls')
                 .then((response) => {
+                    eventBus.$emit("StoprogEvent");
+                    this.loader = false;
                     this.AllCalls = response.data
-                    this.loader = false
                 })
                 .catch((error) => {
-                    this.loader = false
+                    eventBus.$emit("StoprogEvent");
+                    this.loader = false;
                     this.errors = error.response.data.errors
                 })
         },

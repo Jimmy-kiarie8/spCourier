@@ -15,7 +15,7 @@ class CallController extends Controller
      */
     public function index()
     {
-        $calls = Call::take(500)->latest()->get();
+        $calls = Call::take(200)->latest()->get();
         $calls->transform(function ($call, $key) {
             // dd($call->shipment);
             $call->shipment = unserialize($call->shipment);
@@ -38,7 +38,7 @@ class CallController extends Controller
         $start_date = $request->form['start_date'];
         $user_id = $request->select['id'];
         $start = $request->no_btw['start'];
-        $calls = Call::whereBetween('created_at', [$start_date, $end_date])->where('user_id', $user_id)->skip($start - 1)->take(500)->latest()->get();
+        $calls = Call::whereBetween('created_at', [$start_date, $end_date])->where('user_id', $user_id)->skip($start - 1)->take(200)->latest()->get();
         $calls->transform(function ($call, $key) {
             // dd($call->shipment);
             $call->shipment = unserialize($call->shipment);
