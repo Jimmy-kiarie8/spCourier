@@ -26,6 +26,7 @@
                             <li class="list-group-item"><label for=""><b>Waybill Number: </b></label>{{ shipments.airway_bill_no }}</li>
                             <li class="list-group-item"><label for=""><b>From: </b></label>{{ shipments.sender_city }}</li>
                             <li class="list-group-item"><label for=""><b>Status: </b></label>{{ shipments.status }}</li>
+                            <li class="list-group-item"><label for=""><b>Delivery Status: </b></label>{{ shipments.derivery_status }}</li> 
                         </ul>
                     </v-flex>
 

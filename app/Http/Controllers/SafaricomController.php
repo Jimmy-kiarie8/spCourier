@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Safaricom;
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
+use Safaricom\Mpesa\Mpesa;
 
 class SafaricomController extends Controller
 {
 
     public function confirmation(Request $request)
     {
-        $key = 'hzMJS6i9OCuAc6AlRyKz7JUuMIvYIQqV';
-        $secret = 'hgGlK8nSLa2DDAjA';
+        $key = 'vc4SsAN8ko64jNTY71lOZWvGThoGXASL';
+        $secret = 'MVMcOQi4uAOQH73s';
         // $res = $request('POST', 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl', [
         //     'form_params' => [
         //         'consumer_key' => 'test_id',
@@ -20,27 +20,33 @@ class SafaricomController extends Controller
         //     ]
         // ]);
 
-        $client = new Client(); //GuzzleHttp\Client
-        $array = $client->get('https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl', [
-            'form_params' => [
-                'consumer_key' => $key,
-                'consumer_secret' => $secret
-            ]
-        ]);
-        return $array;
-        $array = json_decode($request, true);
-        $TransID = $array['TransID'];
-        $TransactionType = $array['TransactionType'];
-        $TransTime = $array['TransTime'];
-        $TransAmount = $array['TransAmount'];
-        $BusinessShortCode = $array['BusinessShortCode'];
-        $BillRefNumber = $array['BillRefNumber'];
-        $InvoiceNumber = $array['InvoiceNumber'];
-        $MSISDN = $array['MSISDN'];
-        $First_Name = $array['First_Name'];
-        $Middle_Name = $array['Middle_Name'];
-        $Last_Name = $array['Last_Name'];
-        $OrgAccountBalance = $array['OrgAccountBalance'];
+        // $client = new Client(); //GuzzleHttp\Client
+        // $array = $client->get('https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl', [
+        //     'form_params' => [
+        //         'consumer_key' => $key,
+        //         'consumer_secret' => $secret
+        //     ]
+        // ]);
+        // dd($array);
+        // $array = json_decode($request, true);
+        // $TransID = $array['TransID'];
+        // $TransactionType = $array['TransactionType'];
+        // $TransTime = $array['TransTime'];
+        // $TransAmount = $array['TransAmount'];
+        // $BusinessShortCode = $array['BusinessShortCode'];
+        // $BillRefNumber = $array['BillRefNumber'];
+        // $InvoiceNumber = $array['InvoiceNumber'];
+        // $MSISDN = $array['MSISDN'];
+        // $First_Name = $array['First_Name'];
+        // $Middle_Name = $array['Middle_Name'];
+        // $Last_Name = $array['Last_Name'];
+        // $OrgAccountBalance = $array['OrgAccountBalance'];
+        // Mpesa
+        $mpesa = new Mpesa;
+        // $mpesa = new \Safaricom\Mpesa\Mpesa();
+
+        $callbackData = $mpesa->getDataFromCallback();
+        dd($callbackData);
         // $Request = $array['Request'];
         // $Request = $request->Request;
 
@@ -66,8 +72,8 @@ class SafaricomController extends Controller
         // $url = 'https://api.safaricom.co.ke/mpesa/c2b/v1/registerurl';
         $url = 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl';
         $shortcode = '600000';
-        $confirmation_url = 'http://web.speedballcourier.com/confirmation?token=' . $this->token();
-        $validation_url = 'http://web.speedballcourier.com/validation?token=' . $this->token();
+        $confirmation_url = 'http://courier.dev/confirmation?token=' . $this->token();
+        $validation_url = 'http://courier.dev/validation?token=' . $this->token();
 
         $token = $this->token();
 
@@ -128,7 +134,7 @@ class SafaricomController extends Controller
 
     public function validation(Request $request)
     {
-        return $request->token;
+        // return $request->token;
         $token = $this->token();
 
         if (!$token) {
@@ -139,21 +145,21 @@ class SafaricomController extends Controller
             echo "Invalid authorization";
             exit();
         }
-        /* 
-            here you need to parse the json format 
-            and do your business logic e.g. 
-            you can use the Bill Reference number 
-            or mobile phone of a customer 
-            to search for a matching record on your database. 
-         */ 
-        /* 
-            Reject an Mpesa transaction 
-            by replying with the below code 
+        /*
+        here you need to parse the json format
+        and do your business logic e.g.
+        you can use the Bill Reference number
+        or mobile phone of a customer
+        to search for a matching record on your database.
          */
-        // echo '{"ResultCode":1, "ResultDesc":"Failed", "ThirdPartyTransID": 0}'; 
-        /* 
-            Accept an Mpesa transaction 
-            by replying with the below code 
+        /*
+        Reject an Mpesa transaction
+        by replying with the below code
+         */
+        // echo '{"ResultCode":1, "ResultDesc":"Failed", "ThirdPartyTransID": 0}';
+        /*
+        Accept an Mpesa transaction
+        by replying with the below code
          */
         echo '{"ResultCode":0, "ResultDesc":"Success", "ThirdPartyTransID": 0}';
 

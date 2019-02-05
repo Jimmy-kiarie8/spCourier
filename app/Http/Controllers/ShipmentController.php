@@ -483,7 +483,7 @@ class ShipmentController extends Controller
             if (empty($remark)) {
                 // $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'derivery_status' => $status]);
                 foreach ($id as $value) {
-                    $shipment = Shipment::setEagerLoads([])->find($value)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'derivery_status' => $status]);
+                    // $shipment = Shipment::setEagerLoads([])->find($value)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'derivery_status' => $status]);
 
                     $shipment = Shipment::find($value);
                     $shipment->derivery_date = $derivery_date;
@@ -687,8 +687,8 @@ class ShipmentController extends Controller
     public function send_sms($phone, $message)
     {
         return $phone;
-        // dd($phone . '   ' . $message);
-        // $phone = '254778301465';
+        // // dd($phone . '   ' . $message);
+        // // $phone = '254778301465';
         $phone = '254731090832';
         // $phone = '254706920275';
         $sms = $message;
@@ -752,10 +752,10 @@ class ShipmentController extends Controller
                 $driver = User::find($shipment->driver);
                 $shipment->driver = $driver->name;
             }
-// } else {
-            // return 'not empty';
+            // } else {
+                        // return 'not empty';
 
-// }
+            // }
             // $user = User::find($order->buyer_id);
             // $order->buyer_id = $user->name;
             return $shipment;

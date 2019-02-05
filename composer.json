@@ -22,6 +22,7 @@
         "milon/barcode": "^5.3",
         "pusher/pusher-http-laravel": "^4.2",
         "pusher/pusher-php-server": "~3.0",
+        "safaricom/mpesa": "^1.0",
         "smodav/mpesa": "^4.0",
         "snowfire/beautymail": "dev-master",
         "spatie/laravel-permission": "^2.19"

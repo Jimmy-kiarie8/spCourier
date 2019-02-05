@@ -168,6 +168,7 @@ class UserController extends Controller
 		$image_name = '/storage/profile/' . $imagename;
 		$upload->profile = $image_name;
 		$upload->save();
+		
 	}
 
 	public function getDrivers()

@@ -24,7 +24,7 @@
                             </v-tooltip>
                             From {{ between.start }} to {{ between.end }}
                         </v-flex>
-                    </v-layout>
+                    </v-layout> 
                     <v-card-title>
                         Logs
                         <v-tooltip right>
@@ -71,14 +71,37 @@
                             Your search for "{{ search }}" found no results.
                         </v-alert>
                     </v-data-table>
+
+                    <v-layout wrap>
+
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <v-tooltip right>
+                                <v-btn icon slot="activator" class="mx-0" @click="schedulepct">
+                                    <v-icon color="blue darken-2" small>refresh</v-icon>
+                                </v-btn>
+                                <span>Refresh</span>
+                            </v-tooltip>
+                            <div class="card card-chart">
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <!-- <my-branch :height="255"></my-branch> -->
+                                    </div>
+                                    <div class="progress-Ship">
+                                        <div v-for="userC in AllSc" :key="userC.id">
+                                            {{ userC.name }}: {{ userC.count }} %
+                                            <v-progress-linear color="indigo" height="2" :value="userC.count"></v-progress-linear>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </v-layout>
                 </div>
             </v-layout>
+
+            <!-- </v-layou/t> -->
         </v-container>
     </v-content>
-    <v-snackbar :timeout="timeout" :bottom="y === 'bottom'" :color="color" :left="x === 'left'" v-model="snackbar">
-        {{ message }}
-        <v-icon dark right>check_circle</v-icon>
-    </v-snackbar>
     <show></show>
 </div>
 </template>
@@ -95,12 +118,7 @@ export default {
             search: '',
             callCount: null,
             form: {},
-            snackbar: false,
-            timeout: 5000,
-            message: 'Success',
-            color: 'black',
-            y: 'bottom',
-            x: 'left',
+            AllSc: [],
             AllCalls: [],
             loader: false,
             editedItem: {},
@@ -127,7 +145,7 @@ export default {
                 },
                 {
                     text: 'Waybill Number',
-                    value: 'bar_code'
+                    value: 'shipment.airway_bill_no'
                 },
                 {
                     text: 'Updated at',
@@ -141,6 +159,22 @@ export default {
         }
     },
     methods: {
+        schedulepct() {
+            eventBus.$emit("progressEvent");
+            // this.loader = true;
+            axios
+                .get("/allLogs")
+                .then(response => {
+                    eventBus.$emit("StoprogEvent");
+                    this.AllSc = response.data;
+                    this.loader = false;
+                })
+                .catch(error => {
+                    eventBus.$emit("StoprogEvent");
+                    this.loader = false;
+                    this.errors = error.response.data.errors;
+                });
+        },
         getUsers() {
             this.loading = true
             axios.get('/getUsers')
@@ -217,6 +251,7 @@ export default {
     mounted() {
         this.loader = true
         this.getUsers()
+        this.schedulepct()
         this.getCalls()
         axios
             .get("/callcount")

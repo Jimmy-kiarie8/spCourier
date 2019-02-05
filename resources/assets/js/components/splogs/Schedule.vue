@@ -39,10 +39,6 @@
             </v-layout>
         </v-container>
     </v-content>
-    <v-snackbar :timeout="timeout" :bottom="y === 'bottom'" :color="color" :left="x === 'left'" v-model="snackbar">
-        {{ message }}
-        <v-icon dark right>check_circle</v-icon>
-    </v-snackbar>
     <show></show>
 </div>
 </template>
@@ -50,19 +46,13 @@
 <script>
 import show from "./Show";
 export default {
-    props: ["user"],
+    // props: ["user"],
     components: {
         show
     },
     data() {
         return {
             search: "",
-            snackbar: false,
-            timeout: 5000,
-            message: "Success",
-            color: "black",
-            y: "bottom",
-            x: "left",
             AllSc: [],
             loader: false,
             editedItem: {},
@@ -97,11 +87,6 @@ export default {
                 }
             ]
         };
-    },
-    watch: {
-        dialog(val) {
-            val || this.close();
-        }
     },
     methods: {
         schedulepct() {
@@ -140,11 +125,6 @@ export default {
     mounted() {
         this.loader = true;
         this.schedulepct();
-    },
-    computed: {
-        formIsValid() {
-            return this.form.title && this.form.content;
-        }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {

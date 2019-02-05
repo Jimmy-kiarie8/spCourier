@@ -23,27 +23,105 @@ class FollowController extends Controller
 		$derivery_date = $request->form['delivery_date'];
 		if ($status == 'Returned') {
 			if (empty($remark)) {
-				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'driver' => null, 'derivery_status' => $status]);
+				// $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'driver' => null, 'derivery_status' => $status]);
+				foreach ($id as $value) {
+                    $shipment = Shipment::find($value);
+                    $shipment->derivery_date = $derivery_date;
+                    $shipment->status = $status;
+                    // $shipment->speciial_instruction = $remark;
+                    // $shipment->remark = $remark;
+                    $shipment->derivery_status = $status;
+                    $shipment->save();
+                }
 			} else {
-				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'driver' => null, 'derivery_status' => $status]);
+				// $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'driver' => null, 'derivery_status' => $status]);
+				foreach ($id as $value) {
+                    $shipment = Shipment::find($value);
+                    $shipment->derivery_date = $derivery_date;
+                    $shipment->status = $status;
+                    $shipment->speciial_instruction = $remark;
+                    $shipment->remark = $remark;
+                    $shipment->derivery_status = $status;
+                    $shipment->save();
+                }
 			}
 		} elseif ($status == 'Delivered' || $status == 'Cancelled') {
 			if (empty($remark)) {
-				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'derivery_status' => $status]);
+				// $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'derivery_status' => $status]);
+				
+				foreach ($id as $value) {
+                    $shipment = Shipment::find($value);
+                    $shipment->derivery_date = $derivery_date;
+                    $shipment->status = $status;
+                    // $shipment->speciial_instruction = $remark;
+                    // $shipment->remark = $remark;
+                    $shipment->derivery_status = $status;
+                    $shipment->save();
+                }
 			} else {
-				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'derivery_status' => $status]);
+				// $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'derivery_status' => $status]);
+				
+				foreach ($id as $value) {
+                    $shipment = Shipment::find($value);
+                    $shipment->derivery_date = $derivery_date;
+                    $shipment->status = $status;
+                    $shipment->speciial_instruction = $remark;
+                    $shipment->remark = $remark;
+                    $shipment->derivery_status = $status;
+                    $shipment->save();
+                }
 			}
 		} elseif ($status == 'Dispatched') {
 			if (empty($remark)) {
-				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'dispatch_date' => now(), 'derivery_status' => $status]);
+				// $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'dispatch_date' => now(), 'derivery_status' => $status]);
+				
+				foreach ($id as $value) {
+                    $shipment = Shipment::find($value);
+                    $shipment->dispatch_date = $now();
+                    $shipment->status = $status;
+                    // $shipment->speciial_instruction = $remark;
+                    // $shipment->remark = $remark;
+                    $shipment->derivery_status = $status;
+                    $shipment->save();
+                }
 			} else {
-				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'derivery_status' => $status]);
+				// $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'derivery_status' => $status]);
+				
+				foreach ($id as $value) {
+                    $shipment = Shipment::find($value);
+                    $shipment->derivery_date = $derivery_date;
+                    $shipment->status = $status;
+                    $shipment->speciial_instruction = $remark;
+                    $shipment->remark = $remark;
+                    $shipment->derivery_status = $status;
+                    $shipment->save();
+                }
 			}
 		} else {
 			if (empty($remark)) {
-				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['derivery_status' => $status]);
+				// $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['derivery_status' => $status]);
+				
+				foreach ($id as $value) {
+                    $shipment = Shipment::find($value);
+                    // $shipment->derivery_date = $derivery_date;
+                    // $shipment->status = $status;
+                    // $shipment->speciial_instruction = $remark;
+                    // $shipment->remark = $remark;
+                    $shipment->derivery_status = $status;
+                    $shipment->save();
+                }
 			} else {
-				$shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['remark' => $remark, 'derivery_status' => $status]);
+				// $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['remark' => $remark, 'derivery_status' => $status]);
+				
+				foreach ($id as $value) {
+                    $shipment = Shipment::find($value);
+                    // $shipment->derivery_date = $derivery_date;
+                    // $shipment->status = $status;
+                    $shipment->speciial_instruction = $remark;
+                    $shipment->remark = $remark;
+                    $shipment->derivery_status = $status;
+                    $shipment->save();
+                }
 			}
 		}
 		$phones = Shipment::setEagerLoads([])->select('id', 'client_phone', 'client_name', 'bar_code')->whereIn('id', $id)->get();

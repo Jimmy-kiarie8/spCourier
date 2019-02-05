@@ -167,6 +167,8 @@ return [
         // Snowfire\Beautymail\BeautymailServiceProvider::class,
         App\Providers\SpeedballServiceProvider::class,
 
+        \Safaricom\Mpesa\MpesaServiceProvider::class
+
 
 
     ],
@@ -225,6 +227,7 @@ return [
         // 'ExcelReport' => Jimmyjs\ReportGenerator\Facades\ExcelReportFacade::class,
         // 'CSVReport' => Jimmyjs\ReportGenerator\Facades\CSVReportFacade::class,
 
+        'Mpesa'=> \Safaricom\Mpesa\MpesaServiceProvider::class
     ],
 
 ];

@@ -35,7 +35,7 @@ class ShipmentEvents {
     {
 
         // dd($shipment['id']);
-        // dd($shipment);
+        dd($shipment);
         // new Call;
         $call = new Call;
         $call->user_id = Auth::id();

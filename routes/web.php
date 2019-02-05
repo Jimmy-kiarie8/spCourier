@@ -346,6 +346,7 @@ Route::group(['middleware' => ['auth']], function () {
 	// Route::post('test', 'FilterController@test')->name('test');
 
 	Route::any('schedulepct', 'CslogController@schedulepct')->name('schedulepct');
+	Route::any('allLogs', 'CslogController@allLogs')->name('allLogs');
 
 
 	Route::post('Filterlogs', 'CallController@Filterlogs')->name('Filterlogs');
