@@ -87,11 +87,11 @@ class ScanController extends Controller
                 $no = $phone->client_phone;
                 $no_A = explode(' ', $no);
                 $phone_no = $no_A[0];
-                $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your parcel (waybill number: ' . $phone->bar_code . ') has been dispatched. Expected time of arrival 10am-4pm '.$today.'. If you are not at the address given at the time of order i.e ('. $phone->client_address. '), please call or text 0799869844/0799870144, Our rider ' . $rider . ' phone number ' . $rider_no . ' will do the delivery'.'</br>');
+                $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your parcel (waybill number: ' . $phone->bar_code . ') has been dispatched. Expected time of arrival 10am-4pm '.$today.'. If you are not at the address given at the time of order i.e ('. $phone->client_address. '), please call or text 0799869844/0799870144, Our rider ' . $rider . ' phone number ' . $rider_no . ' will do the delivery');
             }
         }
 
-        return $shipment;
+        // return $shipment;
 
     }
 
