@@ -19,9 +19,8 @@
                 <a href="/courier" class="btn btn-primary">Go to the app</a>
                 </div>
             </div>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum commodi qui perferendis ea praesentium enim, vero, nobis illo nihil tenetur eaque dolorum eos officiis! Suscipit unde impedit sequi accusamus debitis?
         </div>
     </div>
 </div>
 @endsection
-
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis laborum corporis iure, eius porro totam veniam commodi ullam quo placeat consequatur blanditiis? Et incidunt amet exercitationem officia quo! Voluptatum, alias!

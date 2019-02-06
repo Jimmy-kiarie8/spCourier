@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Notification;
+use App\Sms;
 
 // use App\Observers\BaseObserver;
 
@@ -415,15 +416,16 @@ class ShipmentController extends Controller
             $statusUpdate->save();
 
         }
+        $sms = new Sms;
 
         if ($request->formobg['status'] == 'Not picking') {
-            $this->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
+            $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
         } elseif ($request->formobg['status'] == 'Not available') {
-            $this->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
+            $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
         } elseif ($request->formobg['status'] == 'Delivered') {
-            $this->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your shipment (waybill number: ' . $request->formobg['bar_code'] . ') has been delivered. Incase of queries call +254207608777, +254207608778, +254207608779    ');
+            $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your parcel (waybill number: ' . $request->formobg['bar_code'] . ') has been delivered. Incase of queries call +254207608777, +254207608778, +254207608779    ');
         } elseif ($request->formobg['status'] == 'Dispatched') {
-            $this->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your shipment (waybill number: ' . $request->formobg['bar_code'] . ') has been dispatched to ' . $City . '  Incase of queries call +254207608777, +254207608778, +254207608779  ');
+            $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your parcel (waybill number: ' . $request->formobg['bar_code'] . ') has been dispatched to ' . $City . '  Incase of queries call +254207608777, +254207608778, +254207608779  ');
         }
         return $shipment;
     }
@@ -600,27 +602,28 @@ class ShipmentController extends Controller
             $statusUpdate->shipment_id = $statuses->id;
             $statusUpdate->save();
         }
+        $sms = new Sms;
 
         if ($status == 'Scheduled') {
             foreach ($phones as $phone) {
                 $no = $phone->client_phone;
                 $no_A = explode(' ', $no);
                 $phone_no = $no_A[0];
-                $this->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ')  has been scheduled to be delivered on ' . $derivery_date . '  Incase of queries call +254207608777, +254207608778, +254207608779  ');
+                $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your parcel (waybill number: ' . $phone->bar_code . ')  has been scheduled to be delivered on ' . $derivery_date . '  Incase of queries call +254207608777, +254207608778, +254207608779  ');
             }
         } elseif ($status == 'Delivered') {
             foreach ($phones as $phone) {
                 $no = $phone->client_phone;
                 $no_A = explode(' ', $no);
                 $phone_no = $no_A[0];
-                $this->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ') has been delivered  Incase of queries call +254207608777, +254207608778, +254207608779    ');
+                $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your parcel (waybill number: ' . $phone->bar_code . ') has been delivered  Incase of queries call +254207608777, +254207608778, +254207608779    ');
             }
         } elseif ($status == 'Dispatched') {
             foreach ($phones as $phone) {
                 $no = $phone->client_phone;
                 $no_A = explode(' ', $no);
                 $phone_no = $no_A[0];
-                $this->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ') has been dispatched to the ' . $phone->client_city . '  Incase of queries call +254207608777, +254207608778, +254207608779    ');
+                $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your parcel (waybill number: ' . $phone->bar_code . ') has been dispatched to ' . $phone->client_city . '  Incase of queries call +254207608777, +254207608778, +254207608779    ');
             }
         }
         // $shipStatus->statuses()->saveMany($shipStatus);
