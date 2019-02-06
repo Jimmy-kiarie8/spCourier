@@ -103,9 +103,9 @@ class CslogController extends Controller
             if (!$user->hasRole('Admin') && Auth::id() == $user->country_id) {
                 $ship_count = ShipmentStatus::whereBetween('created_at', [$today, $tomorrow])->whereIn('shipment_id', $id)->where('user_id', $user->id)->groupBy('user_id')->count();
                 $user_count[] = array(
-                    'cou' => ShipmentStatus::whereBetween('created_at', [$today, $tomorrow])->where('user_id', $user->id)->whereIn('shipment_id', $id)->groupBy('user_id')->count() . $user->name,
+                    'cou' => ShipmentStatus::whereBetween('created_at', [$today, $tomorrow])->where('user_id', $user->id)->groupBy('user_id')->count() . $user->name,
                     'name' => $user->name,
-                    'id' => $key,
+                    // 'id' => $key,
                     // 'count' => (ShipmentStatus::whereIn('shipment_id', $id)->where('user_id', $user->id)->where('status', 'Scheduled')->groupBy('user_id')->count()),
                     'count' => (ShipmentStatus::whereIn('shipment_id', $id)->where('user_id', $user->id)->distinct('shipment_id')->count('shipment_id') / $all_statuses) * 100,
                 );

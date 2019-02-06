@@ -72,7 +72,7 @@
                         </v-alert>
                     </v-data-table>
 
-                    <v-layout wrap>
+                    <!-- <v-layout wrap>
 
                         <div class="col-lg-12 col-md-12 col-sm-12">
                             <v-tooltip right>
@@ -84,7 +84,6 @@
                             <div class="card card-chart">
                                 <div class="card-body">
                                     <div class="chart-area">
-                                        <!-- <my-branch :height="255"></my-branch> -->
                                     </div>
                                     <div class="progress-Ship">
                                         <div v-for="userC in AllSc" :key="userC.id">
@@ -95,7 +94,7 @@
                                 </div>
                             </div>
                         </div>
-                    </v-layout>
+                    </v-layout> -->
                 </div>
             </v-layout>
 
