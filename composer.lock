@@ -13,7 +13,7 @@
                 "type": "git",
                 "url": "https://github.com/agoalofalife/reports.git",
                 "reference": "666296940b5cbd46f7c40f0a64759ca2465dc03f"
-            },
+            }, 
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/agoalofalife/reports/zipball/666296940b5cbd46f7c40f0a64759ca2465dc03f",

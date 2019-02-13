@@ -198,7 +198,7 @@ class ScanController extends Controller
         $driver = $request->selectRider['id'];
         $start_date = $request->form['start_date'];
         $end_date = $request->form['end_date'];
-        return Shipment::where('driver', $driver)->whereBetween('assign_date', [$start_date, $end_date])->take(500)->latest()->get();
+        return Shipment::where('driver', $driver)->where('status', '!=', 'Returned')->whereBetween('assign_date', [$start_date, $end_date])->take(500)->latest()->get();
     }
 
     public function getDelScan(Request $request)

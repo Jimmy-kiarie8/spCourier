@@ -139,8 +139,20 @@
                                     </v-btn>
                                     <span>Print</span>
                                 </v-tooltip>
-                                <v-tooltip bottom v-if="user.can['single print'] && user.country_name != 'Tanzania'">
+                                <v-tooltip bottom v-if="user.can['single print'] && user.country_name === 'Kenya'">
                                     <v-btn icon class="mx-0" @click="showDetails(props.item)" slot="activator">
+                                        <v-icon color="info darken-2" small>visibility</v-icon>
+                                    </v-btn>
+                                    <span>Print</span>
+                                </v-tooltip>
+                                <v-tooltip bottom v-if="user.can['single print'] && user.country_name === 'Uganda'">
+                                    <v-btn icon class="mx-0" @click="UgshowDetails(props.item)" slot="activator">
+                                        <v-icon color="info darken-2" small>visibility</v-icon>
+                                    </v-btn>
+                                    <span>Print</span>
+                                </v-tooltip>
+                                <v-tooltip bottom v-if="user.can['single print'] && user.country_name === 'Rwanda'">
+                                    <v-btn icon class="mx-0" @click="RwshowDetails(props.item)" slot="activator">
                                         <v-icon color="info darken-2" small>visibility</v-icon>
                                     </v-btn>
                                     <span>Print</span>
@@ -176,6 +188,8 @@
     <EditShipment :EditShipment="dialog1" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers" :form="editedItem"></EditShipment>
     <ShowShipment :element="element" @closeRequest="close" :customers="Allcustomers" :showItems="showItem"></ShowShipment>
     <TzShipment></TzShipment>
+    <RwPrintSpdf></RwPrintSpdf>
+    <UgPrintSpdf></UgPrintSpdf>
     <UpdateShipment :UpdateShipment="updateModal" @closeRequest="close" :markers="markers" :updateitedItem="updateitedItem" @alertRequest="showalert"></UpdateShipment>
     <UpdateShipmentStatus :UpdateShipmentStatus="UpdateShipmentModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></UpdateShipmentStatus>
     <AssignDriver :AllDrivers="AllDrivers" :OpenAssignDriver="AssignDriverModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></AssignDriver>
@@ -198,6 +212,8 @@ let AddShipment = require("./AddShipment");
 let EditShipment = require("./EditShipment");
 let ShowShipment = require("./print/PrintSpdf");
 let TzShipment = require("./print/TzSprint");
+let RwPrintSpdf = require("./print/RwPrintSpdf");
+let UgPrintSpdf = require("./print/UgPrintSpdf");
 let UpdateShipment = require("./UpdateShipment");
 let UpdateShipmentStatus = require("./UpdateShipmentStatus");
 let AssignDriver = require("./AssignDriver");
@@ -223,7 +239,9 @@ export default {
         TrackShipment,
         myCsvFile,
         mySCharges,
-        TzShipment
+        TzShipment,
+        UgPrintSpdf,
+        RwPrintSpdf
         // myPrintSPdf,
         // myPrintPod
     },
@@ -444,6 +462,12 @@ export default {
         },
         TzshowDetails(item) {
             eventBus.$emit("TzprintEvent", item);
+        },
+        UgshowDetails(item) {
+            eventBus.$emit("UgprintEvent", item);
+        },
+        RwshowDetails(item) {
+            eventBus.$emit("RwprintEvent", item);
         },
         ShipmentTrack(item) {
             this.updateitedItem = Object.assign({}, item);
