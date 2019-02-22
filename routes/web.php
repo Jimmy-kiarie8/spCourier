@@ -121,6 +121,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('getRoles', 'RoleController@getRoles')->name('getRoles');
 	Route::get('getPermissions', 'RoleController@getPermissions')->name('getPermissions');
 	Route::post('getRolesPerm/{id}', 'RoleController@getRolesPerm')->name('getRolesPerm');
+	Route::get('getRoles', 'RoleController@getRoles')->name('getRoles');
 
 
 	Route::get('getBranch', 'BranchController@getBranch')->name('getBranch');
@@ -188,7 +189,6 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('/sendMail', 'InvoiceController@sendMail')->name('sendMail');
 
 	// Roles
-	Route::get('getRoles', 'RoleController@getRoles')->name('getRoles');
 
 	
 	// file upload

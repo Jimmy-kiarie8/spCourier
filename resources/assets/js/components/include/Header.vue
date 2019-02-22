@@ -316,125 +316,123 @@
 <script>
 import Notifications from "../notification/Notification";
 let AddShipment = require("../shipments/AddShipment");
-import {
-    vueTopprogress
-} from "vue-top-progress";
+import { vueTopprogress } from "vue-top-progress";
 // import chattyNoty from '../notification/chattyNoty'
 export default {
-    components: {
-        Notifications,
-        AddShipment,
-        vueTopprogress
-        //  chattyNoty
+  components: {
+    Notifications,
+    AddShipment,
+    vueTopprogress
+    //  chattyNoty
+  },
+  props: ["user"],
+  data() {
+    return {
+      role: "",
+      color: "#132f51",
+      dialog: false,
+      drawer: true,
+      drawerRight: false,
+      right: null,
+      mode: "",
+      notifications: [],
+      company: {},
+      AllBranches: [],
+      Allcustomers: [],
+      AllDrivers: [],
+      snackbar: false,
+      timeout: 5000,
+      message: "Success"
+      // cruds: [
+      //     ['Create', 'add'],
+      //     ['Read', 'insert_drive_file'],
+      //     ['Update', 'update'],
+      //     ['Delete', 'delete']
+      // ]
+    };
+  },
+  methods: {
+    openShipment() {
+      this.dialog = true;
+      this.getBranch();
+      this.getCustomer();
+      this.getDrivers();
     },
-    props: ["user"],
-    data() {
-        return {
-            role: "",
-            color: "#132f51",
-            dialog: false,
-            drawer: true,
-            drawerRight: false,
-            right: null,
-            mode: "",
-            notifications: [],
-            company: {},
-            AllBranches: [],
-            Allcustomers: [],
-            AllDrivers: [],
-            snackbar: false,
-            timeout: 5000,
-            message: "Success"
-            // cruds: [
-            //     ['Create', 'add'],
-            //     ['Read', 'insert_drive_file'],
-            //     ['Update', 'update'],
-            //     ['Delete', 'delete']
-            // ]
-        };
-    },
-    methods: {
-        openShipment() {
-            this.dialog = true;
-            this.getBranch();
-            this.getCustomer();
-            this.getDrivers();
-        },
 
-        getCustomer() {
-            axios
-                .get("/getCustomer")
-                .then(response => {
-                    this.Allcustomers = response.data;
-                })
-                .catch(error => {
-                    this.errors = error.response.data.errors;
-                });
-        },
-        getDrivers() {
-            axios
-                .get("/getDrivers")
-                .then(response => {
-                    this.AllDrivers = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.errors = error.response.data.errors;
-                });
-        },
-        getBranch() {
-            axios
-                .get("/getBranchEger")
-                .then(response => {
-                    this.AllBranches = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.errors = error.response.data.errors;
-                });
-        },
-        close() {
-            this.dialog = false;
-        },
-
-        showalert() {
-            this.message = "success";
-            // this.color = "indigo";
-            this.snackbar = true;
-        }
-    },
-    created() {
-        eventBus.$on("progressEvent", data => {
-            this.$refs.topProgress.start();
-        });
-        eventBus.$on("StoprogEvent", data => {
-            this.$refs.topProgress.done();
+    getCustomer() {
+      axios
+        .get("/getCustomer")
+        .then(response => {
+          this.Allcustomers = response.data;
+        })
+        .catch(error => {
+          this.errors = error.response.data.errors;
         });
     },
-    mounted() {
-        // axios.post('/getLogo')
-        //     .then((response) => {
-        //         this.company = response.data
-        //     })
-        //     .catch((error) => {
-        //         this.errors = error.response.data.errors
-        //     })
+    getDrivers() {
+      axios
+        .get("/getDrivers")
+        .then(response => {
+          this.AllDrivers = response.data;
+        })
+        .catch(error => {
+          console.log(error);
+          this.errors = error.response.data.errors;
+        });
+    },
+    getBranch() {
+      axios
+        .get("/getBranchEger")
+        .then(response => {
+          this.AllBranches = response.data;
+        })
+        .catch(error => {
+          console.log(error);
+          this.errors = error.response.data.errors;
+        });
+    },
+    close() {
+      this.dialog = false;
+    },
+
+    showalert() {
+      this.message = "success";
+      // this.color = "indigo";
+      this.snackbar = true;
     }
+  },
+  created() {
+    eventBus.$on("progressEvent", data => {
+      this.$refs.topProgress.start();
+    });
+    eventBus.$on("StoprogEvent", data => {
+      this.$refs.topProgress.done();
+    });
+  },
+  mounted() {
+    // axios.post('/getLogo')
+    //     .then((response) => {
+    //         this.company = response.data
+    //     })
+    //     .catch((error) => {
+    //         this.errors = error.response.data.errors
+    //     })
+  }
 };
 </script>
 
 <style scoped>
 .v-expansion-panel__container:hover {
-    border-radius: 10px !important;
-    width: 90% !important;
-    margin-left: 15px !important;
-    background: #e3edfe !important;
-    color: #1a73e8 !important;
+  border-radius: 10px !important;
+  width: 90% !important;
+  margin-left: 15px !important;
+  background: #e3edfe !important;
+  color: #1a73e8 !important;
 }
 
 .theme--light {
-    background-color: #212120 !important;
-    /* background: url('storage/logo1.jpg') !important; */
-    color: #fff !important;
+  background-color: #212120 !important;
+  /* background: url('storage/logo1.jpg') !important; */
+  color: #fff !important;
 }
 </style>
