@@ -43,15 +43,30 @@
                             <td class="text-xs-right">{{ props.item.branch }}</td>
                             <td class="text-xs-right">{{ props.item.status }}</td>
                             <td class="justify-center layout px-0">
-                                <v-btn icon class="mx-0" @click="openEdit(props.item)">
-                                    <v-icon small color="blue darken-2">edit</v-icon>
-                                </v-btn>
-                                <v-btn icon class="mx-0" @click="openShow(props.item)">
-                                    <v-icon small color="blue darken-2">visibility</v-icon>
-                                </v-btn>
-                                <v-btn icon class="mx-0" @click="deleteItem(props.item)">
-                                    <v-icon small color="pink darken-2">delete</v-icon>
-                                </v-btn>
+                               <v-tooltip bottom v-if="user.can['edit users']">
+                                    <v-btn icon class="mx-0" @click="openEdit(props.item)" slot="activator">
+                                        <v-icon small color="blue darken-2">edit</v-icon>
+                                    </v-btn>
+                                    <span>Edit</span>
+                                </v-tooltip>
+                                <v-tooltip bottom v-if="user.can['view users']">
+                                    <v-btn icon class="mx-0" @click="openShow(props.item)" slot="activator">
+                                        <v-icon small color="blue darken-2">visibility</v-icon>
+                                    </v-btn>
+                                    <span>View user</span>
+                                </v-tooltip>
+                                <v-tooltip bottom v-if="user.can['edit users']">
+                                    <v-btn icon class="mx-0" @click="openPerm(props.item)" slot="activator">
+                                        <v-icon small color="orange darken-2">dialpad</v-icon>
+                                    </v-btn>
+                                    <span>Edit Permissions</span>
+                                </v-tooltip>
+                                <v-tooltip bottom v-if="user.can['edit users']">
+                                    <v-btn icon class="mx-0" @click="deleteItem(props.item)" slot="activator">
+                                        <v-icon small color="pink darken-2">delete</v-icon>
+                                    </v-btn>
+                                    <span>Delete</span>
+                                </v-tooltip>
                             </td>
                         </template>
                         <v-alert slot="no-results" :value="true" color="error" icon="warning">
@@ -73,51 +88,54 @@
     <AddUser @closeRequest="close" :openAddRequest="dispAdd" @alertRequest="showAlert" :AllBranches="AllBranches" :AllRoles="AllRoles" :countryList="Allcountries"></AddUser>
     <!-- <ShowUser @closeRequest="close" :openShowRequest="dispShow"></ShowUser> -->
     <EditUser @closeRequest="close" :openEditRequest="dispEdit" @alertRequest="showAlert" :form="editedItem" :AllBranches="AllBranches" :AllRoles="AllRoles" :countryList="Allcountries"></EditUser>
+    <PermUser @closeRequest="close" :openPermRequest="permEdit" :form="editedItem"></PermUser>
     <UserProfile @closeRequest="close" :openShowRequest="dispShow" :user="editedItem" :AllShips="AllShips"></UserProfile>
 </div>
 </template>
 
 <script>
-let AddUser = require('./AddUser.vue')
+let AddUser = require("./AddUser.vue");
+let PermUser = require('./Permission.vue')
 // let ShowUser = require('./ShowUser.vue')
-let EditUser = require('./EditUser.vue')
-let UserProfile = require('./UserProfile.vue')
+let EditUser = require("./EditUser.vue");
+let UserProfile = require("./UserProfile.vue");
 export default {
-    props: ['user', 'role'],
+    props: ["user", "role"],
     components: {
         AddUser,
-        // ShowUser,
+        PermUser,
         EditUser,
         UserProfile
     },
     data() {
         return {
             AllShips: [],
+            permEdit: false,
             Allcountries: [],
             select: {
-                state: 'All',
-                abbr: 'all'
+                state: "All",
+                abbr: "all"
             },
             items: [{
-                    state: 'All',
-                    abbr: 'all'
+                    state: "All",
+                    abbr: "all"
                 },
                 {
-                    state: 'Admin',
-                    abbr: 'Admin'
+                    state: "Admin",
+                    abbr: "Admin"
                 },
                 {
-                    state: 'company Admin',
-                    abbr: 'companyAdmin'
+                    state: "company Admin",
+                    abbr: "companyAdmin"
                 },
                 {
-                    state: 'Customers',
-                    abbr: 'Customer'
+                    state: "Customers",
+                    abbr: "Customer"
                 },
                 {
-                    state: 'Drivers',
-                    abbr: 'Driver'
-                },
+                    state: "Drivers",
+                    abbr: "Driver"
+                }
             ],
             headers: [{
                     text: "Name",
@@ -148,21 +166,21 @@ export default {
                     value: "status"
                 },
                 {
-                    text: 'Actions',
-                    value: 'name',
+                    text: "Actions",
+                    value: "name",
                     sortable: false
                 }
             ],
             json_fields: {
-                'Name': 'name',
-                'Email': 'email',
-                'Phone': 'phone',
-                'City': 'city',
-                'Address': 'address',
-                'Country': 'country',
+                Name: "name",
+                Email: "email",
+                Phone: "phone",
+                City: "city",
+                Address: "address",
+                Country: "country"
             },
             AllBranches: {},
-            search: '',
+            search: "",
             AllRoles: [],
             loader: false,
             a1: null,
@@ -172,48 +190,50 @@ export default {
             snackbar: false,
             loading: false,
             timeout: 5000,
-            color: 'black',
-            message: 'Success',
-            y: 'bottom',
-            x: 'left',
+            color: "black",
+            message: "Success",
+            y: "bottom",
+            x: "left",
             Allusers: [],
-            temp: '',
+            temp: "",
             editedItem: {},
             select: {
-                state: 'All',
-                abbr: 'all'
+                state: "All",
+                abbr: "all"
             },
             items: [{
-                    state: 'All',
-                    abbr: 'all'
+                    state: "All",
+                    abbr: "all"
                 },
                 {
-                    state: 'Admin',
-                    abbr: '1'
+                    state: "Admin",
+                    abbr: "1"
                 },
                 {
-                    state: 'Branch Admin',
-                    abbr: '2'
+                    state: "Branch Admin",
+                    abbr: "2"
                 },
                 {
-                    state: 'Customers',
-                    abbr: '3'
+                    state: "Customers",
+                    abbr: "3"
                 },
                 {
-                    state: 'Drivers',
-                    abbr: '4'
-                },
-            ],
-        }
+                    state: "Drivers",
+                    abbr: "4"
+                }
+            ]
+        };
     },
     watch: {
         search() {
             if (this.search.length > 0) {
-                this.temp = this.Allusers.filter((item) => {
-                    return item.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+                this.temp = this.Allusers.filter(item => {
+                    return (
+                        item.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+                    );
                 });
             } else {
-                this.temp = this.Allusers
+                this.temp = this.Allusers;
             }
         }
     },
@@ -224,11 +244,24 @@ export default {
         //     this.dispShow = true
         // },
         openAdd() {
-            this.dispAdd = true
-            this.getCountry()
+            this.dispAdd = true;
+            this.getCountry();
         },
-        openEdit(item) { 
-            this.getCountry()
+        openEdit(item) {
+            this.getCountry();
+            this.editedIndex = this.Allusers.indexOf(item);
+            this.editedItem = Object.assign({}, item);
+            axios
+                .post(`/getUserPerm/${item.id}`)
+                .then(response => {
+                    eventBus.$emit("permEvent", response.data);
+                })
+                .catch(error => {
+                    this.errors = error.response.data.errors;
+                });
+            this.dispEdit = true;
+        },
+        openPerm(item) {
             this.editedIndex = this.Allusers.indexOf(item)
             this.editedItem = Object.assign({}, item)
             axios.post(`/getUserPerm/${item.id}`)
@@ -238,12 +271,12 @@ export default {
                 .catch((error) => {
                     this.errors = error.response.data.errors
                 })
-            this.dispEdit = true
+            this.permEdit = true
         },
         openShow(item) {
-            this.editedIndex = this.Allusers.indexOf(item)
-            this.editedItem = Object.assign({}, item)
-            eventBus.$emit('getShipEvent', this.editedItem)
+            this.editedIndex = this.Allusers.indexOf(item);
+            this.editedItem = Object.assign({}, item);
+            eventBus.$emit("getShipEvent", this.editedItem);
             // axios.post(`/getUserPro/${this.editedItem.id}`)
             //     .then((response) => {
             //         this.loader = false
@@ -254,109 +287,115 @@ export default {
             //         this.errors = error.response.data.errors
             //     })
 
-            this.dispShow = true
+            this.dispShow = true;
         },
         showAlert() {
-            this.message = 'Successifully Added';
+            this.message = "Successifully Added";
             this.snackbar = true;
-            this.color = 'black';
+            this.color = "black";
         },
         sort() {
-            this.loading = true
-            axios.post('/getSorted', this.select)
-                .then((response) => {
-                    this.loading = false
-                    this.Allusers = response.data
+            this.loading = true;
+            axios
+                .post("/getSorted", this.select)
+                .then(response => {
+                    this.loading = false;
+                    this.Allusers = response.data;
                 })
-                .catch((error) => {
-                    this.loading = false
-                    this.errors = error.response.data.errors
-                })
+                .catch(error => {
+                    this.loading = false;
+                    this.errors = error.response.data.errors;
+                });
         },
         deleteItem(item) {
-            if (confirm('Are you sure you want to delete this item?')) {
-                this.loading = true
-                axios.delete(`/users/${item.id}`)
-                    .then((response) => {
-                        this.loading = false
-                        this.message = 'deleted successifully'
-                        this.color = 'red'
-                        this.snackbar = true
-                        this.Allusers.splice(index, 1)
+            if (confirm("Are you sure you want to delete this item?")) {
+                this.loading = true;
+                axios
+                    .delete(`/users/${item.id}`)
+                    .then(response => {
+                        this.loading = false;
+                        this.message = "deleted successifully";
+                        this.color = "red";
+                        this.snackbar = true;
+                        this.Allusers.splice(index, 1);
                     })
-                    .catch((error) => {
-                        this.loading = false
-                        this.errors = error.response.data.errors
-                        this.message = 'something went wrong'
-                        this.color = 'red'
-                        this.snackbar = true
-                    })
+                    .catch(error => {
+                        this.loading = false;
+                        this.errors = error.response.data.errors;
+                        this.message = "something went wrong";
+                        this.color = "red";
+                        this.snackbar = true;
+                    });
             }
         },
         close() {
-            this.dispAdd = this.dispShow = this.dispEdit = this.dispShow = false
+            this.dispAdd = this.dispShow = this.permEdit = this.dispEdit = this.dispShow = false;
         },
         getUsers() {
-            this.loading = true
-            axios.get('/getUsers')
-                .then((response) => {
-                    this.loading = false
-                    this.Allusers = response.data
+            this.loading = true;
+            axios
+                .get("/getUsers")
+                .then(response => {
+                    this.loading = false;
+                    this.Allusers = response.data;
                 })
-                .catch((error) => {
-                    this.loading = false
-                    this.errors = error.response.data.errors
-                })
+                .catch(error => {
+                    this.loading = false;
+                    this.errors = error.response.data.errors;
+                });
         },
         getCountry() {
-            this.loading = true
-            axios.get('/getCountry')
-                .then((response) => {
-                    this.loading = false
-                    this.Allcountries = response.data
+            this.loading = true;
+            axios
+                .get("/getCountry")
+                .then(response => {
+                    this.loading = false;
+                    this.Allcountries = response.data;
                 })
-                .catch((error) => {
-                    this.loading = false
-                    this.errors = error.response.data.errors
-                })
-        },
+                .catch(error => {
+                    this.loading = false;
+                    this.errors = error.response.data.errors;
+                });
+        }
     },
     mounted() {
-        this.loader = true
-        this.getUsers()
-        axios.get('/getBranch')
-            .then((response) => {
-                this.loader = false
-                this.AllBranches = response.data
+        this.loader = true;
+        this.getUsers();
+        axios
+            .get("/getBranch")
+            .then(response => {
+                this.loader = false;
+                this.AllBranches = response.data;
             })
-            .catch((error) => {
-                this.loader = false
-                this.errors = error.response.data.errors
-            })
+            .catch(error => {
+                this.loader = false;
+                this.errors = error.response.data.errors;
+            });
 
-        axios.get('/getRoles')
-            .then((response) => {
-                this.AllRoles = response.data
+        axios
+            .get("/getRoles")
+            .then(response => {
+                this.AllRoles = response.data;
             })
-            .catch((error) => {
-                this.errors = error.response.data.errors
-            })
+            .catch(error => {
+                this.errors = error.response.data.errors;
+            });
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            if (vm.user.can['view users']) {
+            if (vm.user.can["view users"]) {
                 next();
             } else {
-                next('/unauthorized');
+                next("/unauthorized");
             }
-        })
+        });
     }
-}
+};
 </script>
 
 <style scoped>
 .content--wrap {
-    margin-top: -100px
+    margin-top: -100px;
 }
 
 #profile {

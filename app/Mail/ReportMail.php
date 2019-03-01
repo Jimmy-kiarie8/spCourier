@@ -2,18 +2,16 @@
 
 namespace App\Mail;
 
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Shipment;
-use App\User;
 
-class ReportMail extends Mailable 
+class ReportMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user, $email, $pdf; 
+    public $user, $email, $pdf;
 
     /**
      * Create a new message instance.
@@ -27,7 +25,6 @@ class ReportMail extends Mailable
         $this->pdf = $pdf;
     }
 
-
     /**
      * Build the message.
      *
@@ -38,16 +35,15 @@ class ReportMail extends Mailable
         $mail = $this->email;
 
         return $this->from('courier@courier.com')
-                    ->markdown('mail/ReportCommand')
-                    ->to('jimlaravel@gmail.com')
-                    ->attachData($this->pdf, 'name.pdf', [
-                        'mime' => 'application/pdf',
-                    ])
-                    // ->attach('http://courier.dev/storage/book1.xlsx', [
-                    //     'as' => 'name.xlsx',
-                    //     'mime' => 'application/xlsx',
-                    // ])
-                    ->subject( 'Schedule derivery' );
+            ->markdown('mail/ReportCommand')
+            ->to('jimlaravel@gmail.com')
+            ->attachData($this->pdf, 'name.pdf', [
+                'mime' => 'application/pdf',
+            ])
+        // ->attach('http://courier.dev/storage/book1.xlsx', [
+        //     'as' => 'name.xlsx',
+        //     'mime' => 'application/xlsx',
+        // ])
+            ->subject('Schedule derivery');
     }
 }
-

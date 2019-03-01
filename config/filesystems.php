@@ -11,7 +11,7 @@ return [
     | by the framework. The "local" disk, as well as a variety of cloud
     | based disks are available to your application. Just store away!
     |
-    */
+     */
 
     'default' => env('FILESYSTEM_DRIVER', 'local'),
 
@@ -24,7 +24,7 @@ return [
     | reason, you may specify a default "cloud" driver here. This driver
     | will be bound as the Cloud disk implementation in the container.
     |
-    */
+     */
 
     'cloud' => env('FILESYSTEM_CLOUD', 's3'),
 
@@ -39,7 +39,7 @@ return [
     |
     | Supported Drivers: "local", "ftp", "sftp", "s3", "rackspace"
     |
-    */
+     */
 
     'disks' => [
 
@@ -51,16 +51,15 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
         ],
-        
 
         'uploads' => [
             'driver' => 'local',
-            'root' => 'speedball', 
+            'root' => 'estorage',
         ],
-
+        
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -71,22 +70,19 @@ return [
         ],
     ],
 
-        // 'gcs' => [
-        //     'driver' => 'gcs',
-        //     'project_id' => env('GOOGLE_CLOUD_PROJECT_ID', 'speedball-215310'),
-        //     'key_file' => env('GOOGLE_APPLICATION_CREDENTIALS', './my-buckets.json'), // optional: /path/to/service-account.json
-        //     'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET', 'my-buckets'),
-        //     'path_prefix' => env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', null), // optional: /default/path/to/apply/in/bucket
-        //     'storage_api_uri' => env('GOOGLE_CLOUD_STORAGE_API_URI', 'https://storage.googleapis.com/my-buckets/'), // see: Public URLs below
+    // 'gcs' => [
+    //     'driver' => 'gcs',
+    //     'project_id' => env('GOOGLE_CLOUD_PROJECT_ID', 'speedball-215310'),
+    //     'key_file' => env('GOOGLE_APPLICATION_CREDENTIALS', './my-buckets.json'), // optional: /path/to/service-account.json
+    //     'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET', 'my-buckets'),
+    //     'path_prefix' => env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', null), // optional: /default/path/to/apply/in/bucket
+    //     'storage_api_uri' => env('GOOGLE_CLOUD_STORAGE_API_URI', 'https://storage.googleapis.com/my-buckets/'), // see: Public URLs below
 
-    //     'google' => [ 
-    //         'driver' => 's3', 
-    //         'key' => 'xxx', 
-    //         'secret' => 'xxx', 
-    //         'bucket' => 'qrnotesfiles', 
+    //     'google' => [
+    //         'driver' => 's3',
+    //         'key' => 'xxx',
+    //         'secret' => 'xxx',
+    //         'bucket' => 'qrnotesfiles',
     //         'base_url'=>'https://storage.googleapis.com' ]
 
-
 ];
-
-

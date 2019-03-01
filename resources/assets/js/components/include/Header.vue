@@ -98,7 +98,7 @@
                             </div>
                         </router-link>
 
-                        <!-- <router-link to="/print" class="v-list__tile v-list__tile--link" v-if="user.can['prin']">
+                        <!-- <router-link to="/print" class="v-list__tile v-list__tile--link" v-if="user.can['print waybill']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">print</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
@@ -106,12 +106,12 @@
                                 </div>
                             </div>
               </router-link>-->
-                        <v-list-group prepend-icon="book" v-if="user.can['outscan', 'inscan']">
+                        <v-list-group prepend-icon="book" v-if="user.can['print waybill']">
                             <v-list-tile slot="activator">
                                 <v-list-tile-title>Print</v-list-tile-title>
                             </v-list-tile>
 
-                            <router-link to="/print" class="v-list__tile v-list__tile--link" v-if="user.can['prin']">
+                            <router-link to="/print" class="v-list__tile v-list__tile--link" v-if="user.can['print waybill']">
                                 <div class="v-list__tile__action">
                                     <i aria-hidden="true" class="icon material-icons">print</i>
                                 </div>
@@ -119,7 +119,7 @@
                                     <div class="v-list__tile__title">Print Waybills</div>
                                 </div>
                             </router-link>
-                            <router-link to="/sticker" class="v-list__tile v-list__tile--link" v-if="user.can['prin']">
+                            <router-link to="/sticker" class="v-list__tile v-list__tile--link">
                                 <div class="v-list__tile__action">
                                     <i aria-hidden="true" class="icon material-icons">print</i>
                                 </div>
@@ -299,9 +299,11 @@
                 <v-divider vertical></v-divider>
                 <!-- <chattyNoty :user="user"></chattyNoty> -->
                 <!-- <v-icon @click.stop="right = !right" style="cursor: pointer">apps</v-icon> -->
-                <form action="/logout" method="post">
+                <!-- <form action="/logout" method="post">
                     <v-btn flat color="white" type="submit">Logout</v-btn>
-                </form>
+                </form> -->
+            <Logout :user="user"></Logout>
+
         </v-toolbar>
     </v-app>
 
@@ -317,12 +319,14 @@
 import Notifications from "../notification/Notification";
 let AddShipment = require("../shipments/AddShipment");
 import { vueTopprogress } from "vue-top-progress";
+import Logout from "./Logout";
 // import chattyNoty from '../notification/chattyNoty'
 export default {
   components: {
     Notifications,
     AddShipment,
-    vueTopprogress
+    vueTopprogress,
+    Logout 
     //  chattyNoty
   },
   props: ["user"],

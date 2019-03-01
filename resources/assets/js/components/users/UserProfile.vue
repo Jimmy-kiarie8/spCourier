@@ -10,16 +10,16 @@
                 </v-btn>
             </v-card-title>
             <v-card-text>
-                <avatar :username="user.name" style="font-size: 40px;margin: auto;padding: 50px;"></avatar>
-                <!-- <img :src="user.profile" :alt="user.name" style="width: 150px; height: 150px; border-radius: 50%; text-align:center; margin-top 70px;margin-left-100px;margin-left: 45%;"> -->
+                <!-- <avatar :username="user.name" style="font-size: 40px;margin: auto;padding: 50px;"></avatar> -->
+                <img :src="user.profile" :alt="user.name" style="width: 150px; height: 150px; border-radius: 50%; text-align:center; margin-top 70px;margin-left-100px;margin-left: 45%;">
                 <ul class="list-group">
                     <li class="list-group-item active"><b>Client Details</b></li>
-                    <li class="list-group-item"><label for="">Client Name:</label><span style="margin-right: 100px; float: right;">{{ user.name }}</span></li>
-                    <li class="list-group-item"><label for="">Client Role:</label><span style="margin-right: 100px; float: right;" v-for="role in user.roles" :key="role.id">{{ role.name }}</span></li>
-                    <li class="list-group-item"><label for="">Client Phone:</label><span style="margin-right: 100px; float: right;">{{ user.phone }}</span></li>
-                    <li class="list-group-item"><label for="">Client Email:</label><span style="margin-right: 100px; float: right;">{{ user.email }}</span></li>
-                    <li class="list-group-item"><label for="">Client City:</label><span style="margin-right: 100px; float: right;">{{ user.city }}</span></li>
-                    <li class="list-group-item"><label for="">Client Address:</label><span style="margin-right: 100px; float: right;">{{ user.address }}</span></li>
+                    <li class="list-group-item"><label for="">Name:</label><span style="margin-right: 100px; float: right;">{{ user.name }}</span></li>
+                    <li class="list-group-item"><label for="">Role:</label><span style="margin-right: 100px; float: right;" v-for="role in user.roles" :key="role.id">{{ role.name }}</span></li>
+                    <li class="list-group-item"><label for="">Phone:</label><span style="margin-right: 100px; float: right;">{{ user.phone }}</span></li>
+                    <li class="list-group-item"><label for="">Email:</label><span style="margin-right: 100px; float: right;">{{ user.email }}</span></li>
+                    <li class="list-group-item"><label for="">City:</label><span style="margin-right: 100px; float: right;">{{ user.city }}</span></li>
+                    <li class="list-group-item"><label for="">Address:</label><span style="margin-right: 100px; float: right;">{{ user.address }}</span></li>
                 </ul>
                 <v-container grid-list-md>
                     <div id="scrolling-techniques" class="scroll-y" style="max-height: 600px;">

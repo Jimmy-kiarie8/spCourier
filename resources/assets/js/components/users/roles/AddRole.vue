@@ -1,6 +1,6 @@
 <template>
 <v-layout row justify-center>
-    <v-dialog v-model="openAddRequest" persistent max-width="600px">
+    <v-dialog v-model="openAddRequest" persistent max-width="700px">
         <v-card>
             <v-card-title fixed>
                 <span class="headline">Add Role</span>
@@ -24,7 +24,7 @@
                                     <!-- <v-checkbox v-model="selectAll" label="Unselect All" value="all" @change="unselectRoles" v-else></v-checkbox> -->
                                 </v-layout>
                                 <v-layout wrap>
-                                    <v-flex v-for="perm in permissions" :key="perm.id" xs6 sm6>
+                                    <v-flex v-for="perm in sortPerm" :key="perm.id" xs6 sm3>
                                         <v-checkbox v-model="selected" :label="perm.name" :value="perm.name"></v-checkbox>
                                     </v-flex>
                                 </v-layout>
@@ -46,12 +46,12 @@
 
 <script>
 export default {
-    props: ['openAddRequest', 'AllBranches'],
+    props: ["openAddRequest", "AllBranches"],
     data() {
         const defaultForm = Object.freeze({
-            name: '',
-            description: '',
-        })
+            name: "",
+            description: ""
+        });
         return {
             errors: [],
             selectAll: [],
@@ -62,68 +62,70 @@ export default {
             permissions: [],
             form: Object.assign({}, defaultForm),
             rules: {
-                name: [val => (val || '').length > 0 || 'This field is required']
-            },
-        }
+                name: [val => (val || "").length > 0 || "This field is required"]
+            }
+        };
     },
     methods: {
         save() {
-            this.loading = true
-            axios.post('/roles', {
-                form: this.$data.form,
-                selected: this.$data.selected
-            }).
-            then((response) => {
-                    this.loading = false
+            this.loading = true;
+            axios
+                .post("/roles", {
+                    form: this.$data.form,
+                    selected: this.$data.selected
+                })
+                .then(response => {
+                    this.loading = false;
                     console.log(response);
-                    this.$emit('alertRequest');
-                    this.$parent.AllRoles.push(response.data)
+                    this.$emit("alertRequest");
+                    this.$parent.AllRoles.push(response.data);
                     this.resetForm();
-                    this.$emit('closeRequest');
-
+                    this.$emit("closeRequest");
                 })
-                .catch((error) => {
-                    this.loading = false
-                    this.errors = error.response.data.errors
-                })
+                .catch(error => {
+                    this.loading = false;
+                    this.errors = error.response.data.errors;
+                });
         },
         resetForm() {
-            this.form = Object.assign({}, this.defaultForm)
-            this.$refs.form.reset()
+            this.form = Object.assign({}, this.defaultForm);
+            this.$refs.form.reset();
         },
         close() {
-            this.$emit('closeRequest')
+            this.$emit("closeRequest");
         },
         selectRoles() {
-            this.selected = []
+            this.selected = [];
             // console.log(sel)
             this.selectAll.forEach(sel => {
                 this.permissions.forEach(perm => {
-                    this.selected.push(perm.name)
+                    this.selected.push(perm.name);
                 });
             });
             // console.log(this.selectAll)
-        },
+        }
         // unselectRoles() {
         //     this.selected = []
         // }
     },
     computed: {
         formIsValid() {
-            return (
-                this.form.name
-            )
+            return this.form.name;
         },
 
+        sortPerm() {
+            return _.orderBy(this.permissions, 'name', 'asc')
+        }
     },
     mounted() {
-        axios.get('/getPermissions')
-            .then((response) => {
-                this.permissions = response.data
+        axios
+            .get("/getPermissions")
+            .then(response => {
+                this.permissions = response.data;
             })
-            .catch((errors) => {
-                this.errors = error.response.data.errors
-            })
+            .catch(errors => {
+                this.errors = error.response.data.errors;
+            });
     }
-}
+};
 </script>

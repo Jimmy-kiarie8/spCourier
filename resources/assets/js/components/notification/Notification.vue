@@ -1,6 +1,6 @@
 <template>
 <div class="text-xs-center">
-    <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
+    <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-y transition="slide-y-transition">
         <v-btn icon slot="activator" dark>
             <v-badge color="purple" left overlap>
                 <!-- <v-icon slot="badge" dark small>done</v-icon> -->

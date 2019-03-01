@@ -88,192 +88,194 @@
 </template>
 
 <script>
-let AddSubscribers = require('./AddSubscribers')
-let Unsubscribed = require('./Unsubscribed')
+let AddSubscribers = require("./AddSubscribers");
+let Unsubscribed = require("./Unsubscribed");
 export default {
-    props: ['user', 'role'],
-    components: {
-        AddSubscribers,
-        Unsubscribed
-    },
+  props: ["user", "role"],
+  components: {
+    AddSubscribers,
+    Unsubscribed
+  },
 
-    data() {
-        const defaultForm = Object.freeze({
-            title: '',
-            content: '',
-        })
-        return {
-            defaultForm,
-            errors: {},
-            form: Object.assign({}, defaultForm),
-            OpenAdd: false,
-            OpenUns: false,
-            maildialog: false,
-            Mailloader: false,
-            search: '',
-            snackbar: false,
-            timeout: 5000,
-            message: 'Success',
-            color: 'black',
-            y: 'bottom',
-            x: 'left',
-            headers: [{
-                    text: 'User Name',
-                    align: 'left',
-                    value: 'name'
-                },
-                {
-                    text: 'Email',
-                    value: 'email'
-                },
-                {
-                    text: 'Subscribed on',
-                    value: 'created_at'
-                },
-                {
-                    text: 'Actions',
-                    value: 'name',
-                    sortable: false
-                }
-            ],
-            AllSubscribers: [],
-            AllUnSubscribed: [],
-            editedIndex: -1,
-            loader: false,
-            editedItem: {},
-            loading: false,
-            emailRules: [
-                v => {
-                    return !!v || 'E-mail is required'
-                },
-                v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
-            ],
-            rules: {
-                name: [val => (val || '').length > 0 || 'This field is required']
-            },
+  data() {
+    const defaultForm = Object.freeze({
+      title: "",
+      content: ""
+    });
+    return {
+      defaultForm,
+      errors: {},
+      form: Object.assign({}, defaultForm),
+      OpenAdd: false,
+      OpenUns: false,
+      maildialog: false,
+      Mailloader: false,
+      search: "",
+      snackbar: false,
+      timeout: 5000,
+      message: "Success",
+      color: "black",
+      y: "bottom",
+      x: "left",
+      headers: [
+        {
+          text: "User Name",
+          align: "left",
+          value: "name"
+        },
+        {
+          text: "Email",
+          value: "email"
+        },
+        {
+          text: "Subscribed on",
+          value: "created_at"
+        },
+        {
+          text: "Actions",
+          value: "name",
+          sortable: false
         }
-    },
-    watch: {
-        dialog(val) {
-            val || this.close()
-        }
-    },
-    methods: {
-        sendmail() {
-            this.loading = true
-            axios.post('/sendmail', this.$data.form)
-                .then((response) => {
-                    this.loading = false
-                    this.color = 'black'
-                    this.message = 'Sent'
-                    this.snackbar = true
-                    this.close()
-                })
-                .catch((error) => {
-                    this.loading = false
-                    this.color = 'red'
-                    this.message = 'Something went wrong'
-                    this.snackbar = true
-                    this.errors = error.response.data.errors
-                })
+      ],
+      AllSubscribers: [],
+      AllUnSubscribed: [],
+      editedIndex: -1,
+      loader: false,
+      editedItem: {},
+      loading: false,
+      emailRules: [
+        v => {
+          return !!v || "E-mail is required";
         },
-        resetForm() {
-            this.form = Object.assign({}, this.defaultForm)
-            this.$refs.form.reset()
-        },
-        openModalAdd() {
-            this.OpenAdd = true
-        },
-        openModalMail() {
-            this.maildialog = true
-        },
-        openModalUns() {
-            this.getunsubscribed()
-            this.OpenUns = true
-        },
-        alert() {
-            this.message = 'Thanks for subscribing'
-            this.color = 'black'
-            this.snackbar = true
-        },
-        close() {
-            this.OpenAdd = this.OpenUns = this.maildialog = false
-        },
-        deleteItem(item) {
-            
-            this.message = 'Loading...'
-            this.color = 'black'
-            this.snackbar = true
-            const index = this.AllSubscribers.indexOf(item)
-            if (confirm('Are you sure you want to delete this item?')) {
-                axios.delete(`/email/${item.id}`)
-                    .then((response) => {
-                        this.snackbar = false
-                        this.message = 'Success'
-                        this.color = 'black'
-                        this.snackbar = true
-                        this.AllSubscribers.splice(index, 1)
-                        // this.getsubscribers()
-                        // console.log(response);
-
-                    })
-                    .catch((error) => {
-                        this.errors = error.response.data.errors
-                        this.message = 'something went wrong'
-                        this.color = 'red'
-                        this.snackbar = true
-                    })
-            }
-            // confirm('Are you sure you want to delete this item?') && this.AllSubscribers.splice(index, 1)
-        },
-        resetForm() {
-            this.form = Object.assign({}, this.defaultForm)
-            this.$refs.form.reset()
-        },
-        getunsubscribed() {
-            axios.get('/getunsubscribed')
-                .then((response) => {
-                    this.AllUnSubscribed = response.data
-                    this.loader = false
-                })
-                .catch((error) => {
-                    this.loader = false
-                    this.errors = error.response.data.errors
-                })
-        },
-        getsubscribers() {
-            axios.get('/getsubscribers')
-                .then((response) => {
-                    this.AllSubscribers = response.data
-                    this.loader = false
-                })
-                .catch((error) => {
-                    this.loader = false
-                    this.errors = error.response.data.errors
-                })
-        },
-    },
-    mounted() {
-        this.loader = true
-        this.getsubscribers()
-        this.getunsubscribed()
-    },
-    computed: {
-        formIsValid() {
-            return (
-                this.form.title &&
-                this.form.content
-            )
-        },
-    },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            if (vm.user.can['view subscribers']) {
-                next();
-            } else {
-                next('/unauthorized');
-            }
-        })
+        v =>
+          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+          "E-mail must be valid"
+      ],
+      rules: {
+        name: [val => (val || "").length > 0 || "This field is required"]
+      }
+    };
+  },
+  watch: {
+    dialog(val) {
+      val || this.close();
     }
-}
+  },
+  methods: {
+    sendmail() {
+      this.loading = true;
+      axios
+        .post("/sendmail", this.$data.form)
+        .then(response => {
+          this.loading = false;
+          this.color = "black";
+          this.message = "Sent";
+          this.snackbar = true;
+          this.close();
+        })
+        .catch(error => {
+          this.loading = false;
+          this.color = "red";
+          this.message = "Something went wrong";
+          this.snackbar = true;
+          this.errors = error.response.data.errors;
+        });
+    },
+    resetForm() {
+      this.form = Object.assign({}, this.defaultForm);
+      this.$refs.form.reset();
+    },
+    openModalAdd() {
+      this.OpenAdd = true;
+    },
+    openModalMail() {
+      this.maildialog = true;
+    },
+    openModalUns() {
+      this.getunsubscribed();
+      this.OpenUns = true;
+    },
+    alert() {
+      this.message = "Thanks for subscribing";
+      this.color = "black";
+      this.snackbar = true;
+    },
+    close() {
+      this.OpenAdd = this.OpenUns = this.maildialog = false;
+    },
+    deleteItem(item) {
+      this.message = "Loading...";
+      this.color = "black";
+      this.snackbar = true;
+      const index = this.AllSubscribers.indexOf(item);
+      if (confirm("Are you sure you want to delete this item?")) {
+        axios
+          .delete(`/email/${item.id}`)
+          .then(response => {
+            this.snackbar = false;
+            this.message = "Success";
+            this.color = "black";
+            this.snackbar = true;
+            this.AllSubscribers.splice(index, 1);
+            // this.getsubscribers()
+            // console.log(response);
+          })
+          .catch(error => {
+            this.errors = error.response.data.errors;
+            this.message = "something went wrong";
+            this.color = "red";
+            this.snackbar = true;
+          });
+      }
+      // confirm('Are you sure you want to delete this item?') && this.AllSubscribers.splice(index, 1)
+    },
+    resetForm() {
+      this.form = Object.assign({}, this.defaultForm);
+      this.$refs.form.reset();
+    },
+    getunsubscribed() {
+      axios
+        .get("/getunsubscribed")
+        .then(response => {
+          this.AllUnSubscribed = response.data;
+          this.loader = false;
+        })
+        .catch(error => {
+          this.loader = false;
+          this.errors = error.response.data.errors;
+        });
+    },
+    getsubscribers() {
+      axios
+        .get("/getsubscribers")
+        .then(response => {
+          this.AllSubscribers = response.data;
+          this.loader = false;
+        })
+        .catch(error => {
+          this.loader = false;
+          this.errors = error.response.data.errors;
+        });
+    }
+  },
+  mounted() {
+    this.loader = true;
+    this.getsubscribers();
+    this.getunsubscribed();
+  },
+  computed: {
+    formIsValid() {
+      return this.form.title && this.form.content;
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (vm.user.can["view subscribers"]) {
+        next();
+      } else {
+        next("/unauthorized");
+      }
+    });
+  }
+};
 </script>

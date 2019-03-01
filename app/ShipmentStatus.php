@@ -19,4 +19,14 @@ class ShipmentStatus extends Model
     {
         return $this->belongsTo('App\User', 'user_id');
     }
+
+    public function getuserNameAttribute () {
+        foreach (ShipmentStatus::all() as $status) {
+            if (Auth::user()->can($status->name)) {
+                $statuses[$status->name] = true;
+            } else {
+                $statuses[$status->name] = false;
+            }
+        }
+    }
 }

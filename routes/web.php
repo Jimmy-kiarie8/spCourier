@@ -52,6 +52,8 @@ Route::group(['middleware' => ['auth']], function () {
 		return view('home', compact('shipments'));
 	});
 
+    Route::get('/logoutOther', 'UserController@logoutOther')->name('logoutOther');
+    Route::post('/logOtherDevices', 'UserController@logOtherDevices')->name('logOtherDevices');
 	Route::get('/home', 'HomeController@index')->name('home');
 	Route::get('/courier', 'HomeController@courier')->name('courier');
 	Route::get('/courier/{name}', 'HomeController@courierHome')->name('courierHome');
@@ -104,6 +106,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('productAdd/{id}', 'ProductController@productAdd')->name('productAdd');
 	Route::post('getProducts', 'ProductController@getProducts')->name('getProducts');
 
+    Route::post('permisions/{id}', 'UserController@permisions')->name('permisions');
 	Route::get('getUsers', 'UserController@getUsers')->name('getUsers');
 	Route::get('getDrivers', 'UserController@getDrivers')->name('getDrivers');
 	Route::get('getCustomer', 'UserController@getCustomer')->name('getCustomer');

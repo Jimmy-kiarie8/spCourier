@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Branch;
+use App\Shipment;
 use App\Status;
 use Illuminate\Http\Request;
-use App\Shipment;
 use Illuminate\Support\Facades\Auth;
-use App\Branch;
-use App\DelStatus;
 
 class StatusController extends Controller
 {
@@ -53,11 +52,29 @@ class StatusController extends Controller
         //
     }
 
-
     public function getStatuses()
     {
-        return Status::select('name')->orderBy('name', 'ASC')->get();
+        // return Status::select('name')->orderBy('name', 'ASC')->get();
+        $user = Auth::user();
+        if ($user->hasAllPermissions(['update delivered', 'update dispatched', 'update returned'])) {
+            return Status::select('name')->orderBy('name', 'ASC')->get();
+        } elseif ($user->hasAllPermissions(['update delivered', 'update dispatched'])) {
+            return Status::select('name')->where('name', '!=', 'Returned')->orderBy('name', 'ASC')->get();
+        } elseif ($user->hasAllPermissions(['update delivered', 'update returned'])) {
+            return Status::select('name')->where('name', '!=', 'Dispatched')->orderBy('name', 'ASC')->get();
+        } elseif ($user->hasAllPermissions(['update dispatched', 'update returned'])) {
+            return Status::select('name')->where('name', '!=', 'Delivered')->orderBy('name', 'ASC')->get();
+        } elseif ($user->hasAllPermissions('update delivered')) {
+            return Status::select('name')->where('name', '!=', 'Returned')->Where('name', '!=', 'Dispatched')->orderBy('name', 'ASC')->get();
+        } elseif ($user->hasAllPermissions('update returned')) {
+            return Status::select('name')->where('name', '!=', 'Delivered')->where('name', '!=', 'Dispatched')->orderBy('name', 'ASC')->get();
+        } elseif ($user->hasAllPermissions('update dispatched')) {
+            return Status::select('name')->where('name', '!=', 'Delivered')->where('name', '!=', 'Returned')->orderBy('name', 'ASC')->get();
+        } else {
+            return Status::select('name')->where('name', '!=', 'Delivered')->where('name', '!=', 'Returned')->where('name', '!=', 'Dispatched')->orderBy('name', 'ASC')->get();
+        }
     }
+
     public function getStat()
     {
         return Status::orderBy('name', 'ASC')->get();
@@ -76,7 +93,7 @@ class StatusController extends Controller
 
     public function getScheduled(Request $request)
     {
-		// return $request->all();
+        // return $request->all();
         $print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->take(500)->latest()->get();
         $id = [];
         foreach ($print_shipment as $selectedItems) {
@@ -86,7 +103,7 @@ class StatusController extends Controller
         // $derivery_time = $request->form['derivery_time'];
         // $remark = $request->form['remark'];
         // $derivery_date = $request->form['scheduled_date'];
-		// $shipment = Shipment::whereIn('id', $id)->update(['printed' => 1, 'printReceipt' => 1]);
+        // $shipment = Shipment::whereIn('id', $id)->update(['printed' => 1, 'printReceipt' => 1]);
         return $print_shipment;
     }
     public function getStickers(Request $request)
@@ -99,7 +116,7 @@ class StatusController extends Controller
         foreach ($sticker_shipment as $selectedItems) {
             $id[] = $selectedItems['id'];
         }
-		// $shipment = Shipment::whereIn('id', $id)->update(['sticker' => 1]);
+        // $shipment = Shipment::whereIn('id', $id)->update(['sticker' => 1]);
         return $sticker_shipment;
     }
 
@@ -107,10 +124,10 @@ class StatusController extends Controller
     {
         return Shipment::where('status', 'Delivered')->latest()->take(500)->get();
     }
-    
+
     public function customerS(Request $request)
     {
-        
+
     }
     // public function getDelStatuses()
     // {
