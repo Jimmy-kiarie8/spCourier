@@ -109,7 +109,7 @@ class ShipmentController extends Controller
 		if ($shipment->save()) {
 			$shipment->products()->saveMany($products);
 		}
-		Notification::send($users, new ShipmentNoty($shipment));
+		// Notification::send($users, new ShipmentNoty($shipment));
 		return response()->json(['success' => $shipment, 'status' => '200'], '200'); 
 		die();
 	}
@@ -174,7 +174,7 @@ class ShipmentController extends Controller
 	}
 
 	public function pincode(Request $request) {
-
+		return $request->all();
 		$api_user = new ApiUser();
 		$user_data = $api_user->login($request);
 		if (empty($user_data) || isset($user_data['error'])) {

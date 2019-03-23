@@ -20,6 +20,7 @@
         "laravel/tinker": "^1.0",
         "maatwebsite/excel": "~2.1.0",
         "milon/barcode": "^5.3",
+        "mpociot/laravel-apidoc-generator": "^3.4",
         "pusher/pusher-http-laravel": "^4.2",
         "pusher/pusher-php-server": "~3.0",
         "safaricom/mpesa": "^1.0",
