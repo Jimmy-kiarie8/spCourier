@@ -56,6 +56,6 @@ class CountryController extends Controller
 
     public function getCountry()
     {
-        return Country::all();
+        return Country::with(['branches'])->get();
     }
 }

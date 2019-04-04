@@ -1,6 +1,6 @@
 <template>
 <v-layout row justify-center>
-    <v-dialog v-model="openAddRequest" persistent max-width="700px">
+    <v-dialog v-model="openAddRequest" persistent max-width="700px" v-if="openAddRequest">
         <v-card>
             <v-card-title fixed>
                 <span class="headline">Add User</span>
@@ -23,10 +23,6 @@
                                         <v-text-field v-model="form.email" :rules="emailRules" color="blue darken-2" label="Email" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.email">{{ errors.email[0] }}</small>
                                     </v-flex>
-                                    <!-- <v-flex xs12 sm6>
-                                        <v-text-field :append-icon="e1 ? 'visibility_off' : 'visibility'" :type="e1 ? 'password' : 'text'" v-model="form.password" name="input-10-2" label="Enter your password" hint="At least 6 characters" min="8" value="" class="input-group--focused"></v-text-field>
-                                        <small class="has-text-danger" v-if="errors.password">{{ errors.password[0] }}</small>
-                                    </v-flex> -->
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.address" :rules="rules.name" color="blue darken-2" label="Address" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.address">{{ errors.address[0] }}</small>
@@ -35,10 +31,6 @@
                                         <v-text-field v-model="form.city" :rules="rules.name" color="blue darken-2" label="City" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.city">{{ errors.city[0] }}</small>
                                     </v-flex>
-                                    <!-- <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.country" :rules="rules.name" color="blue darken-2" label="Country" required></v-text-field>
-                                        <small class="has-text-danger" v-if="errors.country">{{ errors.country[0] }}</small>
-                                    </v-flex> -->
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.phone" :rules="rules.name" color="blue darken-2" label="Phone" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.phone">{{ errors.phone[0] }}</small>
@@ -62,7 +54,7 @@
                                         <select class="custom-select custom-select-md col-md-12" v-model="form.countryList">
                                         <option v-for="country in countryList" :key="country.id" :value="country.id">{{ country.country_name }}</option>
                                     </select>
-                                        <!-- <small class="has-text-danger" v-if="errors.branch_id">{{ errors.branch_id[0] }}</small> -->
+                                        <small class="has-text-danger" v-if="errors.countryList">{{ errors.countryList[0] }}</small>
                                     </div>
                                 </v-layout>
                                 <v-layout wrap>
@@ -128,10 +120,9 @@ export default {
     methods: {
         save() {
             this.loading = true
-            axios.post('/users', {
-                form: this.$data.form
-            }).
+            axios.post('/users', this.$data.form).
             then((response) => {
+                    // alert('error1')
                     this.loading = false
                     // console.log(response);
                     this.$parent.Allusers.push(response.data)
@@ -140,9 +131,10 @@ export default {
                     this.$emit('alertRequest');
                 })
                 .catch((error) => {
+                    // alert('error2')
                     this.loading = false
-                    // this.errors = error.response.data.errors
-                    // console.log()
+                    console.log(error)
+                    this.errors = error.response.data.errors
                 })
         },
         resetForm() {
@@ -180,7 +172,7 @@ export default {
                 // this.form.zipcode &&
                 this.form.branch &&
                 this.form.address &&
-                this.form.city 
+                this.form.city
             )
         },
     },

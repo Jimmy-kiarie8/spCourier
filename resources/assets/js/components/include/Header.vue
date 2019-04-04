@@ -307,7 +307,7 @@
         </v-toolbar>
     </v-app>
 
-    <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
+    <v-snackbar :timeout="timeout" bottom="bottom" :color="Snackcolor" left="left" v-model="snackbar">
         {{ message }}
         <v-icon dark right>check_circle</v-icon>
     </v-snackbar>
@@ -333,6 +333,7 @@ export default {
   data() {
     return {
       role: "",
+      Snackcolor: '',
       color: "#132f51",
       dialog: false,
       drawer: true,
@@ -346,13 +347,7 @@ export default {
       AllDrivers: [],
       snackbar: false,
       timeout: 5000,
-      message: "Success"
-      // cruds: [
-      //     ['Create', 'add'],
-      //     ['Read', 'insert_drive_file'],
-      //     ['Update', 'update'],
-      //     ['Delete', 'delete']
-      // ]
+      message: "Success",
     };
   },
   methods: {
@@ -399,9 +394,9 @@ export default {
       this.dialog = false;
     },
 
-    showalert() {
-      this.message = "success";
-      // this.color = "indigo";
+    showalert(data) {
+      this.message = data;
+      this.Snackcolor = "indigo";
       this.snackbar = true;
     }
   },
@@ -411,6 +406,9 @@ export default {
     });
     eventBus.$on("StoprogEvent", data => {
       this.$refs.topProgress.done();
+    });
+    eventBus.$on("alertRequest", data => {
+      this.showalert(data)
     });
   },
   mounted() {

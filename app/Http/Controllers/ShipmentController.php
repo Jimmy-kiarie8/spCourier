@@ -8,6 +8,7 @@ use App\Product;
 use App\ScheduleLogs;
 use App\Shipment;
 use App\ShipmentStatus;
+use App\Sms;
 use App\User;
 use DateTime;
 use Illuminate\Http\Request;
@@ -15,7 +16,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Notification;
-use App\Sms;
 
 // use App\Observers\BaseObserver;
 
@@ -756,7 +756,7 @@ class ShipmentController extends Controller
                 $shipment->driver = $driver->name;
             }
             // } else {
-                        // return 'not empty';
+            // return 'not empty';
 
             // }
             // $user = User::find($order->buyer_id);
@@ -764,6 +764,24 @@ class ShipmentController extends Controller
             return $shipment;
         });
         return $shipments;
+    }
+
+    public function getShipStatus($id)
+    {
+        $statuses = ShipmentStatus::where('shipment_id', $id)->get();
+        // $statuses->transform(function ($status) {
+        //     $user = User::setEagerLoads([])->find($status->user_id);
+        //     // dd($user);
+        //     $status->user_name = '$status->user_id';
+        //     return $status;
+        // });
+        $statuses->transform(function ($status, $key) {
+            $user = User::setEagerLoads([])->find($status->user_id);
+            // dd($user);
+            $status->user_id = $user->name;
+            return $status;
+        });
+        return $statuses;
     }
 
 }

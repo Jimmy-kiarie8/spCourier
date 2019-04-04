@@ -14,7 +14,7 @@
                         </v-btn>
                     </span>
                 </ul>
-                <table class="table table-hover">
+                <table class="table table-hover table-striped">
                     <thead>
                         <th>Waybill</th>
                         <th>From</th>
@@ -33,10 +33,16 @@
                     </tbody>
                 </table>
 
-                <v-toolbar card style="background: #122e4f; color: #fff;" darken-1>
+                <div class="card-header">
+                    <ul class="list-group text-center">
+                        <li class="list-group-item active">Product Details</li>
+                    </ul>
+                </div>
+
+                <!-- <v-toolbar card style="background: #3490dc; color: #fff;" darken-1>
                     <v-toolbar-title class="body-2">Product Details</v-toolbar-title>
-                </v-toolbar>
-                <table class="table table-hover">
+                </v-toolbar> -->
+                <table class="table table-hover table-striped">
                     <thead>
                         <th>Waybill Status</th>
                         <th>Receiver Name</th>
@@ -54,10 +60,16 @@
                         </tr>
                     </tbody>
                 </table>
-                <v-toolbar card style="background: #122e4f; color: #fff;" darken-1>
+
+                <div class="card-header">
+                    <ul class="list-group text-center">
+                        <li class="list-group-item active">Client Details</li>
+                    </ul>
+                </div>
+                <!-- <v-toolbar card style="background: #3490dc; color: #fff;" darken-1>
                     <v-toolbar-title class="body-2">Client Details</v-toolbar-title>
-                </v-toolbar>
-                <table class="table table-hover">
+                </v-toolbar> -->
+                <table class="table table-hover table-striped">
                     <thead>
                         <th>Client Name</th>
                         <th>Client Email</th>
@@ -72,10 +84,15 @@
                     </tbody>
                 </table>
 
-                <v-toolbar card style="background: #122e4f; color: #fff;" darken-1>
+                <div class="card-header">
+                    <ul class="list-group text-center">
+                        <li class="list-group-item active">Branch&Rider</li>
+                    </ul>
+                </div>
+                <!-- <v-toolbar card style="background: #3490dc; color: #fff;" darken-1>
                     <v-toolbar-title class="body-2">Branch&Rider</v-toolbar-title>
-                </v-toolbar>
-                <table class="table table-hover">
+                </v-toolbar> -->
+                <table class="table table-hover table-striped">
                     <thead>
                         <th>Rider Name</th>
                         <th>Branch Name</th>
@@ -87,10 +104,15 @@
                         </tr>
                     </tbody>
                 </table>
-                <v-toolbar card style="background: #122e4f; color: #fff;" darken-1>
+                <div class="card-header">
+                    <ul class="list-group text-center">
+                        <li class="list-group-item active">Sender Details</li>
+                    </ul>
+                </div>
+                <!-- <v-toolbar card style="background: #3490dc; color: #fff;" darken-1>
                     <v-toolbar-title class="body-2">Sender Details</v-toolbar-title>
-                </v-toolbar>
-                <table class="table table-hover">
+                </v-toolbar> -->
+                <table class="table table-hover table-striped">
                     <thead>
                         <th>Sender Name</th>
                         <th>Sender Email</th>
@@ -104,12 +126,16 @@
                         </tr>
                     </tbody>
                 </table>
-
-                <v-toolbar card style="background: #122e4f; color: #fff;" darken-1>
+                <div class="card-header">
+                    <ul class="list-group text-center">
+                        <li class="list-group-item active">Waybill Event Tracking</li>
+                    </ul>
+                </div>
+                <!-- <v-toolbar card style="background: #3490dc; color: #fff;" darken-1>
                     <v-toolbar-title class="body-2">Waybill Event Tracking</v-toolbar-title>
-                </v-toolbar>
+                </v-toolbar> -->
                 <v-layout wrap>
-                    <table class="table table-hover">
+                    <table class="table table-hover table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -117,15 +143,17 @@
                                 <th scope="col">Event date and time</th>
                                 <th scope="col">Location</th>
                                 <th scope="col">Remark</th>
+                                <th scope="col">Updated by</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="statuses in shipments.statuses" :key="statuses.id">
-                                <th scope="row">1</th>
+                            <tr v-for="(statuses, index) in status" :key="statuses.id">
+                                <th scope="row">{{ index + 1 }}</th>
                                 <td>{{ statuses.status }}</td>
                                 <td>{{ statuses.created_at }}</td>
                                 <td>{{ statuses.location }}</td>
                                 <td>{{ statuses.remark }}</td>
+                                <td>{{ statuses.user_id }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -155,7 +183,8 @@ export default {
     data() {
         return {
             shipD: [],
-            dialog: false
+            dialog: false,
+            status: [],
         };
     },
     methods: {
@@ -177,10 +206,20 @@ export default {
                     this.errors = error.response.data.errors
                 })
         },
+        getShipStatus(data) {
+            axios.get(`/getShipStatus/${data.id}`)
+                .then((response) => {
+                    this.status = response.data
+                })
+                .catch((error) => {
+                    this.errors = error.response.data.errors
+                })
+        },
     },
 
     created() {
         eventBus.$on("TrackShipEvent", data => {
+            this.getShipStatus(data)
             this.trackShip(data)
         });
     },

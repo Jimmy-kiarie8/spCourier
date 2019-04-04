@@ -32,14 +32,14 @@
                     </v-layout>
                     <v-card style="background: rgba(5, 117, 230, 0.16);">
                         <v-layout wrap>
-                            <v-flex xs4 sm2>
+                            <v-flex xs4 sm2 v-for="role in user.roles" :key="role.id" v-if="role.name === 'Admin'">
+                                <v-select :items="AllCountries" v-model="selectCountry" hint="COUNTRY" label="Filter By country" single-line item-text="country_name" item-value="id" return-object persistent-hint @change="changeCat(selectCountry)"></v-select>
+                            </v-flex>
+                            <v-flex xs4 offset-sm1 sm2>
                                 <v-select :items="AllBranches" v-model="select" hint="BRANCHES" label="Filter By Branch" single-line item-text="branch_name" item-value="id" return-object persistent-hint></v-select>
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>
                                 <v-select :items="AllStatus" v-model="selectItem" hint="STATUS" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint></v-select>
-                            </v-flex>
-                            <v-flex xs4 sm2 offset-sm1 v-for="role in user.roles" :key="role.id" v-if="role.name === 'Admin'">
-                                <v-select :items="AllCountries" v-model="selectCountry" hint="COUNTRY" label="Filter By country" single-line item-text="country_name" item-value="id" return-object persistent-hint></v-select>
                             </v-flex>
                             <!-- <v-spacer></v-spacer> -->
                             <v-flex xs12 sm2 offset-sm1>
@@ -386,6 +386,7 @@ export default {
             shipment: {},
             markers: [],
             AllStatus: [],
+            // permStatus: [],
             shipmentsCount: null
         };
     },
@@ -671,10 +672,7 @@ export default {
                 country_id: "All",
                 id: "all"
             };
-            this.select = {
-                branch_name: "All",
-                id: "all"
-            };
+            this.getBranch()
             this.form.start_date = this.form.end_date = "";
             this.sortItem();
         },
@@ -705,6 +703,10 @@ export default {
                 .get("/getBranchEger")
                 .then(response => {
                     this.AllBranches = response.data;
+                    this.select = {
+                        branch_name: "All",
+                        id: "all"
+                    };
                 })
                 .catch(error => {
                     console.log(error);
@@ -756,7 +758,14 @@ export default {
                 .catch(error => {
                     this.errors = error.response.data.errors;
                 });
-        }
+        },
+        changeCat(item) {
+            this.select = {
+                branch_name: "All",
+                id: "all"
+            };
+            this.AllBranches = item.branches;
+        },
     },
     created() {
         eventBus.$on("selectClear", data => {
@@ -770,15 +779,6 @@ export default {
         eventBus.$on("TrackEvent", data => {
             this.updateModal = true;
         });
-
-        // eventBus.$on("reload", data => {
-        //     this.selected = [];
-        // });
-
-        // this.sortItem()
-        // this.timer = window.setInterval(() => {
-        //     this.sortItem()
-        // }, 1000)
     },
     beforeDestroy() {
         clearInterval(this.timer);
@@ -807,8 +807,17 @@ export default {
             .catch(error => {
                 this.errors = error.response.data.errors;
             });
+        // axios
+        //     .get("/getStatuses")
+        //     .then(response => {
+        //         this.permStatus = response.data;
+        //     })
+        //     .catch(error => {
+        //         this.errors = error.response.data.errors;
+        //     });
+            
         axios
-            .get("/getStatuses")
+            .get("/status")
             .then(response => {
                 this.AllStatus = response.data;
             })

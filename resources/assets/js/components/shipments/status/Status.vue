@@ -807,7 +807,7 @@ export default {
                 this.errors = error.response.data.errors;
             });
         axios
-            .get("/getStatuses")
+            .get("/status")
             .then(response => {
                 this.AllStatus = response.data;
             })

@@ -10,13 +10,24 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use App\Branch;
+use App\Country;
 
 class UserController extends Controller
 {
     public function getUsers()
     {
         // return User::with(['roles'])->get();
-        return User::with(['roles'])->orderBy('name')->get();
+        $users = User::with(['roles'])->orderBy('name')->get();
+        $users->transform(function ($user, $key) {
+            $branch_name = Branch::find($user->branch_id);
+            $country_name = Country::find($user->country_id);
+            $user->branch = $branch_name->branch_name;
+            $user->country = $country_name->country_name;
+            $user->status = 'active';
+            return $user;
+        });
+        return $users;
     }
     /**
      * Store a newly created resource in storage.
@@ -29,34 +40,28 @@ class UserController extends Controller
         // return $this->generateRandomString();
         // return $request->all();
         $this->Validate($request, [
-            'form.name' => 'required',
-            // 'form.password' => 'required|min:6',
-            'form.email' => 'required|email',
-            'form.phone' => 'required|numeric',
-            'form.branch_id' => 'required',
-            // 'form.address' => 'required',
-            // 'form.city' => 'required',
-            // 'form.country' => 'required',
-            'form.role_id' => 'required',
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required|numeric',
+            'branch_id' => 'required',
+            'countryList' => 'required',
+            'role_id' => 'required',
         ]);
         // return $request->all();
         $user = new User;
-        // $password = $request->form['password'];
         $password = $this->generateRandomString();
         $password_hash = Hash::make($password);
-        // $user->name = $request->name;
         $user->password = $password_hash;
-        $user->name = $request->form['name'];
-        $user->email = $request->form['email'];
-        $user->phone = $request->form['phone'];
-        $user->branch_id = $request->form['branch_id'];
-        $user->address = $request->form['address'];
-        $user->city = $request->form['city'];
-        // $user->country = $request->form['country'];
-        $user->country_id = $request->form['countryList'];
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->branch_id = $request->branch_id;
+        $user->address = $request->address;
+        $user->city = $request->city;
+        $user->country_id = $request->countryList;
         $user->activation_token = str_random(60);
         $user->save();
-        $user->assignRole($request->form['role_id']);
+        $user->assignRole($request->role_id);
         $user->givePermissionTo($request->selected);
         $user->notify(new SignupActivate($user, $password));
         return $user;
@@ -275,36 +280,6 @@ class UserController extends Controller
     {
         return Shipment::where('client_id', $id)->orWhere('driver', $id)->paginate(10);
     }
-    public function send_sms($phone, $message)
-    {
-        // dd($phone . '   ' . $message);
-        $phone = '254731090832';
-        $sms = 'Test messange';
-        $senderID = 'SPEEDBALL';
-
-        $login = 'SPEEDBALL';
-        $password = 's12345';
-
-        $clientsmsID = rand(1000, 9999);
-
-        $xml_data = '<?xml version="1.0"?><smslist><sms><user>' . $login . '</user><password>' . $password . '</password><message>' . $sms . '</message><mobiles>' . $phone . '</mobiles><senderid>' . $senderID . '</senderid><clientsmsid>' . $clientsmsID . '</clientsmsid></sms></smslist>';
-
-        $URL = "http://messaging.advantasms.com/bulksms/sendsms.jsp?";
-
-        $ch = curl_init($URL);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/xml'));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "$xml_data");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($ch);
-        curl_close($ch);
-
-        // return $output;
-    }
-
     public function logoutOther()
     {
         return view('auth.Logout');
@@ -322,5 +297,25 @@ class UserController extends Controller
         $user = User::find($id);
         $user->syncPermissions($request->selected);
         return $user;
+    }
+
+
+    public function undeletedUser($id)
+    {
+        return User::where('id', $id)->restore();
+    }
+
+    public function deletedUsers()
+    {
+        $users = User::onlyTrashed()->get();
+        $users->transform(function ($user, $key) {
+            $branch_name = Branch::find($user->branch_id);
+            $country_name = Country::find($user->country_id);
+            $user->branch = $branch_name->branch_name;
+            $user->country = $country_name->country_name;
+            $user->status = 'active';
+            return $user;
+        });
+        return $users;
     }
 }

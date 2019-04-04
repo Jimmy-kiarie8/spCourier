@@ -157,8 +157,27 @@ export default {
         },
 
         deleteItem(item) {
-            const index = this.AllStatus.indexOf(item)
-            confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+            if (confirm("Are you sure you want to delete this item?")) {
+                this.loading = true;
+                const index = this.AllStatus.indexOf(item)
+                axios
+                    .delete(`/status/${item.id}`)
+                    .then(response => {
+                        this.Allusers.splice(index, 1)
+                        this.loading = false;
+                        this.message = "deleted successifully";
+                        this.color = "red";
+                        this.snackbar = true;
+                        this.Allusers.splice(index, 1);
+                    })
+                    .catch(error => {
+                        this.loading = false;
+                        this.errors = error.response.data.errors;
+                        this.message = "something went wrong";
+                        this.color = "red";
+                        this.snackbar = true;
+                    });
+            }
         },
 
         alert() {

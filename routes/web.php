@@ -88,6 +88,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('getShipSingle/{id}', 'ShipmentController@getShipSingle')->name('getShipSingle');
 	Route::post('getshipD/{id}', 'ShipmentController@getshipD')->name('getshipD');
 	Route::any('updateCancelled', 'ShipmentController@updateCancelled')->name('updateCancelled');
+	Route::get('getShipStatus/{id}', 'ShipmentController@getShipStatus')->name('getShipStatus');
 
 	Route::post('filterShipment', 'FilterController@filterShipment')->name('filterShipment');
 	Route::post('filterCount', 'FilterController@filterCount')->name('filterCount');
@@ -118,6 +119,8 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('password', 'UserController@password')->name('password');
 	Route::patch('AuthUserUp/{id}', 'UserController@AuthUserUp')->name('AuthUserUp');
 	Route::post('UserShip', 'UserController@UserShip')->name('UserShip');
+	Route::get('deletedUsers', 'UserController@deletedUsers')->name('deletedUsers');
+	Route::patch('undeletedUser/{id}', 'UserController@undeletedUser')->name('undeletedUser');
 
 
 	Route::get('getUsersRole', 'RoleController@getUsersRole')->name('getUsersRole');

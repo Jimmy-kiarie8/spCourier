@@ -65,8 +65,8 @@ class EmailController extends Controller
 
     public function refresh(Subscriber $subscriber, $id)
     {
-        $subscribers = Subscriber::where('id', $id)->restore();
-        return $id;
+       return Subscriber::where('id', $id)->restore();
+        // return $id;
     }
 
 

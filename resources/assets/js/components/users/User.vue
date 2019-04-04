@@ -22,7 +22,8 @@
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
-                            <v-btn slot="activator" color="primary" dark @click="openAdd">Add User</v-btn>
+                            <v-btn slot="activator" color="primary" dark flat @click="openAdd">Add User</v-btn>
+                            <v-btn slot="activator" color="orange" dark flat @click="openDeleted">Deleted Users</v-btn>
                             <v-tooltip right>
                                 <v-btn icon slot="activator" class="mx-0" @click="getUsers">
                                     <v-icon color="blue darken-2" small>refresh</v-icon>
@@ -41,9 +42,10 @@
                             <td class="text-xs-right">{{ props.item.phone }}</td>
                             <td class="text-xs-right">{{ props.item.city }}</td>
                             <td class="text-xs-right">{{ props.item.branch }}</td>
+                            <td class="text-xs-right">{{ props.item.country }}</td>
                             <td class="text-xs-right">{{ props.item.status }}</td>
                             <td class="justify-center layout px-0">
-                               <v-tooltip bottom v-if="user.can['edit users']">
+                                <v-tooltip bottom v-if="user.can['edit users']">
                                     <v-btn icon class="mx-0" @click="openEdit(props.item)" slot="activator">
                                         <v-icon small color="blue darken-2">edit</v-icon>
                                     </v-btn>
@@ -86,17 +88,17 @@
         </v-snackbar>
     </v-content>
     <AddUser @closeRequest="close" :openAddRequest="dispAdd" @alertRequest="showAlert" :AllBranches="AllBranches" :AllRoles="AllRoles" :countryList="Allcountries"></AddUser>
-    <!-- <ShowUser @closeRequest="close" :openShowRequest="dispShow"></ShowUser> -->
     <EditUser @closeRequest="close" :openEditRequest="dispEdit" @alertRequest="showAlert" :form="editedItem" :AllBranches="AllBranches" :AllRoles="AllRoles" :countryList="Allcountries"></EditUser>
     <PermUser @closeRequest="close" :openPermRequest="permEdit" :form="editedItem"></PermUser>
     <UserProfile @closeRequest="close" :openShowRequest="dispShow" :user="editedItem" :AllShips="AllShips"></UserProfile>
+    <DeletedUsers></DeletedUsers>
 </div>
 </template>
 
 <script>
 let AddUser = require("./AddUser.vue");
 let PermUser = require('./Permission.vue')
-// let ShowUser = require('./ShowUser.vue')
+let DeletedUsers = require('./DeletedUsers.vue')
 let EditUser = require("./EditUser.vue");
 let UserProfile = require("./UserProfile.vue");
 export default {
@@ -105,7 +107,8 @@ export default {
         AddUser,
         PermUser,
         EditUser,
-        UserProfile
+        UserProfile,
+        DeletedUsers
     },
     data() {
         return {
@@ -116,27 +119,6 @@ export default {
                 state: "All",
                 abbr: "all"
             },
-            items: [{
-                    state: "All",
-                    abbr: "all"
-                },
-                {
-                    state: "Admin",
-                    abbr: "Admin"
-                },
-                {
-                    state: "company Admin",
-                    abbr: "companyAdmin"
-                },
-                {
-                    state: "Customers",
-                    abbr: "Customer"
-                },
-                {
-                    state: "Drivers",
-                    abbr: "Driver"
-                }
-            ],
             headers: [{
                     text: "Name",
                     value: "name"
@@ -160,6 +142,10 @@ export default {
                 {
                     text: "Branch",
                     value: "branch"
+                },
+                {
+                    text: "Country",
+                    value: "country"
                 },
                 {
                     text: "Status",
@@ -224,25 +210,10 @@ export default {
             ]
         };
     },
-    watch: {
-        search() {
-            if (this.search.length > 0) {
-                this.temp = this.Allusers.filter(item => {
-                    return (
-                        item.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1
-                    );
-                });
-            } else {
-                this.temp = this.Allusers;
-            }
-        }
-    },
     methods: {
-        // openShow(key) {
-        //     // this.$children[4].list = this.company[key]
-        //     this.$children[2].list = this.Allusers[key]
-        //     this.dispShow = true
-        // },
+        openDeleted() {
+            eventBus.$emit('openDeletedEvent')
+        },
         openAdd() {
             this.dispAdd = true;
             this.getCountry();
@@ -277,15 +248,6 @@ export default {
             this.editedIndex = this.Allusers.indexOf(item);
             this.editedItem = Object.assign({}, item);
             eventBus.$emit("getShipEvent", this.editedItem);
-            // axios.post(`/getUserPro/${this.editedItem.id}`)
-            //     .then((response) => {
-            //         this.loader = false
-            //         this.AllShips = response.data
-            //     })
-            //     .catch((error) => {
-            //         this.loader = false
-            //         this.errors = error.response.data.errors
-            //     })
 
             this.dispShow = true;
         },
@@ -310,9 +272,11 @@ export default {
         deleteItem(item) {
             if (confirm("Are you sure you want to delete this item?")) {
                 this.loading = true;
+                const index = this.Allusers.indexOf(item)
                 axios
                     .delete(`/users/${item.id}`)
                     .then(response => {
+                        this.Allusers.splice(index, 1)
                         this.loading = false;
                         this.message = "deleted successifully";
                         this.color = "red";
@@ -389,7 +353,13 @@ export default {
                 next("/unauthorized");
             }
         });
-    }
+    },
+
+    created() {
+        eventBus.$on('userEvent', data => {
+            this.getUsers()
+        })
+    },
 };
 </script>
 

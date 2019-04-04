@@ -111,218 +111,223 @@
 <script>
 // import VueGoogleAutocomplete from "vue-google-autocomplete";
 export default {
-    props: ["UpdateShipment", "AllProducts", "updateitedItem", "markers"],
-    components: {
-        // VueGoogleAutocomplete,
+  props: ["UpdateShipment", "AllProducts", "updateitedItem", "markers"],
+  components: {
+    // VueGoogleAutocomplete,
+  },
+  data() {
+    return {
+      loading: false,
+      loading_loc: false,
+      // markers: [],
+      statuses: [],
+      showMap: false,
+      place: null,
+      dist: ""
+    };
+  },
+  description: "Maps",
+
+  methods: {
+    locationUpdate() {
+      this.loading_loc = true;
+      this.updateitedItem.location = this.updateitedItem.location;
+      axios
+        .post(`/locationUpdate/${this.updateitedItem.id}`, this.markers)
+        .then(response => {
+          this.loading_loc = false;
+          this.alert();
+          // Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.updateitedItem)
+        })
+        .catch(error => {
+          this.loading_loc = false;
+          this.errors = error.response.data.errors;
+        });
     },
-    data() {
-        return {
-            loading: false,
-            loading_loc: false,
-            // markers: [],
-            statuses: [],
-            showMap: false,
-            place: null,
-            dist: ""
-        };
+    UpdateStatus() {
+      // alert(this.updateitedItem.id);
+      this.loading = true;
+      axios
+        .post(`/updateStatus/${this.updateitedItem.id}`, {
+          formobg: this.updateitedItem,
+          address: this.address
+        })
+        .then(response => {
+          this.loading = false;
+          this.alert();
+          this.close();
+          // Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.$parent.updateitedItem)
+          eventBus.$emit("refreshShipEvent");
+          this.updateitedItem.derivery_date = "";
+          //   Object.assign(
+          //     this.$parent.AllShipments[this.$parent.editedIndex],
+          //     this.updateitedItem
+          //   );
+        })
+        .catch(error => {
+          this.loading = false;
+          this.errors = error.response.data.errors;
+        });
     },
-    description: "Maps",
-
-    methods: {
-        locationUpdate() {
-            this.loading_loc = true;
-            this.updateitedItem.location = this.updateitedItem.location;
-            axios
-                .post(`/locationUpdate/${this.updateitedItem.id}`, this.markers)
-                .then(response => {
-                    this.loading_loc = false;
-                    this.alert();
-                    // Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.updateitedItem)
-                })
-                .catch(error => {
-                    this.loading_loc = false;
-                    this.errors = error.response.data.errors;
-                });
-        },
-        UpdateStatus() {
-            // alert(this.updateitedItem.id);
-            this.loading = true;
-            axios
-                .post(`/updateStatus/${this.updateitedItem.id}`, {
-                    formobg: this.updateitedItem,
-                    address: this.address
-                })
-                .then(response => {
-                    this.loading = false;
-                    this.alert();
-                    this.close();
-                    // Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.$parent.updateitedItem)
-                    eventBus.$emit("refreshShipEvent")
-                    this.updateitedItem.derivery_date = "";
-                    //   Object.assign(
-                    //     this.$parent.AllShipments[this.$parent.editedIndex],
-                    //     this.updateitedItem
-                    //   );
-                })
-                .catch(error => {
-                    this.loading = false;
-                    this.errors = error.response.data.errors;
-                });
-        },
-        paid() {
-            if (this.updateitedItem.paid == 0) {
-                this.updateitedItem.paid = 1;
-            } else {
-                this.updateitedItem.paid = 0;
-            }
-            axios
-                .post(`/paid/${this.updateitedItem.id}`, this.updateitedItem)
-                .then(response => {
-                    this.loading = false;
-                    this.alert();
-                    // Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.updateitedItem)
-                })
-                .catch(error => {
-                    this.loading = false;
-                    this.errors = error.response.data.errors;
-                });
-        },
-
-        // getAddressData: function(addressData, placeResultData, id) {
-        //   this.address = addressData;
-        // },
-
-        close() {
-            this.$emit("closeRequest");
-            this.showMap = false;
-        },
-        alert() {
-            this.$emit("alertRequest");
-        },
-        setDescription(description) {
-            this.description = description;
-        },
-        setPlace(place) {
-            this.place = place;
-        },
-        usePlace(place) {
-            if (this.place) {
-                this.markers.push({
-                    position: {
-                        lat: this.place.geometry.location.lat(),
-                        lng: this.place.geometry.location.lng()
-                    }
-                });
-                this.place = null;
-            }
-        },
-        mapUpsd() {
-            this.markers = []; 
-            this.showMap = true;
-        },
-        getDistance() {
-            // var p1 = new google.maps.LatLng(45.463688, 9.18814);
-            // var p2 = new google.maps.LatLng(46.0438317, 9.75936230000002);
-            // if (this.place) {
-            //     this.markers.push({
-            //         position: {
-            //             lat: this.place.geometry.location.lat(),
-            //             lng: this.place.geometry.location.lng()
-            //         } 
-            //     });
-            //     this.place = null;
-            // }
-            var dist = []
-            for (let i = 0; i < this.markers.length; i++) {
-                const element = this.markers[i];
-                // console.log(element)
-                // alert(element['position']['lat'])
-                var p1 = new google.maps.LatLng(element['position']['lat'], element['position']['lng']);
-                // var p2 = new google.maps.LatLng(element['position']['lat'], element['position']['lng']);
-                dist.push(p1)
-                // alert(p1)
-                // var p2 = new google.maps.LatLng(-4.05052, 39.667169);
-            }
-            alert(dist)
-            // alert(calcDistance(p1, p2));
-            // console.log(calcDistance(dist))
-
-            //calculates distance between two points in km's
-            function calcDistance(dist) {
-                return this.dist = (google.maps.geometry.spherical.computeDistanceBetween(dist) / 1000).toFixed(2);
-            }
-            // var directionsService = new google.maps.DirectionsService();
-
-            // var request = {
-            //     origin: "Mombasa, Kenya", // a city, full address, landmark etc
-            //     destination: "Nairobi, Kenya",
-            //     travelMode: google.maps.DirectionsTravelMode.DRIVING
-            // };
-            // // var dista = this.dist
-
-            // directionsService.route(request, function (response, status, dista) {
-            //     // if (status == google.maps.DirectionsStatus.OK) {
-            //     this.$refs["distanceGet"];
-            //     console.log(response.routes[0].legs[0].distance.value);
-            //     alert(response.routes[0].legs[0].distance.value);
-            //     dista = response.routes[0].legs[0].distance.value; // the distance in metres
-            //     this.dist = dista;
-            //     alert(dista);
-            //     alert(this.dist);
-            //     // } else {
-            //     //     alert('wrong');
-            //     // oops, there's no route between these two locations
-            //     // every time this happens, a kitten dies
-            //     // so please, ensure your address is formatted properly
-            //     // }
-            // });
-            // alert(this.dista)
-            // this.dist = dista
-            // return dist
-        }
-    },
-    computed: {
-        // getDistance() {
-        //     var directionsService = new google.maps.DirectionsService();
-        //     var request = {
-        //         origin: 'Mombasa, Kenya', // a city, full address, landmark etc
-        //         destination: 'Nairobi, Kenya',
-        //         travelMode: google.maps.DirectionsTravelMode.DRIVING
-        //     };
-        //     directionsService.route(request, function (response, status) {
-        //         // if (status == google.maps.DirectionsStatus.OK) {
-        //             // alert(response.routes[0].legs[0].distance.value);
-        //             this.dist = response.routes[0].legs[0].distance.value // the distance in metres
-        //         // } else {
-        //         //     alert('wrong');
-        //             // oops, there's no route between these two locations
-        //             // every time this happens, a kitten dies
-        //             // so please, ensure your address is formatted properly
-        //         // }
-        //     });
-        //     // return dist
-        // }
-        // getMarkers() {
-        //     if (this.UpdateShipment) {
-        //         this.markers.push({
-        //             position: {
-        //                 lat: this.updateitedItem.lat,
-        //                 lng: this.updateitedItem.lng,
-        //             }
-        //         })
-        //     }
-        // }
+    paid() {
+      if (this.updateitedItem.paid == 0) {
+        this.updateitedItem.paid = 1;
+      } else {
+        this.updateitedItem.paid = 0;
+      }
+      axios
+        .post(`/paid/${this.updateitedItem.id}`, this.updateitedItem)
+        .then(response => {
+          this.loading = false;
+          this.alert();
+          // Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.updateitedItem)
+        })
+        .catch(error => {
+          this.loading = false;
+          this.errors = error.response.data.errors;
+        });
     },
 
-    mounted() {
-        axios
-            .get("/getStatuses")
-            .then(response => {
-                this.statuses = response.data;
-            })
-            .catch(error => {
-                this.errors = error.response.data.errors;
-            });
+    // getAddressData: function(addressData, placeResultData, id) {
+    //   this.address = addressData;
+    // },
+
+    close() {
+      this.$emit("closeRequest");
+      this.showMap = false;
+    },
+    alert() {
+      this.$emit("alertRequest");
+    },
+    setDescription(description) {
+      this.description = description;
+    },
+    setPlace(place) {
+      this.place = place;
+    },
+    usePlace(place) {
+      if (this.place) {
+        this.markers.push({
+          position: {
+            lat: this.place.geometry.location.lat(),
+            lng: this.place.geometry.location.lng()
+          }
+        });
+        this.place = null;
+      }
+    },
+    mapUpsd() {
+      this.markers = [];
+      this.showMap = true;
+    },
+    getDistance() {
+      // var p1 = new google.maps.LatLng(45.463688, 9.18814);
+      // var p2 = new google.maps.LatLng(46.0438317, 9.75936230000002);
+      // if (this.place) {
+      //     this.markers.push({
+      //         position: {
+      //             lat: this.place.geometry.location.lat(),
+      //             lng: this.place.geometry.location.lng()
+      //         }
+      //     });
+      //     this.place = null;
+      // }
+      var dist = [];
+      for (let i = 0; i < this.markers.length; i++) {
+        const element = this.markers[i];
+        // console.log(element)
+        // alert(element['position']['lat'])
+        var p1 = new google.maps.LatLng(
+          element["position"]["lat"],
+          element["position"]["lng"]
+        );
+        // var p2 = new google.maps.LatLng(element['position']['lat'], element['position']['lng']);
+        dist.push(p1);
+        // alert(p1)
+        // var p2 = new google.maps.LatLng(-4.05052, 39.667169);
+      }
+      alert(dist);
+      // alert(calcDistance(p1, p2));
+      // console.log(calcDistance(dist))
+
+      //calculates distance between two points in km's
+      function calcDistance(dist) {
+        return (this.dist = (
+          google.maps.geometry.spherical.computeDistanceBetween(dist) / 1000
+        ).toFixed(2));
+      }
+      // var directionsService = new google.maps.DirectionsService();
+
+      // var request = {
+      //     origin: "Mombasa, Kenya", // a city, full address, landmark etc
+      //     destination: "Nairobi, Kenya",
+      //     travelMode: google.maps.DirectionsTravelMode.DRIVING
+      // };
+      // // var dista = this.dist
+
+      // directionsService.route(request, function (response, status, dista) {
+      //     // if (status == google.maps.DirectionsStatus.OK) {
+      //     this.$refs["distanceGet"];
+      //     console.log(response.routes[0].legs[0].distance.value);
+      //     alert(response.routes[0].legs[0].distance.value);
+      //     dista = response.routes[0].legs[0].distance.value; // the distance in metres
+      //     this.dist = dista;
+      //     alert(dista);
+      //     alert(this.dist);
+      //     // } else {
+      //     //     alert('wrong');
+      //     // oops, there's no route between these two locations
+      //     // every time this happens, a kitten dies
+      //     // so please, ensure your address is formatted properly
+      //     // }
+      // });
+      // alert(this.dista)
+      // this.dist = dista
+      // return dist
     }
+  },
+  computed: {
+    // getDistance() {
+    //     var directionsService = new google.maps.DirectionsService();
+    //     var request = {
+    //         origin: 'Mombasa, Kenya', // a city, full address, landmark etc
+    //         destination: 'Nairobi, Kenya',
+    //         travelMode: google.maps.DirectionsTravelMode.DRIVING
+    //     };
+    //     directionsService.route(request, function (response, status) {
+    //         // if (status == google.maps.DirectionsStatus.OK) {
+    //             // alert(response.routes[0].legs[0].distance.value);
+    //             this.dist = response.routes[0].legs[0].distance.value // the distance in metres
+    //         // } else {
+    //         //     alert('wrong');
+    //             // oops, there's no route between these two locations
+    //             // every time this happens, a kitten dies
+    //             // so please, ensure your address is formatted properly
+    //         // }
+    //     });
+    //     // return dist
+    // }
+    // getMarkers() {
+    //     if (this.UpdateShipment) {
+    //         this.markers.push({
+    //             position: {
+    //                 lat: this.updateitedItem.lat,
+    //                 lng: this.updateitedItem.lng,
+    //             }
+    //         })
+    //     }
+    // }
+  },
+
+  mounted() {
+    axios
+      .get("/getStatuses")
+      .then(response => {
+        this.statuses = response.data;
+      })
+      .catch(error => {
+        this.errors = error.response.data.errors;
+      });
+  }
 };
 </script>
