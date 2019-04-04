@@ -45,11 +45,7 @@
                             <td class="text-xs-right">{{ props.item.country }}</td>
                             <td class="text-xs-right">{{ props.item.status }}</td>
                             <td class="justify-center layout px-0">
-<<<<<<< HEAD
                                 <v-tooltip bottom v-if="user.can['edit users']">
-=======
-                                <v-tooltip bottom>
->>>>>>> 3962ae5025fb4c7ac09ff8ed4c03a47324597080
                                     <v-btn icon class="mx-0" @click="openEdit(props.item)" slot="activator">
                                         <v-icon small color="blue darken-2">edit</v-icon>
                                     </v-btn>
@@ -91,14 +87,8 @@
             <v-icon dark right>check_circle</v-icon>
         </v-snackbar>
     </v-content>
-<<<<<<< HEAD
     <AddUser @closeRequest="close" :openAddRequest="dispAdd" @alertRequest="showAlert" :AllBranches="AllBranches" :AllRoles="AllRoles" :countryList="Allcountries"></AddUser>
     <EditUser @closeRequest="close" :openEditRequest="dispEdit" @alertRequest="showAlert" :form="editedItem" :AllBranches="AllBranches" :AllRoles="AllRoles" :countryList="Allcountries"></EditUser>
-=======
-    <AddUser @closeRequest="close" :openAddRequest="dispAdd" @alertRequest="showAlert" :AllRoles="AllRoles"></AddUser>
-    <!-- <ShowUser @closeRequest="close" :openShowRequest="dispShow"></ShowUser> -->
-    <EditUser @closeRequest="close" :openEditRequest="dispEdit" @alertRequest="showAlert" :form="editedItem" :AllRoles="AllRoles"></EditUser>
->>>>>>> 3962ae5025fb4c7ac09ff8ed4c03a47324597080
     <PermUser @closeRequest="close" :openPermRequest="permEdit" :form="editedItem"></PermUser>
     <UserProfile @closeRequest="close" :openShowRequest="dispShow" :user="editedItem" :AllShips="AllShips"></UserProfile>
     <DeletedUsers></DeletedUsers>
@@ -175,6 +165,7 @@ export default {
                 Address: "address",
                 Country: "country"
             },
+            AllBranches: {},
             search: "",
             AllRoles: [],
             loader: false,
@@ -220,16 +211,15 @@ export default {
         };
     },
     methods: {
-<<<<<<< HEAD
         openDeleted() {
             eventBus.$emit('openDeletedEvent')
         },
-=======
->>>>>>> 3962ae5025fb4c7ac09ff8ed4c03a47324597080
         openAdd() {
             this.dispAdd = true;
+            this.getCountry();
         },
         openEdit(item) {
+            this.getCountry();
             this.editedIndex = this.Allusers.indexOf(item);
             this.editedItem = Object.assign({}, item);
             axios
@@ -257,11 +247,8 @@ export default {
         openShow(item) {
             this.editedIndex = this.Allusers.indexOf(item);
             this.editedItem = Object.assign({}, item);
-<<<<<<< HEAD
             eventBus.$emit("getShipEvent", this.editedItem);
 
-=======
->>>>>>> 3962ae5025fb4c7ac09ff8ed4c03a47324597080
             this.dispShow = true;
         },
         showAlert() {
@@ -313,40 +300,50 @@ export default {
             axios
                 .get("/getUsers")
                 .then(response => {
-                    this.loader = false;
                     this.loading = false;
                     this.Allusers = response.data;
                 })
                 .catch(error => {
-                    this.loader = false;
                     this.loading = false;
-                    this.getUsers()
-                    // alert('user')
-                    // this.errors = error.response.data.errors;
+                    this.errors = error.response.data.errors;
                 });
         },
-        getRoles() {
+        getCountry() {
+            this.loading = true;
             axios
-                .get("/getRoles")
+                .get("/getCountry")
                 .then(response => {
-                    this.AllRoles = response.data;
+                    this.loading = false;
+                    this.Allcountries = response.data;
                 })
                 .catch(error => {
-                    // alert('role')
-                    this.getRoles();
-                    // this.errors = error.response.data.errors;
+                    this.loading = false;
+                    this.errors = error.response.data.errors;
                 });
-        },
-        refresh() {
-            this.getRoles()
-            // this.getUsers()
         }
-
     },
     mounted() {
         this.loader = true;
-        this.getRoles();
         this.getUsers();
+        axios
+            .get("/getBranch")
+            .then(response => {
+                this.loader = false;
+                this.AllBranches = response.data;
+            })
+            .catch(error => {
+                this.loader = false;
+                this.errors = error.response.data.errors;
+            });
+
+        axios
+            .get("/getRoles")
+            .then(response => {
+                this.AllRoles = response.data;
+            })
+            .catch(error => {
+                this.errors = error.response.data.errors;
+            });
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {

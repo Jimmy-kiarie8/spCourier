@@ -28,24 +28,20 @@
                                         <small class="has-text-danger" v-if="errors.address">{{ errors.address[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-<<<<<<< HEAD
                                         <v-text-field v-model="form.city" :rules="rules.name" color="blue darken-2" label="City" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.city">{{ errors.city[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-=======
->>>>>>> 3962ae5025fb4c7ac09ff8ed4c03a47324597080
                                         <v-text-field v-model="form.phone" :rules="rules.name" color="blue darken-2" label="Phone" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.phone">{{ errors.phone[0] }}</small>
                                     </v-flex>
                                     <div class="form-group col-md-6">
                                         <label class="col-md-6 col-form-label text-md-right" for="">Role</label>
                                         <select class="custom-select custom-select-md col-md-12" v-model="form.role_id">
-                                            <option v-for="roles in AllRoles" :key="roles.id" :value="roles.name">{{ roles.name }}</option>
-                                        </select>
+                                        <option v-for="roles in AllRoles" :key="roles.id" :value="roles.name">{{ roles.name }}</option>
+                                    </select>
                                         <small class="has-text-danger" v-if="errors.role_id">{{ errors.role_id[0] }}</small>
                                     </div>
-<<<<<<< HEAD
                                     <div class="form-group col-md-6">
                                         <label class="col-md-6 col-form-label text-md-right" for="">Branch</label>
                                         <select class="custom-select custom-select-md col-md-12" v-model="form.branch_id">
@@ -60,13 +56,13 @@
                                     </select>
                                         <small class="has-text-danger" v-if="errors.countryList">{{ errors.countryList[0] }}</small>
                                     </div>
-=======
->>>>>>> 3962ae5025fb4c7ac09ff8ed4c03a47324597080
                                 </v-layout>
                                 <v-layout wrap>
+                                    <!-- <div> -->
                                     <v-flex v-for="perm in permissions" :key="perm.id" xs6 sm6>
                                         <v-checkbox v-model="selected" :label="perm.name" :value="perm.name"></v-checkbox>
                                     </v-flex>
+                                    <!-- </div> -->
                                 </v-layout>
                             </v-container>
                             <v-card-actions>
@@ -89,58 +85,38 @@
 
 <script>
 export default {
-  props: ["openAddRequest", "AllRoles"],
-  data() {
-    const defaultForm = Object.freeze({
-      name: "",
-      email: "",
-      phone: "",
-      address: ""
-    });
-    return {
-      loading: false,
-      errors: [],
-      selected: [],
-      permissions: [],
-      defaultForm,
-      loader: false,
-      roles: [],
-      e1: true,
-      form: Object.assign({}, defaultForm),
-      emailRules: [
-        v => {
-          return !!v || "E-mail is required";
-        },
-        v =>
-          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-          "E-mail must be valid"
-      ],
-      rules: {
-        name: [val => (val || "").length > 0 || "This field is required"]
-      }
-    };
-  },
-  methods: {
-    save() {
-      this.loading = true;
-      axios
-        .post("/users", this.$data.form)
-        .then(response => {
-          this.loading = false;
-          // console.log(response);
-          this.$parent.Allusers.push(response.data);
-          this.close();
-          // this.resetForm();
-          eventBus.$emit("alertRequestEvent");
-          // this.$emit("alertRequest");
+    props: ['openAddRequest', 'AllBranches', 'AllRoles', 'countryList'],
+    data() {
+        const defaultForm = Object.freeze({
+            name: '',
+            // password: '',
+            email: '',
+            phone: '',
+            branch: '',
+            address: '',
+            city: '',
+            // country: '',
         })
-        .catch(error => {
-          this.loading = false;
-          this.errors = error.response.data.errors;
-          // console.log()
-        });
+        return {
+            loading: false,
+            errors: [],
+            selected: [],
+            permissions: [],
+            defaultForm,
+            loader: false,
+            e1: true,
+            form: Object.assign({}, defaultForm),
+            emailRules: [
+                v => {
+                    return !!v || 'E-mail is required'
+                },
+                v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+            ],
+            rules: {
+                name: [val => (val || '').length > 0 || 'This field is required']
+            },
+        }
     },
-<<<<<<< HEAD
     methods: {
         save() {
             this.loading = true
@@ -168,27 +144,16 @@ export default {
         close() {
             this.$emit('closeRequest')
         },
-=======
-    resetForm() {
-      this.form = Object.assign({}, this.defaultForm);
-      this.$refs.form.reset();
->>>>>>> 3962ae5025fb4c7ac09ff8ed4c03a47324597080
     },
-    close() {
-      this.$emit("closeRequest");
-    }
-  },
-  mounted() {
-    axios
-      .post("/getCompanyAdmin")
-      .then(response => {
-        this.Allusers = response.data;
-      })
-      .catch(error => {
-        this.errors = error.response.data.errors;
-      });
+    mounted() {
+        axios.post('/getCompanyAdmin')
+            .then((response) => {
+                this.Allusers = response.data
+            })
+            .catch((error) => {
+                this.errors = error.response.data.errors
+            })
 
-<<<<<<< HEAD
         axios.get('/getPermissions')
             .then((response) => {
                 console.log(response.data)
@@ -212,29 +177,7 @@ export default {
         },
     },
     mounted() {
-=======
-    axios
-      .get("/getPermissions")
-      .then(response => {
-        console.log(response.data);
-        this.permissions = response.data;
-      })
-      .catch(errors => {
-        this.errors = error.response.data.errors;
-      });
->>>>>>> 3962ae5025fb4c7ac09ff8ed4c03a47324597080
 
-  },
-  computed: {
-    formIsValid() {
-      return (
-        this.form.name &&
-        this.form.email &&
-        this.form.phone &&
-        this.form.address
-      );
     }
-  },
-  mounted() {}
-};
+}
 </script>
