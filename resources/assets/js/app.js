@@ -20,9 +20,6 @@ import 'vuetify/dist/vuetify.min.css'
 // import VueCharts from 'vue-chartjs'
 // import { Bar, Line } from 'vue-chartjs'
 import JsonExcel from 'vue-json-excel'
-import * as VueGoogleMaps from 'vue2-google-maps'
-import { abilitiesPlugin } from '@casl/vue'
-import VueChatScroll from 'vue-chat-scroll'
 // import VueResource from "vue-resource"
 // window.Echo = new Echo({
 
