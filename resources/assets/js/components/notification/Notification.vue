@@ -16,7 +16,7 @@
             <v-list>
                 <v-list-tile avatar>
                     <v-list-tile-avatar>
-                        <avatar :username="user.name" style="font-size: 20px;margin: auto;padding: 0px;"></avatar>
+                        <!-- <avatar :username="user.name" style="font-size: 20px;margin: auto;padding: 0px;"></avatar> -->
                         <!-- <img :src="user.profile" alt="John"> -->
                     </v-list-tile-avatar> 
 
@@ -73,12 +73,10 @@
 
 <script>
 let NotyShipment = require("./NotyShipment");
-import Avatar from "vue-avatar";
 export default {
   props: ["user"],
   components: {
     NotyShipment,
-    Avatar
   },
   data: () => ({
     fav: true,

@@ -28,14 +28,6 @@
                             </div>
                         </router-link>
 
-                        <!-- <router-link to="/customers" class="v-list__tile v-list__tile--link" v-for="roleC in user.roles" :key="roleC.id" v-if="roleC.name === 'Client'">
-                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">local_shipping</i></div>
-                            <div class="v-list__tile__content">
-                                <div class="v-list__tile__title">
-                                    My Shipments
-                                </div>
-                            </div>
-              </router-link>-->
                         <router-link to="/rinders" class="v-list__tile v-list__tile--link" v-for="roleR in user.roles" :key="roleR.id" v-if="roleR.name === 'Rider'">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">local_shipping</i>
@@ -69,15 +61,15 @@
                                 <div class="v-list__tile__title">Subscribers</div>
                             </div>
                         </router-link>
-
-                        <!-- <router-link to="/scanner" class="v-list__tile v-list__tile--link" v-if="user.can['outscan', 'inscan']">
-                            <div class="v-list__tile__action"><i class="fa fa-barcode nav_icon"></i></div>
-                            <div class="v-list__tile__content">
-                                <div class="v-list__tile__title">
-                                    Scan Shipments
-                                </div>
+                        <router-link to="/mails" class="v-list__tile v-list__tile--link" v-if="user.can['view subscribers']">
+                            <div class="v-list__tile__action">
+                                <i aria-hidden="true" class="icon material-icons">email</i>
                             </div>
-              </router-link>-->
+                            <div class="v-list__tile__content">
+                                <div class="v-list__tile__title">Emails</div>
+                            </div>
+                        </router-link>
+
                         <router-link to="/profile" class="v-list__tile v-list__tile--link">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">account_circle</i>
@@ -98,60 +90,7 @@
                             </div>
                         </router-link>
 
-                        <!-- <router-link to="/print" class="v-list__tile v-list__tile--link" v-if="user.can['print waybill']">
-                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">print</i></div>
-                            <div class="v-list__tile__content">
-                                <div class="v-list__tile__title">
-                                    print
-                                </div>
-                            </div>
-              </router-link>-->
-                        <v-list-group prepend-icon="book" v-if="user.can['print waybill']">
-                            <v-list-tile slot="activator">
-                                <v-list-tile-title>Print</v-list-tile-title>
-                            </v-list-tile>
-
-                            <router-link to="/print" class="v-list__tile v-list__tile--link" v-if="user.can['print waybill']">
-                                <div class="v-list__tile__action">
-                                    <i aria-hidden="true" class="icon material-icons">print</i>
-                                </div>
-                                <div class="v-list__tile__content">
-                                    <div class="v-list__tile__title">Print Waybills</div>
-                                </div>
-                            </router-link>
-                            <router-link to="/sticker" class="v-list__tile v-list__tile--link">
-                                <div class="v-list__tile__action">
-                                    <i aria-hidden="true" class="icon material-icons">print</i>
-                                </div>
-                                <div class="v-list__tile__content">
-                                    <div class="v-list__tile__title">Print Stickers</div>
-                                </div>
-                            </router-link>
-                        </v-list-group>
-
                         <!--  -->
-                        <!--  -->
-                        <!--  -->
-                        <v-list-group prepend-icon="book" v-if="user.can['outscan', 'inscan']">
-                            <v-list-tile slot="activator">
-                                <v-list-tile-title>Scan Shipments</v-list-tile-title>
-                            </v-list-tile>
-
-                            <router-link to="/scanner" class="v-list__tile theme--light" style="text-decoration: none">
-                                <div class="v-list__tile__action">
-                                    <i class="fa fa-barcode nav_icon"></i>
-                                </div>
-                                <div class="v-list__tile__content">
-                                    <div class="v-list__tile__title">Scan Shipments</div>
-                                </div>
-                            </router-link>
-                            <router-link to="/filter" class="v-list__tile theme--light" style="text-decoration: none">
-                                <v-list-tile-action>
-                                    <v-icon>business</v-icon>
-                                </v-list-tile-action>
-                                <v-list-tile-title>Delivery Report</v-list-tile-title>
-                            </router-link>
-                        </v-list-group>
 
                         <v-list-group prepend-icon="account_circle" v-if="user.can['view users']">
                             <v-list-tile slot="activator">
@@ -172,74 +111,6 @@
                             </router-link>
                         </v-list-group>
 
-                        <v-list-group prepend-icon="insert_drive_file" v-if="user.can['view branches']">
-                            <v-list-tile slot="activator">
-                                <v-list-tile-title>Branches$Countries</v-list-tile-title>
-                            </v-list-tile>
-
-                            <router-link to="/branches" class="v-list__tile theme--light" style="text-decoration: none">
-                                <v-list-tile-action>
-                                    <v-icon>book</v-icon>
-                                </v-list-tile-action>
-                                <v-list-tile-title>Branches</v-list-tile-title>
-                            </router-link>
-                            <router-link to="/country" class="v-list__tile theme--light" style="text-decoration: none">
-                                <v-list-tile-action>
-                                    <v-icon>map</v-icon>
-                                </v-list-tile-action>
-                                <v-list-tile-title>Countries</v-list-tile-title>
-                            </router-link>
-
-                            <router-link to="/status" class="v-list__tile theme--light" style="text-decoration: none">
-                                <v-list-tile-action>
-                                    <v-icon>question_answer</v-icon>
-                                </v-list-tile-action>
-                                <v-list-tile-title>Shipment Followups</v-list-tile-title>
-                            </router-link>
-                        </v-list-group>
-
-                        <v-list-group prepend-icon="settings" v-for="roleQ in user.roles" :key="roleQ.id" v-if="roleQ.name === 'Admin'">
-                            <v-list-tile slot="activator">
-                                <v-list-tile-title>App Settings</v-list-tile-title>
-                            </v-list-tile>
-                            <router-link to="/towns" class="v-list__tile theme--light" style="text-decoration: none">
-                                <v-list-tile-action>
-                                    <v-icon>map</v-icon>
-                                </v-list-tile-action>
-                                <v-list-tile-title>Towns</v-list-tile-title>
-                            </router-link>
-                            <router-link to="/statuses" class="v-list__tile theme--light" style="text-decoration: none">
-                                <v-list-tile-action>
-                                    <v-icon>dialpad</v-icon>
-                                </v-list-tile-action>
-                                <v-list-tile-title>Status</v-list-tile-title>
-                            </router-link>
-                            <router-link to="/deliverystatus" class="v-list__tile theme--light" style="text-decoration: none">
-                                <v-list-tile-action>
-                                    <v-icon>dialpad</v-icon>
-                                </v-list-tile-action>
-                                <v-list-tile-title>Delivery status</v-list-tile-title>
-                            </router-link>
-                        </v-list-group>
-
-                        <v-list-group prepend-icon="attach_money" v-if="user.can['view finance']">
-                            <v-list-tile slot="activator">
-                                <v-list-tile-title>Finance</v-list-tile-title>
-                            </v-list-tile>
-                            <router-link to="/finance" class="v-list__tile theme--light" style="text-decoration: none">
-                                <v-list-tile-action>
-                                    <v-icon>business</v-icon>
-                                </v-list-tile-action>
-                                <v-list-tile-title>Finace</v-list-tile-title>
-                            </router-link>
-                            <router-link to="/charges" class="v-list__tile theme--light" style="text-decoration: none" v-if="user.can['update charges']">
-                                <v-list-tile-action>
-                                    <v-icon>attach_money</v-icon>
-                                </v-list-tile-action>
-                                <v-list-tile-title>Charges</v-list-tile-title>
-                            </router-link>
-                        </v-list-group>
-
                         <v-list-group prepend-icon="book" v-if="user.can['view logs']">
                             <v-list-tile slot="activator">
                                 <v-list-tile-title>Logs</v-list-tile-title>
@@ -250,81 +121,43 @@
                                 </v-list-tile-action>
                                 <v-list-tile-title>Logs</v-list-tile-title>
                             </router-link>
-                            <!-- <router-link to="/schedulelogs" class="v-list__tile theme--light" style="text-decoration: none">
-                                <v-list-tile-action>
-                                    <v-icon>book</v-icon>
-                                </v-list-tile-action>
-                                <v-list-tile-title>Schedule Logs</v-list-tile-title>
-                            </router-link> -->
                         </v-list-group>
-
-                        <!-- <router-link to="/schedulelogs" class="v-list__tile v-list__tile--link" v-if="user.can['view logs']">
-                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
-                            <div class="v-list__tile__content">
-                                <div class="v-list__tile__title">
-                                    User Logs
-                                </div>
-                            </div>
-                        </router-link>
-                        <router-link to="/schedulelogs" class="v-list__tile v-list__tile--link" v-if="user.can['view logs']">
-                            <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
-                            <div class="v-list__tile__content">
-                                <div class="v-list__tile__title">
-                                    User Logs
-                                </div>
-                            </div>
-              </router-link>-->
                     </v-card>
                 </template>
             </v-list>
         </v-navigation-drawer>
         <v-toolbar dark app :color="color" :clipped-left="$vuetify.breakpoint.lgAndUp" fixed>
             <v-toolbar-title style="width: 600px" class="ml-0 pl-3">
-                <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>SpeedBall Courier
+                <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>Mail App
                 <img
-            src="/storage/logo1.jpg"
+            src="/storage/logo.png"
             alt
-            style="width: 60px; height: 60px; border-radius: 25%;"
+            style="margin-left: 10;"
           >
         </v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-tooltip bottom style="margin-right: 10px;">
-                    <v-btn icon class="mx-0" @click="openShipment" slot="activator">
-                        <v-icon color="white darken-2" large>add</v-icon>
-                    </v-btn>
-                    <span>Add Shipment</span>
-                </v-tooltip>
                 <v-divider vertical></v-divider>
                 <Notifications :user="user"></Notifications>
                 <v-divider vertical></v-divider>
-                <!-- <chattyNoty :user="user"></chattyNoty> -->
-                <!-- <v-icon @click.stop="right = !right" style="cursor: pointer">apps</v-icon> -->
-                <!-- <form action="/logout" method="post">
-                    <v-btn flat color="white" type="submit">Logout</v-btn>
-                </form> -->
             <Logout :user="user"></Logout>
-
         </v-toolbar>
     </v-app>
 
-    <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
+    <v-snackbar :timeout="timeout" top="top" :color="snackcolor" right="right" v-model="snackbar">
         {{ message }}
         <v-icon dark right>check_circle</v-icon>
     </v-snackbar>
-    <AddShipment :addShipment="dialog" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers"></AddShipment>
 </div>
 </template>
 
 <script>
 import Notifications from "../notification/Notification";
-let AddShipment = require("../shipments/AddShipment");
 import { vueTopprogress } from "vue-top-progress";
 import Logout from "./Logout";
 // import chattyNoty from '../notification/chattyNoty'
 export default {
   components: {
     Notifications,
-    AddShipment,
     vueTopprogress,
     Logout 
     //  chattyNoty
@@ -335,73 +168,26 @@ export default {
       role: "",
       color: "#132f51",
       dialog: false,
+      snackcolor: '',
       drawer: true,
       drawerRight: false,
       right: null,
       mode: "",
       notifications: [],
       company: {},
-      AllBranches: [],
-      Allcustomers: [],
-      AllDrivers: [],
       snackbar: false,
       timeout: 5000,
       message: "Success"
-      // cruds: [
-      //     ['Create', 'add'],
-      //     ['Read', 'insert_drive_file'],
-      //     ['Update', 'update'],
-      //     ['Delete', 'delete']
-      // ]
     };
   },
   methods: {
-    openShipment() {
-      this.dialog = true;
-      this.getBranch();
-      this.getCustomer();
-      this.getDrivers();
-    },
-
-    getCustomer() {
-      axios
-        .get("/getCustomer")
-        .then(response => {
-          this.Allcustomers = response.data;
-        })
-        .catch(error => {
-          this.errors = error.response.data.errors;
-        });
-    },
-    getDrivers() {
-      axios
-        .get("/getDrivers")
-        .then(response => {
-          this.AllDrivers = response.data;
-        })
-        .catch(error => {
-          console.log(error);
-          this.errors = error.response.data.errors;
-        });
-    },
-    getBranch() {
-      axios
-        .get("/getBranchEger")
-        .then(response => {
-          this.AllBranches = response.data;
-        })
-        .catch(error => {
-          console.log(error);
-          this.errors = error.response.data.errors;
-        });
-    },
     close() {
       this.dialog = false;
     },
 
     showalert() {
       this.message = "success";
-      // this.color = "indigo";
+      this.snackcolor = 'black'
       this.snackbar = true;
     }
   },
@@ -412,15 +198,11 @@ export default {
     eventBus.$on("StoprogEvent", data => {
       this.$refs.topProgress.done();
     });
+    eventBus.$on("alertRequestEvent", data => {
+      this.showalert()
+    });
   },
   mounted() {
-    // axios.post('/getLogo')
-    //     .then((response) => {
-    //         this.company = response.data
-    //     })
-    //     .catch((error) => {
-    //         this.errors = error.response.data.errors
-    //     })
   }
 };
 </script>

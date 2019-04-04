@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use App\User;
-use App\Shipment;
+
 use Illuminate\Support\Facades\Auth;
 
 class PermissionController extends Controller

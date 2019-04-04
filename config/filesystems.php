@@ -57,9 +57,9 @@ return [
 
         'uploads' => [
             'driver' => 'local',
-            'root' => 'estorage',
+            'root' => storage_path() . '/files/uploads',
         ],
-        
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

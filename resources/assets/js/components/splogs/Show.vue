@@ -124,10 +124,8 @@
 </template>
 
 <script>
-import VueBarcode from "vue-barcode";
 export default {
     components: {
-        barcode: VueBarcode
     },
     data() {
         return {

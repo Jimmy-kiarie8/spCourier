@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Branch;
-use App\Shipment;
+
 use Auth;
 use DB;
 use App\Country;

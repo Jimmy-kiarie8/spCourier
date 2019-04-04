@@ -13,7 +13,7 @@ class SpeedballServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        \App\Shipment::observe(\App\Observer\ShipmentObserver::class);
+        // \App\Shipment::observe(\App\Observer\ShipmentObserver::class);
     }
 
     /**
