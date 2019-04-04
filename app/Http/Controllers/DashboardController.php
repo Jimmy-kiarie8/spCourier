@@ -8,6 +8,7 @@ use App\Branch;
 use Auth;
 use DB;
 use App\Country;
+use App\Shipment;
 
 class DashboardController extends Controller
 {

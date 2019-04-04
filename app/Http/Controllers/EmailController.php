@@ -12,7 +12,6 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Mail;
-use App\E_mail;
 
 class EmailController extends Controller
 {
@@ -31,12 +30,8 @@ class EmailController extends Controller
         $subscribers = Subscriber::all();
 
         foreach ($subscribers as $subscriber) {
-            // Mail::to($subscriber->email)->queue(new CampaignReady($subscriber, $request->title, $request->content));
-            Mail::to($subscriber->email)->queue(new CampaignReady($subscriber, $request->title, $request->content));
+            Mail::queue(new CampaignReady($subscriber, $request->title, $request->content));
         }
-        $email = new E_mail;
-        $email->title = $request->title;
-        $email->content = $request->content;
         return $subscribers;
     }
 
@@ -48,21 +43,11 @@ class EmailController extends Controller
         $subscriber->email = $request->email;
         $subscriber->user_id = Auth::id();
         $subscriber->save();
-        // $mail = Mail::send('emails.subscribed', ['name' => $subscriber->name], function ($message) use ($subscriber) {
-        //     $message->from('courier@courier.com', 'Email Platform');
-        //     $message->to($subscriber->email);
-        // });
+        $mail = Mail::send('emails.subscribed', ['name' => $subscriber->name], function ($message) use ($subscriber) {
+            $message->from('courier@courier.com', 'Email Platform');
+            $message->to($subscriber->email);
+        });
 
-        return $subscriber;
-    }
-
-    public function updateSubscribers(Request $request, $id)
-    {
-        // return $request->all();
-        $subscriber = Subscriber::find($id);
-        $subscriber->name = $request->name;
-        $subscriber->email = $request->email;
-        $subscriber->save();
         return $subscriber;
     }
     
@@ -74,8 +59,8 @@ class EmailController extends Controller
      */
     public function destroy(Subscriber $subscriber, $id)
     {
-        Subscriber::find($id)->delete();
-        // return $id;
+        $subscribers = Subscriber::where('id', $id)->delete();
+        return $id;
     }
 
     public function refresh(Subscriber $subscriber, $id)

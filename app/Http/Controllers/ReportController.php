@@ -15,6 +15,7 @@ use App\Exports\Reports;
 // use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 use App\Mail\ReportMail;
+use App\Shipment;
 
 class ReportController extends Controller
 {

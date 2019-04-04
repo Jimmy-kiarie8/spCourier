@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Notifications\SignupActivate;
-
+use App\Shipment;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,15 +41,10 @@ class UserController extends Controller
         // return $request->all();
         $this->Validate($request, [
             'name' => 'required',
-<<<<<<< HEAD
             'email' => 'required|email',
             'phone' => 'required|numeric',
             'branch_id' => 'required',
             'countryList' => 'required',
-=======
-            'email' => 'required|email:unique',
-            'phone' => 'required|numeric',
->>>>>>> 3962ae5025fb4c7ac09ff8ed4c03a47324597080
             'role_id' => 'required',
         ]);
         // return $request->all();
@@ -60,14 +55,10 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
-<<<<<<< HEAD
         $user->branch_id = $request->branch_id;
         $user->address = $request->address;
         $user->city = $request->city;
         $user->country_id = $request->countryList;
-=======
-        $user->address = $request->address;
->>>>>>> 3962ae5025fb4c7ac09ff8ed4c03a47324597080
         $user->activation_token = str_random(60);
         $user->save();
         $user->assignRole($request->role_id);
@@ -98,19 +89,28 @@ class UserController extends Controller
         // return $request->all();
         // return $request->selected;
         $this->Validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique',
+            'form.name' => 'required',
+            'form.email' => 'required|email',
+            'form.phone' => 'required|numeric',
+            // 'form.branch_id' => 'required',
+            // 'form.address' => 'required',
+            // 'form.city' => 'required',
+            // 'form.country' => 'required',
+            // 'form.role_id' => 'required'
         ]);
-        $user = User::find($request->id);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->phone = $request->phone;
-        $user->address = $request->address;
-        // dd($request->role_name);
+        $user = User::find($request->form['id']);
+        $user->name = $request->form['name'];
+        $user->email = $request->form['email'];
+        $user->phone = $request->form['phone'];
+        $user->branch_id = $request->form['branch_id'];
+        $user->address = $request->form['address'];
+        $user->city = $request->form['city'];
+        $user->country = $request->form['country'];
+        $user->country_id = $request->form['country_id'];
         $user->save();
-        // foreach ($request->role_name as $role) {
-            $role_name = $request->role_name;
-        // }
+        foreach ($request->form['roles'] as $role) {
+            $role_name = $role['name'];
+        }
         $user->syncRoles($role_name);
 
         // $p_all = Permission::all();//Get all permissions
@@ -248,6 +248,10 @@ class UserController extends Controller
         return $userArr;
     }
 
+    public function getUserPro(Request $request, $id)
+    {
+        return Shipment::where('client_id', $id)->paginate(10);
+    }
 
     public function getUserPerm(Request $request, $id)
     {
@@ -272,13 +276,10 @@ class UserController extends Controller
         return $user;
     }
 
-<<<<<<< HEAD
     public function UserShip()
     {
         return Shipment::where('client_id', $id)->orWhere('driver', $id)->paginate(10);
     }
-=======
->>>>>>> 3962ae5025fb4c7ac09ff8ed4c03a47324597080
     public function logoutOther()
     {
         return view('auth.Logout');

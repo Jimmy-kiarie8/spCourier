@@ -7,6 +7,7 @@ use Spatie\Permission\Models\Permission;
 use App\User;
 
 use Illuminate\Support\Facades\Auth;
+use App\Shipment;
 
 class PermissionController extends Controller
 {
