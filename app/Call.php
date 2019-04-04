@@ -10,8 +10,4 @@ class Call extends Model
     {
         return $this->hasMany('App\User', 'user_id');
     }
-    public function shipments()
-    {
-        return $this->hasMany('App\Shipment', 'user_id');
-    }
 }

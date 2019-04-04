@@ -2,27 +2,26 @@
 
 namespace App\Mail;
 
+use App\Subscriber;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Subscriber;
 
 class CampaignReady extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $subscriber, $title, $content;
+    public $subscriber, $data;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Subscriber $subscriber, $title, $content)
+    public function __construct(Subscriber $subscriber, $data)
     {
         $this->subscriber = $subscriber;
-        $this->title = $title;
-        $this->content = $content;
+        $this->data = $data;
+
     }
 
     /**
@@ -32,14 +31,18 @@ class CampaignReady extends Mailable
      */
     public function build()
     {
-        return $this->from('jim@eboard.com')
+        $email = $this->from('jimlaravel@gmail.com')
             ->view('emails.campaign')
             ->with([
                 'name' => $this->subscriber->name,
-                'title' => $this->title,
-                'content' => $this->content 
+                'title' => $this->data['title'],
+                'content' => $this->data['content'],
             ])
-            ->to($this->subscriber->email)
-            ->subject( $this->title );
+        // ->attach($this->data['filepath'], ['mime' => $this->data['mime']])
+            ->subject($this->data['title']);
+        foreach ($this->data['filepath'] as $file) {
+            $email->attach(public_path() . '/storage/file/' . $file['file']); // attach each file
+        }
+        return $email;
     }
 }

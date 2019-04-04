@@ -1,11 +1,13 @@
 <template>
 <v-layout row justify-center>
-    <v-dialog v-model="openAddRequest" persistent max-width="700px">
+    <v-dialog v-model="openAddRequest" persistent max-width="500px">
         <v-card>
             <v-card-title fixed>
                 <span class="headline">Add Subscribers</span>
                 <v-spacer></v-spacer>
-                <v-btn icon dark @click="close">                         <v-icon color="black">close</v-icon>                     </v-btn>
+                <v-btn icon dark @click="close">
+                    <v-icon color="black">close</v-icon>
+                </v-btn>
             </v-card-title>
             <v-card-text>
                 <v-container grid-list-md>
@@ -13,11 +15,11 @@
                         <v-form ref="form" @submit.prevent>
                             <v-container grid-list-xl fluid>
                                 <v-layout wrap>
-                                    <v-flex xs12 sm6>
+                                    <v-flex xs12 sm12>
                                         <v-text-field v-model="form.name" :rules="rules.name" color="purple darken-2" label="Full name" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small>
                                     </v-flex>
-                                    <v-flex xs12 sm6>
+                                    <v-flex xs12 sm12>
                                         <v-text-field v-model="form.email" :rules="emailRules" color="blue darken-2" label="Email" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.email">{{ errors.email[0] }}</small>
                                     </v-flex>

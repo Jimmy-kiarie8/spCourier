@@ -77,11 +77,11 @@
 </template>
 
 <script>
-import Avatar from 'vue-avatar'
+// import Avatar from 'vue-avatar'
 export default {
     props: ['user', 'openShowRequest'],
     components: {
-        Avatar
+        // Avatar
     },
     data() {
         return {

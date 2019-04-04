@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
-use App\Shipment;
+
 use Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -52,11 +52,6 @@ class NotificationController extends Controller
         return $notification_data;
     }
 
-
-    public function Notyshpments(Request $request, $id)
-    {
-        return Shipment::find($id);
-    }
 
     public function read()
     {

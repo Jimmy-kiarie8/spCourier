@@ -186,15 +186,15 @@ export default {
         this.loader = true
         this.getRoles()
     },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (vm.user.can["view roles"]) {
-        next();
-      } else {
-        next("/unauthorized");
-      }
-    });
-  }
+//   beforeRouteEnter(to, from, next) {
+//     next(vm => {
+//       if (vm.user.can["view roles"]) {
+//         next();
+//       } else {
+//         next("/unauthorized");
+//       }
+//     });
+//   }
 }
 </script>
 
